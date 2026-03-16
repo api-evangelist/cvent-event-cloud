@@ -2,8 +2,8 @@ name: Cvent Event Cloud
 description: Cvent Event Cloud provides comprehensive event management solutions including registration, venue selection, mobile apps, onsite solutions, and virtual/hybrid event capabilities.
 image: https://www.cvent.com/sites/default/files/cvent-logo.png
 url: https://www.cvent.com
-created: '2024'
-modified: '2024'
+created: '2024-01-01'
+modified: '2026-03-16'
 tags:
 - Events
 - Event Management
@@ -92,6 +92,5 @@ common:
 - type: Contact
   url: https://www.cvent.com/en/contact
 maintainers:
-- name: Cvent
-  email: api-support@cvent.com
-  url: https://www.cvent.com
+  - FN: Kin Lane
+    email: kin@apievangelist.com
