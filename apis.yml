@@ -1,18 +1,16 @@
 name: Cvent Event Cloud
-description: Cvent Event Cloud provides comprehensive event management solutions
-  including registration, venue selection, mobile apps, onsite solutions, and 
-  virtual/hybrid event capabilities.
+description: Cvent Event Cloud provides comprehensive event management solutions including registration, venue selection, mobile apps, onsite solutions, and virtual/hybrid event capabilities.
 image: https://www.cvent.com/sites/default/files/cvent-logo.png
 url: https://www.cvent.com
 created: '2024-01-01'
 modified: '2026-03-16'
 tags:
-  - Events
   - Event Management
+  - Event Marketing
+  - Events
+  - Hybrid Events
   - Registration
   - Venue Selection
-  - Event Marketing
-  - Hybrid Events
   - Virtual Events
 apis:
   - name: Cvent REST API
@@ -22,10 +20,10 @@ apis:
     humanURL: https://api.cvent.com
     baseURL: https://api.cvent.com/ea
     tags:
-      - REST
+      - Attendees
       - Events
       - Registration
-      - Attendees
+      - REST
     properties:
       - type: Documentation
         url: https://api.cvent.com/docs
@@ -41,9 +39,9 @@ apis:
     humanURL: https://api.cvent.com/registration
     baseURL: https://api.cvent.com/ea/registration
     tags:
-      - Registration
       - Attendees
       - Forms
+      - Registration
     properties:
       - type: Documentation
         url: https://api.cvent.com/docs/registration
@@ -71,9 +69,9 @@ apis:
     humanURL: https://api.cvent.com/webhooks
     baseURL: https://api.cvent.com/webhooks
     tags:
-      - Webhooks
       - Notifications
-      - Real-time
+      - Real-Time
+      - Webhooks
     properties:
       - type: Documentation
         url: https://api.cvent.com/docs/webhooks
