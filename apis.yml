@@ -1,6 +1,6 @@
 aid: cvent-event-cloud
 name: Cvent Event Cloud
-x-type: company
+kind: company
 description: >-
   Cvent Event Cloud is the event management product line of the Cvent
   Platform. It supports the full event lifecycle: event creation,
@@ -85,7 +85,7 @@ common:
     url: https://www.cvent.com/en/pricing
   - type: Support
     url: https://support.cvent.com/
-  - type: Status
+  - type: StatusPage
     url: https://status.cvent.com/
   - type: TermsOfService
     url: https://www.cvent.com/en/terms-of-service
