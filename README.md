@@ -1,19 +1,33 @@
 # Cvent Event Cloud (cvent-event-cloud)
 
-Cvent Event Cloud is the event management product line of the Cvent Platform. It supports the full event lifecycle: event creation, registration, marketing, agenda and session management, mobile event apps, onsite check-in, virtual and hybrid event delivery via Attendee Hub, surveys, and analytics. Programmatic access uses the unified Cvent Platform REST API protected by OAuth 2.0 client credentials, with the token endpoint at `api-platform.cvent.com/ea/oauth2/token`.
+Cvent Event Cloud is the event management product line of the Cvent Platform. It supports the full event lifecycle: event creation, registration, marketing, agenda and session management, mobile event apps, onsite check-in, virtual and hybrid event delivery via the Attendee Hub, surveys, and analytics. The Cvent Platform REST API exposes Event Cloud resources programmatically using OAuth 2.0 client credentials, with the token endpoint at api-platform.cvent.com/ea/oauth2/token. OpenAPI specifications can be downloaded from the developer portal at developers.cvent.com.
 
-**URL:** [Visit APIs.json URL](https://raw.githubusercontent.com/api-evangelist/cvent-event-cloud/refs/heads/main/apis.yml)
+**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/cvent-event-cloud/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/cvent-event-cloud/refs/heads/main/apis.yml)
 
 ## Scope
 
 - **Type:** Index
 - **Position:** Consuming
 - **Access:** 3rd-Party
-- **x-type:** company
 
 ## Tags
 
-- Attendee Hub, Attendees, Event Cloud, Event Management, Event Marketing, Events, Hybrid Events, OAuth 2.0, Onsite, Registration, REST, Sessions, Speakers, Surveys, Virtual Events, Webhooks
+- Attendee Hub
+- Attendees
+- Event Cloud
+- Event Management
+- Event Marketing
+- Events
+- Hybrid Events
+- OAuth 2.0
+- Onsite
+- Registration
+- REST
+- Sessions
+- Speakers
+- Surveys
+- Virtual Events
+- Webhooks
 
 ## Timestamps
 
@@ -24,33 +38,48 @@ Cvent Event Cloud is the event management product line of the Cvent Platform. It
 
 ### Cvent Platform REST API (Event Cloud)
 
-RESTful API for managing events, contacts, registrations, attendees, sessions, speakers, exhibitors, surveys, webhooks, and Attendee Hub data. OAuth 2.0 client credentials. The OpenAPI specification is downloadable from the API reference.
+RESTful API for managing events, contacts, registrations, attendees, sessions, speakers, exhibitors, surveys, webhooks, and Attendee Hub data. Uses OAuth 2.0 client credentials. Authorization code flow is available to planner administrators. The OpenAPI specification can be downloaded from the API reference.
 
-**Human URL:** https://developers.cvent.com/docs/rest-api/overview
-**Base URL:** `https://api-platform.cvent.com`
+- **Human URL:** [https://developers.cvent.com/docs/rest-api/overview](https://developers.cvent.com/docs/rest-api/overview)
+- **Base URL:** `https://api-platform.cvent.com`
 
-## Capabilities
+#### Tags
 
-- Event creation and lifecycle management
-- Registration and attendee management
-- Session, speaker, and exhibitor data sync
-- Survey distribution and response collection
-- Webhook subscriptions for real-time data sync
-- Attendee Hub data integration
+- Attendees
+- Contacts
+- Events
+- OAuth 2.0
+- Registration
+- REST
+- Sessions
+- Surveys
+- Webhooks
 
-## Use Cases
+#### Properties
 
-- Sync registrations to CRM and marketing automation
-- Build custom registration / check-in experiences on top of Cvent
-- Pipe attendee engagement data into BI dashboards
-- Trigger downstream workflows from event webhooks
+- [Documentation](https://developers.cvent.com/docs/rest-api/overview)
+- [Concepts](https://developers.cvent.com/docs/rest-api)
+- [Guides](https://developers.cvent.com/docs/rest-api/guides/rest-guides)
+- [Registration Guide](https://developers.cvent.com/docs/rest-api/guides/registration-guide)
+- [Migration Guide](https://developers.cvent.com/docs/rest-api/migration-guide/benefits)
+- [O Auth Token Endpoint](https://api-platform.cvent.com/ea/oauth2/token)
+- [Postman Collection](collections/cvent-event-cloud.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
+- [Open Collection](collections/cvent-event-cloud.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
 
-## Common Resources
+## Common Properties
 
-- [Cvent Event Management](https://www.cvent.com/en/event-management-software)
+- [GitHub Organization](https://github.com/cvent)
+- [Website](https://www.cvent.com/en/event-management-software)
 - [Developer Portal](https://developers.cvent.com/)
-- [REST API Overview](https://developers.cvent.com/docs/rest-api/overview)
+- [API Reference](https://developers.cvent.com/docs/rest-api/overview)
 - [Attendee Hub](https://www.cvent.com/en/attendee-hub)
+- [Pricing](https://www.cvent.com/en/pricing)
+- [Support](https://support.cvent.com/)
+- [Status Page](https://status.cvent.com/)
+- [Terms of Service](https://www.cvent.com/en/terms-of-service)
+- [Privacy Policy](https://www.cvent.com/en/privacy-policy)
+- [Blog](https://www.cvent.com/blog)
+- [L L Ms Txt](https://www.cvent.com/llms.txt)
 
 ## Maintainers
 
