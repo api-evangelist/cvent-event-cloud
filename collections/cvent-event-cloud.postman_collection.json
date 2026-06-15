@@ -1,0 +1,2355 @@
+{
+  "item": [
+    {
+      "id": "5b77761b-9a1b-4ede-b535-c2fdebcb3ed1",
+      "name": "OAuth",
+      "description": {
+        "content": "OAuth 2.0 token issuance",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "27b109df-af7e-411c-97bb-d858336bc263",
+          "name": "Issue OAuth 2.0 access token",
+          "request": {
+            "name": "Issue OAuth 2.0 access token",
+            "description": {
+              "content": "Exchange Basic-authenticated client credentials for a Bearer access\ntoken valid for 60 minutes. Use the returned token in the\n`Authorization: Bearer <token>` header on subsequent API calls.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "ea",
+                "oauth2",
+                "token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{basicAuthUsername}}"
+                },
+                {
+                  "key": "password",
+                  "value": "{{basicAuthPassword}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "grant_type",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "client_id",
+                  "value": "<string>"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "93bbe2ea-8569-4713-a9e7-d9ce310e0ca4",
+              "name": "Access token issued",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ea",
+                    "oauth2",
+                    "token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "grant_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "client_id",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"access_token\": \"string\",\n  \"token_type\": \"Bearer\",\n  \"expires_in\": 3599,\n  \"scope\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "665146cc-bbf6-4670-ac13-116c8b246790",
+              "name": "Missing or invalid OAuth credentials",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ea",
+                    "oauth2",
+                    "token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "grant_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "client_id",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"string\",\n  \"title\": \"string\",\n  \"status\": 5131,\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "7c54184d-6423-4f6f-b18d-d696ef9ab869",
+      "name": "Events",
+      "description": {
+        "content": "Event lifecycle and configuration",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "869b640d-2743-4b43-b64c-6466c56e32d8",
+          "name": "List events",
+          "request": {
+            "name": "List events",
+            "description": {},
+            "url": {
+              "path": [
+                "ea",
+                "events"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "50"
+                },
+                {
+                  "disabled": false,
+                  "key": "token",
+                  "value": "<string>",
+                  "description": "Continuation token for paged results."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "RSQL-style filter expression."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5a9fb288-ca63-4cdc-8883-494083db6390",
+              "name": "Paginated list of events",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ea",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"code\": \"string\",\n      \"title\": \"string\",\n      \"description\": \"string\",\n      \"start\": \"1947-10-03T09:43:03.747Z\",\n      \"end\": \"2026-02-18T01:20:58.202Z\",\n      \"timezone\": \"string\",\n      \"status\": \"CANCELLED\",\n      \"type\": \"VIRTUAL\",\n      \"eventUrl\": \"https://CkSaXtwhdcWyVfzrDg.hslooRP+vK6wfEr-t80zdObsophBxuN,QT60LccQkgvaiW-ObeqM0g-bY0,3\",\n      \"currency\": \"string\",\n      \"locale\": \"string\",\n      \"created\": \"1947-05-10T23:43:42.786Z\",\n      \"lastModified\": \"1983-01-06T12:18:20.472Z\"\n    },\n    {\n      \"id\": \"string\",\n      \"code\": \"string\",\n      \"title\": \"string\",\n      \"description\": \"string\",\n      \"start\": \"2006-06-21T12:13:20.747Z\",\n      \"end\": \"2023-06-07T21:57:17.459Z\",\n      \"timezone\": \"string\",\n      \"status\": \"CANCELLED\",\n      \"type\": \"HYBRID\",\n      \"eventUrl\": \"http://sbDFJQlx.fijaveZY4vDFHVYGyC+C32iK0ze.t159Quhsnv8Z5r,Y4d9K\",\n      \"currency\": \"string\",\n      \"locale\": \"string\",\n      \"created\": \"1966-11-07T12:24:31.248Z\",\n      \"lastModified\": \"2013-10-04T03:31:22.647Z\"\n    }\n  ],\n  \"paging\": {\n    \"token\": \"string\",\n    \"limit\": 6801\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3d5812cb-395b-49d0-ae29-c52863271569",
+              "name": "Missing or invalid OAuth credentials",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ea",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"string\",\n  \"title\": \"string\",\n  \"status\": 5131,\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7504e85a-ceec-4a72-a0cf-dbaa7c7a1a77",
+          "name": "Create event",
+          "request": {
+            "name": "Create event",
+            "description": {},
+            "url": {
+              "path": [
+                "ea",
+                "events"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<string>\",\n  \"code\": \"<string>\",\n  \"title\": \"<string>\",\n  \"description\": \"<string>\",\n  \"start\": \"<dateTime>\",\n  \"end\": \"<dateTime>\",\n  \"timezone\": \"<string>\",\n  \"status\": \"<string>\",\n  \"type\": \"<string>\",\n  \"eventUrl\": \"<uri>\",\n  \"currency\": \"<string>\",\n  \"locale\": \"<string>\",\n  \"created\": \"<dateTime>\",\n  \"lastModified\": \"<dateTime>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8b75b795-4ad9-4762-884e-8a769bb329fc",
+              "name": "Event created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ea",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<string>\",\n  \"code\": \"<string>\",\n  \"title\": \"<string>\",\n  \"description\": \"<string>\",\n  \"start\": \"<dateTime>\",\n  \"end\": \"<dateTime>\",\n  \"timezone\": \"<string>\",\n  \"status\": \"<string>\",\n  \"type\": \"<string>\",\n  \"eventUrl\": \"<uri>\",\n  \"currency\": \"<string>\",\n  \"locale\": \"<string>\",\n  \"created\": \"<dateTime>\",\n  \"lastModified\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"code\": \"string\",\n  \"title\": \"string\",\n  \"description\": \"string\",\n  \"start\": \"1983-12-04T14:04:50.569Z\",\n  \"end\": \"1986-05-06T16:22:39.459Z\",\n  \"timezone\": \"string\",\n  \"status\": \"CANCELLED\",\n  \"type\": \"VIRTUAL\",\n  \"eventUrl\": \"http://BwRMAPjnnsLmyRxpfw.muCClZG7hNCg\",\n  \"currency\": \"string\",\n  \"locale\": \"string\",\n  \"created\": \"1989-12-10T00:04:08.744Z\",\n  \"lastModified\": \"1970-02-20T21:44:01.192Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d9456d1a-f3fe-45d7-a04e-0053804474f7",
+          "name": "Get event",
+          "request": {
+            "name": "Get event",
+            "description": {},
+            "url": {
+              "path": [
+                "ea",
+                "events",
+                ":eventId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "eventId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "22f5bd03-7192-4f43-ac4b-c698eb79ef25",
+              "name": "Event detail",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ea",
+                    "events",
+                    ":eventId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "eventId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"code\": \"string\",\n  \"title\": \"string\",\n  \"description\": \"string\",\n  \"start\": \"1983-12-04T14:04:50.569Z\",\n  \"end\": \"1986-05-06T16:22:39.459Z\",\n  \"timezone\": \"string\",\n  \"status\": \"CANCELLED\",\n  \"type\": \"VIRTUAL\",\n  \"eventUrl\": \"http://BwRMAPjnnsLmyRxpfw.muCClZG7hNCg\",\n  \"currency\": \"string\",\n  \"locale\": \"string\",\n  \"created\": \"1989-12-10T00:04:08.744Z\",\n  \"lastModified\": \"1970-02-20T21:44:01.192Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "db2b80e9-0128-4132-b0d7-632f7ebeb3f2",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ea",
+                    "events",
+                    ":eventId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "eventId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"string\",\n  \"title\": \"string\",\n  \"status\": 5131,\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "912dc016-5c39-49d4-af77-cd8014124a8f",
+          "name": "Replace event",
+          "request": {
+            "name": "Replace event",
+            "description": {},
+            "url": {
+              "path": [
+                "ea",
+                "events",
+                ":eventId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "eventId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<string>\",\n  \"code\": \"<string>\",\n  \"title\": \"<string>\",\n  \"description\": \"<string>\",\n  \"start\": \"<dateTime>\",\n  \"end\": \"<dateTime>\",\n  \"timezone\": \"<string>\",\n  \"status\": \"<string>\",\n  \"type\": \"<string>\",\n  \"eventUrl\": \"<uri>\",\n  \"currency\": \"<string>\",\n  \"locale\": \"<string>\",\n  \"created\": \"<dateTime>\",\n  \"lastModified\": \"<dateTime>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "202efed8-65e5-41ee-8683-66dc71083d48",
+              "name": "Updated event",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ea",
+                    "events",
+                    ":eventId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "eventId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<string>\",\n  \"code\": \"<string>\",\n  \"title\": \"<string>\",\n  \"description\": \"<string>\",\n  \"start\": \"<dateTime>\",\n  \"end\": \"<dateTime>\",\n  \"timezone\": \"<string>\",\n  \"status\": \"<string>\",\n  \"type\": \"<string>\",\n  \"eventUrl\": \"<uri>\",\n  \"currency\": \"<string>\",\n  \"locale\": \"<string>\",\n  \"created\": \"<dateTime>\",\n  \"lastModified\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"code\": \"string\",\n  \"title\": \"string\",\n  \"description\": \"string\",\n  \"start\": \"1983-12-04T14:04:50.569Z\",\n  \"end\": \"1986-05-06T16:22:39.459Z\",\n  \"timezone\": \"string\",\n  \"status\": \"CANCELLED\",\n  \"type\": \"VIRTUAL\",\n  \"eventUrl\": \"http://BwRMAPjnnsLmyRxpfw.muCClZG7hNCg\",\n  \"currency\": \"string\",\n  \"locale\": \"string\",\n  \"created\": \"1989-12-10T00:04:08.744Z\",\n  \"lastModified\": \"1970-02-20T21:44:01.192Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fad0ebf3-2b15-4af3-829b-2e72a2e9e4af",
+          "name": "Delete event",
+          "request": {
+            "name": "Delete event",
+            "description": {},
+            "url": {
+              "path": [
+                "ea",
+                "events",
+                ":eventId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "eventId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2c1cec60-aac7-4c6d-b02d-6bccb0096abc",
+              "name": "Deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ea",
+                    "events",
+                    ":eventId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "eventId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "499d892b-cd8b-4392-b285-38f21a43a7eb",
+          "name": "Copy event",
+          "request": {
+            "name": "Copy event",
+            "description": {},
+            "url": {
+              "path": [
+                "ea",
+                "events",
+                ":eventId",
+                "copy"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "eventId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b1a67ba3-81c9-4f5b-b7cf-dba5a361f0e0",
+              "name": "Event copy created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ea",
+                    "events",
+                    ":eventId",
+                    "copy"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "eventId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"code\": \"string\",\n  \"title\": \"string\",\n  \"description\": \"string\",\n  \"start\": \"1983-12-04T14:04:50.569Z\",\n  \"end\": \"1986-05-06T16:22:39.459Z\",\n  \"timezone\": \"string\",\n  \"status\": \"CANCELLED\",\n  \"type\": \"VIRTUAL\",\n  \"eventUrl\": \"http://BwRMAPjnnsLmyRxpfw.muCClZG7hNCg\",\n  \"currency\": \"string\",\n  \"locale\": \"string\",\n  \"created\": \"1989-12-10T00:04:08.744Z\",\n  \"lastModified\": \"1970-02-20T21:44:01.192Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "43eaa741-ad16-4f7c-bb45-792c3b3e6898",
+      "name": "Contacts",
+      "description": {
+        "content": "Contact/address book",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c317f6ab-8d4d-427d-a148-fc7480269b29",
+          "name": "List contacts",
+          "request": {
+            "name": "List contacts",
+            "description": {},
+            "url": {
+              "path": [
+                "ea",
+                "contacts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "50"
+                },
+                {
+                  "disabled": false,
+                  "key": "token",
+                  "value": "<string>",
+                  "description": "Continuation token for paged results."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "52169189-8a91-46a3-af8a-ec4e139a87ff",
+              "name": "Paginated contact list",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ea",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "token",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"firstName\": \"string\",\n      \"lastName\": \"string\",\n      \"email\": \"aFstPTjje4nZ@aUMdhpUNsAvyMGCgKVaxIaT.dv\",\n      \"company\": \"string\",\n      \"title\": \"string\",\n      \"phone\": \"string\",\n      \"address\": {\n        \"line1\": \"string\",\n        \"city\": \"string\",\n        \"state\": \"string\",\n        \"postalCode\": \"string\",\n        \"countryCode\": \"string\"\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"firstName\": \"string\",\n      \"lastName\": \"string\",\n      \"email\": \"cerlalVNqVIJW@XjwTtQtGURoHlVJnGO.vdyw\",\n      \"company\": \"string\",\n      \"title\": \"string\",\n      \"phone\": \"string\",\n      \"address\": {\n        \"line1\": \"string\",\n        \"city\": \"string\",\n        \"state\": \"string\",\n        \"postalCode\": \"string\",\n        \"countryCode\": \"string\"\n      }\n    }\n  ],\n  \"paging\": {\n    \"token\": \"string\",\n    \"limit\": 6464\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f7e2af31-aeaf-4ed6-b356-78ebf0de8265",
+          "name": "Create contact",
+          "request": {
+            "name": "Create contact",
+            "description": {},
+            "url": {
+              "path": [
+                "ea",
+                "contacts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<string>\",\n  \"firstName\": \"<string>\",\n  \"lastName\": \"<string>\",\n  \"email\": \"<email>\",\n  \"company\": \"<string>\",\n  \"title\": \"<string>\",\n  \"phone\": \"<string>\",\n  \"address\": {\n    \"line1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"state\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"countryCode\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c6ea4407-adb0-4200-8576-d76abf6fe32b",
+              "name": "Contact created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ea",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<string>\",\n  \"firstName\": \"<string>\",\n  \"lastName\": \"<string>\",\n  \"email\": \"<email>\",\n  \"company\": \"<string>\",\n  \"title\": \"<string>\",\n  \"phone\": \"<string>\",\n  \"address\": {\n    \"line1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"state\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"countryCode\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"firstName\": \"string\",\n  \"lastName\": \"string\",\n  \"email\": \"2-x-GIzrgz91@DokMgERoyaxyqVdMDC.bb\",\n  \"company\": \"string\",\n  \"title\": \"string\",\n  \"phone\": \"string\",\n  \"address\": {\n    \"line1\": \"string\",\n    \"city\": \"string\",\n    \"state\": \"string\",\n    \"postalCode\": \"string\",\n    \"countryCode\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "145d6cb5-8de1-411f-9e5e-902077a03385",
+          "name": "Get contact",
+          "request": {
+            "name": "Get contact",
+            "description": {},
+            "url": {
+              "path": [
+                "ea",
+                "contacts",
+                ":contactId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "contactId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ca46d275-a08b-4c6c-9f0f-8fa09d1f7efa",
+              "name": "Contact detail",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ea",
+                    "contacts",
+                    ":contactId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "contactId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"firstName\": \"string\",\n  \"lastName\": \"string\",\n  \"email\": \"2-x-GIzrgz91@DokMgERoyaxyqVdMDC.bb\",\n  \"company\": \"string\",\n  \"title\": \"string\",\n  \"phone\": \"string\",\n  \"address\": {\n    \"line1\": \"string\",\n    \"city\": \"string\",\n    \"state\": \"string\",\n    \"postalCode\": \"string\",\n    \"countryCode\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "656cbda4-24cb-4d04-93c5-d58aa64b9802",
+          "name": "Update contact",
+          "request": {
+            "name": "Update contact",
+            "description": {},
+            "url": {
+              "path": [
+                "ea",
+                "contacts",
+                ":contactId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "contactId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<string>\",\n  \"firstName\": \"<string>\",\n  \"lastName\": \"<string>\",\n  \"email\": \"<email>\",\n  \"company\": \"<string>\",\n  \"title\": \"<string>\",\n  \"phone\": \"<string>\",\n  \"address\": {\n    \"line1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"state\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"countryCode\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0348cbcb-b50a-4399-91fb-2a9dd1de6232",
+              "name": "Updated contact",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ea",
+                    "contacts",
+                    ":contactId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "contactId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<string>\",\n  \"firstName\": \"<string>\",\n  \"lastName\": \"<string>\",\n  \"email\": \"<email>\",\n  \"company\": \"<string>\",\n  \"title\": \"<string>\",\n  \"phone\": \"<string>\",\n  \"address\": {\n    \"line1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"state\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"countryCode\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"firstName\": \"string\",\n  \"lastName\": \"string\",\n  \"email\": \"2-x-GIzrgz91@DokMgERoyaxyqVdMDC.bb\",\n  \"company\": \"string\",\n  \"title\": \"string\",\n  \"phone\": \"string\",\n  \"address\": {\n    \"line1\": \"string\",\n    \"city\": \"string\",\n    \"state\": \"string\",\n    \"postalCode\": \"string\",\n    \"countryCode\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ad3ae5ad-f8c1-40ac-87b0-78c728d7f246",
+          "name": "Delete contact",
+          "request": {
+            "name": "Delete contact",
+            "description": {},
+            "url": {
+              "path": [
+                "ea",
+                "contacts",
+                ":contactId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "contactId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2593e363-ae60-4929-afe6-f2bc74bead20",
+              "name": "Deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ea",
+                    "contacts",
+                    ":contactId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "contactId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "d8a23d84-5969-43e2-8642-adc500a3f21d",
+      "name": "Attendees",
+      "description": {
+        "content": "Event registrations and attendees",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4d28c80b-3f02-40d1-8c21-a3207b4579e1",
+          "name": "List attendees for an event",
+          "request": {
+            "name": "List attendees for an event",
+            "description": {},
+            "url": {
+              "path": [
+                "ea",
+                "events",
+                ":eventId",
+                "attendees"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "50"
+                },
+                {
+                  "disabled": false,
+                  "key": "token",
+                  "value": "<string>",
+                  "description": "Continuation token for paged results."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "eventId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fab331f6-8627-42b7-90c4-60b5dfd1f611",
+              "name": "Paginated attendee list",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ea",
+                    "events",
+                    ":eventId",
+                    "attendees"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "token",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "eventId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"contactId\": \"string\",\n      \"eventId\": \"string\",\n      \"registrationStatus\": \"ACCEPTED\",\n      \"registrationTypeId\": \"string\",\n      \"admissionItemId\": \"string\",\n      \"attendanceType\": \"IN_PERSON\",\n      \"checkedIn\": true,\n      \"registered\": \"1967-08-19T14:55:44.732Z\"\n    },\n    {\n      \"id\": \"string\",\n      \"contactId\": \"string\",\n      \"eventId\": \"string\",\n      \"registrationStatus\": \"CANCELLED\",\n      \"registrationTypeId\": \"string\",\n      \"admissionItemId\": \"string\",\n      \"attendanceType\": \"IN_PERSON\",\n      \"checkedIn\": true,\n      \"registered\": \"1973-06-24T19:08:07.260Z\"\n    }\n  ],\n  \"paging\": {\n    \"token\": \"string\",\n    \"limit\": 3683\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "78dcb0a4-aa0c-4c54-b82a-6d22d7c6e6ee",
+          "name": "Add attendees (register contacts)",
+          "request": {
+            "name": "Add attendees (register contacts)",
+            "description": {},
+            "url": {
+              "path": [
+                "ea",
+                "events",
+                ":eventId",
+                "attendees"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "eventId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"id\": \"<string>\",\n    \"contactId\": \"<string>\",\n    \"eventId\": \"<string>\",\n    \"registrationStatus\": \"<string>\",\n    \"registrationTypeId\": \"<string>\",\n    \"admissionItemId\": \"<string>\",\n    \"attendanceType\": \"<string>\",\n    \"checkedIn\": \"<boolean>\",\n    \"registered\": \"<dateTime>\"\n  },\n  {\n    \"id\": \"<string>\",\n    \"contactId\": \"<string>\",\n    \"eventId\": \"<string>\",\n    \"registrationStatus\": \"<string>\",\n    \"registrationTypeId\": \"<string>\",\n    \"admissionItemId\": \"<string>\",\n    \"attendanceType\": \"<string>\",\n    \"checkedIn\": \"<boolean>\",\n    \"registered\": \"<dateTime>\"\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b2cda4cc-1931-4116-b2c0-1fa4f801781c",
+              "name": "Attendees registered",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ea",
+                    "events",
+                    ":eventId",
+                    "attendees"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "eventId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"id\": \"string\",\n    \"contactId\": \"string\",\n    \"eventId\": \"string\",\n    \"registrationStatus\": \"CANCELLED\",\n    \"registrationTypeId\": \"string\",\n    \"admissionItemId\": \"string\",\n    \"attendanceType\": \"IN_PERSON\",\n    \"checkedIn\": false,\n    \"registered\": \"1962-09-17T15:43:57.399Z\"\n  },\n  {\n    \"id\": \"string\",\n    \"contactId\": \"string\",\n    \"eventId\": \"string\",\n    \"registrationStatus\": \"DECLINED\",\n    \"registrationTypeId\": \"string\",\n    \"admissionItemId\": \"string\",\n    \"attendanceType\": \"VIRTUAL\",\n    \"checkedIn\": false,\n    \"registered\": \"1990-08-02T07:24:15.254Z\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a1286a57-aa9e-431d-a737-e93ae91f7de0",
+          "name": "Get attendee",
+          "request": {
+            "name": "Get attendee",
+            "description": {},
+            "url": {
+              "path": [
+                "ea",
+                "events",
+                ":eventId",
+                "attendees",
+                ":attendeeId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "eventId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "attendeeId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6b5b9fe4-f4bb-482b-89fe-feda511522ff",
+              "name": "Attendee detail",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ea",
+                    "events",
+                    ":eventId",
+                    "attendees",
+                    ":attendeeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "eventId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "attendeeId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"contactId\": \"string\",\n  \"eventId\": \"string\",\n  \"registrationStatus\": \"DECLINED\",\n  \"registrationTypeId\": \"string\",\n  \"admissionItemId\": \"string\",\n  \"attendanceType\": \"VIRTUAL\",\n  \"checkedIn\": true,\n  \"registered\": \"2012-02-12T07:30:39.774Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e6924328-874c-46f7-825b-276a52cd7058",
+          "name": "Update attendee (cancel, modify)",
+          "request": {
+            "name": "Update attendee (cancel, modify)",
+            "description": {},
+            "url": {
+              "path": [
+                "ea",
+                "events",
+                ":eventId",
+                "attendees",
+                ":attendeeId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "eventId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "attendeeId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<string>\",\n  \"contactId\": \"<string>\",\n  \"eventId\": \"<string>\",\n  \"registrationStatus\": \"<string>\",\n  \"registrationTypeId\": \"<string>\",\n  \"admissionItemId\": \"<string>\",\n  \"attendanceType\": \"<string>\",\n  \"checkedIn\": \"<boolean>\",\n  \"registered\": \"<dateTime>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "35ace36c-0e76-4a12-9baa-3051691d803e",
+              "name": "Updated attendee",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ea",
+                    "events",
+                    ":eventId",
+                    "attendees",
+                    ":attendeeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "eventId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "attendeeId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<string>\",\n  \"contactId\": \"<string>\",\n  \"eventId\": \"<string>\",\n  \"registrationStatus\": \"<string>\",\n  \"registrationTypeId\": \"<string>\",\n  \"admissionItemId\": \"<string>\",\n  \"attendanceType\": \"<string>\",\n  \"checkedIn\": \"<boolean>\",\n  \"registered\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"contactId\": \"string\",\n  \"eventId\": \"string\",\n  \"registrationStatus\": \"DECLINED\",\n  \"registrationTypeId\": \"string\",\n  \"admissionItemId\": \"string\",\n  \"attendanceType\": \"VIRTUAL\",\n  \"checkedIn\": true,\n  \"registered\": \"2012-02-12T07:30:39.774Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "97a642d9-6190-49c1-b82c-5b9cbf553c0b",
+      "name": "Sessions",
+      "description": {
+        "content": "Agenda sessions",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9c8cf0e4-541e-4db8-8f23-bce2da48da23",
+          "name": "List sessions",
+          "request": {
+            "name": "List sessions",
+            "description": {},
+            "url": {
+              "path": [
+                "ea",
+                "events",
+                ":eventId",
+                "sessions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "eventId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a9235e8a-e7b4-4883-83f0-91f3476ba1de",
+              "name": "Sessions",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ea",
+                    "events",
+                    ":eventId",
+                    "sessions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "eventId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"string\",\n    \"title\": \"string\",\n    \"start\": \"1960-12-31T05:23:27.944Z\",\n    \"end\": \"2014-03-25T11:27:14.619Z\",\n    \"capacity\": 4375\n  },\n  {\n    \"id\": \"string\",\n    \"title\": \"string\",\n    \"start\": \"1965-01-27T21:35:31.058Z\",\n    \"end\": \"1983-01-31T08:53:15.339Z\",\n    \"capacity\": 1617\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "3f05b4a5-f403-4f2b-84a1-019af5077e86",
+      "name": "Exhibitors",
+      "description": {
+        "content": "Exhibitor management",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e0a7b191-2fa4-4d1e-94c0-640b0c57d428",
+          "name": "List exhibitors",
+          "request": {
+            "name": "List exhibitors",
+            "description": {},
+            "url": {
+              "path": [
+                "ea",
+                "events",
+                ":eventId",
+                "exhibitors"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "eventId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "336766ca-3a90-4427-a594-c03488813edc",
+              "name": "Exhibitors",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ea",
+                    "events",
+                    ":eventId",
+                    "exhibitors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "eventId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"boothNumber\": \"string\"\n  },\n  {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"boothNumber\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "aa004d5d-fd0c-49f8-a023-e141b382b345",
+      "name": "Webhooks",
+      "description": {
+        "content": "Webhook subscriptions",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f69127dc-cc13-4d9c-8a1b-d850f1049530",
+          "name": "List webhook subscriptions",
+          "request": {
+            "name": "List webhook subscriptions",
+            "description": {},
+            "url": {
+              "path": [
+                "ea",
+                "webhooks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b1795335-424e-45ae-9a90-83f9364e28c0",
+              "name": "Webhooks",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ea",
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"string\",\n    \"url\": \"https://gXPrOVGXuEZLnbTG.fkjheNBKHm91eW79Ln5wclyegkrqsgntj3GGShPJ-dfcOZ7vMw-AXTgR0PF1S9Qmv\",\n    \"events\": [\n      \"string\",\n      \"string\"\n    ],\n    \"active\": false\n  },\n  {\n    \"id\": \"string\",\n    \"url\": \"http://BhKRtqCfudTnefS.rrcgXLpsZzuP6PxBfzCwSQ\",\n    \"events\": [\n      \"string\",\n      \"string\"\n    ],\n    \"active\": false\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ba17680e-aafa-4276-bcdb-5cce1b76435a",
+          "name": "Create webhook subscription",
+          "request": {
+            "name": "Create webhook subscription",
+            "description": {},
+            "url": {
+              "path": [
+                "ea",
+                "webhooks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<string>\",\n  \"url\": \"<uri>\",\n  \"events\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"active\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a45d9262-1480-4623-a519-60eb680c13ac",
+              "name": "Webhook subscription created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ea",
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<string>\",\n  \"url\": \"<uri>\",\n  \"events\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"active\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"url\": \"http://RJTdsfBaxsFopVuYNCddWxnCaMXyUSpUo.mtbiKNOH\",\n  \"events\": [\n    \"string\",\n    \"string\"\n  ],\n  \"active\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-platform.cvent.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "event/events:read event/events:write event/contacts:read event/contacts:write event/attendees:read event/attendees:write event/sessions:read event/registration-types:read event/custom-fields:read"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api-platform.cvent.com/ea/oauth2/token"
+      },
+      {
+        "key": "grant_type",
+        "value": "client_credentials"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "094cedd0-7fb0-48c7-971a-adf47f1a1279",
+    "name": "Cvent Event Cloud REST API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Event Cloud surface of the Cvent Platform REST API — events,\ncontacts, registrations, attendees, sessions, exhibitors, surveys,\nAttendee Hub, and webhook resources. Provides programmatic access to events, contacts,\nregistrations, attendees, sessions, exhibitors, surveys, webhooks, and\nrelated Event Cloud resources, authenticated via OAuth 2.0 client\ncredentials. Endpoint host varies by region — US accounts use\napi-platform.cvent.com and EMEA accounts use api-platform-eur.cvent.com.\n\nBest-effort spec derived from Cvent developer portal documentation\n(overview, quickstart, Registration Guide, Managing Events Guide).\nRefer to https://developers.cvent.com/docs/rest-api/overview for the\nauthoritative reference and downloadable OpenAPI.\n\n\nContact Support:\n Name: Cvent Developer Portal",
+      "type": "text/plain"
+    }
+  }
+}
