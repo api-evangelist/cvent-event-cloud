@@ -95,7 +95,7 @@ common:
     url: https://www.cvent.com/en/privacy-policy
   - type: Blog
     url: https://www.cvent.com/blog
-  - type: LLMsTxt
+  - type: LlmsText
     url: https://www.cvent.com/llms.txt
 maintainers:
   - FN: Kin Lane
