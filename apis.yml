@@ -73,6 +73,12 @@ apis:
       - type: OAuthTokenEndpoint
         url: https://api-platform.cvent.com/ea/oauth2/token
 common:
+  - type: TrustCenter
+    url: security/cvent-event-cloud-trust-center.yml
+  - type: DomainSecurity
+    url: security/cvent-event-cloud-domain-security.yml
+  - type: Authentication
+    url: authentication/cvent-event-cloud-authentication.yml
   - type: OAuthScopes
     url: scopes/cvent-event-cloud-scopes.yml
   - type: GitHubOrganization
