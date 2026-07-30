@@ -13,7 +13,20 @@ description: >-
   be downloaded from the developer portal at developers.cvent.com.
 url: >-
   https://raw.githubusercontent.com/api-evangelist/cvent-event-cloud/refs/heads/main/apis.yml
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/cvent-event-cloud.png
 type: Index
 access: 3rd-Party
 position: Consuming
@@ -38,40 +51,108 @@ tags:
   - Virtual Events
   - Webhooks
 apis:
-  - aid: cvent-event-cloud:rest-api
-    name: Cvent Platform REST API (Event Cloud)
-    description: >-
-      RESTful API for managing events, contacts, registrations, attendees,
-      sessions, speakers, exhibitors, surveys, webhooks, and Attendee Hub
-      data. Uses OAuth 2.0 client credentials. Authorization code flow is
-      available to planner administrators. The OpenAPI specification can
-      be downloaded from the API reference.
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://developers.cvent.com/docs/rest-api/overview
-    baseURL: https://api-platform.cvent.com
-    tags:
-      - Attendees
-      - Contacts
-      - Events
-      - OAuth 2.0
-      - Registration
-      - REST
-      - Sessions
-      - Surveys
-      - Webhooks
-    properties:
-      - type: Documentation
-        url: https://developers.cvent.com/docs/rest-api/overview
-      - type: Concepts
-        url: https://developers.cvent.com/docs/rest-api
-      - type: Guides
-        url: https://developers.cvent.com/docs/rest-api/guides/rest-guides
-      - type: RegistrationGuide
-        url: https://developers.cvent.com/docs/rest-api/guides/registration-guide
-      - type: MigrationGuide
-        url: https://developers.cvent.com/docs/rest-api/migration-guide/benefits
-      - type: OAuthTokenEndpoint
-        url: https://api-platform.cvent.com/ea/oauth2/token
+- aid: cvent-event-cloud:rest-api
+  name: Cvent Platform REST API (Event Cloud)
+  description: >-
+    RESTful API for managing events, contacts, registrations, attendees, sessions, speakers, exhibitors,
+    surveys, webhooks, and Attendee Hub data. Uses OAuth 2.0 client credentials. Authorization code flow
+    is available to planner administrators. The OpenAPI specification can be downloaded from the API reference.
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Attendees
+  - Contacts
+  - Events
+  - OAuth 2.0
+  - Registration
+  - REST
+  - Sessions
+  - Surveys
+  - Webhooks
+  properties:
+  - type: Documentation
+    url: https://developers.cvent.com/docs/rest-api/overview
+  - type: Concepts
+    url: https://developers.cvent.com/docs/rest-api
+  - type: Guides
+    url: https://developers.cvent.com/docs/rest-api/guides/rest-guides
+  - type: RegistrationGuide
+    url: https://developers.cvent.com/docs/rest-api/guides/registration-guide
+  - type: MigrationGuide
+    url: https://developers.cvent.com/docs/rest-api/migration-guide/benefits
+  - type: OAuthTokenEndpoint
+    url: https://api-platform.cvent.com/ea/oauth2/token
+- aid: cvent-event-cloud:cvent-event-cloud-attendees-api
+  name: Cvent Event Cloud Attendees API
+  description: Event registrations and attendees
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Attendees
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-attendees-api-openapi.yml
+- aid: cvent-event-cloud:cvent-event-cloud-contacts-api
+  name: Cvent Event Cloud Contacts API
+  description: Contact/address book
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Contacts
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-contacts-api-openapi.yml
+- aid: cvent-event-cloud:cvent-event-cloud-events-api
+  name: Cvent Event Cloud Events API
+  description: Event lifecycle and configuration
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Events
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-events-api-openapi.yml
+- aid: cvent-event-cloud:cvent-event-cloud-exhibitors-api
+  name: Cvent Event Cloud Exhibitors API
+  description: Exhibitor management
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Exhibitors
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-exhibitors-api-openapi.yml
+- aid: cvent-event-cloud:cvent-event-cloud-oauth-api
+  name: Cvent Event Cloud OAuth API
+  description: OAuth 2.0 token issuance
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - OAuth
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-oauth-api-openapi.yml
+- aid: cvent-event-cloud:cvent-event-cloud-sessions-api
+  name: Cvent Event Cloud Sessions API
+  description: Agenda sessions
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Sessions
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-sessions-api-openapi.yml
+- aid: cvent-event-cloud:cvent-event-cloud-webhooks-api
+  name: Cvent Event Cloud Webhooks API
+  description: Webhook subscriptions
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-webhooks-api-openapi.yml
 common:
   - type: AgenticAccess
     url: agentic-access/cvent-event-cloud-agentic-access.yml
