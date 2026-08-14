@@ -6,11 +6,21 @@ description: >-
   Platform. It supports the full event lifecycle: event creation,
   registration, marketing, agenda and session management, mobile event
   apps, onsite check-in, virtual and hybrid event delivery via the
-  Attendee Hub, surveys, and analytics. The Cvent Platform REST API
-  exposes Event Cloud resources programmatically using OAuth 2.0
-  client credentials, with the token endpoint at
-  api-platform.cvent.com/ea/oauth2/token. OpenAPI specifications can
-  be downloaded from the developer portal at developers.cvent.com.
+  Attendee Hub, surveys, and analytics. Cvent publishes its own OpenAPI
+  specification in public git at github.com/cvent/rest-sdks
+  (cvent-public-spec/openapi.yaml) — 346 paths, 458 operations, 1,302
+  schemas — and generates its first-party TypeScript, .NET and Java SDKs
+  from it with Speakeasy, applying five published OpenAPI Overlay 1.0.0
+  documents in the process. Access is OAuth 2.0, client credentials for
+  server-to-server and authorization code for planner administrators,
+  with the token endpoint at api-platform.cvent.com/ea/oauth2/token and
+  235 declared scopes. Regional bases split North America
+  (api-platform.cvent.com/ea) from Europe (api-platform-eur.cvent.com/ea)
+  with no cross-region read. Cvent also runs a live remote MCP server at
+  mcp.cvent.com/mcp secured with OAuth 2.1 and PKCE, publishes a dated
+  biweekly changelog, a 40-message webhook catalogue, SCIM 2.0 user
+  provisioning, and a Custom Widgets browser SDK for embedding components
+  in Cvent-hosted event pages.
 url: >-
   https://raw.githubusercontent.com/api-evangelist/cvent-event-cloud/refs/heads/main/apis.yml
 accessModel:
@@ -31,24 +41,33 @@ type: Index
 access: 3rd-Party
 position: Consuming
 created: '2024-01-01'
-modified: '2026-04-28'
+modified: '2026-08-13'
 specificationVersion: '0.20'
 tags:
   - Attendee Hub
   - Attendees
+  - Bulk
+  - Contacts
   - Event Cloud
   - Event Management
   - Event Marketing
   - Events
+  - Exhibitors
   - Hybrid Events
+  - MCP
   - OAuth 2.0
   - Onsite
+  - OpenAPI
+  - Overlay
   - Registration
   - REST
+  - SCIM
+  - SDKs
   - Sessions
   - Speakers
   - Surveys
   - Virtual Events
+  - Webcasts
   - Webhooks
 apis:
 - aid: cvent-event-cloud:rest-api
@@ -93,6 +112,10 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/cvent-event-cloud-attendees-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-attendees-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-attendees-api.opencollection.json
 - aid: cvent-event-cloud:cvent-event-cloud-contacts-api
   name: Cvent Event Cloud Contacts API
   description: Contact/address book
@@ -103,6 +126,10 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/cvent-event-cloud-contacts-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-contacts-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-contacts-api.opencollection.json
 - aid: cvent-event-cloud:cvent-event-cloud-events-api
   name: Cvent Event Cloud Events API
   description: Event lifecycle and configuration
@@ -113,26 +140,10 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/cvent-event-cloud-events-api-openapi.yml
-- aid: cvent-event-cloud:cvent-event-cloud-exhibitors-api
-  name: Cvent Event Cloud Exhibitors API
-  description: Exhibitor management
-  humanURL: https://developers.cvent.com/docs/rest-api/overview
-  baseURL: https://api-platform.cvent.com
-  tags:
-  - Exhibitors
-  properties:
-  - type: OpenAPI
-    url: openapi/cvent-event-cloud-exhibitors-api-openapi.yml
-- aid: cvent-event-cloud:cvent-event-cloud-oauth-api
-  name: Cvent Event Cloud OAuth API
-  description: OAuth 2.0 token issuance
-  humanURL: https://developers.cvent.com/docs/rest-api/overview
-  baseURL: https://api-platform.cvent.com
-  tags:
-  - OAuth
-  properties:
-  - type: OpenAPI
-    url: openapi/cvent-event-cloud-oauth-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-events-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-events-api.opencollection.json
 - aid: cvent-event-cloud:cvent-event-cloud-sessions-api
   name: Cvent Event Cloud Sessions API
   description: Agenda sessions
@@ -143,16 +154,780 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/cvent-event-cloud-sessions-api-openapi.yml
-- aid: cvent-event-cloud:cvent-event-cloud-webhooks-api
-  name: Cvent Event Cloud Webhooks API
-  description: Webhook subscriptions
+  - type: Postman
+    url: collections/cvent-event-cloud-sessions-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-sessions-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-appointments-api
+  name: Cvent Event Cloud Appointments API
+  description: >-
+    An appointment is a meeting scheduled between two or more parties. These APIs allow you to get
+     information about your Cvent Appointments: appointment attendees, their interests, and availabilities.
+
+
+    * **Appointment Events** - Appointment events help planners facilitate meetings between attendees.
+    Attendees express their interest and availability to schedule appointments. Use this API to get information
+    about appointments and appointment attendees.
+
+
+    * **Appointment Attendees** - Appointment attendees are meeting participants. They can be attendees
+    of either events or appointment events. Get information about these participants or use their appointment
+    attendee ID to get their availabilities and interests.
+
+
+    * **Availability** - Appointment availabilities describe an appointment attendees' preference in meeting
+    dates and times. Availability information is only available for *Planner Coordinated Appointments*.
+
+
+    * **Interests** - Appointment interests describe appointment attendees' preferences in meeting with
+    another organization or individual. Interest information is only available for *Planner Coordinated
+    Appointments*.
+
+    * **Available Times** - Available times lists time ranges available  for appointments scheduling.
+
+    * **Locations** - Locations lists details of all locations created for  scheduling appointments.
+
+    * **Appointment Types** - Appointment Types lists details of different  appointment types created.
   humanURL: https://developers.cvent.com/docs/rest-api/overview
   baseURL: https://api-platform.cvent.com
   tags:
-  - Webhooks
+  - Appointments
   properties:
   - type: OpenAPI
-    url: openapi/cvent-event-cloud-webhooks-api-openapi.yml
+    url: openapi/cvent-event-cloud-appointments-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-appointments-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-appointments-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-attendee-activities-api
+  name: Cvent Event Cloud Attendee Activities API
+  description: >-
+    The Attendee Activities API gives valuable insight into your customer's experience at your Cvent event.
+
+    Now, you can get a fuller picture of your customer's journey, including onsite activities, offsite
+    meetings,
+
+    breakout sessions, booth visits, and virtual seminars. You can use that data to compile a unified
+    customer
+
+    profile that integrates with your external systems and data.
+
+
+    By gathering all this info into a single interface, the API allows you to see your customer's engagement
+
+    at every step of the journey, create engagement models, and integrate that data with your external
+    tools.
+
+    You can use this data to understand what your customers are looking for, keep them engaged, build
+    loyalty,
+
+    drive upsell, and increase the long-term value of your events.
+
+
+    Please note that attendee activities data is retained for a maximum of 2 years and is purged thereafter.
+
+
+    For more details on [attendee activities](https://developers.cvent.com/docs/rest-api/explanation/attendee-activities).
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Attendee Activities
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-attendee-activities-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-attendee-activities-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-attendee-activities-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-attendee-insights-api
+  name: Cvent Event Cloud Attendee Insights API
+  description: >-
+    The Attendee Insights feature provides valuable information about your event attendees. It assists
+    planners, marketers, and exhibitors in targeting customers effectively, thereby enhancing engagement
+    and conversion rates for marketing campaigns. Utilize these APIs to fetch engagement score data from
+    your event and integrate it into your marketing systems.
+
+
+    **Engagement Score** - Engagement scores are a container that track individual attendees' engagement
+    with your event. Attendees earn points by performing actions, which indicates their relative engagement
+    with your content.
+
+
+    **Actions** - These are distinct, trackable activities that attendees can perform during an event.
+    Points are awarded for these actions and contribute to the engagement score.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Attendee Insights
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-attendee-insights-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-attendee-insights-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-attendee-insights-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-attendee-messages-api
+  name: Cvent Event Cloud Attendee Messages API
+  description: >-
+    These APIs retrieve and manage attendee messages—communications exchanged between attendees within
+    channels. Channels are virtual spaces created for one-on-one or group conversations, allowing attendees
+    to communicate directly or in groups during an event.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Attendee Messages
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-attendee-messages-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-attendee-messages-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-attendee-messages-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-audience-segments-api
+  name: Cvent Event Cloud Audience Segments API
+  description: >-
+    Audience Segments allow planners to segment their attendees into groups and
+
+    better manage the attendee experience based on their defined segments. Audience
+
+    Segments APIs will enable you to get, create, and update segment information.
+
+    These APIs will also allow you to get and update attendees associated with an
+
+    audience segment.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Audience Segments
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-audience-segments-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-audience-segments-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-audience-segments-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-authentication-api
+  name: Cvent Event Cloud Authentication API
+  description: Endpoints for obtaining, refreshing, and validating OAuth2 access tokens.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Authentication
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-authentication-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-authentication-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-authentication-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-badge-print-job-api
+  name: Cvent Event Cloud Badge Print Job API
+  description: >-
+    Badge print jobs can be scheduled to a printer pool, so a printer in the printer pool can consume
+    the job and print the badge.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Badge Print Job
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-badge-print-job-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-badge-print-job-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-badge-print-job-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-badge-printer-pools-api
+  name: Cvent Event Cloud Badge Printer Pools API
+  description: >-
+    Badge printer pools are set up from Cvent UI. You can use this API to retrieve badge printer pools.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Badge Printer Pools
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-badge-printer-pools-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-badge-printer-pools-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-badge-printer-pools-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-budget-api
+  name: Cvent Event Cloud Budget API
+  description: >-
+    Budget is an event feature used to organize spending and track [allocations](https://support.cvent.com/s/communityarticle/Setting-Up-Budget-Allocations).
+    Use this API to view budget items, cards and card transactions related to the budget module.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Budget
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-budget-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-budget-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-budget-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-bulk-api
+  name: Cvent Event Cloud Bulk API
+  description: >-
+    The Bulk API provides a simple interface to upload large amounts of data into Cvent.  The API processes
+    the uploaded data asynchronously making API calls on behalf of the caller.
+
+
+    Consumers of the bulk API will do the following:
+
+    * [Create a bulk job](#operation/createBulkJob) with or without data
+
+    * *(Optional)* If a bulk job was created without data, then [upload bulk job data](#operation/uploadBulkJobData)
+    as many times as needed
+
+    * *(Optional)* [Run bulk job](#operation/runBulkJob)
+
+    * Use [get bulk job](#operation/getBulkJobById) to track status
+
+    * Use [list bulk job results](#operation/listBulkJobResult) to get details of items uploaded
+
+
+    For more details, see the [Bulk Job User Guide](https://developers.cvent.com/docs/rest-api/guides/bulk-api-user-guide).
+
+
+    **Note:** These bulk jobs have a TTL and will expire once they are complete or never ran. Bulk jobs
+    will expire
+
+    1 week after creation, and this one week is refreshed when data is uploaded and the job is run. The
+    Bulk Job
+
+    will be available for 1 week after completion to get results. Right now we do NOT support bulk GET
+    requests.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Bulk
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-bulk-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-bulk-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-bulk-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-campaigns-api
+  name: Cvent Event Cloud Campaigns API
+  description: >-
+    Planners use eMarketing campaigns to contact an audience, such as newsletters, press releases, or
+    product updates. Campaign emails are used as newsletters, promotions, advertisements, or marketing
+    messages. Use these APIs to send an email and get historical data about your campaigns.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Campaigns
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-campaigns-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-campaigns-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-campaigns-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-card-tokens-api
+  name: Cvent Event Cloud Card Tokens API
+  description: >-
+    **Card Tokenization**: Tokenization is the process Cvent uses to collect sensitive card details and
+
+    personally identifiable information (PII), directly from your customers in a secure manner.
+
+    This guarantees that no sensitive card data touches your server, and allows your integration to
+
+    operate in compliance with PCI standards. A card token is a unique identifier that represents sensitive
+    credit card information.
+
+    It is used as a secure alternative to directly handling credit card details during transactions.
+
+    The token can be used in place of the actual credit card data when making API calls, providing an
+    extra layer of security.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Card Tokens
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-card-tokens-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-card-tokens-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-card-tokens-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-compliance-api
+  name: Cvent Event Cloud Compliance API
+  description: >-
+    These API's provide compliance support for regulated industries.
+
+
+    **Communication Compliance** lets you view communication activities across your account.
+
+    Various written forms of communication are captured. For example, emails, SMS, chat messages, or push
+    notifications
+
+    can be downloaded for archival or analysis.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Compliance
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-compliance-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-compliance-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-compliance-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-custom-fields-api
+  name: Cvent Event Cloud Custom Fields API
+  description: >-
+    Custom Fields are created by event planners to track important information about specific objects
+    like events, contacts, or sessions. Use these APIs to view, create, and update custom fields in your
+    account and their related details.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Custom Fields
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-custom-fields-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-custom-fields-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-custom-fields-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-discounts-api
+  name: Cvent Event Cloud Discounts API
+  description: >-
+    Discounts provide a way to reduce the cost of event registration items. Use these APIs to manage event
+    discounts, including creating, updating, and linking discounts to agenda items.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Discounts
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-discounts-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-discounts-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-discounts-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-emails-api
+  name: Cvent Event Cloud Emails API
+  description: >-
+    Event planners use emails to invite registrants, market their events and request feedback from attendees.
+    Use these APIs to get historical data about your emails and see relevant details like the types of
+    emails sent, the recipient, and delivery status.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Emails
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-emails-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-emails-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-emails-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-event-credits-api
+  name: Cvent Event Cloud Event Credits API
+  description: >-
+    Event Credits reward attendees for participating in your events. Planners can award credits for the
+    entire event, specific sessions, or both. You can also award credits after attendees complete surveys.
+    Use these APIs to retrieve credit details for your attendees.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Event Credits
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-event-credits-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-event-credits-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-event-credits-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-event-features-api
+  name: Cvent Event Cloud Event Features API
+  description: EventFeatures related APIs
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Event Features
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-event-features-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-event-features-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-event-features-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-event-role-api
+  name: Cvent Event Cloud Event Role API
+  description: >-
+    Event roles are event specific permission sets for your organization's users. Use these APIs to retrieve,
+    create, update, and delete event role assignments to your organization's users.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Event Role
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-event-role-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-event-role-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-event-role-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-event-travel-api
+  name: Cvent Event Cloud Event Travel API
+  description: >-
+    Event travel lets planners capture air & hotel requests from attendees and track air actuals, hotel
+    reservations and alternate travel answers at your event. Use these endpoints to retrieve your air,
+    hotel, housing reservation request and alternate travel answers data from your events. **Housing Reservation
+    Request** - An association between an attendee's information in a registration event and a Cvent Passkey
+    event. Also known as a Passkey bridge.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Event Travel
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-event-travel-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-event-travel-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-event-travel-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-events-hub-api
+  name: Cvent Event Cloud Events+ Hub API
+  description: >-
+    An Events+ Hub persists basic information needed to assign an owner and optionally customize the public
+    presentation.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Events+ Hub
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-events-hub-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-events-hub-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-events-hub-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-exhibitor-api
+  name: Cvent Event Cloud Exhibitor API
+  description: >-
+    * **Exhibitor -** An exhibitor is an organization that is sponsoring or exhibiting at your event.
+    This API allows you to get information about your exhibitors.
+
+
+    * **Registration Pack -** Registration Pack provides capacities of different registration types allocated
+    by the planner to a specific exhibitor.
+
+
+    * **Exhibitor Questions -** Set of questions for an exhibitor.
+
+
+    * **Exhibitor Answers -** Set of answers to exhibitor questions for an exhibitor.
+
+
+    * **Exhibitor Categories -** Set of exhibitor categories for an event. Exhibitor Categories are used
+    in Attendee Hub and Event App to differentiate exhibitors.
+
+
+    * **Sponsorship Levels -** Sponsorship levels are defined by the planner. Use this API to get details
+    of existing sponsorship levels defined within the event. To assign sponsorship levels to exhibitors,
+    use the Exhibitor endpoints.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Exhibitor
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-exhibitor-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-exhibitor-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-exhibitor-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-exhibitor-content-api
+  name: Cvent Event Cloud Exhibitor Content API
+  description: >-
+    Exhibitor Content operations for an exhibitor. This API allows you to upload & get exhibitor content
+    data such as files, weblinks.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Exhibitor Content
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-exhibitor-content-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-exhibitor-content-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-exhibitor-content-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-exhibitor-team-api
+  name: Cvent Event Cloud Exhibitor Team API
+  description: >-
+    * **Exhibitor Admin -** Exhibitor Admins are administrators that have access to the exhibitor portal.
+    In the portal, they are able to complete pre-event tasks, manage their team, purchase LeadCapture
+    (if applicable), and download leads. Use this API to get details for existing admins, create new admins,
+    and update admin details.
+
+
+    * **Exhibitor Booth Staff -** Exhibitor booth staff is someone that manages the frontline of the exhibitor's
+    booth onsite or virtually. Booth staff needs to be registered for the event in order to be associated
+    with an exhibitor. Use this API to get details for the existing booth staff(s) for a specific exhibitor,
+    associate new booth staff to the exhibitor, and delete the association of a booth staff if required.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Exhibitor Team
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-exhibitor-team-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-exhibitor-team-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-exhibitor-team-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-file-api
+  name: Cvent Event Cloud File API
+  description: >-
+    Allows you to upload files and get file location using the file ID. File ID can be used with other
+    APIs to associate the file to an entity. For example:
+
+    * <a href="#operation/addSessionDoc">Add Document To Session</a>
+
+    * <a href="#operation/addSpeakerDoc">Add Document To Speaker</a>
+
+    * <a href="#operation/assignContactProfileImage">Assign Contact Profile Picture</a>
+
+    * <a href="#operation/updateExhibitorCategoryBanner">Assign Banner to Exhibitor Category</a>
+
+    * <a href="#operation/updateExhibitorBanner">Assign Exhibitor Banner Image</a>
+
+    * <a href="#operation/updateExhibitorLogo">Assign Exhibitor Logo Image</a>
+
+    * <a href="#operation/assignSpeakerProfileImage">Assign Speaker Profile Picture</a>
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - File
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-file-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-file-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-file-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-hooks-api
+  name: Cvent Event Cloud Hooks API
+  description: >-
+    These APIs allow you to create hooks. When triggered, a hook sends a request to your service to
+
+    get updated data related to the related Cvent object.
+
+
+    For more information on using hooks, see the
+
+    [getting started guide](https://developers.cvent.com/docs/cid/attendee-identification-service).
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Hooks
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-hooks-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-hooks-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-hooks-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-leads-api
+  name: Cvent Event Cloud Leads API
+  description: >-
+    * **Leads -** Leads include leads gathered by LeadCapture, Appointments, and Inbound Leads. Use this
+    API to get information for the lead and how it was captured.
+
+
+    * **Lead Qualification Question -** Custom questions created by each exhibitor to qualify a lead.
+    Questions and answers are their own endpoints.
+
+
+    * **Eliterature Requests -** List of E-literature requests data sent to lead.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Leads
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-leads-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-leads-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-leads-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-process-form-api
+  name: Cvent Event Cloud Process Form API
+  description: >-
+    Process forms automate data collection and notifications related to planning and executing events.
+    Process form submissions are responses to a specific process form, providing data the form requests.
+    Use these APIs to manage process form submissions in your account.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Process Form
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-process-form-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-process-form-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-process-form-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-seating-api
+  name: Cvent Event Cloud Seating API
+  description: >-
+    Seating lets you plan seating at your events by configuring tables and assigning seats to your attendees.
+    The seating APIs allow you to create, update, and delete seating, tables, seats, and seating assignments.
+
+    * **Seating** - A diagram of tables and seats. Your event can have many seatings.
+
+    * **Table** - A communal location where chairs are assigned. Each table is assigned to a seating.
+
+    * **Seat** - Individual seat at a table. Each seat can be assigned to an attendee.
+
+    * **Assignments** - Seat that is assigned to an attendee.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Seating
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-seating-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-seating-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-seating-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-signatures-api
+  name: Cvent Event Cloud Signatures API
+  description: Retrieves Check-In & Check-Out Signatures Of Attendees
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Signatures
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-signatures-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-signatures-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-signatures-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-speakers-api
+  name: Cvent Event Cloud Speakers API
+  description: >-
+    Speakers are individuals presenting at your event's session(s). Use Speaker APIs to read existing
+    speaker data, create new speakers or update existing speakers in your events.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Speakers
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-speakers-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-speakers-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-speakers-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-surveys-api
+  name: Cvent Event Cloud Surveys API
+  description: >-
+    Surveys are lists of questions deployed to your contacts. Surveys can be standalone or can be associated
+    to a Cvent event. Use these APIs to search for surveys and retrieve the associated questions and responses.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Surveys
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-surveys-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-surveys-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-surveys-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-usage-api
+  name: Cvent Event Cloud Usage API
+  description: >-
+    Use these APIs view your REST API usage and limits metrics. For more details on limits - [Rate Limits](#section/Getting-Started/Rate-Limits)
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Usage
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-usage-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-usage-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-usage-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-user-scim-api
+  name: Cvent Event Cloud User SCIM API
+  description: >-
+    The [SCIM](https://www.simplecloud.info/) standard allows for easier cross-domain identity management.
+    This API allows you to manage your account users and SCIM groups (representing Cvent user roles).
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - User SCIM
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-user-scim-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-user-scim-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-user-scim-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-users-api
+  name: Cvent Event Cloud Users API
+  description: >-
+    Operations for managing account users and user groups, including creation, retrieval, update, and
+    deletion. Use these endpoints to administer user access and roles within your account.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-users-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-users-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-users-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-video-api
+  name: Cvent Event Cloud Video API
+  description: >-
+    Videos can be added to Cvent events with renditions at various resolutions, audio files, reactions
+    tracks, and text tracks. Attendee viewership is tracked to get insight into durations, devices used
+    and venue where the video is watched. Use these APIs to view and manage videos, related text tracks,
+    and audio files. Use these APIs also to get insight into video viewership.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Video
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-video-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-video-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-video-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-webcasts-api
+  name: Cvent Event Cloud Webcasts API
+  description: >-
+    Webcasts are virtual or livestreaming components of your Cvent events. Use these APIs to integrate
+    your virtual events from outside sources into your Cvent workflows, create and delete webcasts from
+    within Cvent, and retrieve and update webcast details.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Webcasts
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-webcasts-api-openapi.yml
+  - type: Postman
+    url: collections/cvent-event-cloud-webcasts-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/cvent-event-cloud-webcasts-api.opencollection.json
 common:
   - type: AgenticAccess
     url: agentic-access/cvent-event-cloud-agentic-access.yml
@@ -175,19 +950,100 @@ common:
   - type: AttendeeHub
     url: https://www.cvent.com/en/attendee-hub
   - type: Pricing
-    url: https://www.cvent.com/en/pricing
+    url: https://www.cvent.com/en/event-management-software/cvent-pricing
   - type: Support
     url: https://support.cvent.com/
   - type: StatusPage
     url: https://status.cvent.com/
   - type: TermsOfService
-    url: https://www.cvent.com/en/terms-of-service
+    url: https://www.cvent.com/en/cvent-general-terms-of-use
   - type: PrivacyPolicy
     url: https://www.cvent.com/en/privacy-policy
   - type: Blog
     url: https://www.cvent.com/blog
   - type: LlmsText
     url: https://www.cvent.com/llms.txt
+  - type: LLMsTxt
+    url: llms/cvent-event-cloud-llms.txt
+  - type: Documentation
+    url: https://developers.cvent.com/docs/rest-api/overview
+  - type: GettingStarted
+    url: https://developers.cvent.com/docs/rest-api/tutorials/developer-quickstart
+  - type: Guides
+    url: https://developers.cvent.com/docs/rest-api/guides/rest-guides
+  - type: SignUp
+    url: https://developers.cvent.com/applications
+  - type: TrustCenterURL
+    url: https://trust.cvent.com/
+  - type: SourceCode
+    url: https://github.com/cvent/rest-sdks
+  - type: Packages
+    url: packages/cvent-event-cloud-packages.yml
+  - type: SDKs
+    url: packages/cvent-event-cloud-packages.yml
+  - type: SDKDocumentation
+    url: https://developers.cvent.com/docs/rest-api/sdks
+  - type: WellKnown
+    url: well-known/cvent-event-cloud-well-known.yml
+  - type: MCPServer
+    url: mcp/cvent-event-cloud-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/cvent-event-cloud-tool-crosswalk.yml
+  - type: Overlay
+    url: overlays/cvent-event-cloud-overlays.yml
+  - type: Arazzo
+    url: arazzo/cvent-event-cloud-sdk-tests.arazzo.yaml
+  - type: Conformance
+    url: conformance/cvent-event-cloud-conformance.yml
+  - type: Compliance
+    url: security/cvent-event-cloud-trust-center.yml
+  - type: ErrorCatalog
+    url: errors/cvent-event-cloud-problem-types.yml
+  - type: Lifecycle
+    url: lifecycle/cvent-event-cloud-lifecycle.yml
+  - type: Deprecation
+    url: lifecycle/cvent-event-cloud-lifecycle.yml
+  - type: Conventions
+    url: conventions/cvent-event-cloud-conventions.yml
+  - type: ChangeLog
+    url: changelog/cvent-event-cloud-changelog.yml
+  - type: ChangeLogURL
+    url: https://developers.cvent.com/docs/rest-api/changelog
+  - type: Components
+    url: components/cvent-event-cloud-components.yml
+  - type: DataModel
+    url: data-model/cvent-event-cloud-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cvent-event-cloud-webhooks.yml
+  - type: WebhooksDocumentation
+    url: https://developers.cvent.com/docs/webhooks/overview
+  - type: AgentSkill
+    url: skills/_index.yml
+  - type: Plans
+    url: plans/cvent-event-cloud-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/cvent-event-cloud-rate-limits.yml
+  - type: FinOps
+    url: finops/cvent-event-cloud-finops.yml
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
+x-enrichment:
+  date: '2026-08-13'
+  status: enriched
+  artifacts_added: 20
+  pass: local-v1
+x-coverage:
+  state: covered
+  reason: null
+  detail: >-
+    Cvent's real OpenAPI was located in its own public GitHub org
+    (github.com/cvent/rest-sdks, cvent-public-spec/openapi.yaml) and replaced a hand-written
+    scaffold; a live remote MCP server was confirmed at mcp.cvent.com/mcp via its RFC 9728
+    protected-resource metadata.
+  evidence:
+    - url: https://raw.githubusercontent.com/cvent/rest-sdks/main/cvent-public-spec/openapi.yaml
+      status: 200
+    - url: https://mcp.cvent.com/.well-known/oauth-protected-resource/mcp
+      status: 200
+  checked: '2026-08-13'
