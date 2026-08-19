@@ -42,7 +42,7 @@ access: 3rd-Party
 position: Consuming
 created: '2024-01-01'
 modified: '2026-08-13'
-specificationVersion: '0.20'
+specificationVersion: '0.23'
 tags:
   - Attendee Hub
   - Attendees
