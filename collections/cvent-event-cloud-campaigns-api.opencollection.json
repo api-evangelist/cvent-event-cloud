@@ -1,0 +1,174 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cvent REST APIs — Event Cloud Campaigns API",
+    "version": "ea"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Campaigns",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List eMarketing Campaigns",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/campaigns",
+            "params": [
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been created before this time point. Defaults to current time."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been created after this time point. Defaults to 6 months back from current time."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "A filter query string narrows search results and supports the combination of logical and comparison operators.\nThe filter adheres to the pattern filter='field' comparisonType 'value'.\n\n'OR' is not supported. Only 'AND' operator is supported.\n\nThe following comparison types can be used in filter expressions:\n  * equal: eq\n  * not equal: ne\n  * greater or equal: ge\n  * less than or equal: le\n\nThe following fields are filterable:\n  * campaign.name (eq|ne)\n  * campaign.id (eq|ne)\n  * campaign.active (eq|ne)\n  * created (eq|le|ge)\n  * lastModified (eq|le|ge)\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a list of eMarketing campaigns."
+        },
+        {
+          "info": {
+            "name": "List Email Templates",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/emarketing/campaigns/:campaignId/email-templates",
+            "params": [
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been created before this time point. Defaults to current time."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been created after this time point. Defaults to 6 months back from current time."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "campaignId",
+                "value": "",
+                "type": "path",
+                "description": "The unique ID of a campaign. Used to retrieve the email templates used in this campaign."
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "A filter query string narrows search results and supports the combination of logical and comparison operators.\nThe filter adheres to the pattern filter='field' comparisonType 'value'.\n\n'OR' is not supported. Only 'AND' operator is supported.\n\nThe following comparison types can be used in filter expressions:\n  * equal: eq\n\nThe following fields are filterable:\n  * name (eq)\n  * createdBy (eq)\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a list of eMarketing email templates."
+        },
+        {
+          "info": {
+            "name": "Send Email To Recipients",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/emarketing/emails",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Sends an email to one or more eMarketing campaign recipients who are on the recipient list."
+        },
+        {
+          "info": {
+            "name": "List Emarketing Email Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/emarketing/emails/:emailRequestId/status",
+            "params": [
+              {
+                "name": "emailRequestId",
+                "value": "",
+                "type": "path",
+                "description": "Used to get status of emails which were sent with this email request ID."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets the status of email using unique email request ID that was generated as a response of [Send Email To Recipients](#tag/Campaigns/operation/sendEMarketingEmails) request."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

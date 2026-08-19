@@ -3,157 +3,142 @@ specificationVersion: '0.1'
 schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
 provider: Cvent Event Cloud
 providerId: cvent-event-cloud
+generated: '2026-08-13'
+method: searched
+source: https://www.cvent.com/en/event-management-software/cvent-pricing
+sources:
+  - https://www.cvent.com/en/event-management-software/cvent-pricing
+  - https://github.com/cvent/rest-sdks/blob/main/cvent-public-spec/openapi.yaml
 created: '2026-05-04'
-modified: '2026-05-04'
-tags:
-  - Attendee Hub
-  - Attendees
-  - Event Cloud
-  - Event Management
-  - Event Marketing
-  - Events
-  - Hybrid Events
-  - OAuth 2.0
-  - Onsite
-  - Registration
-  - REST
-  - Sessions
-  - Speakers
-  - Surveys
-  - Virtual Events
-  - Webhooks
-description: Machine-readable plans and pricing scaffold for this API provider. Conforms to the API Commons
-  Plans schema. Tier limits and prices are scaffold defaults; replace with provider-published values.
+modified: '2026-08-13'
+supersedes: >-
+  The 2026-05-04 bulk-sweep scaffold, which invented a Free / Professional / Enterprise ladder with
+  placeholder quotas (1,000 and 100,000 requests per month) and "TBD" prices. Cvent publishes no
+  such tiers. The API access tiers below are Cvent's real, published ones and they are quota tiers,
+  not price tiers.
+plan_count: 3
+pricing_published: false
+currency: null
+note: >-
+  Cvent publishes NO prices. Every path on the pricing page terminates in "Contact sales" or "Get a
+  free quote", and the page is organised by product module rather than by priced tier. Cvent does
+  discount for non-profits but states the rate is discussed with its team. What Cvent DOES publish
+  is the API usage-tier ladder below — Free, Standard and Premium — which governs API access volume
+  and is documented in the OpenAPI itself and self-discoverable at runtime via GET /ea/usage/tier.
+  Which tier an account receives is set by its Cvent contract, not chosen at signup.
+
 plans:
-  - id: cvent-event-cloud-free
+  - id: cvent-event-cloud-api-free
     name: Free
-    type: freemium
-    description: Free entry tier for the Cvent Event Cloud API surface. Intended for evaluation, prototyping,
-      and low-volume integrations. Real limits and pricing must be reconciled with the provider's published
-      plan documentation.
+    type: usage-tier
+    price: null
+    price_published: false
+    description: >-
+      Entry API usage tier. Sufficient for evaluation and low-volume integration; a single sustained
+      poll loop will exhaust it.
     entries:
-      - label: API Requests
-        description: Monthly API request quota across all included endpoints
-        name: api_requests
+      - label: Daily API Calls
+        name: daily_calls
         type: quota
-        metric: requests
+        metric: calls
         limit: 1000
-        timeFrame: month
-        geo: global
-        domains:
-          - https://api-platform.cvent.com
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-      - label: Rate Limit
-        description: Maximum requests per minute on the free tier
-        name: rate_limit
+        timeFrame: day
+        reset: 00:00 GMT
+      - label: Calls per Second
+        name: call_rate
         type: rate
-        metric: requests_per_minute
+        metric: calls_per_second
+        limit: 2
+        timeFrame: second
+      - label: Max Burst
+        name: burst
+        type: rate
+        metric: calls
+        limit: 1
+    elements:
+      - name: Cvent REST APIs
+      - name: Public documentation
+      - name: OpenAPI specification
+      - name: First-party SDKs (TypeScript, .NET, Java)
+  - id: cvent-event-cloud-api-standard
+    name: Standard
+    type: usage-tier
+    price: null
+    price_published: false
+    description: Production API usage tier.
+    entries:
+      - label: Daily API Calls
+        name: daily_calls
+        type: quota
+        metric: calls
+        limit: 15000
+        timeFrame: day
+        reset: 00:00 GMT
+      - label: Calls per Second
+        name: call_rate
+        type: rate
+        metric: calls_per_second
         limit: 10
-        timeFrame: minute
-        geo: global
-        domains:
-          - https://api-platform.cvent.com
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-    elements:
-      - name: Public Documentation
-      - name: Community Support
-      - name: Sandbox Access
-      - name: Cvent Platform REST API (Event Cloud)
-  - id: cvent-event-cloud-pro
-    name: Professional
-    type: paid
-    description: Production tier for Cvent Event Cloud. Provides higher quotas, priority support, and
-      access to the broader API portfolio. Pricing placeholder; align with the provider's pricing page.
-    entries:
-      - label: API Requests
-        description: Monthly API request quota
-        name: api_requests
-        type: quota
-        metric: requests
-        limit: 100000
-        timeFrame: month
-        geo: global
-        domains:
-          - https://api-platform.cvent.com
-        unit: 1
-        price: TBD
-        userMultiplied: false
-      - label: Rate Limit
-        description: Maximum requests per minute on the professional tier
-        name: rate_limit
+        timeFrame: second
+      - label: Max Burst
+        name: burst
         type: rate
-        metric: requests_per_minute
-        limit: 100
-        timeFrame: minute
-        geo: global
-        domains:
-          - https://api-platform.cvent.com
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-      - label: Overage
-        description: Per-request price after monthly quota is exceeded
-        name: overage
-        type: metered
-        metric: requests
-        limit: -1
-        timeFrame: month
-        geo: global
-        domains:
-          - https://api-platform.cvent.com
-        unit: 1000
-        price: TBD
-        userMultiplied: false
+        metric: calls
+        limit: 10
     elements:
-      - name: All Production Endpoints
-      - name: Email Support
-      - name: SLA Targets
-      - name: Webhook Subscriptions
-      - name: Cvent Platform REST API (Event Cloud)
-  - id: cvent-event-cloud-enterprise
-    name: Enterprise
-    type: enterprise
-    description: Custom-negotiated tier for Cvent Event Cloud. Includes dedicated capacity, contractual
-      SLAs, security review, data residency options, and named technical account management.
+      - name: Cvent REST APIs
+      - name: Webhooks
+      - name: Bulk API
+  - id: cvent-event-cloud-api-premium
+    name: Premium
+    type: usage-tier
+    price: null
+    price_published: false
+    description: High-volume API usage tier.
     entries:
-      - label: API Requests
-        description: Negotiated request volume; -1 indicates uncapped subject to fair use
-        name: api_requests
+      - label: Daily API Calls
+        name: daily_calls
         type: quota
-        metric: requests
-        limit: -1
-        timeFrame: month
-        geo: configurable
-        domains:
-          - https://api-platform.cvent.com
-        unit: 1
-        price: custom
-        userMultiplied: false
-      - label: Rate Limit
-        description: Negotiated burst and steady-state rate
-        name: rate_limit
+        metric: calls
+        limit: 500000
+        timeFrame: day
+        reset: 00:00 GMT
+      - label: Calls per Second
+        name: call_rate
         type: rate
-        metric: requests_per_minute
-        limit: 1000
-        timeFrame: minute
-        geo: configurable
-        domains:
-          - https://api-platform.cvent.com
-        unit: 1
-        price: custom
-        userMultiplied: false
+        metric: calls_per_second
+        limit: 25
+        timeFrame: second
+      - label: Max Burst
+        name: burst
+        type: rate
+        metric: calls
+        limit: 25
     elements:
-      - name: Unlimited / Negotiated Volume
-      - name: 24/7 Dedicated Support
-      - name: Contractual SLA
-      - name: Security & Compliance Review
-      - name: Dedicated Account Manager
-      - name: Custom Data Residency
-      - name: Cvent Platform REST API (Event Cloud)
+      - name: Cvent REST APIs
+      - name: Webhooks
+      - name: Bulk API
+
+tier_discovery:
+  operation: getUsageTier
+  method: GET
+  path: /ea/usage/tier
+  description: >-
+    An account can read its own assigned usage tier at runtime. Cvent notes limits "may change as
+    the Cvent API Platform evolves", so a client should read the tier rather than hard-code it.
+
+product_pricing:
+  model: quote-only
+  url: https://www.cvent.com/en/event-management-software/cvent-pricing
+  cta: [Contact sales, Get a free quote, Request demo]
+  discounts:
+    - audience: non-profit organizations
+      published_rate: false
+      note: Cvent states it extends special rates to non-profits, negotiated with its team.
+  note: >-
+    The apis.yml Pricing pointer previously read https://www.cvent.com/en/pricing, which returns
+    HTTP 404. The live page is /en/event-management-software/cvent-pricing.
+
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com

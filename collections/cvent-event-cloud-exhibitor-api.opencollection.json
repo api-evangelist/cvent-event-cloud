@@ -1,0 +1,1162 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cvent REST APIs — Event Cloud Exhibitor API",
+    "version": "ea"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Exhibitor",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Exhibitor Categories",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitor-categories",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves a paginated list of exhibitor categories associated with a single event."
+        },
+        {
+          "info": {
+            "name": "Create Exhibitor Category",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitor-categories",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Creates a single exhibitor category entity for an event."
+        },
+        {
+          "info": {
+            "name": "Update Exhibitor Category",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitor-categories/:exhibitorCategoryId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorCategoryId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor category."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Updates data for a single exhibitor category entity."
+        },
+        {
+          "info": {
+            "name": "Delete Exhibitor Category",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitor-categories/:exhibitorCategoryId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorCategoryId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor category."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Deletes a single exhibitor Category entity."
+        },
+        {
+          "info": {
+            "name": "Assign Banner to Category",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitor-categories/:exhibitorCategoryId/banner-files/:fileId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorCategoryId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor category."
+              },
+              {
+                "name": "fileId",
+                "value": "",
+                "type": "path",
+                "description": "ID of a file."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Assign a banner image to an exhibitor category with a file UUID from <a href=\"#operation/uploadFile\">file upload</a> endpoint. This will replace the current banner image if one is assigned.\n\n**Note:** For category banner images we recommend images that are 900x300 pixels and 5MiB or smaller. File types supported are : JPEG, JPG, PNG, GIF.\n"
+        },
+        {
+          "info": {
+            "name": "Delete Banner from Category",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitor-categories/:exhibitorCategoryId/banner-files/:fileId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorCategoryId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor category."
+              },
+              {
+                "name": "fileId",
+                "value": "",
+                "type": "path",
+                "description": "ID of a file."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Deletes an exhibitor Category banner image."
+        },
+        {
+          "info": {
+            "name": "List Category's Exhibitors",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitor-categories/:exhibitorCategoryId/exhibitors",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorCategoryId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor category."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get a paginated list of exhibitors assigned to the provided exhibitor-category Id."
+        },
+        {
+          "info": {
+            "name": "Assign Exhibitor to Category",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitor-categories/:exhibitorCategoryId/exhibitors/:exhibitorId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorCategoryId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor category."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Assign an exhibitor ID to an exhibitor-category Id."
+        },
+        {
+          "info": {
+            "name": "Delete Exhibitor from Category",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitor-categories/:exhibitorCategoryId/exhibitors/:exhibitorId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorCategoryId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor category."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "delete an exhibitor from an exhibitor-category"
+        },
+        {
+          "info": {
+            "name": "List Exhibitor Questions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitor-questions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a list of exhibitor questions for a given event id."
+        },
+        {
+          "info": {
+            "name": "List Exhibitors",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "A filter query string narrows search results and supports the combination of logical and comparison operators.\nThe filter adheres to the pattern filter='field' comparisonType 'value'.\n\nThese are the comparison types that can be used in filter expressions:\n* equal: eq\n* includes value(s): in\n\nThe following fields are filterable:\n* hidden (eq)\n* deleted (eq)\n* id (in)\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves a paginated list of exhibitors associated with a single event."
+        },
+        {
+          "info": {
+            "name": "Create Exhibitor",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Creates a single exhibitor entity for an event."
+        },
+        {
+          "info": {
+            "name": "Get Exhibitor",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves a single exhibitor entity for an event."
+        },
+        {
+          "info": {
+            "name": "Update Exhibitor",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Updates data for a single exhibitor entity."
+        },
+        {
+          "info": {
+            "name": "Delete Exhibitor",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Deletes a single exhibitor entity. To be deleted, exhibitors must have no tasks, registrations, or LeadCapture licenses assigned and must not be a sponsored or featured exhibitor."
+        },
+        {
+          "info": {
+            "name": "Assign Exhibitor Banner Image",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/banner-files/:fileId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              },
+              {
+                "name": "fileId",
+                "value": "",
+                "type": "path",
+                "description": "ID of a file."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Assign a banner image to an exhibitor with a file UUID from <a href=\"#operation/uploadFile\">file upload</a> endpoint. This will replace the current banner image if one is assigned.\n\n**Note:** For exhibitor profile banner images, we recommend images that are 1872x320 pixels or smaller images that have an aspect ratio of 5.85:1. File extensions supported: JPEG, JPG, PNG, GIF\n"
+        },
+        {
+          "info": {
+            "name": "Delete Exhibitor Banner Image",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/banner-files/:fileId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              },
+              {
+                "name": "fileId",
+                "value": "",
+                "type": "path",
+                "description": "ID of a file."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Deletes exhibitor banner image data"
+        },
+        {
+          "info": {
+            "name": "List Exhibitor Answers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/exhibitor-answers",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a list of answers to exhibitor questions for a given exhibitor id."
+        },
+        {
+          "info": {
+            "name": "Update Exhibitor Answers",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/exhibitor-answers",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Updates answers to exhibitor questions for a given exhibitor id. The Planner can skip answering the questions marked as required for exhibitor admins."
+        },
+        {
+          "info": {
+            "name": "List Exhibitor's Categories",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/exhibitor-categories",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get a paginated list of exhibitor-categories assigned to the provided exhibitor Id."
+        },
+        {
+          "info": {
+            "name": "Assign Exhibitor Logo Image",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/logo-files/:fileId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              },
+              {
+                "name": "fileId",
+                "value": "",
+                "type": "path",
+                "description": "ID of a file."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Assign a logo image to an exhibitor with a file UUID from <a href=\"#operation/uploadFile\">file upload</a> endpoint. This will replace the current logo image if one is assigned.\n\n**Note:**  For exhibitor profile logo images we recommend square images larger than 300x300 pixels. The file types supported are : JPEG, JPG, PNG, GIF\n"
+        },
+        {
+          "info": {
+            "name": "Delete Exhibitor Logo Image",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/logo-files/:fileId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              },
+              {
+                "name": "fileId",
+                "value": "",
+                "type": "path",
+                "description": "ID of a file."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Deletes exhibitor logo image data"
+        },
+        {
+          "info": {
+            "name": "List Qualification Questions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/questions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves a list of lead qualification questions associated with a single exhibitor at the given event."
+        },
+        {
+          "info": {
+            "name": "List Registration Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/registration-packs",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves the registration pack associated with an exhibitor. Each exhibitor has one registration pack per event\nthat consolidates capacities across all registration types.\n"
+        },
+        {
+          "info": {
+            "name": "Create Registration Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/registration-packs",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Create registration pack for an exhibitor"
+        },
+        {
+          "info": {
+            "name": "Get Registration Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/registration-packs/:registrationPackId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              },
+              {
+                "name": "registrationPackId",
+                "value": "",
+                "type": "path",
+                "description": "ID of a registration pack."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves registration types allocated to an exhibitor, along with the count of registrations utilized."
+        },
+        {
+          "info": {
+            "name": "Update Registration Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/registration-packs/:registrationPackId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              },
+              {
+                "name": "registrationPackId",
+                "value": "",
+                "type": "path",
+                "description": "ID of a registration pack."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Update registration pack for an exhibitor"
+        },
+        {
+          "info": {
+            "name": "Delete Registration Pack",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/registration-packs/:registrationPackId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              },
+              {
+                "name": "registrationPackId",
+                "value": "",
+                "type": "path",
+                "description": "ID of a registration pack."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Delete registration pack for an exhibitor"
+        },
+        {
+          "info": {
+            "name": "List Sponsorship Levels",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/sponsorship-levels",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a list of associated sponsorship levels for a single event."
+        },
+        {
+          "info": {
+            "name": "Get Sponsorship Level",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/sponsorship-levels/:sponsorshipLevelId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "sponsorshipLevelId",
+                "value": "",
+                "type": "path",
+                "description": "ID of sponsorship level."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves associated sponsorship level data for a single sponsorship level ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

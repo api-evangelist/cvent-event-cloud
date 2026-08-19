@@ -1,0 +1,94 @@
+generated: '2026-08-13'
+method: derived
+source: mcp/cvent-event-cloud-mcp.yml + openapi/_original/cvent-rest-apis-openapi.yaml
+provider: Cvent Event Cloud
+providerId: cvent-event-cloud
+description: Binding between Cvent's MCP tools and the REST operations that back them. Cvent runs a real remote
+  MCP server (https://mcp.cvent.com/mcp) and publishes a real OpenAPI (458 operations), but the server's tools/list
+  is OAuth-gated and Cvent publishes no tool documentation anywhere — not on the developer portal, not in llms.txt,
+  not in the rest-sdks repository. No tool names were observed, so crosswalk[] is deliberately empty rather than
+  guessed. This file records the gate, not a mapping.
+surfaces:
+  openapi:
+    file: openapi/_original/cvent-rest-apis-openapi.yaml
+    url: https://github.com/cvent/rest-sdks/blob/main/cvent-public-spec/openapi.yaml
+    gated: false
+    operations: 458
+  mcp:
+    endpoint: https://mcp.cvent.com/mcp
+    gated: true
+    gate: OAuth 2.1 bearer; tools/list returns 401
+  graphql:
+    endpoint: null
+    note: Cvent publishes no GraphQL surface.
+crosswalk: []
+mcp_only: []
+rest_only:
+  count: 458
+  note: 'Every published REST operation is currently rest_only by evidence: none has been observed bound to an MCP
+    tool, because no tool has been observed at all. This is an unknown, not a zero.'
+coverage:
+  tools_discovered: 0
+  tools_mapped: 0
+  rest_operations: 458
+  rest_operations_mapped: 0
+  confidence: unknown
+  blocker: MCP tools/list requires an OAuth 2.1 access token from https://mcp.cvent.com/oauth2/token
+rest_operations_by_tag:
+  Appointments: 16
+  Attendee Activities: 6
+  Attendee Insights: 4
+  Attendee Messages: 1
+  Attendees: 12
+  Audience Segments: 12
+  Authentication: 3
+  Badge Print Job: 3
+  Badge Printer Pools: 2
+  Budget: 24
+  Bulk: 6
+  Campaigns: 4
+  Card Tokens: 1
+  Compliance: 4
+  Contacts: 28
+  Custom Fields: 7
+  Discounts: 6
+  Emails: 3
+  Event Credits: 1
+  Event Features: 4
+  Event Role: 1
+  Event Travel: 5
+  Events: 52
+  Events+ Hub: 2
+  Exhibitor: 30
+  Exhibitor Content: 9
+  Exhibitor Team: 8
+  File: 2
+  Hooks: 4
+  Housing: 21
+  Housing Hotels: 1
+  Leads: 4
+  Meeting Request: 8
+  Process Form: 1
+  Proposal Draft: 1
+  RFP Additional Details: 1
+  RFP Management: 3
+  RFP Requirements: 7
+  RFP Suppliers: 2
+  Seating: 8
+  Sessions: 29
+  Signatures: 1
+  Speakers: 19
+  Surveys: 23
+  Travel Accounts: 4
+  Travel RFPs: 9
+  Travel Suppliers: 8
+  Usage: 2
+  User SCIM: 11
+  Users: 7
+  Venue Meeting Rooms: 5
+  Venue Profiles: 5
+  Video: 7
+  Webcasts: 11
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

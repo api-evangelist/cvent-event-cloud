@@ -1,24 +1,216 @@
-generated: '2026-07-11'
+generated: '2026-08-13'
 method: derived
-source: openapi/cvent-event-cloud-openapi.yml
+source: openapi/cvent-event-cloud-appointments-api-openapi.yml, openapi/cvent-event-cloud-attendee-activities-api-openapi.yml,
+  openapi/cvent-event-cloud-attendee-insights-api-openapi.yml, openapi/cvent-event-cloud-attendee-messages-api-openapi.yml,
+  openapi/cvent-event-cloud-attendees-api-openapi.yml, openapi/cvent-event-cloud-audience-segments-api-openapi.yml,
+  openapi/cvent-event-cloud-authentication-api-openapi.yml, openapi/cvent-event-cloud-badge-print-job-api-openapi.yml,
+  openapi/cvent-event-cloud-badge-printer-pools-api-openapi.yml, openapi/cvent-event-cloud-budget-api-openapi.yml,
+  openapi/cvent-event-cloud-bulk-api-openapi.yml, openapi/cvent-event-cloud-campaigns-api-openapi.yml
+  ...
 summary:
   types:
+  - apiKey
   - http
   - oauth2
+  api_key_in:
+  - header
   oauth2_flows:
+  - authorizationCode
   - clientCredentials
 schemes:
-- name: OAuth2ClientCredentials
+- name: OAuth2.authorizationCode
+  type: oauth2
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://api-platform.cvent.com/ea/oauth2/authorize
+    tokenUrl: https://api-platform.cvent.com/ea/oauth2/token
+    scopes: 205
+  description: OAuth2 Authorization Code Flow.
+  sources:
+  - openapi/cvent-event-cloud-appointments-api-openapi.yml
+  - openapi/cvent-event-cloud-attendee-activities-api-openapi.yml
+  - openapi/cvent-event-cloud-attendee-insights-api-openapi.yml
+  - openapi/cvent-event-cloud-attendee-messages-api-openapi.yml
+  - openapi/cvent-event-cloud-attendees-api-openapi.yml
+  - openapi/cvent-event-cloud-audience-segments-api-openapi.yml
+  - openapi/cvent-event-cloud-authentication-api-openapi.yml
+  - openapi/cvent-event-cloud-badge-print-job-api-openapi.yml
+  - openapi/cvent-event-cloud-badge-printer-pools-api-openapi.yml
+  - openapi/cvent-event-cloud-budget-api-openapi.yml
+  - openapi/cvent-event-cloud-bulk-api-openapi.yml
+  - openapi/cvent-event-cloud-campaigns-api-openapi.yml
+  - openapi/cvent-event-cloud-card-tokens-api-openapi.yml
+  - openapi/cvent-event-cloud-compliance-api-openapi.yml
+  - openapi/cvent-event-cloud-contacts-api-openapi.yml
+  - openapi/cvent-event-cloud-custom-fields-api-openapi.yml
+  - openapi/cvent-event-cloud-discounts-api-openapi.yml
+  - openapi/cvent-event-cloud-emails-api-openapi.yml
+  - openapi/cvent-event-cloud-event-credits-api-openapi.yml
+  - openapi/cvent-event-cloud-event-features-api-openapi.yml
+  - openapi/cvent-event-cloud-event-role-api-openapi.yml
+  - openapi/cvent-event-cloud-event-travel-api-openapi.yml
+  - openapi/cvent-event-cloud-events-api-openapi.yml
+  - openapi/cvent-event-cloud-events-hub-api-openapi.yml
+  - openapi/cvent-event-cloud-exhibitor-api-openapi.yml
+  - openapi/cvent-event-cloud-exhibitor-content-api-openapi.yml
+  - openapi/cvent-event-cloud-exhibitor-team-api-openapi.yml
+  - openapi/cvent-event-cloud-file-api-openapi.yml
+  - openapi/cvent-event-cloud-hooks-api-openapi.yml
+  - openapi/cvent-event-cloud-leads-api-openapi.yml
+  - openapi/cvent-event-cloud-process-form-api-openapi.yml
+  - openapi/cvent-event-cloud-seating-api-openapi.yml
+  - openapi/cvent-event-cloud-sessions-api-openapi.yml
+  - openapi/cvent-event-cloud-signatures-api-openapi.yml
+  - openapi/cvent-event-cloud-speakers-api-openapi.yml
+  - openapi/cvent-event-cloud-surveys-api-openapi.yml
+  - openapi/cvent-event-cloud-usage-api-openapi.yml
+  - openapi/cvent-event-cloud-user-scim-api-openapi.yml
+  - openapi/cvent-event-cloud-users-api-openapi.yml
+  - openapi/cvent-event-cloud-video-api-openapi.yml
+  - openapi/cvent-event-cloud-webcasts-api-openapi.yml
+- name: OAuth2.clientCredentials
   type: oauth2
   flows:
   - flow: clientCredentials
     tokenUrl: https://api-platform.cvent.com/ea/oauth2/token
-    scopes: 9
+    scopes: 235
+  description: OAuth2 Client Credentials Flow.
   sources:
-  - openapi/cvent-event-cloud-openapi.yml
-- name: BasicAuth
+  - openapi/cvent-event-cloud-appointments-api-openapi.yml
+  - openapi/cvent-event-cloud-attendee-activities-api-openapi.yml
+  - openapi/cvent-event-cloud-attendee-insights-api-openapi.yml
+  - openapi/cvent-event-cloud-attendee-messages-api-openapi.yml
+  - openapi/cvent-event-cloud-attendees-api-openapi.yml
+  - openapi/cvent-event-cloud-audience-segments-api-openapi.yml
+  - openapi/cvent-event-cloud-authentication-api-openapi.yml
+  - openapi/cvent-event-cloud-badge-print-job-api-openapi.yml
+  - openapi/cvent-event-cloud-badge-printer-pools-api-openapi.yml
+  - openapi/cvent-event-cloud-budget-api-openapi.yml
+  - openapi/cvent-event-cloud-bulk-api-openapi.yml
+  - openapi/cvent-event-cloud-campaigns-api-openapi.yml
+  - openapi/cvent-event-cloud-card-tokens-api-openapi.yml
+  - openapi/cvent-event-cloud-compliance-api-openapi.yml
+  - openapi/cvent-event-cloud-contacts-api-openapi.yml
+  - openapi/cvent-event-cloud-custom-fields-api-openapi.yml
+  - openapi/cvent-event-cloud-discounts-api-openapi.yml
+  - openapi/cvent-event-cloud-emails-api-openapi.yml
+  - openapi/cvent-event-cloud-event-credits-api-openapi.yml
+  - openapi/cvent-event-cloud-event-features-api-openapi.yml
+  - openapi/cvent-event-cloud-event-role-api-openapi.yml
+  - openapi/cvent-event-cloud-event-travel-api-openapi.yml
+  - openapi/cvent-event-cloud-events-api-openapi.yml
+  - openapi/cvent-event-cloud-events-hub-api-openapi.yml
+  - openapi/cvent-event-cloud-exhibitor-api-openapi.yml
+  - openapi/cvent-event-cloud-exhibitor-content-api-openapi.yml
+  - openapi/cvent-event-cloud-exhibitor-team-api-openapi.yml
+  - openapi/cvent-event-cloud-file-api-openapi.yml
+  - openapi/cvent-event-cloud-hooks-api-openapi.yml
+  - openapi/cvent-event-cloud-leads-api-openapi.yml
+  - openapi/cvent-event-cloud-process-form-api-openapi.yml
+  - openapi/cvent-event-cloud-seating-api-openapi.yml
+  - openapi/cvent-event-cloud-sessions-api-openapi.yml
+  - openapi/cvent-event-cloud-signatures-api-openapi.yml
+  - openapi/cvent-event-cloud-speakers-api-openapi.yml
+  - openapi/cvent-event-cloud-surveys-api-openapi.yml
+  - openapi/cvent-event-cloud-usage-api-openapi.yml
+  - openapi/cvent-event-cloud-user-scim-api-openapi.yml
+  - openapi/cvent-event-cloud-users-api-openapi.yml
+  - openapi/cvent-event-cloud-video-api-openapi.yml
+  - openapi/cvent-event-cloud-webcasts-api-openapi.yml
+- name: CallbackApiKeyAuth
+  type: apiKey
+  in: header
+  parameter: Authorization
+  description: This security scheme is used to indicate that Cvent should use API Key auth when
+    invoking your callback. This scheme is only supported for callback operations, and cannot
+    be used to make calls to Cvent endpoints.
+  sources:
+  - openapi/cvent-event-cloud-appointments-api-openapi.yml
+  - openapi/cvent-event-cloud-attendee-activities-api-openapi.yml
+  - openapi/cvent-event-cloud-attendee-insights-api-openapi.yml
+  - openapi/cvent-event-cloud-attendee-messages-api-openapi.yml
+  - openapi/cvent-event-cloud-attendees-api-openapi.yml
+  - openapi/cvent-event-cloud-audience-segments-api-openapi.yml
+  - openapi/cvent-event-cloud-authentication-api-openapi.yml
+  - openapi/cvent-event-cloud-badge-print-job-api-openapi.yml
+  - openapi/cvent-event-cloud-badge-printer-pools-api-openapi.yml
+  - openapi/cvent-event-cloud-budget-api-openapi.yml
+  - openapi/cvent-event-cloud-bulk-api-openapi.yml
+  - openapi/cvent-event-cloud-campaigns-api-openapi.yml
+  - openapi/cvent-event-cloud-card-tokens-api-openapi.yml
+  - openapi/cvent-event-cloud-compliance-api-openapi.yml
+  - openapi/cvent-event-cloud-contacts-api-openapi.yml
+  - openapi/cvent-event-cloud-custom-fields-api-openapi.yml
+  - openapi/cvent-event-cloud-discounts-api-openapi.yml
+  - openapi/cvent-event-cloud-emails-api-openapi.yml
+  - openapi/cvent-event-cloud-event-credits-api-openapi.yml
+  - openapi/cvent-event-cloud-event-features-api-openapi.yml
+  - openapi/cvent-event-cloud-event-role-api-openapi.yml
+  - openapi/cvent-event-cloud-event-travel-api-openapi.yml
+  - openapi/cvent-event-cloud-events-api-openapi.yml
+  - openapi/cvent-event-cloud-events-hub-api-openapi.yml
+  - openapi/cvent-event-cloud-exhibitor-api-openapi.yml
+  - openapi/cvent-event-cloud-exhibitor-content-api-openapi.yml
+  - openapi/cvent-event-cloud-exhibitor-team-api-openapi.yml
+  - openapi/cvent-event-cloud-file-api-openapi.yml
+  - openapi/cvent-event-cloud-hooks-api-openapi.yml
+  - openapi/cvent-event-cloud-leads-api-openapi.yml
+  - openapi/cvent-event-cloud-process-form-api-openapi.yml
+  - openapi/cvent-event-cloud-seating-api-openapi.yml
+  - openapi/cvent-event-cloud-sessions-api-openapi.yml
+  - openapi/cvent-event-cloud-signatures-api-openapi.yml
+  - openapi/cvent-event-cloud-speakers-api-openapi.yml
+  - openapi/cvent-event-cloud-surveys-api-openapi.yml
+  - openapi/cvent-event-cloud-usage-api-openapi.yml
+  - openapi/cvent-event-cloud-user-scim-api-openapi.yml
+  - openapi/cvent-event-cloud-users-api-openapi.yml
+  - openapi/cvent-event-cloud-video-api-openapi.yml
+  - openapi/cvent-event-cloud-webcasts-api-openapi.yml
+- name: CallbackBasicAuth
   type: http
   scheme: basic
-  description: Client ID / client secret Basic auth used only for the /ea/oauth2/token call.
+  description: This security scheme is used to indicate that Cvent should use basic auth when
+    invoking your callback. This scheme is only supported for callback operations, and cannot
+    be used to make calls to Cvent endpoints.
   sources:
-  - openapi/cvent-event-cloud-openapi.yml
+  - openapi/cvent-event-cloud-appointments-api-openapi.yml
+  - openapi/cvent-event-cloud-attendee-activities-api-openapi.yml
+  - openapi/cvent-event-cloud-attendee-insights-api-openapi.yml
+  - openapi/cvent-event-cloud-attendee-messages-api-openapi.yml
+  - openapi/cvent-event-cloud-attendees-api-openapi.yml
+  - openapi/cvent-event-cloud-audience-segments-api-openapi.yml
+  - openapi/cvent-event-cloud-authentication-api-openapi.yml
+  - openapi/cvent-event-cloud-badge-print-job-api-openapi.yml
+  - openapi/cvent-event-cloud-badge-printer-pools-api-openapi.yml
+  - openapi/cvent-event-cloud-budget-api-openapi.yml
+  - openapi/cvent-event-cloud-bulk-api-openapi.yml
+  - openapi/cvent-event-cloud-campaigns-api-openapi.yml
+  - openapi/cvent-event-cloud-card-tokens-api-openapi.yml
+  - openapi/cvent-event-cloud-compliance-api-openapi.yml
+  - openapi/cvent-event-cloud-contacts-api-openapi.yml
+  - openapi/cvent-event-cloud-custom-fields-api-openapi.yml
+  - openapi/cvent-event-cloud-discounts-api-openapi.yml
+  - openapi/cvent-event-cloud-emails-api-openapi.yml
+  - openapi/cvent-event-cloud-event-credits-api-openapi.yml
+  - openapi/cvent-event-cloud-event-features-api-openapi.yml
+  - openapi/cvent-event-cloud-event-role-api-openapi.yml
+  - openapi/cvent-event-cloud-event-travel-api-openapi.yml
+  - openapi/cvent-event-cloud-events-api-openapi.yml
+  - openapi/cvent-event-cloud-events-hub-api-openapi.yml
+  - openapi/cvent-event-cloud-exhibitor-api-openapi.yml
+  - openapi/cvent-event-cloud-exhibitor-content-api-openapi.yml
+  - openapi/cvent-event-cloud-exhibitor-team-api-openapi.yml
+  - openapi/cvent-event-cloud-file-api-openapi.yml
+  - openapi/cvent-event-cloud-hooks-api-openapi.yml
+  - openapi/cvent-event-cloud-leads-api-openapi.yml
+  - openapi/cvent-event-cloud-process-form-api-openapi.yml
+  - openapi/cvent-event-cloud-seating-api-openapi.yml
+  - openapi/cvent-event-cloud-sessions-api-openapi.yml
+  - openapi/cvent-event-cloud-signatures-api-openapi.yml
+  - openapi/cvent-event-cloud-speakers-api-openapi.yml
+  - openapi/cvent-event-cloud-surveys-api-openapi.yml
+  - openapi/cvent-event-cloud-usage-api-openapi.yml
+  - openapi/cvent-event-cloud-user-scim-api-openapi.yml
+  - openapi/cvent-event-cloud-users-api-openapi.yml
+  - openapi/cvent-event-cloud-video-api-openapi.yml
+  - openapi/cvent-event-cloud-webcasts-api-openapi.yml

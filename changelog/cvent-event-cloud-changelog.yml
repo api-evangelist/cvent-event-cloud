@@ -1,0 +1,167 @@
+generated: '2026-08-13'
+method: searched
+source: https://developers.cvent.com/docs/rest-api/changelog
+provider: Cvent Event Cloud
+providerId: cvent-event-cloud
+description: >-
+  Cvent publishes a dated, sectioned REST API changelog going back to September 2022. Releases land
+  on a roughly biweekly cadence and are titled by the calendar days the change shipped rather than
+  by a semantic version, because the API itself carries a single stable URI version (`ea`).
+scheme: dated releases
+current_version: ea
+cadence: biweekly
+entries_published: 70
+coverage: 2022-09 through 2026-08
+sections_used: [New APIs, New Tags, Added, Updated, Deprecated]
+latest_release: '2026-08-05'
+checked: '2026-08-13'
+
+entries:
+  - date: '2026-08-05'
+    title: REST API Updates (August 5–6, 2026)
+    sections: [Updated]
+    breaking: false
+    highlights:
+      - surface: Budget
+        change: >-
+          Create Budget Item, Update Budget Item, List Event Budget Items and List Budget Items —
+          the BudgetVendor schema's `vendor.type` now includes REPOSITE as a possible value,
+          indicating a vendor sourced from Reposite. Additive enum value.
+      - surface: Event Travel
+        change: >-
+          Get Air Actual — the air-actual-detail response now documents minItems 0 / maxItems 200
+          on the attendee air-actuals collection and on AirActualDetail.airActualDetails.
+      - surface: RFP Management
+        change: >-
+          Get RFP — new optional `preferredVenueIntegrations` field on RfpRequest, an array
+          (maxItems 1) of VenueIntegrationType values CED | PASSKEY.
+  - date: '2026-07-22'
+    title: REST API Updates (July 22-23)
+    sections: [Added, New APIs, New Tags, Updated]
+    breaking: false
+    highlights:
+      - surface: Venue Profiles
+        change: >-
+          New endpoints — Update Venue Details (PUT /venues/{venueId}/details), Patch Venue Details,
+          Get Venue Details Overview, Update Venue Facility, Patch Venue Facility.
+      - surface: Venue Meeting Rooms
+        change: >-
+          New endpoints — Create Meeting Room (POST /venues/{venueId}/meeting-rooms), List Meeting
+          Rooms Overviews, Update Meeting Room, Patch Meeting Room, Get Meeting Room Overview.
+      - surface: tags
+        change: Two new OpenAPI tags introduced — Venue Profiles and Venue Meeting Rooms.
+      - surface: Travel RFPs
+        change: >-
+          List Travel Proposals, List/Get Travel Proposal Bid and Get Travel Proposal gained the
+          business-travel/proposals:read and business-travel/bids:read OAuth2 scopes alongside the
+          existing business-transient/* scopes. The bid-item-status-type enum value `not_available`
+          was replaced with `not_offered` to match production behaviour — Cvent states
+          `not_available` was never actually emitted by the service.
+      - surface: Bulk
+        change: >-
+          List Bulk Job Result — documentation now warns that `failed` reflects only the target
+          operation's top-level HTTP status, so a 207 Multi-Status shows failed=false even when
+          individual items failed. Create Bulk Job — `name`, `mode` and `ttl` removed from
+          `required` as a spec correction (they were never in properties).
+      - surface: Events
+        change: >-
+          List Orders / List Order Items — `deleted` query parameter description clarified to
+          "When true, includes soft-deleted records in the response. Defaults to false."
+      - surface: Attendees
+        change: >-
+          List Attendees / Get Attendee — the `deprecated` marker was REMOVED from `unsubscribed`
+          as a documentation correction; the field remains read-only and filterable.
+      - surface: Events+ Hub
+        change: List Events+ Hubs — new `websiteTheming` boolean on the Hub branding schema, default false.
+  - date: '2026-07-07'
+    title: REST API Updates (July 7–8, 2026)
+    sections: [Updated]
+    breaking: false
+  - date: '2026-06-17'
+    title: REST API Updates (June 17–18, 2026)
+    sections: [Added, Updated]
+    breaking: false
+    highlights:
+      - surface: Card Tokens
+        change: >-
+          New API — Create a Credit Card Token. Creates a short-lived, single-use token representing
+          a credit card, valid for 3600 seconds, that replaces the card in other API methods. New
+          OAuth 2.0 scope secure-ecommerce/card-tokens:write.
+      - surface: Custom Fields
+        change: >-
+          Create Custom Field request body now includes the `active` property. Missing 404 response
+          added to Create Custom Field Translation.
+      - surface: Audience Segments
+        change: >-
+          Schema rename — `existing-audience-segment` became `audience-segment-response`, and
+          `audience-segment-creation-type` became `existing-audience-segment-creation-type`.
+  - date: '2026-06-03'
+    title: REST API Updates (June 3–4, 2026)
+    sections: [Added, Updated]
+    breaking: false
+    highlights:
+      - surface: Surveys
+        change: New API — Get Question Choices, returning all choices for a given event question.
+      - surface: Appointments
+        change: >-
+          Missing 400 responses documented across nine list operations, missing 429 responses
+          documented across seven, and a new `participants[].status` property on the appointment
+          response body.
+      - surface: Events
+        change: >-
+          The `filter` query parameter now supports `and` / `or` logical operators on List Orders,
+          List Order Items, List Transactions and List Transaction Items.
+  - date: '2026-05-20'
+    title: REST API Updates (May 20–21, 2026)
+    sections: [Added, Updated]
+    breaking: false
+  - date: '2026-05-06'
+    title: REST API Updates (May 6–7, 2026)
+    sections: [Updated]
+    breaking: false
+  - date: '2026-04-22'
+    title: REST API Updates (April 22–23, 2026)
+    sections: [Added, Updated]
+    breaking: false
+  - date: '2026-04-08'
+    title: REST API Updates (April 8–9, 2026)
+    sections: [Updated]
+    breaking: false
+  - date: '2026-03-25'
+    title: REST API Updates (March 25–26, 2026)
+    sections: [Updated]
+    breaking: false
+  - date: '2026-03-12'
+    title: REST API Updates (March 12, 2026)
+    sections: [Added, Updated]
+    breaking: false
+  - date: '2026-02-25'
+    title: REST API Updates (February 25–26, 2026)
+    sections: [Updated]
+    breaking: false
+  - date: '2026-02-11'
+    title: REST API Updates (February 11–12, 2026)
+    sections: [Added, Updated]
+    breaking: false
+  - date: '2026-01-14'
+    title: REST API Updates (January 14–15, 2026)
+    sections: [Added, Updated]
+    breaking: false
+
+observations:
+  - >-
+    Not one 2026 release carries a Deprecated section. The most recent Deprecated sections are
+    dated 2025-06-18, 2025-05-08, 2025-03-26, 2025-02-26 and 2025-02-12 — Cvent has removed nothing
+    from the contract in more than a year.
+  - >-
+    A large share of entries are contract corrections rather than behaviour changes: undocumented
+    400/404/429 responses being added to the spec, `required` lists being fixed, deprecation markers
+    being withdrawn. That is a spec catching up with a service, and it is visible because Cvent
+    versions the spec in public git.
+  - >-
+    Changelog entries name operations by human title ("List Bulk Job Result") rather than by
+    operationId, so machine-correlating an entry to the spec requires a title-to-operationId lookup.
+
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

@@ -1,0 +1,127 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cvent REST APIs — Event Cloud Authentication API",
+    "version": "ea"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Authentication",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Authorization Code",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/oauth2/authorize",
+            "params": [
+              {
+                "name": "response_type",
+                "value": "code",
+                "type": "query",
+                "description": "The response type must be code. Indicates the client wants an authorization code (authorization code grant flow).\n\n**Note:** *implicit flow* or the *token* value is not supported at this time.\n"
+              },
+              {
+                "name": "client_id",
+                "value": "ad398u21ijw3s9w3939",
+                "type": "query",
+                "description": "The OAuth2 Client application ID.\n\nMust be a pre-registered client created in the developer portal.\n"
+              },
+              {
+                "name": "redirect_uri",
+                "value": "https://example.com/redirect",
+                "type": "query",
+                "description": "The URL to which the authorization server redirects the browser after authorization has been granted by the user.\n\nA redirect URI must:\n\n* Be an absolute URI.\n* Be pre-registered with a client.\n* **NOT** include a fragment component.\n* Wildcards are **NOT** supported\n\nRequires HTTPS over HTTP except for http://localhost for testing purposes only.\n\n**Note:** App callback URLs such as *com.myclientapp://myclient/redirect* are also supported.\n"
+              },
+              {
+                "name": "state",
+                "value": "abc123xyz",
+                "type": "query",
+                "description": "An opaque value the client application adds to the initial request. The authorization server\nincludes this value when redirecting back to the client.\n\nThis value must be used by the client to prevent CSRF attacks.\n\n**Optional** but strongly recommended.\n"
+              },
+              {
+                "name": "scope",
+                "value": "event/events:read event/attendees:read",
+                "type": "query",
+                "description": "Can be a combination of any scopes associated with a client. Scopes must be separated by spaces.\nAny scope used must be pre-associated with the client or it will be ignored at runtime.\n\n**Note:** If the client doesn't request any scopes, the authorization server uses all\nscopes associated with the client.\n"
+              }
+            ]
+          },
+          "docs": "Initiates the OAuth2 authorization code flow by directing the user-agent to the Cvent authorization server. The client typically triggers this request via a browser. For the `redirect_uri` HTTPS is required; `http://localhost` is permitted for local testing only. On success, the authorization server redirects the user-agent back to the client's `redirect_uri` with an authorization code. The client can then exchange that code via [Get Token](#operation/oauth2Token) to obtain an access token.\n"
+        },
+        {
+          "info": {
+            "name": "Get Token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/oauth2/token",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "Basic Y2xpZW50X2lkOmNsaWVudF9zZWNyZXQ="
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "grant_type",
+                  "value": ""
+                },
+                {
+                  "name": "client_id",
+                  "value": ""
+                },
+                {
+                  "name": "scope",
+                  "value": ""
+                },
+                {
+                  "name": "redirect_uri",
+                  "value": ""
+                },
+                {
+                  "name": "refresh_token",
+                  "value": ""
+                },
+                {
+                  "name": "code",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Obtains an access token and, optionally, a refresh token. Read the [Developer Quickstart](https://developers.cvent.com/docs/rest-api/tutorials/developer-quickstart) for an example request.\n\n**Note:** The token endpoint returns refresh_token only when the grant_type is authorization_code.\n"
+        },
+        {
+          "info": {
+            "name": "Validate Token",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/token-validation",
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Verifies presented authentication token is valid."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

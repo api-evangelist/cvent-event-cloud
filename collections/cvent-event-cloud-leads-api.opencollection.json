@@ -1,0 +1,212 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cvent REST APIs — Event Cloud Leads API",
+    "version": "ea"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Leads",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List E-literature Requests",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/eliterature-requests",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "A filter query string narrows search results and supports the combination of logical and comparison operators.\nThe filter adheres to the pattern filter='field' comparisonType 'value'.\n\nThese are the comparison types that can be used in filter expressions:\n* equal: eq\n\nThe following fields are filterable:\n* event.id (eq)\n* exhibitor.id (eq)\n* lead.id (eq)\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of eliterature requests data"
+        },
+        {
+          "info": {
+            "name": "List Qualification Answers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/leads/:leadId/answers",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              },
+              {
+                "name": "leadId",
+                "value": "",
+                "type": "path",
+                "description": "ID of a lead."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a list of answers to lead qualification questions for a given lead id."
+        },
+        {
+          "info": {
+            "name": "List Leads",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/leads",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "A filter query string narrows search results and supports the combination of logical and comparison operators.\nThe filter adheres to the pattern filter='field' comparisonType 'value'.\n\nThese are the comparison types that can be used in filter expressions:\n* equal: eq\n\nThe following fields are filterable:\n* event.id (eq)\n* exhibitor.id (eq)\n* deleted (eq)\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of leads"
+        },
+        {
+          "info": {
+            "name": "List Leads",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/leads/filter",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of leads"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

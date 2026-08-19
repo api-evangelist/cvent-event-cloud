@@ -1,0 +1,72 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cvent REST APIs — Event Cloud Usage API",
+    "version": "ea"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Usage",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Current Usage",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/usage",
+            "params": [
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Returns usage for the seven days before (inclusive) the date provided. If after is also provided, then\nonly the dates between (inclusive) those dates are returned. before must be a valid ISO8601 date stamp.\nbefore and after must not be more then seven days apart.\n"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Returns usage for the seven days after (inclusive) the date provided. If before is also provided, then\nonly the dates between (inclusive) those dates are returned. after must be a valid ISO8601 date stamp.\nafter and before must not be more then seven days apart.\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns API call usage for the last seven days, or between some date range (up to the past seven days) for\nthe current caller's account.\n"
+        },
+        {
+          "info": {
+            "name": "Get Current Usage Tier",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/usage/tier",
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns the current usage tier of the caller's account.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,844 @@
+{
+  "item": [
+    {
+      "id": "d8b4a66d-3ef5-458d-9384-a07d73abb356",
+      "name": "Authentication",
+      "description": {
+        "content": "Endpoints for obtaining, refreshing, and validating OAuth2 access tokens.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "0c350442-b098-47fb-9e5c-789862b2cba8",
+          "name": "Get Authorization Code",
+          "request": {
+            "name": "Get Authorization Code",
+            "description": {
+              "content": "Initiates the OAuth2 authorization code flow by directing the user-agent to the Cvent authorization server. The client typically triggers this request via a browser. For the `redirect_uri` HTTPS is required; `http://localhost` is permitted for local testing only. On success, the authorization server redirects the user-agent back to the client's `redirect_uri` with an authorization code. The client can then exchange that code via [Get Token](#operation/oauth2Token) to obtain an access token.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "oauth2",
+                "authorize"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "response_type",
+                  "value": "<string>",
+                  "description": "(Required) The response type must be code. Indicates the client wants an authorization code (authorization code grant flow).\n\n**Note:** *implicit flow* or the *token* value is not supported at this time.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "client_id",
+                  "value": "<string>",
+                  "description": "(Required) The OAuth2 Client application ID.\n\nMust be a pre-registered client created in the developer portal.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "redirect_uri",
+                  "value": "<string>",
+                  "description": "(Required) The URL to which the authorization server redirects the browser after authorization has been granted by the user.\n\nA redirect URI must:\n\n* Be an absolute URI.\n* Be pre-registered with a client.\n* **NOT** include a fragment component.\n* Wildcards are **NOT** supported\n\nRequires HTTPS over HTTP except for http://localhost for testing purposes only.\n\n**Note:** App callback URLs such as *com.myclientapp://myclient/redirect* are also supported.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "state",
+                  "value": "<string>",
+                  "description": "An opaque value the client application adds to the initial request. The authorization server\nincludes this value when redirecting back to the client.\n\nThis value must be used by the client to prevent CSRF attacks.\n\n**Optional** but strongly recommended.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "scope",
+                  "value": "<string>",
+                  "description": "Can be a combination of any scopes associated with a client. Scopes must be separated by spaces.\nAny scope used must be pre-associated with the client or it will be ignored at runtime.\n\n**Note:** If the client doesn't request any scopes, the authorization server uses all\nscopes associated with the client.\n"
+                }
+              ],
+              "variable": []
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8626c145-1d3c-4261-9ec0-04e0467e4fc0",
+              "name": "Redirect back to calling application.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "oauth2",
+                    "authorize"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "response_type",
+                      "value": "code"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "ad398u21ijw3s9w3939"
+                    },
+                    {
+                      "key": "redirect_uri",
+                      "value": "https://example.com/redirect"
+                    },
+                    {
+                      "key": "state",
+                      "value": "abc123xyz"
+                    },
+                    {
+                      "key": "scope",
+                      "value": "event/events:read event/attendees:read"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Found",
+              "code": 302,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "**Positive Response**\n\nThe authorization server redirects the user-agent back to the client's redirect URI with the authorization code and state.\nThe code and state must be returned in the query string parameters.\n\n**Negative Responses**\n\n- If client_id and redirect_uri are valid but there are other problems with the request parameters\n(for example, if response_type is not included), the authorization server redirects the error to\nclient's redirect_uri.\n  - Location: https://client_redirect_uri?error=invalid_request\n\n- If the client requests 'code' in response_type but does not have permission for these requests,\nthe authorization server should return unauthorized_client to client's redirect_uri.\n  - Location: https://client_redirect_uri?error=unauthorized_client\n\n- If the client requests invalid, unknown, malformed scope, the authorization server should return\ninvalid_scope to the client's redirect_uri, as follows.\n  - Location: https://client_redirect_uri?error=invalid_scope\n\n- If there is any unexpected error in the server, the authorization server should return\nserver_error to client's redirect_uri. It should not be the HTTP 500 error displayed to\nthe end user in the browser, because this error doesn't get sent to the client.\n  - Location: https://client_redirect_uri?error=server_error\n\n- In the rare case where the authorization server encounters an exception in the communication\nprotocol while making any connection to an external identity provider, the authorization\nserver redirects the error to the client's redirect_uri with either of the following messages.\n  - Location: https://client_redirect_uri?error=invalid_request&error_description=Connection+reset\n  - Location: https://client_redirect_uri?error=invalid_request&error_description=Read+timed+out\n",
+                  "key": "Location",
+                  "value": "https://client_redirect_uri?code=AUTHORIZATION_CODE&state=STATE"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b6d467bd-7597-46d0-9cac-cee7f00fb1c7",
+              "name": "The request is missing a required parameter.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "oauth2",
+                    "authorize"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "response_type",
+                      "value": "code"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "ad398u21ijw3s9w3939"
+                    },
+                    {
+                      "key": "redirect_uri",
+                      "value": "https://example.com/redirect"
+                    },
+                    {
+                      "key": "state",
+                      "value": "abc123xyz"
+                    },
+                    {
+                      "key": "scope",
+                      "value": "event/events:read event/attendees:read"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "af8ba324-c53d-4abe-94f0-1258a58333d0",
+          "name": "Get Token",
+          "request": {
+            "name": "Get Token",
+            "description": {
+              "content": "Obtains an access token and, optionally, a refresh token. Read the [Developer Quickstart](https://developers.cvent.com/docs/rest-api/tutorials/developer-quickstart) for an example request.\n\n**Note:** The token endpoint returns refresh_token only when the grant_type is authorization_code.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "oauth2",
+                "token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "grant_type",
+                  "value": "<string>",
+                  "description": "(Required) Controls the OAuth2 grant flow used to obtain tokens."
+                },
+                {
+                  "disabled": false,
+                  "key": "client_id",
+                  "value": "<string>",
+                  "description": "(Required) The OAuth2 Client application ID.\n\nMust be a pre-registered client created in the developer portal.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "scope",
+                  "value": "<string>",
+                  "description": "Can be a combination of any scopes associated with a client. Any scope requested must be pre-associated with the client or it will be ignored at runtime.\nIf the client doesn't request any scopes, the authorization server uses all scopes associated with the client.\n\n**Optional** - Only used if the grant_type is client_credentials.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "redirect_uri",
+                  "value": "<string>",
+                  "description": "Must be the same *redirect_uri* that was used to get *authorization_code* in */oauth2/authorize*.\n\n**Required only if grant_type is authorization_code.**\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "refresh_token",
+                  "value": "<string>",
+                  "description": "The refresh token.\n\n**Note:** The token endpoint returns *refresh_token* only when the grant_type is *authorization_code*.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "code",
+                  "value": "<string>",
+                  "description": "The code that is returned from a successful */oauth2/authorize*.\n\n**Required if grant_type is authorization_code.**\n"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "49aa966e-1091-4db2-af47-0aa1300a0cb8",
+              "name": "A successful response returning an access token and a possible refresh token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "oauth2",
+                    "token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The client must pass its client_id and client_secret in the authorization header through Basic HTTP authorization.\n\nAn example is `Basic Base64Encode(client_id:client_secret)` where `Base64Encode` means that the client id and secret are base64 encoded.\n",
+                    "key": "Authorization",
+                    "value": "Basic Y2xpZW50X2lkOmNsaWVudF9zZWNyZXQ="
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Controls the OAuth2 grant flow used to obtain tokens.",
+                        "type": "text/plain"
+                      },
+                      "key": "grant_type",
+                      "value": "client_credentials"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The OAuth2 Client application ID.\n\nMust be a pre-registered client created in the developer portal.\n",
+                        "type": "text/plain"
+                      },
+                      "key": "client_id",
+                      "value": "djc98u3jiedmi283eu928"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Can be a combination of any scopes associated with a client. Any scope requested must be pre-associated with the client or it will be ignored at runtime.\nIf the client doesn't request any scopes, the authorization server uses all scopes associated with the client.\n\n**Optional** - Only used if the grant_type is client_credentials.\n",
+                        "type": "text/plain"
+                      },
+                      "key": "scope",
+                      "value": "event/events:read event/attendees:read"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Must be the same *redirect_uri* that was used to get *authorization_code* in */oauth2/authorize*.\n\n**Required only if grant_type is authorization_code.**\n",
+                        "type": "text/plain"
+                      },
+                      "key": "redirect_uri",
+                      "value": "https://example.com/redirect"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The refresh token.\n\n**Note:** The token endpoint returns *refresh_token* only when the grant_type is *authorization_code*.\n",
+                        "type": "text/plain"
+                      },
+                      "key": "refresh_token",
+                      "value": "dn43ud8uj32nk2je"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The code that is returned from a successful */oauth2/authorize*.\n\n**Required if grant_type is authorization_code.**\n",
+                        "type": "text/plain"
+                      },
+                      "key": "code",
+                      "value": "AUTHORIZATION_CODE"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"access_token\": \"eyJz9sdfsdfsdfsd\",\n  \"token_type\": \"Bearer\",\n  \"expires_in\": 3600,\n  \"refresh_token\": \"dn43ud8uj32nk2je\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f946f0c9-226f-459a-a36d-117ab440654e",
+              "name": "A bad token response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "oauth2",
+                    "token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The client must pass its client_id and client_secret in the authorization header through Basic HTTP authorization.\n\nAn example is `Basic Base64Encode(client_id:client_secret)` where `Base64Encode` means that the client id and secret are base64 encoded.\n",
+                    "key": "Authorization",
+                    "value": "Basic Y2xpZW50X2lkOmNsaWVudF9zZWNyZXQ="
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Controls the OAuth2 grant flow used to obtain tokens.",
+                        "type": "text/plain"
+                      },
+                      "key": "grant_type",
+                      "value": "client_credentials"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The OAuth2 Client application ID.\n\nMust be a pre-registered client created in the developer portal.\n",
+                        "type": "text/plain"
+                      },
+                      "key": "client_id",
+                      "value": "djc98u3jiedmi283eu928"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Can be a combination of any scopes associated with a client. Any scope requested must be pre-associated with the client or it will be ignored at runtime.\nIf the client doesn't request any scopes, the authorization server uses all scopes associated with the client.\n\n**Optional** - Only used if the grant_type is client_credentials.\n",
+                        "type": "text/plain"
+                      },
+                      "key": "scope",
+                      "value": "event/events:read event/attendees:read"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Must be the same *redirect_uri* that was used to get *authorization_code* in */oauth2/authorize*.\n\n**Required only if grant_type is authorization_code.**\n",
+                        "type": "text/plain"
+                      },
+                      "key": "redirect_uri",
+                      "value": "https://example.com/redirect"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The refresh token.\n\n**Note:** The token endpoint returns *refresh_token* only when the grant_type is *authorization_code*.\n",
+                        "type": "text/plain"
+                      },
+                      "key": "refresh_token",
+                      "value": "dn43ud8uj32nk2je"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The code that is returned from a successful */oauth2/authorize*.\n\n**Required if grant_type is authorization_code.**\n",
+                        "type": "text/plain"
+                      },
+                      "key": "code",
+                      "value": "AUTHORIZATION_CODE"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_description\": \"string\",\n  \"error\": \"invalid_request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5f0da8d3-ccd5-43b5-ab2e-3e535d9a78dc",
+              "name": "Client authentication failed. The credentials provided in the Authorization header are invalid or missing.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "oauth2",
+                    "token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The client must pass its client_id and client_secret in the authorization header through Basic HTTP authorization.\n\nAn example is `Basic Base64Encode(client_id:client_secret)` where `Base64Encode` means that the client id and secret are base64 encoded.\n",
+                    "key": "Authorization",
+                    "value": "Basic Y2xpZW50X2lkOmNsaWVudF9zZWNyZXQ="
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Controls the OAuth2 grant flow used to obtain tokens.",
+                        "type": "text/plain"
+                      },
+                      "key": "grant_type",
+                      "value": "client_credentials"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The OAuth2 Client application ID.\n\nMust be a pre-registered client created in the developer portal.\n",
+                        "type": "text/plain"
+                      },
+                      "key": "client_id",
+                      "value": "djc98u3jiedmi283eu928"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Can be a combination of any scopes associated with a client. Any scope requested must be pre-associated with the client or it will be ignored at runtime.\nIf the client doesn't request any scopes, the authorization server uses all scopes associated with the client.\n\n**Optional** - Only used if the grant_type is client_credentials.\n",
+                        "type": "text/plain"
+                      },
+                      "key": "scope",
+                      "value": "event/events:read event/attendees:read"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Must be the same *redirect_uri* that was used to get *authorization_code* in */oauth2/authorize*.\n\n**Required only if grant_type is authorization_code.**\n",
+                        "type": "text/plain"
+                      },
+                      "key": "redirect_uri",
+                      "value": "https://example.com/redirect"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The refresh token.\n\n**Note:** The token endpoint returns *refresh_token* only when the grant_type is *authorization_code*.\n",
+                        "type": "text/plain"
+                      },
+                      "key": "refresh_token",
+                      "value": "dn43ud8uj32nk2je"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The code that is returned from a successful */oauth2/authorize*.\n\n**Required if grant_type is authorization_code.**\n",
+                        "type": "text/plain"
+                      },
+                      "key": "code",
+                      "value": "AUTHORIZATION_CODE"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e4969e0c-7a21-4876-85d9-4f5b80ae867a",
+          "name": "Validate Token",
+          "request": {
+            "name": "Validate Token",
+            "description": {
+              "content": "Verifies presented authentication token is valid.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "token-validation"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "account/hooks:delete account/hooks:read account/hooks:write account/user-groups:delete account/user-groups:read account/user-groups:write account/users:delete account/users:read account/users:write appointments/appointment-attendees:read appointments/appointment-events:read appointments/appointment-types:read appointments/appointments:read appointments/appointments:write appointments/available-times:read appointments/locations:read attendee-insights/attendee-insights:read attendee-insights/scores:read attendee-insights/stats:read budget/budget-items:delete budget/budget-items:read budget/budget-items:write budget/budget-totals:read budget/budget-vendors:read budget/cards:read budget/currency-conversion-rate:delete budget/currency-conversion-rate:read budget/currency-conversion-rate:write budget/payments:delete budget/payments:read budget/payments:write budget/transactions:delete budget/transactions:read budget/transactions:write bulk/bulk-jobs:read bulk/bulk-jobs:write business-transient/bids:read business-transient/proposals:read business-transient/supplier-brands:read business-transient/supplier-chains:read business-transient/supplier-properties:read business-transient/supplier-property-rooms:read business-transient/travel-accounts:read business-transient/travel-program-questions:read business-transient/travel-programs:read business-transient/travel-supplier-accounts:read business-travel/bids:read business-travel/proposals:read business-travel/travel-accounts:read business-travel/travel-program-questions:read business-travel/travel-programs:read compliance/communications:read compliance/communications:write email/bounces:read email/email-status:read email/emails:read eMarketing/campaigns:read emarketing/emarketing-email-status:read eMarketing/eMarketing-email-templates:read eMarketing/eMarketing-send-emails:write event/admission-items:read event/air-request:read event/alternate-travel:read event/attendance-durations:read event/attendee-activities-metadata:delete event/attendee-activities-metadata:read event/attendee-activities-metadata:write event/attendee-activities:read event/attendee-activities:write event/attendee-credits:read event/attendee-links:delete event/attendee-links:read event/attendee-links:write event/attendee-messages:read event/attendees:read event/attendees:write event/audience-segments:read event/audience-segments:write event/contact-groups:read event/contact-groups:write event/contact-types:read event/contacts:delete event/contacts:read event/contacts:write event/contacts:write-sensitive event/custom-fields:read event/custom-fields:write event/discounts:write event/donation-items:read event/event-discounts:read event/event-discounts:write event/event-email-status:read event/event-emails:read event/event-emails:write event/event-features:read event/event-features:write event/event-user-groups:read event/event-user-groups:write event/events:read event/events:write event/fee-items:read event/hotel-request:read event/invitation-lists:read event/meeting-request-forms:read event/meeting-requests:read event/meeting-requests:write event/membership-items:read event/orders:read event/planning-documents:read event/players:read event/process-form-submissions:read event/program-items:delete event/program-items:read event/program-items:write event/quantity-items:read event/quantity-items:write event/registration-paths:read event/registration-types:read event/registration-types:write event/role-assignments:read event/session-attendance:read event/session-attendance:write event/session-categories:read event/session-categories:write event/session-enrollment:delete event/session-enrollment:read event/session-enrollment:write event/session-segments:read event/sessions:delete event/sessions:read event/sessions:write event/speaker-categories:read event/speaker-categories:write event/speakers:delete event/speakers:read event/speakers:write event/taxes:read event/transactions:read event/transactions:write event/video-views:read event/videos:read event/videos:write event/vouchers:read event/webcasts:delete event/webcasts:read event/webcasts:write event/weblinks:read events-plus/hubs:read exhibitor/badges:read exhibitor/badges:write exhibitor/booth-staff:delete exhibitor/booth-staff:read exhibitor/booth-staff:write exhibitor/eliterature-requests:read exhibitor/exhibitor-admins:read exhibitor/exhibitor-admins:write exhibitor/exhibitor-answers:read exhibitor/exhibitor-answers:write exhibitor/exhibitor-categories:delete exhibitor/exhibitor-categories:read exhibitor/exhibitor-categories:write exhibitor/exhibitor-contents:delete exhibitor/exhibitor-contents:read exhibitor/exhibitor-contents:write exhibitor/exhibitor-questions:read exhibitor/exhibitors:delete exhibitor/exhibitors:read exhibitor/exhibitors:write exhibitor/lead-qualification-answers:read exhibitor/lead-qualification-questions:read exhibitor/leads:read exhibitor/registration-packs:delete exhibitor/registration-packs:read exhibitor/registration-packs:write exhibitor/sponsorship-levels:read file/file:read file/file:write housing/connections:write housing/hotel-room-rates:write housing/housing-event-available-nights:read housing/housing-event-hotels:read housing/housing-event-inventory:read housing/housing-event-room-types:read housing/housing-events:read housing/reservation-requests:delete housing/reservation-requests:read housing/reservation-requests:write housing/reservations-link:delete housing/reservations-link:write housing/reservations:delete housing/reservations:read housing/reservations:write onsite/signatures:read proposal/proposals:write remote-printing/badge-print-jobs:read remote-printing/badge-print-jobs:write remote-printing/badge-printer-pools:read rfp/rfp-agenda-items:read rfp/rfp-attachments:read rfp/rfp-custom-fields:read rfp/rfp-guest-rooms:read rfp/rfp-internal-documents:read rfp/rfp-lead-sources:read rfp/rfp-past-events:read rfp/rfp-questions:read rfp/rfp-recipients-history:read rfp/rfp-suppliers:read rfp/rfps:read seating/assignments:read seating/event-seatings:read seating/seats:read seating/tables:read secure-ecommerce/card-tokens:write survey/questions:read survey/respondents:read survey/responses:read survey/standard-survey-email-templates:read survey/standard-survey-email:write survey/standard-survey-questions:read survey/standard-survey-respondents:read survey/standard-survey-respondents:write survey/standard-survey-responses:read survey/standard-survey-responses:write survey/standard-surveys:read survey/survey-questions:read survey/survey-respondents:read survey/survey-respondents:write survey/survey-responses:read survey/survey-responses:write survey/surveys:read venue/meeting-room-overviews:read venue/meeting-rooms:write venue/venue-details-overview:read venue/venue-details:write venue/venue-facility:write"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api-platform.cvent.com/ea/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "581badea-438f-4d41-96c9-de3aad604a7e",
+              "name": "A confirmation message that the token is valid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "token-validation"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"tokenValid\": true,\n  \"statusCode\": 200\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "879cea33-c943-4fb4-ac80-5fd43464e0af",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "token-validation"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ecd95482-eace-445d-b0b2-eb7dcab9682e",
+              "name": "Bad or expired token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "token-validation"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "55fc495e-eb56-46e8-a7e4-d878bcc57243",
+              "name": "You do not have access to the resource",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "token-validation"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"Access Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b47276ab-293c-482a-9ffd-33ef5f3f097a",
+              "name": "Too many requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "token-validation"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 429,\n  \"message\": \"Limit Exceeded\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-platform.cvent.com/ea",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "53c2b7ad-2335-491f-a1aa-1341dda8d1a6",
+    "name": "Cvent REST APIs — Event Cloud Authentication API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Event Cloud scope of the Cvent REST APIs. This document is a TAG-SCOPED SUBSET of the OpenAPI specification Cvent publishes at https://github.com/cvent/rest-sdks/blob/main/cvent-public-spec/openapi.yaml (the source of truth for Cvent's official TypeScript/.NET/Java SDKs). Venue-sourcing, RFP, housing-supplier and travel-supplier tags were removed because they belong to Cvent Hospitality Cloud; every path, operation, parameter, schema and security requirement below is verbatim from Cvent's published spec.\n\n# Introduction\nThe Cvent API Platform is built around REST. We aim to provide intuitive endpoints that can be easily\ndiscovered to help leverage the Cvent platform for your event needs. The RESTful APIs outlined here\nuse JSON-encoded request and response format, along with HTTP codes, to convey processing status of\nrequests received. The Cvent resources are protected using OAuth2.\n\n# Getting Started\n\nIf you're new to the Cvent API Platform, start by reading our\n[Developer Quickstart](https://developers.cvent.com/docs/rest-api/tutorials/developer-quickstart) guide. This will\ngive you an overview of how to authenticate and make requests using our APIs.\n\n## Authentication\n\nThe Cvent REST API uses [OAuth2](https://oauth.net/2/) to authorize requests to the platform. The client\ncredentials authorization flow is supported.\n\n<a name=\"oauth2-auth-code-planner-admin\"></a>\n\nAuthorization code flow is only supported for planner users with the administrator role in Cvent. Developer users\ncannot use authorization code flow.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\nHere's an example of using client credential flow to authorize. You'll supply your application's id and secret to\nmake a [Token](#operation/oauth2Token) request.\n\n```bash\ncurl --location --request POST '{hostName}/{version}/oauth2/token' \\\n--header 'Content-Type: application/x-www-form-urlencoded' \\\n--header 'Authorization: Basic {api_credentials}' \\\n--data-urlencode 'grant_type=client_credentials' \\\n--data-urlencode 'client_id={client_id}'\n```\n\n| Key               | Description                                          | Value                                                                                                        |\n| :---------------- | :--------------------------------------------------- | :----------------------------------------------------------------------------------------------------------- |\n| {hostName}        | https://api-platform.cvent.com                       | Location if your account is in the North American datacenter.                                                |\n|                   | https://api-platform-eur.cvent.com                   | Location if your account is in the European data center.                                                     |\n| {version}         | ea                                                   | The version of the API you're using. Only `ea` is currently supported.                                       |\n| {api_credentials} | {client_id}:{client_secret} in base64 encoded format | Supply your client id & client credentials in a base 64 encoded format.                                      |\n| {client_id}       | Retrieved from your application                      | Your application's client id.                                                                                |\n| {client_secret}   | Retrieved from your application                      | Your application's client secret.                                                                            |\n\nOn a successful call, you'll receive the following response:\n\n```json\n{\n  \"access_token\": \"{accessToken}\",\n  \"expires_in\": 3600,\n  \"token_type\": \"Bearer\"\n}\n```\n\nThis bearer token is valid for 3600 seconds (60 minutes) and must be used in subsequent calls.\n\n## Endpoints\n\nEndpoints start with `hostName` and `version`.\n\nThe `hostname` will depend on the region that your Cvent account is hosted in. Please see the table\nbelow to identify which hostname you should be using.\n\n| Region        |\tHostname                           |\n|:--------------|:-----------------------------------|\n| North America\t| https://api-platform.cvent.com     |\n| Europe        | https://api-platform-eur.cvent.com |\n\nThe current `version` of the Cvent API is `ea`.\n\n## Rate Limits\n\nCvent APIs enforce rate limits to ensure platform stability. Your limits depend on your tier: Free,\nStandard, or Premium.\n\n<br />\n\n### Usage Tiers\n\n| Tier     | Daily Calls | Calls per Second | Max Burst |\n| -------- | ----------- | ---------------- | --------- |\n| Free     | 1,000       | 2                | 1         |\n| Standard | 15,000      | 10               | 10        |\n| Premium  | 500,000     | 25               | 25        |\n\n- **Daily calls** define how many requests you can make in a 24-hour period. Quota\n  resets at 12 midnight (+0 GMT).\n- **Calls per second** define how many requests you can make in a 1-second window.\n- **Max Burst** defines how many requests you can make at once.\n\nIf you are unsure what usage tier applies to your account, you can check via\n[Get Current Usage Tier](#operation/getUsageTier).\n\nPlease note that these limits may change as the Cvent API Platform evolves.\n\n<br />\n\n### Handling Rate Limits\n\nSometimes, you may exceed your rate limits. When this happens, the API will return a `429 Too Many Requests`. See\n[handling rate limits](https://developers.cvent.com/docs/rest-api/guides/handling-rate-limits) for best practices on how to handle this.\n\n## Pagination\n\nSome APIs use pagination to manage records. Each page of records has a token associated to identify it.\n\nIf an API uses pagination, you’ll find up to three tokens in the response:\n- **currentToken**: Describes the token of the current page.\n- **nextToken**: Provides a token for the next page of records, if one exists.\n- **previousToken**: Provides a token for the previous page of records, if one exists. Not all APIs will return\n  this token.\n\nYou specify which page of records to view via the `token` parameter in your API call. To navigate through pages,\ntake the `nextToken` or `previousToken` value and pass it to your next call’s `token` parameter to get the\nrespective page of records. For example, if you made this request:\n\n```bash\ncurl -X GET {hostname}/{version}/contacts?limit=100 \\\n-H 'Accept: application/json' \\\n-H 'Authorization: Bearer {accessToken}'\n```\n\nThe response contains a paging array where you'll find the token information.\n\n```json\n{\n  \"paging\": {\n    \"currentToken\": \"90c5f062-76ad-4ea4-aa53-00eb698d9262\",\n    \"nextToken\": \"3b2359a7-4583-40ed-8afd-67e5f15373d3\",\n    \"limit\": 100,\n    \"totalCount\": 102,\n    \"_links\": {...}\n  },\n  \"data\": [...]\n}\n```\n\nTake the `nextToken` and use it in the `token` parameter on your subsequent call.\n\n```bash\ncurl -X GET {hostname}/{version}/contacts?limit=100&token=3b2359a7-4583-40ed-8afd-67e5f15373d3 \\\n-H 'Accept: application/json' \\\n-H 'Authorization: Bearer {accessToken}'\n```\n\nWhen the response doesn’t contain a `nextToken` field, you’ve reached the last page. Occasionally, you might\nencounter an empty page at the end of results. This typically happens when the results were evenly divisible.\nEnsure your client code handles the possibility of receiving an empty data array when using the `nextToken`.\n\n## Filtering\n\nUse filters to narrow down results. The filter follows the pattern\n`filter='field' comparisonType 'value'`. The value can be enclosed with single\nquotes (') or double quotes (\").\n\n```bash\nGET {hostName}/{version}/contacts?filter=lastName eq 'Smith'\n````\n\nTo correctly pass a single quote in the filter's value, use double quotes around\nthe string.\n\n```bash\nGET {hostName}/{version}/contacts?filter=lastName eq \"O'Keenan\"\n```\n\nTo correctly pass a double quote in the filter's value, use double quotes around\nthe string and add an escape character `\\` to each quote that is part of the\nstring.\n\n```bash\nGET {hostName}/{version}/events?filter=eventName eq \"\\\"Yearly\\\" Conference\"\n```\n\n## Versioning\n\nChange is inevitable in API development. Planning for it is crucial. We track\nboth backward-compatible and backward-incompatible changes.\n\n<br />\n\n### Backward Compatible Changes\n\nBackward compatible changes will be made often and are intended to avoid\nany adverse impact on our customers. It is highly advisable that when reading\nJSON payloads from Cvent, you are able to handle \"unknown\" attributes that\ncan be added over time. We consider the following changes backward-compatible:\n\n- Adding new resources\n- Adding new optional request parameters to existing operations\n- Adding new attributes to requests or responses\n- Changing the length or format (not type) of resource identifiers. For example, an ID can change from\n  \"1234/1234\" to \"1234::1234\".\n- Increasing the length of string fields\n\n<br />\n\n### Backward Incompatible Changes\n\nBackward-incompatible changes are made infrequently, however, they can be\ndisruptive to consumers. Due to this, our APIs are versioned to avoid\ndisruptions to customers. We leverage a URI-based versioning scheme,\nwhich means that a version value is included in the Cvent API URL.\nWhen breaking changes occur, a new version of the API is made available\nwhile the existing version is deprecated but remains available for a\nlimited period of time. We consider the following backward-incompatible changes:\n\n- Adding a new required parameter (query string param or payload attribute)\n- Deleting API resources\n- Deleting any attribute from API responses\n- Changing the data type on any parameter or attribute\n\n## Standards\nAs you begin working with our APIs, it's essential to be aware of standards around\ncountry codes, time formats, and other important details that ensure smooth integration.\nLearn more about our [API Standards](https://developers.cvent.com/docs/rest-api/reference/api-standards)\n\n\nContact Support:\n Name: Cvent Development Platform",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,2284 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cvent REST APIs — Event Cloud Events API",
+    "version": "ea"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Events",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Admission Items",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/admission-items",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "A filter query string narrows search results and supports the combination of logical and comparison operators.\nThe filter adheres to the pattern filter='field' comparisonType 'value'.\nThese are the comparison types that can be used in filter expressions:\n  * equal: eq\n  * not equal: ne\n  * greater than: gt\n  * greater or equal: ge\n  * less than: lt\n  * less than or equal: le\n  * starts with: sw\n  * contains a value: contains\n\nThe following fields are filterable:\n  * id (eq|ne)\n  * event.id (eq|ne)\n  * name (eq|ne)\n  * code (eq|ne)\n  * allowOptionalSessions (eq|ne)\n\nThe following operators are available:\n  * and\n  * or"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of admission items."
+        },
+        {
+          "info": {
+            "name": "List Admission Items",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/admission-items/filter",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of admission items by sending a filter in the body of the request. This method will return the same data as [GET List Admission Items](#operation/listAdmissionItems) but allows for longer filters.\n"
+        },
+        {
+          "info": {
+            "name": "List Event Questions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/event-questions",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "A filter query string narrows search results and supports the combination of logical and comparison operators.\nThe filter adheres to the pattern filter='field' comparisonType 'value'.\n\nThese are the comparison types that can be used in filter expressions:\n  * equal: eq\n  * not equal: ne\n  * greater than: gt\n  * greater or equal: ge\n  * less than: lt\n  * less than or equal: le\n\nThe following fields are filterable:\n  * event.id (eq|ne)\n  * id (eq|ne)\n  * code (eq|ne)\n  * tag (eq|ne)\n  * created (eq|ne|lt|le|gt|ge)\n  * lastModified (eq|ne|lt|le|gt|ge)\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of event questions."
+        },
+        {
+          "info": {
+            "name": "Get Question Choices",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/event-questions/:questionId/choices",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "questionId",
+                "value": "",
+                "type": "path",
+                "description": "Question Id"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "A filter query string narrows search results and supports the combination of logical and comparison operators.\nThe filter adheres to the pattern filter='field' comparisonType 'value'.\n\nThis comparison type will be used in filter expression:\n  * equal: eq\n\nThe following fields are filterable:\n  * text (eq)\n\nThe following operators are available:\n  * or\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets all the choices for a given event question."
+        },
+        {
+          "info": {
+            "name": "List Events",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "The sort order passed as a parameter, used to control the order of the\nsearch results as a priority ordered list of sorts\n\nThere are two orders:\n  * ascending: ASC\n  * descending: DESC\n\nThe following fields are sortable:\n  * start\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "A filter query string narrows search results and supports the combination of logical and comparison operators.\nThe filter adheres to the pattern filter='field' comparisonType 'value'.\nThese are the comparison types that can be used in filter expressions:\n  * equal: eq\n  * not equal: ne\n  * greater than: gt\n  * greater or equal: ge\n  * less than: lt\n  * less than or equal: le\n  * contains a value: contains\n\nThe following fields are filterable:\n  * id (eq|ne)\n  * start (eq|ne|lt|le|gt|ge)\n  * end (eq|ne|lt|le|gt|ge)\n  * status (eq|ne)\n  * eventStatus (eq|ne) **Note:** Events with a status of `Deleted` are available\n    for approximately 24 hours after deletion. After this, they are\n    removed and no longer appear in search results.\n  * format (eq|ne)\n  * title (eq|ne|contains) **Note:** Contains filters must be between 3 and 15 characters.\n  * code (eq|ne)\n  * description (eq|ne)\n  * launchAfter (eq|ne|lt|le|gt|ge)\n  * created (eq|ne|lt|le|gt|ge)\n  * lastModified (eq|ne|lt|le|gt|ge)\n  * closeAfter (eq|ne|lt|le|gt|ge)\n  * archiveAfter (eq|ne|lt|le|gt|ge)\n  * capacity (eq|ne|lt|le|gt|ge)\n  * stakeholder.firstName (eq|ne)\n  * stakeholder.lastName (eq|ne)\n  * stakeholder.email (eq|ne)\n  * stakeholder.company (eq|ne)\n  * stakeholder.title (eq|ne)\n  * stakeholder.workPhone (eq|ne)\n  * note (eq|ne)\n  * virtual (eq|ne)\n  * planner.firstName (eq|ne)\n  * planner.lastName (eq|ne)\n  * planner.email (eq|ne)\n  * venue.address.city (eq|ne)\n  * venue.address.region (eq|ne)\n  * venue.address.regionCode (eq|ne)\n  * venue.address.country (eq|ne)\n  * venue.address.countryCode (eq|ne)\n  * customField.{uuid of custom field} (eq|ne|lt|le|gt|ge|sw|contains)\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of events.\n"
+        },
+        {
+          "info": {
+            "name": "Create Event Async",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/events/async",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Creates an event using the details supplied in the request body. Check the\n[Get Event Async Status](#operation/getEventAsyncStatus) to determine when the\nevent is ready.\n"
+        },
+        {
+          "info": {
+            "name": "Get Event Async Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/async/:eventCreationId/status",
+            "params": [
+              {
+                "name": "eventCreationId",
+                "value": "",
+                "type": "path",
+                "description": "Process ID for the async process for creating events."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets the event creation status of the given event."
+        },
+        {
+          "info": {
+            "name": "Get Event Copy Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/copy/:eventCopyId/status",
+            "params": [
+              {
+                "name": "eventCopyId",
+                "value": "",
+                "type": "path",
+                "description": "Process ID for the async process for copying events."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets the event copy status of the given event."
+        },
+        {
+          "info": {
+            "name": "Send Email To Attendees",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/events/emails",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Sends an email to one or more event attendees who are on the invitation list."
+        },
+        {
+          "info": {
+            "name": "List Event Email Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/emails/:emailRequestId/status",
+            "params": [
+              {
+                "name": "emailRequestId",
+                "value": "",
+                "type": "path",
+                "description": "Used to get status of emails which were sent with this email request ID."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets the status of email using unique email request ID that was generated as a response of [Send Email To Attendees](#tag/Events/operation/sendEventEmails) request."
+        },
+        {
+          "info": {
+            "name": "List Events",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/events/filter",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "The sort order passed as a parameter, used to control the order of the\nsearch results as a priority ordered list of sorts\n\nThere are two orders:\n  * ascending: ASC\n  * descending: DESC\n\nThe following fields are sortable:\n  * start\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of events by sending a filter in the body of the request. This method will return the same data as [GET List Events](#operation/getEvents) but allows for longer filters.\n"
+        },
+        {
+          "info": {
+            "name": "Get Event",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a single event based on the provided event ID."
+        },
+        {
+          "info": {
+            "name": "Update Event",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/events/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Updates the information for a single event based on the details provided in the request body."
+        },
+        {
+          "info": {
+            "name": "Event Check-In",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/events/:id/check-in",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Check-in attendees to an event based on the attendee IDs provided in the body of the request."
+        },
+        {
+          "info": {
+            "name": "Remove Check-In",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-platform.cvent.com/ea/events/:id/check-in/:attendeeId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "attendeeId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an attendee."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Deletes the event check-in of attendee."
+        },
+        {
+          "info": {
+            "name": "Copy Event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/events/:id/copy",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Copies the event details provided in the request body. Supports either creating a new event using the\ncopied data, or inserting the copied data to an existing event.\n"
+        },
+        {
+          "info": {
+            "name": "Event Custom Field Answers",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/events/:id/custom-fields/:customFieldId/answers",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "customFieldId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of the custom field."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Answer a single custom field for an event. Event custom fields are used to store extra \ninformation about an event, such as the event type or event region.\n"
+        },
+        {
+          "info": {
+            "name": "List Donation Items",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/donation-items",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field             | Operators |\n|-------------------|-----------|\n| id                | `in`      |\n| registrationTypes | `in`      |\n\nThe following logical operators are supported for combining filters:\n* and\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of donation items. Donation items are a type of [optional item](https://support.cvent.com/s/communityarticle/Understanding-Agenda-Items).\n"
+        },
+        {
+          "info": {
+            "name": "List Donation Items",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/events/:id/donation-items/filter",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of donation items by sending a filter in the body of the request. Donation items are a type of [optional item](https://support.cvent.com/s/communityarticle/Understanding-Agenda-Items).\n"
+        },
+        {
+          "info": {
+            "name": "List Event Emails",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/emails",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "A filter query string narrows search results and supports the combination of logical and comparison operators.\nThe filter adheres to the pattern filter='field' comparisonType 'value'.\n\nThere are six comparison types that can be used in filter expressions:\n  * equal: eq\n  * not equal: ne\n  * greater than: gt\n  * greater or equal: ge\n  * less than: lt\n  * less than or equal: le\n  * contains a value: contains\n\nThe following fields are filterable for event emails:\n  * id (eq|ne)\n  * name (eq|ne|contains)\n  * active (eq|ne)\n  * created (eq|ne|lt|le|gt|ge)\n  * createdBy (eq|ne)\n  * lastModified (eq|ne|lt|le|gt|ge)\n  * lastModifiedBy (eq|ne)\n  * invitationList.id (eq|ne)\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of emails for a given event."
+        },
+        {
+          "info": {
+            "name": "List Fee Items",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/fee-items",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field                 | Operators                          |\n|-----------------------|------------------------------------|\n| id                    | `eq`, `ne`                         |\n| product.id            | `eq`, `ne`                         |\n| generalLedgerCodes.id | `eq`, `ne`                         |\n| product.type          | `eq`, `ne`                         |\n| created               | `eq`, `ne`, `lt`, `le`, `gt`, `ge` |\n| lastModified          | `eq`, `ne`, `lt`, `le`, `gt`, `ge` |\n\nThe following logical operators are supported for combining filters:\n* and\n* or\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of fee items associated with the event.\n"
+        },
+        {
+          "info": {
+            "name": "List Invitation Lists",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/invitation-lists",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "A filter query string narrows search results and supports the combination of logical and comparison operators.\nThe filter adheres to the pattern filter='field' comparisonType 'value'.\n\nThere are six comparison types that can be used in filter expressions:\n  * equal: eq\n  * not equal: ne\n  * greater than: gt\n  * greater or equal: ge\n  * less than: lt\n  * less than or equal: le\n  * contains a value: contains\n\nThe following fields are filterable for invitation list:\n  * id (eq|ne)\n  * name (eq|ne|contains)\n  * locale (eq|ne)\n  * createdBy (eq|ne)\n  * created (eq|ne|lt|le|gt|ge)\n  * lastModifiedBy (eq|ne)\n  * lastModified (eq|ne|lt|le|gt|ge)\n  * default (eq|ne)\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of invitation lists for a given event."
+        },
+        {
+          "info": {
+            "name": "List Membership Items",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/membership-items",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field             | Operators |\n|-------------------|-----------|\n| id                | `in`      |\n| registrationTypes | `in`      |\n\nThe following logical operators are supported for combining filters:\n* and\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of membership items. [Membership items](https://support.cvent.com/s/communityarticle/Setting-Up-Memberships) are a type of [optional item](https://support.cvent.com/s/communityarticle/Understanding-Agenda-Items) that can be purchased during registration.\n"
+        },
+        {
+          "info": {
+            "name": "List Membership Items",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/events/:id/membership-items/filter",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of membership items. [Membership items](https://support.cvent.com/s/communityarticle/Setting-Up-Memberships) are a type of [optional item](https://support.cvent.com/s/communityarticle/Understanding-Agenda-Items) that can be purchased during registration.\n"
+        },
+        {
+          "info": {
+            "name": "List Orders",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/orders",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an Event."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "attendee.id eq '78b3d72a-1851-46f4-a837-5f8613f4db83' AND (type eq 'Online Charge' OR type eq 'Online Refund')",
+                "type": "query",
+                "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field        | Operators                          |\n|--------------|------------------------------------|\n| id           | `eq`, `ne`                         |\n| attendee.id  | `eq`, `ne`                         |\n| event.id     | `eq`, `ne`                         |\n| type         | `eq`, `ne`                         |\n| created      | `eq`, `ne`, `lt`, `le`, `gt`, `ge` |\n| lastModified | `eq`, `ne`, `lt`, `le`, `gt`, `ge` |\n\nThe following logical operators are supported for combining filters:\n* and\n* or\n"
+              },
+              {
+                "name": "deleted",
+                "value": "",
+                "type": "query",
+                "description": "When `true`, includes soft-deleted records in the response. Defaults to `false`."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of Orders in event"
+        },
+        {
+          "info": {
+            "name": "List Order Items",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/orders/items",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an Event."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "attendee.id eq '78b3d72a-1851-46f4-a837-5f8613f4db83' AND (product.id eq '65322e75-076f-4070-a6e6-3315c581728d' OR product.id eq 'e1874067-a5ed-4111-ac8a-63de9aa18929')",
+                "type": "query",
+                "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field        | Operators                          |\n|--------------|------------------------------------|\n| id           | `eq`, `ne`                         |\n| attendee.id  | `eq`, `ne`                         |\n| event.id     | `eq`, `ne`                         |\n| order.id     | `eq`, `ne`                         |\n| product.id   | `eq`, `ne`                         |\n| product.type | `eq`, `ne`                         |\n| created      | `eq`, `ne`, `lt`, `le`, `gt`, `ge` |\n| lastModified | `eq`, `ne`, `lt`, `le`, `gt`, `ge` |\n\nThe following logical operators are supported for combining filters:\n* and\n* or\n"
+              },
+              {
+                "name": "deleted",
+                "value": "",
+                "type": "query",
+                "description": "When `true`, includes soft-deleted records in the response. Defaults to `false`."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of Order items in event"
+        },
+        {
+          "info": {
+            "name": "Assign Discount to Order Item",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/events/:id/orders/:orderId/items/:orderItemId/discounts/:discountCode",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an Event."
+              },
+              {
+                "name": "orderId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an Order."
+              },
+              {
+                "name": "orderItemId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an Order Item."
+              },
+              {
+                "name": "discountCode",
+                "value": "",
+                "type": "path",
+                "description": "Unique Code for a Discount."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Assigns a discount code to an order item based on the given IDs."
+        },
+        {
+          "info": {
+            "name": "List Event Planning Documents",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/planning-documents",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "A filter query string narrows search results and supports the combination of logical and comparison operators.\nThe filter adheres to the pattern filter='field' comparisonType 'value'.\nThese are the comparison types that can be used in filter expressions:\n  * equal: eq\n  * not equal: ne\n  * greater than: gt\n  * greater or equal: ge\n  * less than: lt\n  * less than or equal: le\n\nThe following fields are filterable:\n  * id (eq|ne)\n  * name (eq)\n  * category (eq)\n  * lastModified (eq|ne|lt|le|gt|ge)\n  * uploaded (eq|ne|lt|le|gt|ge)\n  * mimeType (eq|ne)\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of event planning documents.\n"
+        },
+        {
+          "info": {
+            "name": "List Quantity Items",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/quantity-items",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field             | Operators |\n|-------------------|-----------|\n| id                | `in`      |\n| registrationTypes | `in`      |\n\nThe following logical operators are supported for combining filters:\n* and\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of quantity items. Quantity items are a type of [optional item](https://support.cvent.com/s/communityarticle/Understanding-Agenda-Items).\n"
+        },
+        {
+          "info": {
+            "name": "List Quantity Items",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/events/:id/quantity-items/filter",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of quantity items by sending a filter in the body of the request. Quantity items are a type of [optional item](https://support.cvent.com/s/communityarticle/Understanding-Agenda-Items).\n"
+        },
+        {
+          "info": {
+            "name": "List Registration Paths",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/registration-paths",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "locale",
+                "value": "",
+                "type": "query",
+                "description": "Locale code in IETF Language tag format. Indicates desired locale of return values."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of registration paths."
+        },
+        {
+          "info": {
+            "name": "List Registration Types",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/registration-types",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of registration types."
+        },
+        {
+          "info": {
+            "name": "Update Event Registration Type",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/events/:id/registration-types/:registrationTypeId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "registrationTypeId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of a registration type."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Updates an attendee's registration type in an event."
+        },
+        {
+          "info": {
+            "name": "List Taxes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/taxes",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field        | Operators                          |\n|--------------|------------------------------------|\n| id           | `eq`, `in`                         |\n| active       | `eq`                               |\n| created      | `eq`, `ne`, `lt`, `le`, `gt`, `ge` |\n| lastModified | `eq`, `ne`, `lt`, `le`, `gt`, `ge` |\n\nThe following logical operators are supported for combining filters:\n* and\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of taxes for an event. A tax is an event-level pricing configuration applied to products such as admission items, sessions, and other billable items.\n"
+        },
+        {
+          "info": {
+            "name": "List Transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/transactions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an Event."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "attendee.id eq 'f4af0b94-4427-46f8-bea0-b06af2a0af80' AND (paymentType eq 'Online Charge' OR paymentType eq 'Online Refund')",
+                "type": "query",
+                "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field                  | Operators                          |\n|------------------------|------------------------------------|\n| id                     | `eq`, `ne`                         |\n| processorTransactionId | `eq`, `ne`                         |\n| attendee.id            | `eq`, `ne`                         |\n| event.id               | `eq`, `ne`                         |\n| success                | `eq`, `ne`                         |\n| paymentType            | `eq`, `ne`                         |\n| created                | `eq`, `ne`, `lt`, `le`, `gt`, `ge` |\n| lastModified           | `eq`, `ne`, `lt`, `le`, `gt`, `ge` |\n\nThe following logical operators are supported for combining filters:\n* and\n* or\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of Transactions in event"
+        },
+        {
+          "info": {
+            "name": "Create Transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/events/:id/transactions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an Event."
+              },
+              {
+                "name": "partialPayment",
+                "value": "",
+                "type": "query",
+                "description": "True indicates this request will create an offline transaction based on the amount(s) you\nspecify in the request body. False indicates this request will create an offline\ntransaction equal to the remaining amount of the order.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Create offline transactions for an order in your event. Offline transactions can be any digital or physical transactions performed outside Cvent. Valid transaction types for this method include Offline Charge and Offline Refund."
+        },
+        {
+          "info": {
+            "name": "List Transaction Items",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/transactions/items",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an Event."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "attendee.id eq '78b3d72a-1851-46f4-a837-5f8613f4db83' AND (transaction.id eq '82da8c60-24f4-47d0-b6e2-429b18a4bb7c' OR transaction.id eq '034bb884-05de-4818-b9f9-5144495d5495')",
+                "type": "query",
+                "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field                              | Operators                          |\n|------------------------------------|------------------------------------|\n| id                                 | `eq`, `ne`                         |\n| attendee.id                        | `eq`, `ne`                         |\n| event.id                           | `eq`, `ne`                         |\n| transaction.id                     | `eq`, `ne`                         |\n| transaction.processorTransactionId | `eq`, `ne`                         |\n| uniqueId                           | `eq`, `ne`                         |\n| created                            | `eq`, `ne`, `lt`, `le`, `gt`, `ge` |\n| lastModified                       | `eq`, `ne`, `lt`, `le`, `gt`, `ge` |\n\nThe following logical operators are supported for combining filters:\n* and\n* or\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of Transaction items in event"
+        },
+        {
+          "info": {
+            "name": "List Event User Groups",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/user-groups",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of user groups associated with an event."
+        },
+        {
+          "info": {
+            "name": "Associate User Group to Event",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/events/:id/user-groups/:userGroupId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "userGroupId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of the user group to associate or disassociate."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Associates (adds) a user group to an event."
+        },
+        {
+          "info": {
+            "name": "Disassociate Group from Event",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-platform.cvent.com/ea/events/:id/user-groups/:userGroupId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "userGroupId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of the user group to associate or disassociate."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Disassociates (removes) a single user group from an event."
+        },
+        {
+          "info": {
+            "name": "List Event Vouchers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/vouchers",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "The sort order for the results, expressed as a priority-ordered list of field and direction pairs.\n\nThere are two sort directions:\n  * ascending: ASC\n  * descending: DESC\n\nThe following fields are sortable:\n  * code\n\nWhen not provided, results are sorted by `code` ascending.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field | Operators |\n|-------|-----------|\n| id    | `in`      |\n\nNo logical operators are available.\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves a paginated list of vouchers set up for a specific event.\n"
+        },
+        {
+          "info": {
+            "name": "List Event Vouchers (Filter)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/events/:id/vouchers/filter",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "The sort order for the results, expressed as a priority-ordered list of field and direction pairs.\n\nThere are two sort directions:\n  * ascending: ASC\n  * descending: DESC\n\nThe following fields are sortable:\n  * code\n\nWhen not provided, results are sorted by `code` ascending.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves a paginated list of vouchers configured for an event using a filter provided in the body of the request.\n"
+        },
+        {
+          "info": {
+            "name": "List Voucher Attendees",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/vouchers/:voucherId/attendees",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "voucherId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of a voucher."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves a paginated list of attendees who have redeemed a specific voucher for the given event.\n"
+        },
+        {
+          "info": {
+            "name": "Update Quantity Item",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/quantity-items/:quantityItemId",
+            "params": [
+              {
+                "name": "quantityItemId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of a quantity item."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Update a specific [quantity item](https://support.cvent.com/s/communityarticle/Creating-Quantity-Items) for an attendee's registration based on the details supplied in the body of the request."
+        },
+        {
+          "info": {
+            "name": "Session Attendance",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/sessions/attendance",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "A filter query string narrows search results and supports the combination of logical and comparison operators. The filter adheres to the pattern filter='field' comparisonType 'value'.\n\nThere are eight comparison types that can be used in filter expressions:\n* equal: eq\n* not equal: ne\n* greater than: gt\n* greater or equal: ge\n* less than: lt\n* less than or equal: le\n* starts with: sw\n* contains a value: contains\n\nThe following fields are filterable:\n* id (eq|ne)\n* event.id (eq|ne)\n* attendee.id (eq|ne)\n* session.id (eq|ne)\n* deleted (eq|ne)\n* created (eq|ne|lt|le|gt|ge)\n* lastModified (eq|ne|lt|le|gt|ge)"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get a paginated list of session attendance."
+        },
+        {
+          "info": {
+            "name": "List Session Registrants",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/sessions/enrollment",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated on or after this time point. Defaults to the beginning of time of the data store."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated on or before this time point. The date and time should be in ISO 8601 format."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "A filter string passed in the body of the request, narrows search results and supports the combination of logical and comparison operators.\nThe filter adheres to the pattern filter='field' comparisonType 'value'.\nThese are the comparison types that can be used in filter expressions:\n  * equal: eq\n  * not equal: ne\n  * greater than: gt\n  * greater or equal: ge\n  * less than: lt\n  * less than or equal: le\n\nThe following fields are filterable:\n  * id (eq|ne)\n  * event.id (eq|ne)\n  * attendee.id (eq|ne)\n  * session.id (eq|ne)\n  * status (eq|ne)\n  * deleted (eq|ne)\n  * created (eq|ne|lt|le|gt|ge)\n  * lastModified (eq|ne|lt|le|gt|ge)\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets registrant data for sessions. The returned data depends on the individual session type.\n- **Optional Sessions:** Provides a paginated list of attendees registered for the session.\n- **Included Session:** Provides a paginated list of attendees who have participated or marked as no-shows. It does not list all registered attendees.\n"
+        },
+        {
+          "info": {
+            "name": "List Session Registrants",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/sessions/enrollment/filter",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated on or after this time point. Defaults to the beginning of time of the data store."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated on or before this time point. The date and time should be in ISO 8601 format."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets registrant data for sessions. The returned data depends on the individual session type.   - **Optional Sessions:** Provides a paginated list of attendees registered for the session.   - **Included Session:** Provides a paginated list of attendees who have participated or been\n  marked as no-shows. It does not list all registered attendees.\n\nThis method will return the same data as [GET List Session Registrants](#operation/listSessionsEnrollment)  but allows for longer filters.\n"
+        },
+        {
+          "info": {
+            "name": "Del Session Check-in",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-platform.cvent.com/ea/sessions/:id/attendance/:attendeeId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of a session."
+              },
+              {
+                "name": "attendeeId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an attendee."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Deletes the attendance of an attendee in a session."
+        },
+        {
+          "info": {
+            "name": "Session Check-In",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/sessions/:id/check-in",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of a session."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Check-in attendees to a session based on the attendee IDs provided in the body of the request."
+        },
+        {
+          "info": {
+            "name": "Update Session Check-In",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/sessions/:id/check-in",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of a session."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Update check-in details of attendees in a session based on the attendee IDs provided in the body of the request."
+        },
+        {
+          "info": {
+            "name": "Create Session Registration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/sessions/:id/enrollment/:attendeeId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of a session."
+              },
+              {
+                "name": "attendeeId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an attendee."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Register an attendee in the given session. Requires the modify registration widget to be\npresent on the event's registration path. See the following\n[article](https://support.cvent.com/s/communityarticle/Modifying-Registrations#modifyown) for\nmore information.\n"
+        },
+        {
+          "info": {
+            "name": "Delete Session Registration",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-platform.cvent.com/ea/sessions/:id/enrollment/:attendeeId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of a session."
+              },
+              {
+                "name": "attendeeId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an attendee."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Unregister an attendee from a session. Requires the modify registration widget\nto be present on the event's registration path. See the following\n[article](https://support.cvent.com/s/communityarticle/Modifying-Registrations#modifyown)\nfor more information.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

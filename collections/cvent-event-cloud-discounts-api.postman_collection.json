@@ -1,0 +1,3005 @@
+{
+  "item": [
+    {
+      "id": "d379abfb-281b-4c85-b6d4-76f66bce22fc",
+      "name": "Discounts",
+      "description": {
+        "content": "Discounts provide a way to reduce the cost of event registration items. Use these APIs to manage event discounts, including creating, updating, and linking discounts to agenda items.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4d6dedc2-2ee5-47ac-873f-c414c488f811",
+          "name": "List Event Discounts",
+          "request": {
+            "name": "List Event Discounts",
+            "description": {
+              "content": "Returns a paginated list of all discounts used in an event, including both event-specific and account-level discount codes used in an event.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "events",
+                ":id",
+                "discounts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "100",
+                  "description": "The maximum number of records to return per page."
+                },
+                {
+                  "disabled": false,
+                  "key": "token",
+                  "value": "<string>",
+                  "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "<string>",
+                  "description": "The sort order passed as a parameter, used to control the order of the\nsearch results as a priority ordered list of sorts.\n\nThere are two orders:\n  * ascending: ASC\n  * descending: DESC\n\nThe following fields are sortable:\n  * name\n  * code\n  * method.type\n  * effectiveTo\n  * effectiveFrom\n  * type\n  * level\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field            | Operators                          |\n|------------------|-------------------------------------|\n| id               | `in`                                |\n| method.type      | `eq`                                |\n| type             | `eq`                                |\n| level            | `eq`                                |\n\nThe following logical operators are supported for combining filters:\n* and\n* or\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "before",
+                  "value": "<dateTime>",
+                  "description": "Used to query records that have been added or updated before this time point."
+                },
+                {
+                  "disabled": false,
+                  "key": "after",
+                  "value": "<dateTime>",
+                  "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Unique ID of an event."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "account/hooks:delete account/hooks:read account/hooks:write account/user-groups:delete account/user-groups:read account/user-groups:write account/users:delete account/users:read account/users:write appointments/appointment-attendees:read appointments/appointment-events:read appointments/appointment-types:read appointments/appointments:read appointments/appointments:write appointments/available-times:read appointments/locations:read attendee-insights/attendee-insights:read attendee-insights/scores:read attendee-insights/stats:read budget/budget-items:delete budget/budget-items:read budget/budget-items:write budget/budget-totals:read budget/budget-vendors:read budget/cards:read budget/currency-conversion-rate:delete budget/currency-conversion-rate:read budget/currency-conversion-rate:write budget/payments:delete budget/payments:read budget/payments:write budget/transactions:delete budget/transactions:read budget/transactions:write bulk/bulk-jobs:read bulk/bulk-jobs:write business-transient/bids:read business-transient/proposals:read business-transient/supplier-brands:read business-transient/supplier-chains:read business-transient/supplier-properties:read business-transient/supplier-property-rooms:read business-transient/travel-accounts:read business-transient/travel-program-questions:read business-transient/travel-programs:read business-transient/travel-supplier-accounts:read business-travel/bids:read business-travel/proposals:read business-travel/travel-accounts:read business-travel/travel-program-questions:read business-travel/travel-programs:read compliance/communications:read compliance/communications:write email/bounces:read email/email-status:read email/emails:read eMarketing/campaigns:read emarketing/emarketing-email-status:read eMarketing/eMarketing-email-templates:read eMarketing/eMarketing-send-emails:write event/admission-items:read event/air-request:read event/alternate-travel:read event/attendance-durations:read event/attendee-activities-metadata:delete event/attendee-activities-metadata:read event/attendee-activities-metadata:write event/attendee-activities:read event/attendee-activities:write event/attendee-credits:read event/attendee-links:delete event/attendee-links:read event/attendee-links:write event/attendee-messages:read event/attendees:read event/attendees:write event/audience-segments:read event/audience-segments:write event/contact-groups:read event/contact-groups:write event/contact-types:read event/contacts:delete event/contacts:read event/contacts:write event/contacts:write-sensitive event/custom-fields:read event/custom-fields:write event/discounts:write event/donation-items:read event/event-discounts:read event/event-discounts:write event/event-email-status:read event/event-emails:read event/event-emails:write event/event-features:read event/event-features:write event/event-user-groups:read event/event-user-groups:write event/events:read event/events:write event/fee-items:read event/hotel-request:read event/invitation-lists:read event/meeting-request-forms:read event/meeting-requests:read event/meeting-requests:write event/membership-items:read event/orders:read event/planning-documents:read event/players:read event/process-form-submissions:read event/program-items:delete event/program-items:read event/program-items:write event/quantity-items:read event/quantity-items:write event/registration-paths:read event/registration-types:read event/registration-types:write event/role-assignments:read event/session-attendance:read event/session-attendance:write event/session-categories:read event/session-categories:write event/session-enrollment:delete event/session-enrollment:read event/session-enrollment:write event/session-segments:read event/sessions:delete event/sessions:read event/sessions:write event/speaker-categories:read event/speaker-categories:write event/speakers:delete event/speakers:read event/speakers:write event/taxes:read event/transactions:read event/transactions:write event/video-views:read event/videos:read event/videos:write event/vouchers:read event/webcasts:delete event/webcasts:read event/webcasts:write event/weblinks:read events-plus/hubs:read exhibitor/badges:read exhibitor/badges:write exhibitor/booth-staff:delete exhibitor/booth-staff:read exhibitor/booth-staff:write exhibitor/eliterature-requests:read exhibitor/exhibitor-admins:read exhibitor/exhibitor-admins:write exhibitor/exhibitor-answers:read exhibitor/exhibitor-answers:write exhibitor/exhibitor-categories:delete exhibitor/exhibitor-categories:read exhibitor/exhibitor-categories:write exhibitor/exhibitor-contents:delete exhibitor/exhibitor-contents:read exhibitor/exhibitor-contents:write exhibitor/exhibitor-questions:read exhibitor/exhibitors:delete exhibitor/exhibitors:read exhibitor/exhibitors:write exhibitor/lead-qualification-answers:read exhibitor/lead-qualification-questions:read exhibitor/leads:read exhibitor/registration-packs:delete exhibitor/registration-packs:read exhibitor/registration-packs:write exhibitor/sponsorship-levels:read file/file:read file/file:write housing/connections:write housing/hotel-room-rates:write housing/housing-event-available-nights:read housing/housing-event-hotels:read housing/housing-event-inventory:read housing/housing-event-room-types:read housing/housing-events:read housing/reservation-requests:delete housing/reservation-requests:read housing/reservation-requests:write housing/reservations-link:delete housing/reservations-link:write housing/reservations:delete housing/reservations:read housing/reservations:write onsite/signatures:read proposal/proposals:write remote-printing/badge-print-jobs:read remote-printing/badge-print-jobs:write remote-printing/badge-printer-pools:read rfp/rfp-agenda-items:read rfp/rfp-attachments:read rfp/rfp-custom-fields:read rfp/rfp-guest-rooms:read rfp/rfp-internal-documents:read rfp/rfp-lead-sources:read rfp/rfp-past-events:read rfp/rfp-questions:read rfp/rfp-recipients-history:read rfp/rfp-suppliers:read rfp/rfps:read seating/assignments:read seating/event-seatings:read seating/seats:read seating/tables:read secure-ecommerce/card-tokens:write survey/questions:read survey/respondents:read survey/responses:read survey/standard-survey-email-templates:read survey/standard-survey-email:write survey/standard-survey-questions:read survey/standard-survey-respondents:read survey/standard-survey-respondents:write survey/standard-survey-responses:read survey/standard-survey-responses:write survey/standard-surveys:read survey/survey-questions:read survey/survey-respondents:read survey/survey-respondents:write survey/survey-responses:read survey/survey-responses:write survey/surveys:read venue/meeting-room-overviews:read venue/meeting-rooms:write venue/venue-details-overview:read venue/venue-details:write venue/venue-facility:write"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api-platform.cvent.com/ea/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "cf664599-e009-4359-aab1-0f688405e908",
+              "name": "Successfully retrieved a paginated list of discounts.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "name:DESC,code:ASC"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "id in ('1b01ae34-6970-41f2-a4e8-b4f39185dc15', '1b01ae34-6970-41f2-a4e8-b4f39185dc16') and method.type eq 'PERCENTAGE'"
+                    },
+                    {
+                      "key": "before",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "after",
+                      "value": "2017-01-02T02:00:00Z"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"code\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"type\": \"DISCOUNT_CODE\",\n      \"applyToAllEvents\": false,\n      \"id\": \"04ca6ae2-0dc3-487b-953e-86d6abbdf7d3\",\n      \"level\": \"EVENT\",\n      \"capacity\": {\n        \"total\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"used\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"audienceType\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"includeGuestsTowardsCapacity\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"autoApply\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"applyToAllAgendaItems\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      }\n    },\n    {\n      \"code\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"type\": \"DISCOUNT_CODE\",\n      \"applyToAllEvents\": false,\n      \"id\": \"04ca6ae2-0dc3-487b-953e-86d6abbdf7d3\",\n      \"level\": \"EVENT\",\n      \"capacity\": {\n        \"total\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"used\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"audienceType\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"includeGuestsTowardsCapacity\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"autoApply\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"applyToAllAgendaItems\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      }\n    }\n  ],\n  \"paging\": {\n    \"_links\": {\n      \"next\": {\n        \"href\": \"?token=90c5f062-76ad-4ea4-aa53-00eb698d9262\"\n      },\n      \"self\": {\n        \"href\": \"?token=90c5f062-76ad-4ea4-aa53-00eb698d9262\"\n      },\n      \"prev\": {\n        \"href\": \"?token=90c5f062-76ad-4ea4-aa53-00eb698d9262\"\n      }\n    },\n    \"previousToken\": \"1a2b3c4d5e6f7g8h9i10j11k\",\n    \"nextToken\": \"1a2b3c4d5e6f7g8h9i10j11k\",\n    \"currentToken\": \"1a2b3c4d5e6f7g8h9i10j11k\",\n    \"limit\": 100,\n    \"totalCount\": 2\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e0784272-6db6-4ae3-9e54-e04936c106c6",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "name:DESC,code:ASC"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "id in ('1b01ae34-6970-41f2-a4e8-b4f39185dc15', '1b01ae34-6970-41f2-a4e8-b4f39185dc16') and method.type eq 'PERCENTAGE'"
+                    },
+                    {
+                      "key": "before",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "after",
+                      "value": "2017-01-02T02:00:00Z"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f38f2f25-a3b5-4f99-a38d-7d7ca09ba08c",
+              "name": "Bad or expired token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "name:DESC,code:ASC"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "id in ('1b01ae34-6970-41f2-a4e8-b4f39185dc15', '1b01ae34-6970-41f2-a4e8-b4f39185dc16') and method.type eq 'PERCENTAGE'"
+                    },
+                    {
+                      "key": "before",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "after",
+                      "value": "2017-01-02T02:00:00Z"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9bb963c3-f014-436a-afa3-04b97dabc4e2",
+              "name": "You do not have access to the resource",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "name:DESC,code:ASC"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "id in ('1b01ae34-6970-41f2-a4e8-b4f39185dc15', '1b01ae34-6970-41f2-a4e8-b4f39185dc16') and method.type eq 'PERCENTAGE'"
+                    },
+                    {
+                      "key": "before",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "after",
+                      "value": "2017-01-02T02:00:00Z"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"Access Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cb81b5d8-4085-47f8-b158-a565990d84dd",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "name:DESC,code:ASC"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "id in ('1b01ae34-6970-41f2-a4e8-b4f39185dc15', '1b01ae34-6970-41f2-a4e8-b4f39185dc16') and method.type eq 'PERCENTAGE'"
+                    },
+                    {
+                      "key": "before",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "after",
+                      "value": "2017-01-02T02:00:00Z"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7ac6b944-7aef-49d9-8232-70a7627cfa71",
+              "name": "Too many requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "name:DESC,code:ASC"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "id in ('1b01ae34-6970-41f2-a4e8-b4f39185dc15', '1b01ae34-6970-41f2-a4e8-b4f39185dc16') and method.type eq 'PERCENTAGE'"
+                    },
+                    {
+                      "key": "before",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "after",
+                      "value": "2017-01-02T02:00:00Z"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 429,\n  \"message\": \"Limit Exceeded\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "dba7c9ce-31b0-410a-9ae0-f6e8156aff10",
+          "name": "Create Event Discount",
+          "request": {
+            "name": "Create Event Discount",
+            "description": {
+              "content": "Create discount in an event.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "events",
+                ":id",
+                "discounts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Unique ID of an event."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "account/hooks:delete account/hooks:read account/hooks:write account/user-groups:delete account/user-groups:read account/user-groups:write account/users:delete account/users:read account/users:write appointments/appointment-attendees:read appointments/appointment-events:read appointments/appointment-types:read appointments/appointments:read appointments/appointments:write appointments/available-times:read appointments/locations:read attendee-insights/attendee-insights:read attendee-insights/scores:read attendee-insights/stats:read budget/budget-items:delete budget/budget-items:read budget/budget-items:write budget/budget-totals:read budget/budget-vendors:read budget/cards:read budget/currency-conversion-rate:delete budget/currency-conversion-rate:read budget/currency-conversion-rate:write budget/payments:delete budget/payments:read budget/payments:write budget/transactions:delete budget/transactions:read budget/transactions:write bulk/bulk-jobs:read bulk/bulk-jobs:write business-transient/bids:read business-transient/proposals:read business-transient/supplier-brands:read business-transient/supplier-chains:read business-transient/supplier-properties:read business-transient/supplier-property-rooms:read business-transient/travel-accounts:read business-transient/travel-program-questions:read business-transient/travel-programs:read business-transient/travel-supplier-accounts:read business-travel/bids:read business-travel/proposals:read business-travel/travel-accounts:read business-travel/travel-program-questions:read business-travel/travel-programs:read compliance/communications:read compliance/communications:write email/bounces:read email/email-status:read email/emails:read eMarketing/campaigns:read emarketing/emarketing-email-status:read eMarketing/eMarketing-email-templates:read eMarketing/eMarketing-send-emails:write event/admission-items:read event/air-request:read event/alternate-travel:read event/attendance-durations:read event/attendee-activities-metadata:delete event/attendee-activities-metadata:read event/attendee-activities-metadata:write event/attendee-activities:read event/attendee-activities:write event/attendee-credits:read event/attendee-links:delete event/attendee-links:read event/attendee-links:write event/attendee-messages:read event/attendees:read event/attendees:write event/audience-segments:read event/audience-segments:write event/contact-groups:read event/contact-groups:write event/contact-types:read event/contacts:delete event/contacts:read event/contacts:write event/contacts:write-sensitive event/custom-fields:read event/custom-fields:write event/discounts:write event/donation-items:read event/event-discounts:read event/event-discounts:write event/event-email-status:read event/event-emails:read event/event-emails:write event/event-features:read event/event-features:write event/event-user-groups:read event/event-user-groups:write event/events:read event/events:write event/fee-items:read event/hotel-request:read event/invitation-lists:read event/meeting-request-forms:read event/meeting-requests:read event/meeting-requests:write event/membership-items:read event/orders:read event/planning-documents:read event/players:read event/process-form-submissions:read event/program-items:delete event/program-items:read event/program-items:write event/quantity-items:read event/quantity-items:write event/registration-paths:read event/registration-types:read event/registration-types:write event/role-assignments:read event/session-attendance:read event/session-attendance:write event/session-categories:read event/session-categories:write event/session-enrollment:delete event/session-enrollment:read event/session-enrollment:write event/session-segments:read event/sessions:delete event/sessions:read event/sessions:write event/speaker-categories:read event/speaker-categories:write event/speakers:delete event/speakers:read event/speakers:write event/taxes:read event/transactions:read event/transactions:write event/video-views:read event/videos:read event/videos:write event/vouchers:read event/webcasts:delete event/webcasts:read event/webcasts:write event/weblinks:read events-plus/hubs:read exhibitor/badges:read exhibitor/badges:write exhibitor/booth-staff:delete exhibitor/booth-staff:read exhibitor/booth-staff:write exhibitor/eliterature-requests:read exhibitor/exhibitor-admins:read exhibitor/exhibitor-admins:write exhibitor/exhibitor-answers:read exhibitor/exhibitor-answers:write exhibitor/exhibitor-categories:delete exhibitor/exhibitor-categories:read exhibitor/exhibitor-categories:write exhibitor/exhibitor-contents:delete exhibitor/exhibitor-contents:read exhibitor/exhibitor-contents:write exhibitor/exhibitor-questions:read exhibitor/exhibitors:delete exhibitor/exhibitors:read exhibitor/exhibitors:write exhibitor/lead-qualification-answers:read exhibitor/lead-qualification-questions:read exhibitor/leads:read exhibitor/registration-packs:delete exhibitor/registration-packs:read exhibitor/registration-packs:write exhibitor/sponsorship-levels:read file/file:read file/file:write housing/connections:write housing/hotel-room-rates:write housing/housing-event-available-nights:read housing/housing-event-hotels:read housing/housing-event-inventory:read housing/housing-event-room-types:read housing/housing-events:read housing/reservation-requests:delete housing/reservation-requests:read housing/reservation-requests:write housing/reservations-link:delete housing/reservations-link:write housing/reservations:delete housing/reservations:read housing/reservations:write onsite/signatures:read proposal/proposals:write remote-printing/badge-print-jobs:read remote-printing/badge-print-jobs:write remote-printing/badge-printer-pools:read rfp/rfp-agenda-items:read rfp/rfp-attachments:read rfp/rfp-custom-fields:read rfp/rfp-guest-rooms:read rfp/rfp-internal-documents:read rfp/rfp-lead-sources:read rfp/rfp-past-events:read rfp/rfp-questions:read rfp/rfp-recipients-history:read rfp/rfp-suppliers:read rfp/rfps:read seating/assignments:read seating/event-seatings:read seating/seats:read seating/tables:read secure-ecommerce/card-tokens:write survey/questions:read survey/respondents:read survey/responses:read survey/standard-survey-email-templates:read survey/standard-survey-email:write survey/standard-survey-questions:read survey/standard-survey-respondents:read survey/standard-survey-respondents:write survey/standard-survey-responses:read survey/standard-survey-responses:write survey/standard-surveys:read survey/survey-questions:read survey/survey-respondents:read survey/survey-respondents:write survey/survey-responses:read survey/survey-responses:write survey/surveys:read venue/meeting-room-overviews:read venue/meeting-rooms:write venue/venue-details-overview:read venue/venue-details:write venue/venue-facility:write"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api-platform.cvent.com/ea/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"<string>\",\n  \"method\": {\n    \"value\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"type\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    }\n  },\n  \"name\": \"<string>\",\n  \"type\": \"<string>\",\n  \"capacity\": {\n    \"total\": -1\n  },\n  \"audienceType\": \"ALL\",\n  \"includeGuestsTowardsCapacity\": false,\n  \"autoApply\": false,\n  \"applyToAllAgendaItems\": false,\n  \"active\": true,\n  \"stackable\": true,\n  \"effectiveFrom\": \"<date>\",\n  \"effectiveTo\": \"<date>\",\n  \"note\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "fdc510b4-fc20-4493-9ff9-d2b4e036a634",
+              "name": "Discount created successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"10OFF\",\n  \"method\": {\n    \"value\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"type\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    }\n  },\n  \"name\": \"10% off\",\n  \"type\": \"DISCOUNT_CODE\",\n  \"capacity\": {\n    \"total\": -1\n  },\n  \"audienceType\": \"ALL\",\n  \"includeGuestsTowardsCapacity\": true,\n  \"autoApply\": true,\n  \"applyToAllAgendaItems\": false,\n  \"active\": true,\n  \"stackable\": true,\n  \"effectiveFrom\": \"2025-01-01\",\n  \"effectiveTo\": \"2025-02-01\",\n  \"note\": \"10% off for early birds.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"10OFF\",\n  \"method\": {\n    \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n  },\n  \"name\": {\n    \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n  },\n  \"type\": \"DISCOUNT_CODE\",\n  \"id\": \"04ca6ae2-0dc3-487b-953e-86d6abbdf7d3\",\n  \"level\": \"EVENT\",\n  \"capacity\": {\n    \"total\": 100,\n    \"used\": 10\n  },\n  \"audienceType\": \"ALL\",\n  \"includeGuestsTowardsCapacity\": true,\n  \"autoApply\": true,\n  \"applyToAllAgendaItems\": false,\n  \"active\": {\n    \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n  },\n  \"stackable\": {\n    \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n  },\n  \"effectiveFrom\": {\n    \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n  },\n  \"effectiveTo\": {\n    \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n  },\n  \"note\": {\n    \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "629274f6-3ba6-4d1f-9d63-90449819d8b3",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"10OFF\",\n  \"method\": {\n    \"value\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"type\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    }\n  },\n  \"name\": \"10% off\",\n  \"type\": \"DISCOUNT_CODE\",\n  \"capacity\": {\n    \"total\": -1\n  },\n  \"audienceType\": \"ALL\",\n  \"includeGuestsTowardsCapacity\": true,\n  \"autoApply\": true,\n  \"applyToAllAgendaItems\": false,\n  \"active\": true,\n  \"stackable\": true,\n  \"effectiveFrom\": \"2025-01-01\",\n  \"effectiveTo\": \"2025-02-01\",\n  \"note\": \"10% off for early birds.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "15d674f9-710d-49c3-ba3f-2cf69782dc9f",
+              "name": "Bad or expired token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"10OFF\",\n  \"method\": {\n    \"value\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"type\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    }\n  },\n  \"name\": \"10% off\",\n  \"type\": \"DISCOUNT_CODE\",\n  \"capacity\": {\n    \"total\": -1\n  },\n  \"audienceType\": \"ALL\",\n  \"includeGuestsTowardsCapacity\": true,\n  \"autoApply\": true,\n  \"applyToAllAgendaItems\": false,\n  \"active\": true,\n  \"stackable\": true,\n  \"effectiveFrom\": \"2025-01-01\",\n  \"effectiveTo\": \"2025-02-01\",\n  \"note\": \"10% off for early birds.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "69c90c68-ee85-4dc9-bd89-a761ffde7a7f",
+              "name": "You do not have access to the resource",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"10OFF\",\n  \"method\": {\n    \"value\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"type\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    }\n  },\n  \"name\": \"10% off\",\n  \"type\": \"DISCOUNT_CODE\",\n  \"capacity\": {\n    \"total\": -1\n  },\n  \"audienceType\": \"ALL\",\n  \"includeGuestsTowardsCapacity\": true,\n  \"autoApply\": true,\n  \"applyToAllAgendaItems\": false,\n  \"active\": true,\n  \"stackable\": true,\n  \"effectiveFrom\": \"2025-01-01\",\n  \"effectiveTo\": \"2025-02-01\",\n  \"note\": \"10% off for early birds.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"Access Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c474b057-52ff-4ab5-a8f2-4993ba76ef56",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"10OFF\",\n  \"method\": {\n    \"value\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"type\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    }\n  },\n  \"name\": \"10% off\",\n  \"type\": \"DISCOUNT_CODE\",\n  \"capacity\": {\n    \"total\": -1\n  },\n  \"audienceType\": \"ALL\",\n  \"includeGuestsTowardsCapacity\": true,\n  \"autoApply\": true,\n  \"applyToAllAgendaItems\": false,\n  \"active\": true,\n  \"stackable\": true,\n  \"effectiveFrom\": \"2025-01-01\",\n  \"effectiveTo\": \"2025-02-01\",\n  \"note\": \"10% off for early birds.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9e3ddd77-2a46-4168-97e2-49eda65f5814",
+              "name": "Too many requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"10OFF\",\n  \"method\": {\n    \"value\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"type\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    }\n  },\n  \"name\": \"10% off\",\n  \"type\": \"DISCOUNT_CODE\",\n  \"capacity\": {\n    \"total\": -1\n  },\n  \"audienceType\": \"ALL\",\n  \"includeGuestsTowardsCapacity\": true,\n  \"autoApply\": true,\n  \"applyToAllAgendaItems\": false,\n  \"active\": true,\n  \"stackable\": true,\n  \"effectiveFrom\": \"2025-01-01\",\n  \"effectiveTo\": \"2025-02-01\",\n  \"note\": \"10% off for early birds.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 429,\n  \"message\": \"Limit Exceeded\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "13aee586-2b2b-4b6d-b978-a1f494611f05",
+          "name": "List Discounted Agenda Items",
+          "request": {
+            "name": "List Discounted Agenda Items",
+            "description": {
+              "content": "Returns a paginated list of agenda items that are associated with discounts for the specified event.  This endpoint helps identify which agenda items (such as admission items, sessions, session bundles, membership-items or quantity-items) are currently associated with discounts.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "events",
+                ":id",
+                "discounts",
+                "agenda-items"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "100",
+                  "description": "The maximum number of records to return per page."
+                },
+                {
+                  "disabled": false,
+                  "key": "token",
+                  "value": "<string>",
+                  "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field            | Operators                          |\n|------------------|-------------------------------------|\n| discount.id      | `eq`, `in`                          |\n| type             | `eq`, `in`                          |\n\nThe following logical operators are supported for combining filters:\n* and\n* or\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Unique ID of an event."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "account/hooks:delete account/hooks:read account/hooks:write account/user-groups:delete account/user-groups:read account/user-groups:write account/users:delete account/users:read account/users:write appointments/appointment-attendees:read appointments/appointment-events:read appointments/appointment-types:read appointments/appointments:read appointments/appointments:write appointments/available-times:read appointments/locations:read attendee-insights/attendee-insights:read attendee-insights/scores:read attendee-insights/stats:read budget/budget-items:delete budget/budget-items:read budget/budget-items:write budget/budget-totals:read budget/budget-vendors:read budget/cards:read budget/currency-conversion-rate:delete budget/currency-conversion-rate:read budget/currency-conversion-rate:write budget/payments:delete budget/payments:read budget/payments:write budget/transactions:delete budget/transactions:read budget/transactions:write bulk/bulk-jobs:read bulk/bulk-jobs:write business-transient/bids:read business-transient/proposals:read business-transient/supplier-brands:read business-transient/supplier-chains:read business-transient/supplier-properties:read business-transient/supplier-property-rooms:read business-transient/travel-accounts:read business-transient/travel-program-questions:read business-transient/travel-programs:read business-transient/travel-supplier-accounts:read business-travel/bids:read business-travel/proposals:read business-travel/travel-accounts:read business-travel/travel-program-questions:read business-travel/travel-programs:read compliance/communications:read compliance/communications:write email/bounces:read email/email-status:read email/emails:read eMarketing/campaigns:read emarketing/emarketing-email-status:read eMarketing/eMarketing-email-templates:read eMarketing/eMarketing-send-emails:write event/admission-items:read event/air-request:read event/alternate-travel:read event/attendance-durations:read event/attendee-activities-metadata:delete event/attendee-activities-metadata:read event/attendee-activities-metadata:write event/attendee-activities:read event/attendee-activities:write event/attendee-credits:read event/attendee-links:delete event/attendee-links:read event/attendee-links:write event/attendee-messages:read event/attendees:read event/attendees:write event/audience-segments:read event/audience-segments:write event/contact-groups:read event/contact-groups:write event/contact-types:read event/contacts:delete event/contacts:read event/contacts:write event/contacts:write-sensitive event/custom-fields:read event/custom-fields:write event/discounts:write event/donation-items:read event/event-discounts:read event/event-discounts:write event/event-email-status:read event/event-emails:read event/event-emails:write event/event-features:read event/event-features:write event/event-user-groups:read event/event-user-groups:write event/events:read event/events:write event/fee-items:read event/hotel-request:read event/invitation-lists:read event/meeting-request-forms:read event/meeting-requests:read event/meeting-requests:write event/membership-items:read event/orders:read event/planning-documents:read event/players:read event/process-form-submissions:read event/program-items:delete event/program-items:read event/program-items:write event/quantity-items:read event/quantity-items:write event/registration-paths:read event/registration-types:read event/registration-types:write event/role-assignments:read event/session-attendance:read event/session-attendance:write event/session-categories:read event/session-categories:write event/session-enrollment:delete event/session-enrollment:read event/session-enrollment:write event/session-segments:read event/sessions:delete event/sessions:read event/sessions:write event/speaker-categories:read event/speaker-categories:write event/speakers:delete event/speakers:read event/speakers:write event/taxes:read event/transactions:read event/transactions:write event/video-views:read event/videos:read event/videos:write event/vouchers:read event/webcasts:delete event/webcasts:read event/webcasts:write event/weblinks:read events-plus/hubs:read exhibitor/badges:read exhibitor/badges:write exhibitor/booth-staff:delete exhibitor/booth-staff:read exhibitor/booth-staff:write exhibitor/eliterature-requests:read exhibitor/exhibitor-admins:read exhibitor/exhibitor-admins:write exhibitor/exhibitor-answers:read exhibitor/exhibitor-answers:write exhibitor/exhibitor-categories:delete exhibitor/exhibitor-categories:read exhibitor/exhibitor-categories:write exhibitor/exhibitor-contents:delete exhibitor/exhibitor-contents:read exhibitor/exhibitor-contents:write exhibitor/exhibitor-questions:read exhibitor/exhibitors:delete exhibitor/exhibitors:read exhibitor/exhibitors:write exhibitor/lead-qualification-answers:read exhibitor/lead-qualification-questions:read exhibitor/leads:read exhibitor/registration-packs:delete exhibitor/registration-packs:read exhibitor/registration-packs:write exhibitor/sponsorship-levels:read file/file:read file/file:write housing/connections:write housing/hotel-room-rates:write housing/housing-event-available-nights:read housing/housing-event-hotels:read housing/housing-event-inventory:read housing/housing-event-room-types:read housing/housing-events:read housing/reservation-requests:delete housing/reservation-requests:read housing/reservation-requests:write housing/reservations-link:delete housing/reservations-link:write housing/reservations:delete housing/reservations:read housing/reservations:write onsite/signatures:read proposal/proposals:write remote-printing/badge-print-jobs:read remote-printing/badge-print-jobs:write remote-printing/badge-printer-pools:read rfp/rfp-agenda-items:read rfp/rfp-attachments:read rfp/rfp-custom-fields:read rfp/rfp-guest-rooms:read rfp/rfp-internal-documents:read rfp/rfp-lead-sources:read rfp/rfp-past-events:read rfp/rfp-questions:read rfp/rfp-recipients-history:read rfp/rfp-suppliers:read rfp/rfps:read seating/assignments:read seating/event-seatings:read seating/seats:read seating/tables:read secure-ecommerce/card-tokens:write survey/questions:read survey/respondents:read survey/responses:read survey/standard-survey-email-templates:read survey/standard-survey-email:write survey/standard-survey-questions:read survey/standard-survey-respondents:read survey/standard-survey-respondents:write survey/standard-survey-responses:read survey/standard-survey-responses:write survey/standard-surveys:read survey/survey-questions:read survey/survey-respondents:read survey/survey-respondents:write survey/survey-responses:read survey/survey-responses:write survey/surveys:read venue/meeting-room-overviews:read venue/meeting-rooms:write venue/venue-details-overview:read venue/venue-details:write venue/venue-facility:write"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api-platform.cvent.com/ea/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "13373201-daab-4b7b-af88-696474205057",
+              "name": "Successfully retrieved a paginated list of agenda items that are associated with discounts in the event.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts",
+                    "agenda-items"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "type eq 'AdmissionItem' and discount.id in ('1b01ae34-6970-41f2-a4e8-b4f39185dc15', '1b01ae34-6970-41f2-a4e8-b4f39185dc16')"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"14ca6ae2-0dc3-487b-953e-86d6abbdf6d4\",\n      \"type\": \"Session\",\n      \"discount\": {\n        \"id\": \"04ca6ae2-0dc3-487b-953e-86d6abbdf7d3\"\n      }\n    },\n    {\n      \"id\": \"14ca6ae2-0dc3-487b-953e-86d6abbdf6d4\",\n      \"type\": \"Session\",\n      \"discount\": {\n        \"id\": \"04ca6ae2-0dc3-487b-953e-86d6abbdf7d3\"\n      }\n    }\n  ],\n  \"paging\": {\n    \"_links\": {\n      \"next\": {\n        \"href\": \"?token=90c5f062-76ad-4ea4-aa53-00eb698d9262\"\n      },\n      \"self\": {\n        \"href\": \"?token=90c5f062-76ad-4ea4-aa53-00eb698d9262\"\n      },\n      \"prev\": {\n        \"href\": \"?token=90c5f062-76ad-4ea4-aa53-00eb698d9262\"\n      }\n    },\n    \"previousToken\": \"1a2b3c4d5e6f7g8h9i10j11k\",\n    \"nextToken\": \"1a2b3c4d5e6f7g8h9i10j11k\",\n    \"currentToken\": \"1a2b3c4d5e6f7g8h9i10j11k\",\n    \"limit\": 100,\n    \"totalCount\": 2\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d361507c-6a04-4363-a877-01170995245b",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts",
+                    "agenda-items"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "type eq 'AdmissionItem' and discount.id in ('1b01ae34-6970-41f2-a4e8-b4f39185dc15', '1b01ae34-6970-41f2-a4e8-b4f39185dc16')"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6b08d9cc-e284-441a-843e-93ffd3726d7a",
+              "name": "Bad or expired token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts",
+                    "agenda-items"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "type eq 'AdmissionItem' and discount.id in ('1b01ae34-6970-41f2-a4e8-b4f39185dc15', '1b01ae34-6970-41f2-a4e8-b4f39185dc16')"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "89191289-d569-4bc1-8c23-bc1ba1f1e587",
+              "name": "You do not have access to the resource",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts",
+                    "agenda-items"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "type eq 'AdmissionItem' and discount.id in ('1b01ae34-6970-41f2-a4e8-b4f39185dc15', '1b01ae34-6970-41f2-a4e8-b4f39185dc16')"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"Access Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6724202b-1a83-4765-babd-c4b012476ec5",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts",
+                    "agenda-items"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "type eq 'AdmissionItem' and discount.id in ('1b01ae34-6970-41f2-a4e8-b4f39185dc15', '1b01ae34-6970-41f2-a4e8-b4f39185dc16')"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "90971d0e-ae75-43c7-ae70-62dd3bb8fa93",
+              "name": "Too many requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts",
+                    "agenda-items"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "type eq 'AdmissionItem' and discount.id in ('1b01ae34-6970-41f2-a4e8-b4f39185dc15', '1b01ae34-6970-41f2-a4e8-b4f39185dc16')"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 429,\n  \"message\": \"Limit Exceeded\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9dabf539-926b-4cba-a480-3ef8bec00dba",
+          "name": "Update Event Discount",
+          "request": {
+            "name": "Update Event Discount",
+            "description": {
+              "content": "Update a discount in an event based on details in the request body. Fields not included in the request will revert to their default value.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "events",
+                ":id",
+                "discounts",
+                ":discountId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Unique ID of an event."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "discountId",
+                  "description": "(Required) Unique ID of a discount."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "account/hooks:delete account/hooks:read account/hooks:write account/user-groups:delete account/user-groups:read account/user-groups:write account/users:delete account/users:read account/users:write appointments/appointment-attendees:read appointments/appointment-events:read appointments/appointment-types:read appointments/appointments:read appointments/appointments:write appointments/available-times:read appointments/locations:read attendee-insights/attendee-insights:read attendee-insights/scores:read attendee-insights/stats:read budget/budget-items:delete budget/budget-items:read budget/budget-items:write budget/budget-totals:read budget/budget-vendors:read budget/cards:read budget/currency-conversion-rate:delete budget/currency-conversion-rate:read budget/currency-conversion-rate:write budget/payments:delete budget/payments:read budget/payments:write budget/transactions:delete budget/transactions:read budget/transactions:write bulk/bulk-jobs:read bulk/bulk-jobs:write business-transient/bids:read business-transient/proposals:read business-transient/supplier-brands:read business-transient/supplier-chains:read business-transient/supplier-properties:read business-transient/supplier-property-rooms:read business-transient/travel-accounts:read business-transient/travel-program-questions:read business-transient/travel-programs:read business-transient/travel-supplier-accounts:read business-travel/bids:read business-travel/proposals:read business-travel/travel-accounts:read business-travel/travel-program-questions:read business-travel/travel-programs:read compliance/communications:read compliance/communications:write email/bounces:read email/email-status:read email/emails:read eMarketing/campaigns:read emarketing/emarketing-email-status:read eMarketing/eMarketing-email-templates:read eMarketing/eMarketing-send-emails:write event/admission-items:read event/air-request:read event/alternate-travel:read event/attendance-durations:read event/attendee-activities-metadata:delete event/attendee-activities-metadata:read event/attendee-activities-metadata:write event/attendee-activities:read event/attendee-activities:write event/attendee-credits:read event/attendee-links:delete event/attendee-links:read event/attendee-links:write event/attendee-messages:read event/attendees:read event/attendees:write event/audience-segments:read event/audience-segments:write event/contact-groups:read event/contact-groups:write event/contact-types:read event/contacts:delete event/contacts:read event/contacts:write event/contacts:write-sensitive event/custom-fields:read event/custom-fields:write event/discounts:write event/donation-items:read event/event-discounts:read event/event-discounts:write event/event-email-status:read event/event-emails:read event/event-emails:write event/event-features:read event/event-features:write event/event-user-groups:read event/event-user-groups:write event/events:read event/events:write event/fee-items:read event/hotel-request:read event/invitation-lists:read event/meeting-request-forms:read event/meeting-requests:read event/meeting-requests:write event/membership-items:read event/orders:read event/planning-documents:read event/players:read event/process-form-submissions:read event/program-items:delete event/program-items:read event/program-items:write event/quantity-items:read event/quantity-items:write event/registration-paths:read event/registration-types:read event/registration-types:write event/role-assignments:read event/session-attendance:read event/session-attendance:write event/session-categories:read event/session-categories:write event/session-enrollment:delete event/session-enrollment:read event/session-enrollment:write event/session-segments:read event/sessions:delete event/sessions:read event/sessions:write event/speaker-categories:read event/speaker-categories:write event/speakers:delete event/speakers:read event/speakers:write event/taxes:read event/transactions:read event/transactions:write event/video-views:read event/videos:read event/videos:write event/vouchers:read event/webcasts:delete event/webcasts:read event/webcasts:write event/weblinks:read events-plus/hubs:read exhibitor/badges:read exhibitor/badges:write exhibitor/booth-staff:delete exhibitor/booth-staff:read exhibitor/booth-staff:write exhibitor/eliterature-requests:read exhibitor/exhibitor-admins:read exhibitor/exhibitor-admins:write exhibitor/exhibitor-answers:read exhibitor/exhibitor-answers:write exhibitor/exhibitor-categories:delete exhibitor/exhibitor-categories:read exhibitor/exhibitor-categories:write exhibitor/exhibitor-contents:delete exhibitor/exhibitor-contents:read exhibitor/exhibitor-contents:write exhibitor/exhibitor-questions:read exhibitor/exhibitors:delete exhibitor/exhibitors:read exhibitor/exhibitors:write exhibitor/lead-qualification-answers:read exhibitor/lead-qualification-questions:read exhibitor/leads:read exhibitor/registration-packs:delete exhibitor/registration-packs:read exhibitor/registration-packs:write exhibitor/sponsorship-levels:read file/file:read file/file:write housing/connections:write housing/hotel-room-rates:write housing/housing-event-available-nights:read housing/housing-event-hotels:read housing/housing-event-inventory:read housing/housing-event-room-types:read housing/housing-events:read housing/reservation-requests:delete housing/reservation-requests:read housing/reservation-requests:write housing/reservations-link:delete housing/reservations-link:write housing/reservations:delete housing/reservations:read housing/reservations:write onsite/signatures:read proposal/proposals:write remote-printing/badge-print-jobs:read remote-printing/badge-print-jobs:write remote-printing/badge-printer-pools:read rfp/rfp-agenda-items:read rfp/rfp-attachments:read rfp/rfp-custom-fields:read rfp/rfp-guest-rooms:read rfp/rfp-internal-documents:read rfp/rfp-lead-sources:read rfp/rfp-past-events:read rfp/rfp-questions:read rfp/rfp-recipients-history:read rfp/rfp-suppliers:read rfp/rfps:read seating/assignments:read seating/event-seatings:read seating/seats:read seating/tables:read secure-ecommerce/card-tokens:write survey/questions:read survey/respondents:read survey/responses:read survey/standard-survey-email-templates:read survey/standard-survey-email:write survey/standard-survey-questions:read survey/standard-survey-respondents:read survey/standard-survey-respondents:write survey/standard-survey-responses:read survey/standard-survey-responses:write survey/standard-surveys:read survey/survey-questions:read survey/survey-respondents:read survey/survey-respondents:write survey/survey-responses:read survey/survey-responses:write survey/surveys:read venue/meeting-room-overviews:read venue/meeting-rooms:write venue/venue-details-overview:read venue/venue-details:write venue/venue-facility:write"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api-platform.cvent.com/ea/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"<string>\",\n  \"method\": {\n    \"value\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"type\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    }\n  },\n  \"name\": \"<string>\",\n  \"type\": \"<string>\",\n  \"capacity\": {\n    \"total\": -1\n  },\n  \"audienceType\": \"ALL\",\n  \"includeGuestsTowardsCapacity\": false,\n  \"autoApply\": false,\n  \"applyToAllAgendaItems\": false,\n  \"active\": true,\n  \"stackable\": true,\n  \"effectiveFrom\": \"<date>\",\n  \"effectiveTo\": \"<date>\",\n  \"note\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "28495e0d-44fd-450a-a073-af7f8114bde0",
+              "name": "Successfully updated the discount in the event.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts",
+                    ":discountId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "discountId",
+                      "description": "(Required) Unique ID of a discount."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"10OFF\",\n  \"method\": {\n    \"value\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"type\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    }\n  },\n  \"name\": \"10% off\",\n  \"type\": \"DISCOUNT_CODE\",\n  \"capacity\": {\n    \"total\": -1\n  },\n  \"audienceType\": \"ALL\",\n  \"includeGuestsTowardsCapacity\": true,\n  \"autoApply\": true,\n  \"applyToAllAgendaItems\": false,\n  \"active\": true,\n  \"stackable\": true,\n  \"effectiveFrom\": \"2025-01-01\",\n  \"effectiveTo\": \"2025-02-01\",\n  \"note\": \"10% off for early birds.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"10OFF\",\n  \"method\": {\n    \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n  },\n  \"name\": {\n    \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n  },\n  \"type\": \"DISCOUNT_CODE\",\n  \"id\": \"04ca6ae2-0dc3-487b-953e-86d6abbdf7d3\",\n  \"level\": \"EVENT\",\n  \"capacity\": {\n    \"total\": 100,\n    \"used\": 10\n  },\n  \"audienceType\": \"ALL\",\n  \"includeGuestsTowardsCapacity\": true,\n  \"autoApply\": true,\n  \"applyToAllAgendaItems\": false,\n  \"active\": {\n    \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n  },\n  \"stackable\": {\n    \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n  },\n  \"effectiveFrom\": {\n    \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n  },\n  \"effectiveTo\": {\n    \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n  },\n  \"note\": {\n    \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d9ed226e-4e66-404f-a4ab-1601efa68338",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts",
+                    ":discountId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "discountId",
+                      "description": "(Required) Unique ID of a discount."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"10OFF\",\n  \"method\": {\n    \"value\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"type\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    }\n  },\n  \"name\": \"10% off\",\n  \"type\": \"DISCOUNT_CODE\",\n  \"capacity\": {\n    \"total\": -1\n  },\n  \"audienceType\": \"ALL\",\n  \"includeGuestsTowardsCapacity\": true,\n  \"autoApply\": true,\n  \"applyToAllAgendaItems\": false,\n  \"active\": true,\n  \"stackable\": true,\n  \"effectiveFrom\": \"2025-01-01\",\n  \"effectiveTo\": \"2025-02-01\",\n  \"note\": \"10% off for early birds.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6fe0ac07-195c-4323-9922-b72522396e7b",
+              "name": "Bad or expired token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts",
+                    ":discountId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "discountId",
+                      "description": "(Required) Unique ID of a discount."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"10OFF\",\n  \"method\": {\n    \"value\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"type\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    }\n  },\n  \"name\": \"10% off\",\n  \"type\": \"DISCOUNT_CODE\",\n  \"capacity\": {\n    \"total\": -1\n  },\n  \"audienceType\": \"ALL\",\n  \"includeGuestsTowardsCapacity\": true,\n  \"autoApply\": true,\n  \"applyToAllAgendaItems\": false,\n  \"active\": true,\n  \"stackable\": true,\n  \"effectiveFrom\": \"2025-01-01\",\n  \"effectiveTo\": \"2025-02-01\",\n  \"note\": \"10% off for early birds.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "23014760-45d4-453e-9962-f96a97595ffd",
+              "name": "You do not have access to the resource",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts",
+                    ":discountId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "discountId",
+                      "description": "(Required) Unique ID of a discount."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"10OFF\",\n  \"method\": {\n    \"value\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"type\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    }\n  },\n  \"name\": \"10% off\",\n  \"type\": \"DISCOUNT_CODE\",\n  \"capacity\": {\n    \"total\": -1\n  },\n  \"audienceType\": \"ALL\",\n  \"includeGuestsTowardsCapacity\": true,\n  \"autoApply\": true,\n  \"applyToAllAgendaItems\": false,\n  \"active\": true,\n  \"stackable\": true,\n  \"effectiveFrom\": \"2025-01-01\",\n  \"effectiveTo\": \"2025-02-01\",\n  \"note\": \"10% off for early birds.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"Access Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "697c9ffa-4a51-4ee9-a31c-eb9fb07fe6fe",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts",
+                    ":discountId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "discountId",
+                      "description": "(Required) Unique ID of a discount."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"10OFF\",\n  \"method\": {\n    \"value\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"type\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    }\n  },\n  \"name\": \"10% off\",\n  \"type\": \"DISCOUNT_CODE\",\n  \"capacity\": {\n    \"total\": -1\n  },\n  \"audienceType\": \"ALL\",\n  \"includeGuestsTowardsCapacity\": true,\n  \"autoApply\": true,\n  \"applyToAllAgendaItems\": false,\n  \"active\": true,\n  \"stackable\": true,\n  \"effectiveFrom\": \"2025-01-01\",\n  \"effectiveTo\": \"2025-02-01\",\n  \"note\": \"10% off for early birds.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "939f08a3-9048-4cfd-b658-54bfccd2d1fd",
+              "name": "Too many requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts",
+                    ":discountId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "discountId",
+                      "description": "(Required) Unique ID of a discount."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"10OFF\",\n  \"method\": {\n    \"value\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"type\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    }\n  },\n  \"name\": \"10% off\",\n  \"type\": \"DISCOUNT_CODE\",\n  \"capacity\": {\n    \"total\": -1\n  },\n  \"audienceType\": \"ALL\",\n  \"includeGuestsTowardsCapacity\": true,\n  \"autoApply\": true,\n  \"applyToAllAgendaItems\": false,\n  \"active\": true,\n  \"stackable\": true,\n  \"effectiveFrom\": \"2025-01-01\",\n  \"effectiveTo\": \"2025-02-01\",\n  \"note\": \"10% off for early birds.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 429,\n  \"message\": \"Limit Exceeded\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d923ce99-ac2f-4bd3-a1f5-dfa79c13e23b",
+          "name": "Link Agenda Item to Discount",
+          "request": {
+            "name": "Link Agenda Item to Discount",
+            "description": {
+              "content": "Links an agenda item to a given event discount.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "events",
+                ":id",
+                "discounts",
+                ":discountId",
+                "agenda-items",
+                ":agendaItemId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Unique ID of an event."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "discountId",
+                  "description": "(Required) Unique ID of a discount."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "agendaItemId",
+                  "description": "(Required) Unique ID of an agenda item."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "account/hooks:delete account/hooks:read account/hooks:write account/user-groups:delete account/user-groups:read account/user-groups:write account/users:delete account/users:read account/users:write appointments/appointment-attendees:read appointments/appointment-events:read appointments/appointment-types:read appointments/appointments:read appointments/appointments:write appointments/available-times:read appointments/locations:read attendee-insights/attendee-insights:read attendee-insights/scores:read attendee-insights/stats:read budget/budget-items:delete budget/budget-items:read budget/budget-items:write budget/budget-totals:read budget/budget-vendors:read budget/cards:read budget/currency-conversion-rate:delete budget/currency-conversion-rate:read budget/currency-conversion-rate:write budget/payments:delete budget/payments:read budget/payments:write budget/transactions:delete budget/transactions:read budget/transactions:write bulk/bulk-jobs:read bulk/bulk-jobs:write business-transient/bids:read business-transient/proposals:read business-transient/supplier-brands:read business-transient/supplier-chains:read business-transient/supplier-properties:read business-transient/supplier-property-rooms:read business-transient/travel-accounts:read business-transient/travel-program-questions:read business-transient/travel-programs:read business-transient/travel-supplier-accounts:read business-travel/bids:read business-travel/proposals:read business-travel/travel-accounts:read business-travel/travel-program-questions:read business-travel/travel-programs:read compliance/communications:read compliance/communications:write email/bounces:read email/email-status:read email/emails:read eMarketing/campaigns:read emarketing/emarketing-email-status:read eMarketing/eMarketing-email-templates:read eMarketing/eMarketing-send-emails:write event/admission-items:read event/air-request:read event/alternate-travel:read event/attendance-durations:read event/attendee-activities-metadata:delete event/attendee-activities-metadata:read event/attendee-activities-metadata:write event/attendee-activities:read event/attendee-activities:write event/attendee-credits:read event/attendee-links:delete event/attendee-links:read event/attendee-links:write event/attendee-messages:read event/attendees:read event/attendees:write event/audience-segments:read event/audience-segments:write event/contact-groups:read event/contact-groups:write event/contact-types:read event/contacts:delete event/contacts:read event/contacts:write event/contacts:write-sensitive event/custom-fields:read event/custom-fields:write event/discounts:write event/donation-items:read event/event-discounts:read event/event-discounts:write event/event-email-status:read event/event-emails:read event/event-emails:write event/event-features:read event/event-features:write event/event-user-groups:read event/event-user-groups:write event/events:read event/events:write event/fee-items:read event/hotel-request:read event/invitation-lists:read event/meeting-request-forms:read event/meeting-requests:read event/meeting-requests:write event/membership-items:read event/orders:read event/planning-documents:read event/players:read event/process-form-submissions:read event/program-items:delete event/program-items:read event/program-items:write event/quantity-items:read event/quantity-items:write event/registration-paths:read event/registration-types:read event/registration-types:write event/role-assignments:read event/session-attendance:read event/session-attendance:write event/session-categories:read event/session-categories:write event/session-enrollment:delete event/session-enrollment:read event/session-enrollment:write event/session-segments:read event/sessions:delete event/sessions:read event/sessions:write event/speaker-categories:read event/speaker-categories:write event/speakers:delete event/speakers:read event/speakers:write event/taxes:read event/transactions:read event/transactions:write event/video-views:read event/videos:read event/videos:write event/vouchers:read event/webcasts:delete event/webcasts:read event/webcasts:write event/weblinks:read events-plus/hubs:read exhibitor/badges:read exhibitor/badges:write exhibitor/booth-staff:delete exhibitor/booth-staff:read exhibitor/booth-staff:write exhibitor/eliterature-requests:read exhibitor/exhibitor-admins:read exhibitor/exhibitor-admins:write exhibitor/exhibitor-answers:read exhibitor/exhibitor-answers:write exhibitor/exhibitor-categories:delete exhibitor/exhibitor-categories:read exhibitor/exhibitor-categories:write exhibitor/exhibitor-contents:delete exhibitor/exhibitor-contents:read exhibitor/exhibitor-contents:write exhibitor/exhibitor-questions:read exhibitor/exhibitors:delete exhibitor/exhibitors:read exhibitor/exhibitors:write exhibitor/lead-qualification-answers:read exhibitor/lead-qualification-questions:read exhibitor/leads:read exhibitor/registration-packs:delete exhibitor/registration-packs:read exhibitor/registration-packs:write exhibitor/sponsorship-levels:read file/file:read file/file:write housing/connections:write housing/hotel-room-rates:write housing/housing-event-available-nights:read housing/housing-event-hotels:read housing/housing-event-inventory:read housing/housing-event-room-types:read housing/housing-events:read housing/reservation-requests:delete housing/reservation-requests:read housing/reservation-requests:write housing/reservations-link:delete housing/reservations-link:write housing/reservations:delete housing/reservations:read housing/reservations:write onsite/signatures:read proposal/proposals:write remote-printing/badge-print-jobs:read remote-printing/badge-print-jobs:write remote-printing/badge-printer-pools:read rfp/rfp-agenda-items:read rfp/rfp-attachments:read rfp/rfp-custom-fields:read rfp/rfp-guest-rooms:read rfp/rfp-internal-documents:read rfp/rfp-lead-sources:read rfp/rfp-past-events:read rfp/rfp-questions:read rfp/rfp-recipients-history:read rfp/rfp-suppliers:read rfp/rfps:read seating/assignments:read seating/event-seatings:read seating/seats:read seating/tables:read secure-ecommerce/card-tokens:write survey/questions:read survey/respondents:read survey/responses:read survey/standard-survey-email-templates:read survey/standard-survey-email:write survey/standard-survey-questions:read survey/standard-survey-respondents:read survey/standard-survey-respondents:write survey/standard-survey-responses:read survey/standard-survey-responses:write survey/standard-surveys:read survey/survey-questions:read survey/survey-respondents:read survey/survey-respondents:write survey/survey-responses:read survey/survey-responses:write survey/surveys:read venue/meeting-room-overviews:read venue/meeting-rooms:write venue/venue-details-overview:read venue/venue-details:write venue/venue-facility:write"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api-platform.cvent.com/ea/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "c7bd96f8-9119-4a7e-b2c7-4527f4966ac9",
+              "name": "Successfully linked an agenda item to an event discount.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts",
+                    ":discountId",
+                    "agenda-items",
+                    ":agendaItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "discountId",
+                      "description": "(Required) Unique ID of a discount."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "agendaItemId",
+                      "description": "(Required) Unique ID of an agenda item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0dbf0bcf-2bb2-4058-a39f-e1083963f8e5",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts",
+                    ":discountId",
+                    "agenda-items",
+                    ":agendaItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "discountId",
+                      "description": "(Required) Unique ID of a discount."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "agendaItemId",
+                      "description": "(Required) Unique ID of an agenda item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b0703da2-4eeb-45dc-a04c-63ce7ff29dfc",
+              "name": "Bad or expired token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts",
+                    ":discountId",
+                    "agenda-items",
+                    ":agendaItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "discountId",
+                      "description": "(Required) Unique ID of a discount."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "agendaItemId",
+                      "description": "(Required) Unique ID of an agenda item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f6439135-b6ba-4c5a-a096-6bf21b829fdf",
+              "name": "You do not have access to the resource",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts",
+                    ":discountId",
+                    "agenda-items",
+                    ":agendaItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "discountId",
+                      "description": "(Required) Unique ID of a discount."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "agendaItemId",
+                      "description": "(Required) Unique ID of an agenda item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"Access Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f0c21488-d14e-4f19-9939-d40c4af0ff50",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts",
+                    ":discountId",
+                    "agenda-items",
+                    ":agendaItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "discountId",
+                      "description": "(Required) Unique ID of a discount."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "agendaItemId",
+                      "description": "(Required) Unique ID of an agenda item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a5f4e3a8-7cf4-48e3-b945-7871813e359a",
+              "name": "Too many requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts",
+                    ":discountId",
+                    "agenda-items",
+                    ":agendaItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "discountId",
+                      "description": "(Required) Unique ID of a discount."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "agendaItemId",
+                      "description": "(Required) Unique ID of an agenda item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 429,\n  \"message\": \"Limit Exceeded\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ab45aa27-da76-40a5-85a1-8a34577074af",
+          "name": "Unlink Agenda Item Discount",
+          "request": {
+            "name": "Unlink Agenda Item Discount",
+            "description": {
+              "content": "Unlinks an agenda item from a given event discount.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "events",
+                ":id",
+                "discounts",
+                ":discountId",
+                "agenda-items",
+                ":agendaItemId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Unique ID of an event."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "discountId",
+                  "description": "(Required) Unique ID of a discount."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "agendaItemId",
+                  "description": "(Required) Unique ID of an agenda item."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "account/hooks:delete account/hooks:read account/hooks:write account/user-groups:delete account/user-groups:read account/user-groups:write account/users:delete account/users:read account/users:write appointments/appointment-attendees:read appointments/appointment-events:read appointments/appointment-types:read appointments/appointments:read appointments/appointments:write appointments/available-times:read appointments/locations:read attendee-insights/attendee-insights:read attendee-insights/scores:read attendee-insights/stats:read budget/budget-items:delete budget/budget-items:read budget/budget-items:write budget/budget-totals:read budget/budget-vendors:read budget/cards:read budget/currency-conversion-rate:delete budget/currency-conversion-rate:read budget/currency-conversion-rate:write budget/payments:delete budget/payments:read budget/payments:write budget/transactions:delete budget/transactions:read budget/transactions:write bulk/bulk-jobs:read bulk/bulk-jobs:write business-transient/bids:read business-transient/proposals:read business-transient/supplier-brands:read business-transient/supplier-chains:read business-transient/supplier-properties:read business-transient/supplier-property-rooms:read business-transient/travel-accounts:read business-transient/travel-program-questions:read business-transient/travel-programs:read business-transient/travel-supplier-accounts:read business-travel/bids:read business-travel/proposals:read business-travel/travel-accounts:read business-travel/travel-program-questions:read business-travel/travel-programs:read compliance/communications:read compliance/communications:write email/bounces:read email/email-status:read email/emails:read eMarketing/campaigns:read emarketing/emarketing-email-status:read eMarketing/eMarketing-email-templates:read eMarketing/eMarketing-send-emails:write event/admission-items:read event/air-request:read event/alternate-travel:read event/attendance-durations:read event/attendee-activities-metadata:delete event/attendee-activities-metadata:read event/attendee-activities-metadata:write event/attendee-activities:read event/attendee-activities:write event/attendee-credits:read event/attendee-links:delete event/attendee-links:read event/attendee-links:write event/attendee-messages:read event/attendees:read event/attendees:write event/audience-segments:read event/audience-segments:write event/contact-groups:read event/contact-groups:write event/contact-types:read event/contacts:delete event/contacts:read event/contacts:write event/contacts:write-sensitive event/custom-fields:read event/custom-fields:write event/discounts:write event/donation-items:read event/event-discounts:read event/event-discounts:write event/event-email-status:read event/event-emails:read event/event-emails:write event/event-features:read event/event-features:write event/event-user-groups:read event/event-user-groups:write event/events:read event/events:write event/fee-items:read event/hotel-request:read event/invitation-lists:read event/meeting-request-forms:read event/meeting-requests:read event/meeting-requests:write event/membership-items:read event/orders:read event/planning-documents:read event/players:read event/process-form-submissions:read event/program-items:delete event/program-items:read event/program-items:write event/quantity-items:read event/quantity-items:write event/registration-paths:read event/registration-types:read event/registration-types:write event/role-assignments:read event/session-attendance:read event/session-attendance:write event/session-categories:read event/session-categories:write event/session-enrollment:delete event/session-enrollment:read event/session-enrollment:write event/session-segments:read event/sessions:delete event/sessions:read event/sessions:write event/speaker-categories:read event/speaker-categories:write event/speakers:delete event/speakers:read event/speakers:write event/taxes:read event/transactions:read event/transactions:write event/video-views:read event/videos:read event/videos:write event/vouchers:read event/webcasts:delete event/webcasts:read event/webcasts:write event/weblinks:read events-plus/hubs:read exhibitor/badges:read exhibitor/badges:write exhibitor/booth-staff:delete exhibitor/booth-staff:read exhibitor/booth-staff:write exhibitor/eliterature-requests:read exhibitor/exhibitor-admins:read exhibitor/exhibitor-admins:write exhibitor/exhibitor-answers:read exhibitor/exhibitor-answers:write exhibitor/exhibitor-categories:delete exhibitor/exhibitor-categories:read exhibitor/exhibitor-categories:write exhibitor/exhibitor-contents:delete exhibitor/exhibitor-contents:read exhibitor/exhibitor-contents:write exhibitor/exhibitor-questions:read exhibitor/exhibitors:delete exhibitor/exhibitors:read exhibitor/exhibitors:write exhibitor/lead-qualification-answers:read exhibitor/lead-qualification-questions:read exhibitor/leads:read exhibitor/registration-packs:delete exhibitor/registration-packs:read exhibitor/registration-packs:write exhibitor/sponsorship-levels:read file/file:read file/file:write housing/connections:write housing/hotel-room-rates:write housing/housing-event-available-nights:read housing/housing-event-hotels:read housing/housing-event-inventory:read housing/housing-event-room-types:read housing/housing-events:read housing/reservation-requests:delete housing/reservation-requests:read housing/reservation-requests:write housing/reservations-link:delete housing/reservations-link:write housing/reservations:delete housing/reservations:read housing/reservations:write onsite/signatures:read proposal/proposals:write remote-printing/badge-print-jobs:read remote-printing/badge-print-jobs:write remote-printing/badge-printer-pools:read rfp/rfp-agenda-items:read rfp/rfp-attachments:read rfp/rfp-custom-fields:read rfp/rfp-guest-rooms:read rfp/rfp-internal-documents:read rfp/rfp-lead-sources:read rfp/rfp-past-events:read rfp/rfp-questions:read rfp/rfp-recipients-history:read rfp/rfp-suppliers:read rfp/rfps:read seating/assignments:read seating/event-seatings:read seating/seats:read seating/tables:read secure-ecommerce/card-tokens:write survey/questions:read survey/respondents:read survey/responses:read survey/standard-survey-email-templates:read survey/standard-survey-email:write survey/standard-survey-questions:read survey/standard-survey-respondents:read survey/standard-survey-respondents:write survey/standard-survey-responses:read survey/standard-survey-responses:write survey/standard-surveys:read survey/survey-questions:read survey/survey-respondents:read survey/survey-respondents:write survey/survey-responses:read survey/survey-responses:write survey/surveys:read venue/meeting-room-overviews:read venue/meeting-rooms:write venue/venue-details-overview:read venue/venue-details:write venue/venue-facility:write"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api-platform.cvent.com/ea/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "45c08cbb-ae6e-4098-bca3-bda9bd87ed7b",
+              "name": "Successfully unlinked an agenda item from an event discount.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts",
+                    ":discountId",
+                    "agenda-items",
+                    ":agendaItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "discountId",
+                      "description": "(Required) Unique ID of a discount."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "agendaItemId",
+                      "description": "(Required) Unique ID of an agenda item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9fdfe4ae-486a-4d8b-a83d-7741c89935bf",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts",
+                    ":discountId",
+                    "agenda-items",
+                    ":agendaItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "discountId",
+                      "description": "(Required) Unique ID of a discount."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "agendaItemId",
+                      "description": "(Required) Unique ID of an agenda item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c618468f-4fb9-4fc9-84e8-327844b6d29c",
+              "name": "Bad or expired token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts",
+                    ":discountId",
+                    "agenda-items",
+                    ":agendaItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "discountId",
+                      "description": "(Required) Unique ID of a discount."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "agendaItemId",
+                      "description": "(Required) Unique ID of an agenda item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ffc1d3bd-eadd-49bb-a1ee-16cd19b9b896",
+              "name": "You do not have access to the resource",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts",
+                    ":discountId",
+                    "agenda-items",
+                    ":agendaItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "discountId",
+                      "description": "(Required) Unique ID of a discount."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "agendaItemId",
+                      "description": "(Required) Unique ID of an agenda item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"Access Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d077f1dc-218c-44b5-97a9-baf3cdd16dd6",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts",
+                    ":discountId",
+                    "agenda-items",
+                    ":agendaItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "discountId",
+                      "description": "(Required) Unique ID of a discount."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "agendaItemId",
+                      "description": "(Required) Unique ID of an agenda item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a079802c-6890-491a-b678-c14e7ba2ff86",
+              "name": "Too many requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "events",
+                    ":id",
+                    "discounts",
+                    ":discountId",
+                    "agenda-items",
+                    ":agendaItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique ID of an event."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "discountId",
+                      "description": "(Required) Unique ID of a discount."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "agendaItemId",
+                      "description": "(Required) Unique ID of an agenda item."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 429,\n  \"message\": \"Limit Exceeded\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-platform.cvent.com/ea",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "91e09325-5c99-4b43-a229-f7547cffa229",
+    "name": "Cvent REST APIs — Event Cloud Discounts API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Event Cloud scope of the Cvent REST APIs. This document is a TAG-SCOPED SUBSET of the OpenAPI specification Cvent publishes at https://github.com/cvent/rest-sdks/blob/main/cvent-public-spec/openapi.yaml (the source of truth for Cvent's official TypeScript/.NET/Java SDKs). Venue-sourcing, RFP, housing-supplier and travel-supplier tags were removed because they belong to Cvent Hospitality Cloud; every path, operation, parameter, schema and security requirement below is verbatim from Cvent's published spec.\n\n# Introduction\nThe Cvent API Platform is built around REST. We aim to provide intuitive endpoints that can be easily\ndiscovered to help leverage the Cvent platform for your event needs. The RESTful APIs outlined here\nuse JSON-encoded request and response format, along with HTTP codes, to convey processing status of\nrequests received. The Cvent resources are protected using OAuth2.\n\n# Getting Started\n\nIf you're new to the Cvent API Platform, start by reading our\n[Developer Quickstart](https://developers.cvent.com/docs/rest-api/tutorials/developer-quickstart) guide. This will\ngive you an overview of how to authenticate and make requests using our APIs.\n\n## Authentication\n\nThe Cvent REST API uses [OAuth2](https://oauth.net/2/) to authorize requests to the platform. The client\ncredentials authorization flow is supported.\n\n<a name=\"oauth2-auth-code-planner-admin\"></a>\n\nAuthorization code flow is only supported for planner users with the administrator role in Cvent. Developer users\ncannot use authorization code flow.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\nHere's an example of using client credential flow to authorize. You'll supply your application's id and secret to\nmake a [Token](#operation/oauth2Token) request.\n\n```bash\ncurl --location --request POST '{hostName}/{version}/oauth2/token' \\\n--header 'Content-Type: application/x-www-form-urlencoded' \\\n--header 'Authorization: Basic {api_credentials}' \\\n--data-urlencode 'grant_type=client_credentials' \\\n--data-urlencode 'client_id={client_id}'\n```\n\n| Key               | Description                                          | Value                                                                                                        |\n| :---------------- | :--------------------------------------------------- | :----------------------------------------------------------------------------------------------------------- |\n| {hostName}        | https://api-platform.cvent.com                       | Location if your account is in the North American datacenter.                                                |\n|                   | https://api-platform-eur.cvent.com                   | Location if your account is in the European data center.                                                     |\n| {version}         | ea                                                   | The version of the API you're using. Only `ea` is currently supported.                                       |\n| {api_credentials} | {client_id}:{client_secret} in base64 encoded format | Supply your client id & client credentials in a base 64 encoded format.                                      |\n| {client_id}       | Retrieved from your application                      | Your application's client id.                                                                                |\n| {client_secret}   | Retrieved from your application                      | Your application's client secret.                                                                            |\n\nOn a successful call, you'll receive the following response:\n\n```json\n{\n  \"access_token\": \"{accessToken}\",\n  \"expires_in\": 3600,\n  \"token_type\": \"Bearer\"\n}\n```\n\nThis bearer token is valid for 3600 seconds (60 minutes) and must be used in subsequent calls.\n\n## Endpoints\n\nEndpoints start with `hostName` and `version`.\n\nThe `hostname` will depend on the region that your Cvent account is hosted in. Please see the table\nbelow to identify which hostname you should be using.\n\n| Region        |\tHostname                           |\n|:--------------|:-----------------------------------|\n| North America\t| https://api-platform.cvent.com     |\n| Europe        | https://api-platform-eur.cvent.com |\n\nThe current `version` of the Cvent API is `ea`.\n\n## Rate Limits\n\nCvent APIs enforce rate limits to ensure platform stability. Your limits depend on your tier: Free,\nStandard, or Premium.\n\n<br />\n\n### Usage Tiers\n\n| Tier     | Daily Calls | Calls per Second | Max Burst |\n| -------- | ----------- | ---------------- | --------- |\n| Free     | 1,000       | 2                | 1         |\n| Standard | 15,000      | 10               | 10        |\n| Premium  | 500,000     | 25               | 25        |\n\n- **Daily calls** define how many requests you can make in a 24-hour period. Quota\n  resets at 12 midnight (+0 GMT).\n- **Calls per second** define how many requests you can make in a 1-second window.\n- **Max Burst** defines how many requests you can make at once.\n\nIf you are unsure what usage tier applies to your account, you can check via\n[Get Current Usage Tier](#operation/getUsageTier).\n\nPlease note that these limits may change as the Cvent API Platform evolves.\n\n<br />\n\n### Handling Rate Limits\n\nSometimes, you may exceed your rate limits. When this happens, the API will return a `429 Too Many Requests`. See\n[handling rate limits](https://developers.cvent.com/docs/rest-api/guides/handling-rate-limits) for best practices on how to handle this.\n\n## Pagination\n\nSome APIs use pagination to manage records. Each page of records has a token associated to identify it.\n\nIf an API uses pagination, you’ll find up to three tokens in the response:\n- **currentToken**: Describes the token of the current page.\n- **nextToken**: Provides a token for the next page of records, if one exists.\n- **previousToken**: Provides a token for the previous page of records, if one exists. Not all APIs will return\n  this token.\n\nYou specify which page of records to view via the `token` parameter in your API call. To navigate through pages,\ntake the `nextToken` or `previousToken` value and pass it to your next call’s `token` parameter to get the\nrespective page of records. For example, if you made this request:\n\n```bash\ncurl -X GET {hostname}/{version}/contacts?limit=100 \\\n-H 'Accept: application/json' \\\n-H 'Authorization: Bearer {accessToken}'\n```\n\nThe response contains a paging array where you'll find the token information.\n\n```json\n{\n  \"paging\": {\n    \"currentToken\": \"90c5f062-76ad-4ea4-aa53-00eb698d9262\",\n    \"nextToken\": \"3b2359a7-4583-40ed-8afd-67e5f15373d3\",\n    \"limit\": 100,\n    \"totalCount\": 102,\n    \"_links\": {...}\n  },\n  \"data\": [...]\n}\n```\n\nTake the `nextToken` and use it in the `token` parameter on your subsequent call.\n\n```bash\ncurl -X GET {hostname}/{version}/contacts?limit=100&token=3b2359a7-4583-40ed-8afd-67e5f15373d3 \\\n-H 'Accept: application/json' \\\n-H 'Authorization: Bearer {accessToken}'\n```\n\nWhen the response doesn’t contain a `nextToken` field, you’ve reached the last page. Occasionally, you might\nencounter an empty page at the end of results. This typically happens when the results were evenly divisible.\nEnsure your client code handles the possibility of receiving an empty data array when using the `nextToken`.\n\n## Filtering\n\nUse filters to narrow down results. The filter follows the pattern\n`filter='field' comparisonType 'value'`. The value can be enclosed with single\nquotes (') or double quotes (\").\n\n```bash\nGET {hostName}/{version}/contacts?filter=lastName eq 'Smith'\n````\n\nTo correctly pass a single quote in the filter's value, use double quotes around\nthe string.\n\n```bash\nGET {hostName}/{version}/contacts?filter=lastName eq \"O'Keenan\"\n```\n\nTo correctly pass a double quote in the filter's value, use double quotes around\nthe string and add an escape character `\\` to each quote that is part of the\nstring.\n\n```bash\nGET {hostName}/{version}/events?filter=eventName eq \"\\\"Yearly\\\" Conference\"\n```\n\n## Versioning\n\nChange is inevitable in API development. Planning for it is crucial. We track\nboth backward-compatible and backward-incompatible changes.\n\n<br />\n\n### Backward Compatible Changes\n\nBackward compatible changes will be made often and are intended to avoid\nany adverse impact on our customers. It is highly advisable that when reading\nJSON payloads from Cvent, you are able to handle \"unknown\" attributes that\ncan be added over time. We consider the following changes backward-compatible:\n\n- Adding new resources\n- Adding new optional request parameters to existing operations\n- Adding new attributes to requests or responses\n- Changing the length or format (not type) of resource identifiers. For example, an ID can change from\n  \"1234/1234\" to \"1234::1234\".\n- Increasing the length of string fields\n\n<br />\n\n### Backward Incompatible Changes\n\nBackward-incompatible changes are made infrequently, however, they can be\ndisruptive to consumers. Due to this, our APIs are versioned to avoid\ndisruptions to customers. We leverage a URI-based versioning scheme,\nwhich means that a version value is included in the Cvent API URL.\nWhen breaking changes occur, a new version of the API is made available\nwhile the existing version is deprecated but remains available for a\nlimited period of time. We consider the following backward-incompatible changes:\n\n- Adding a new required parameter (query string param or payload attribute)\n- Deleting API resources\n- Deleting any attribute from API responses\n- Changing the data type on any parameter or attribute\n\n## Standards\nAs you begin working with our APIs, it's essential to be aware of standards around\ncountry codes, time formats, and other important details that ensure smooth integration.\nLearn more about our [API Standards](https://developers.cvent.com/docs/rest-api/reference/api-standards)\n\n\nContact Support:\n Name: Cvent Development Platform",
+      "type": "text/plain"
+    }
+  }
+}

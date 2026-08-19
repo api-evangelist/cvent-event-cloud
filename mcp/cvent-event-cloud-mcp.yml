@@ -1,0 +1,76 @@
+generated: '2026-08-13'
+method: probed
+source: https://mcp.cvent.com/mcp
+provider: Cvent Event Cloud
+providerId: cvent-event-cloud
+name: Cvent MCP Server
+status: live
+description: >-
+  Cvent runs a hosted, remote MCP server at https://mcp.cvent.com/mcp. It is protected by OAuth 2.1
+  with PKCE and advertises its own authorization requirements per RFC 9728: an unauthenticated
+  tools/list POST returns HTTP 401 with
+  WWW-Authenticate: Bearer realm="mcp", resource_metadata="https://mcp.cvent.com/.well-known/oauth-protected-resource/mcp",
+  and that metadata document resolves 200 naming resource https://mcp.cvent.com/mcp. The endpoint
+  was not guessed — it is named by Cvent's own protected-resource document.
+deployment:
+  mode: remote
+  endpoint: https://mcp.cvent.com/mcp
+  transport: streamable-http
+  auth: oauth
+  verified: probed
+authorization:
+  scheme: OAuth 2.1 authorization code + PKCE
+  issuer: https://mcp.cvent.com
+  authorization_endpoint: https://mcp.cvent.com/oauth2/authorize
+  token_endpoint: https://mcp.cvent.com/oauth2/token
+  grant_types: [authorization_code, refresh_token]
+  code_challenge_methods: [S256]
+  token_endpoint_auth_methods: [client_secret_basic, client_secret_post]
+  bearer_methods: [header]
+  protected_resource_metadata: https://mcp.cvent.com/.well-known/oauth-protected-resource/mcp
+  authorization_server_metadata: https://mcp.cvent.com/.well-known/oauth-authorization-server
+  artifacts:
+    - well-known/cvent-event-cloud-oauth-authorization-server.json
+    - well-known/cvent-event-cloud-oauth-protected-resource.json
+  note: >-
+    This is a SEPARATE authorization server from the REST API's. The REST API issues client-credentials
+    tokens at https://api-platform.cvent.com/ea/oauth2/token; the MCP server issues user-delegated
+    authorization-code tokens at https://mcp.cvent.com/oauth2/token. An agent cannot reuse a REST
+    access token against the MCP endpoint.
+tools:
+  discovered: false
+  count: null
+  note: >-
+    tools/list is auth-gated (HTTP 401 with an OAuth challenge, zero-length body), so the live tool
+    names and inputSchemas could not be read anonymously. Cvent publishes no MCP documentation on
+    developers.cvent.com — the 665-route build manifest of the developer portal contains no /mcp
+    route — and www.cvent.com/llms.txt does not mention MCP or agents. No tool list is asserted here
+    because none was observed; enumerating it requires an authenticated OAuth introspection pass.
+evidence:
+  - probe: POST https://mcp.cvent.com/mcp {"jsonrpc":"2.0","id":1,"method":"tools/list"}
+    status: 401
+    www_authenticate: 'Bearer realm="mcp", resource_metadata="https://mcp.cvent.com/.well-known/oauth-protected-resource/mcp"'
+    checked: '2026-08-13'
+  - probe: GET https://mcp.cvent.com/.well-known/oauth-protected-resource/mcp
+    status: 200
+    checked: '2026-08-13'
+  - probe: GET https://mcp.cvent.com/.well-known/oauth-authorization-server
+    status: 200
+    checked: '2026-08-13'
+  - probe: POST https://api-platform.cvent.com/mcp
+    status: 404
+    checked: '2026-08-13'
+  - probe: GET https://mcp.cvent.com/sse
+    status: 404
+    checked: '2026-08-13'
+    note: No legacy SSE transport; streamable HTTP only.
+backing_api:
+  openapi: openapi/_original/cvent-rest-apis-openapi.yaml
+  operations: 458
+  note: >-
+    The MCP server fronts the same Cvent REST API platform documented by the OpenAPI. Which subset
+    of the 458 operations it exposes as tools is unknown while tools/list is gated.
+crosswalk: mcp/cvent-event-cloud-tool-crosswalk.yml
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

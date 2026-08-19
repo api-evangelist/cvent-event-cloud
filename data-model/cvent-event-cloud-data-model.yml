@@ -1,0 +1,1104 @@
+generated: '2026-08-13'
+method: derived
+source: openapi/_original/cvent-rest-apis-openapi.yaml
+provider: Cvent Event Cloud
+providerId: cvent-event-cloud
+description: 'Entity-relationship graph derived from Cvent''s published OpenAPI: 346 paths, 458 operations, 1,302
+  component schemas. Relationships are read from path nesting (/{parent}/{id}/{child} = parent has_many child) and
+  from the path parameters each resource requires. Cvent also publishes a per-tag data-model reference on its developer
+  portal (54 pages under /docs/platform/data-models/) which is the human companion to this graph.'
+docs: https://developers.cvent.com/docs/platform/data-models/
+schema_count: 1302
+path_count: 346
+operation_count: 458
+root_entity:
+  name: events
+  note: 'Event is the aggregate root: 110 of 458 operations hang off /events, and most Event Cloud child resources
+    are addressed as /events/{id}/<child>.'
+entities:
+- name: events
+  operations: 144
+  paths: 110
+  identifiers:
+  - adminId
+  - agendaItemId
+  - attendeeId
+  - badgeId
+  - boothstaffId
+  - budgetItemId
+- name: contacts
+  operations: 23
+  paths: 13
+  identifiers:
+  - contactId
+  - customFieldId
+  - id
+  - obfuscateId
+  - relatedContactId
+- name: sessions
+  operations: 22
+  paths: 14
+  identifiers:
+  - attendeeId
+  - customFieldId
+  - fileId
+  - id
+  - speakerId
+- name: attendees
+  operations: 16
+  paths: 10
+  identifiers:
+  - attendeeId
+  - id
+- name: program-items
+  operations: 15
+  paths: 9
+  identifiers:
+  - fileId
+  - id
+  - programItemId
+- name: rfps
+  operations: 13
+  paths: 13
+  identifiers:
+  - leadSourceId
+  - leadSourceSectionId
+  - rfpId
+- name: speakers
+  operations: 12
+  paths: 7
+  identifiers:
+  - fileId
+  - id
+- name: scim
+  operations: 11
+  paths: 8
+  identifiers:
+  - id
+- name: webcasts
+  operations: 11
+  paths: 6
+  identifiers:
+  - attendeeLinkId
+  - id
+- name: housing-events
+  operations: 10
+  paths: 10
+  identifiers:
+  - hotelId
+  - housingEventId
+  - roomTypeId
+- name: standard-surveys
+  operations: 10
+  paths: 9
+  identifiers:
+  - emailTemplateId
+  - respondentId
+  - responseId
+  - surveyId
+- name: venues
+  operations: 10
+  paths: 7
+  identifiers:
+  - meetingRoomId
+  - venueId
+- name: audience-segments
+  operations: 9
+  paths: 5
+  identifiers:
+  - attendeeId
+  - audienceSegmentId
+- name: appointment-events
+  operations: 8
+  paths: 7
+  identifiers:
+  - apptId
+  - id
+- name: contact-groups
+  operations: 8
+  paths: 4
+  identifiers:
+  - contactId
+  - id
+- name: travel-suppliers
+  operations: 8
+  paths: 8
+  identifiers:
+  - brandId
+  - chainId
+  - propertyId
+  - roomId
+- name: account-user-groups
+  operations: 7
+  paths: 3
+  identifiers:
+  - userGroupId
+  - userId
+- name: custom-fields
+  operations: 7
+  paths: 4
+  identifiers:
+  - customFieldId
+- name: videos
+  operations: 7
+  paths: 6
+  identifiers:
+  - textTrackId
+  - videoId
+- name: bulk-jobs
+  operations: 6
+  paths: 6
+  identifiers:
+  - id
+- name: meeting-request-forms
+  operations: 6
+  paths: 4
+  identifiers:
+  - id
+  - requestId
+- name: reservation-requests
+  operations: 6
+  paths: 3
+  identifiers:
+  - reservationId
+  - reservationRequestsId
+- name: cards
+  operations: 5
+  paths: 3
+  identifiers:
+  - transactionId
+- name: travel-programs
+  operations: 5
+  paths: 5
+  identifiers:
+  - programId
+  - questionId
+- name: attendee-insights
+  operations: 4
+  paths: 4
+  identifiers:
+  - id
+- name: currencies
+  operations: 4
+  paths: 2
+  identifiers:
+  - conversionRateId
+  - currency
+- name: logs
+  operations: 4
+  paths: 3
+  identifiers: []
+- name: reservations
+  operations: 4
+  paths: 2
+  identifiers:
+  - reservationId
+- name: travel-accounts
+  operations: 4
+  paths: 4
+  identifiers:
+  - travelAccountId
+- name: travel-proposals
+  operations: 4
+  paths: 4
+  identifiers:
+  - travelProposalBidId
+  - travelProposalId
+- name: emarketing
+  operations: 3
+  paths: 3
+  identifiers:
+  - campaignId
+  - emailRequestId
+- name: admission-items
+  operations: 2
+  paths: 2
+  identifiers: []
+- name: appointment-attendees
+  operations: 2
+  paths: 2
+  identifiers:
+  - id
+- name: appointment-availability-times
+  operations: 2
+  paths: 2
+  identifiers:
+  - id
+- name: appointment-meeting-interests
+  operations: 2
+  paths: 2
+  identifiers:
+  - id
+- name: appointments
+  operations: 2
+  paths: 2
+  identifiers:
+  - id
+- name: emails
+  operations: 2
+  paths: 2
+  identifiers:
+  - emailRequestId
+- name: event-questions
+  operations: 2
+  paths: 2
+  identifiers:
+  - questionId
+- name: files
+  operations: 2
+  paths: 2
+  identifiers:
+  - id
+- name: hubs
+  operations: 2
+  paths: 2
+  identifiers:
+  - hubId
+- name: leads
+  operations: 2
+  paths: 2
+  identifiers: []
+- name: oauth2
+  operations: 2
+  paths: 2
+  identifiers: []
+- name: session-categories
+  operations: 2
+  paths: 1
+  identifiers: []
+- name: speaker-categories
+  operations: 2
+  paths: 1
+  identifiers: []
+- name: usage
+  operations: 2
+  paths: 2
+  identifiers: []
+relationships:
+- from: account-user-groups
+  to: users
+  type: has_many
+  via: path nesting
+- from: activities
+  to: external
+  type: has_many
+  via: path nesting
+- from: admission-items
+  to: filter
+  type: has_many
+  via: path nesting
+- from: agenda-items
+  to: schedules
+  type: has_many
+  via: path nesting
+- from: appointment-events
+  to: appointment-available-times
+  type: has_many
+  via: path nesting
+- from: appointment-events
+  to: appointment-types
+  type: has_many
+  via: path nesting
+- from: appointment-events
+  to: appointments
+  type: has_many
+  via: path nesting
+- from: appointment-events
+  to: locations
+  type: has_many
+  via: path nesting
+- from: async
+  to: status
+  type: has_many
+  via: path nesting
+- from: attendee-insights
+  to: scores
+  type: has_many
+  via: path nesting
+- from: attendee-insights
+  to: stats
+  type: has_many
+  via: path nesting
+- from: attendee-messages
+  to: members
+  type: has_many
+  via: path nesting
+- from: attendees
+  to: activities
+  type: has_many
+  via: path nesting
+- from: attendees
+  to: audience-segments
+  type: has_many
+  via: path nesting
+- from: attendees
+  to: email-subscriptions
+  type: has_many
+  via: path nesting
+- from: attendees
+  to: filter
+  type: has_many
+  via: path nesting
+- from: attendees
+  to: internal-information-questions
+  type: has_many
+  via: path nesting
+- from: audience-segments
+  to: attendees
+  type: has_many
+  via: path nesting
+- from: audience-segments
+  to: filter
+  type: has_many
+  via: path nesting
+- from: badges
+  to: filter
+  type: has_many
+  via: path nesting
+- from: budget-items
+  to: allocations
+  type: has_many
+  via: path nesting
+- from: budget-items
+  to: budget-payments
+  type: has_many
+  via: path nesting
+- from: budget-items
+  to: custom-fields
+  type: has_many
+  via: path nesting
+- from: budget-payments
+  to: invoices
+  type: has_many
+  via: path nesting
+- from: bulk-jobs
+  to: cancel
+  type: has_many
+  via: path nesting
+- from: bulk-jobs
+  to: data
+  type: has_many
+  via: path nesting
+- from: bulk-jobs
+  to: results
+  type: has_many
+  via: path nesting
+- from: bulk-jobs
+  to: run
+  type: has_many
+  via: path nesting
+- from: campaigns
+  to: email-templates
+  type: has_many
+  via: path nesting
+- from: cards
+  to: transactions
+  type: has_many
+  via: path nesting
+- from: communications
+  to: configuration
+  type: has_many
+  via: path nesting
+- from: communications
+  to: messages
+  type: has_many
+  via: path nesting
+- from: contact-groups
+  to: contacts
+  type: has_many
+  via: path nesting
+- from: contacts
+  to: custom-fields
+  type: has_many
+  via: path nesting
+- from: contacts
+  to: filter
+  type: has_many
+  via: path nesting
+- from: contacts
+  to: history
+  type: has_many
+  via: path nesting
+- from: contacts
+  to: hooks
+  type: has_many
+  via: path nesting
+- from: contacts
+  to: merge
+  type: has_many
+  via: path nesting
+- from: contacts
+  to: obfuscate
+  type: has_many
+  via: path nesting
+- from: contacts
+  to: profile-images
+  type: has_many
+  via: path nesting
+- from: contacts
+  to: related-contacts
+  type: has_many
+  via: path nesting
+- from: copy
+  to: status
+  type: has_many
+  via: path nesting
+- from: currencies
+  to: conversion-rates
+  type: has_many
+  via: path nesting
+- from: custom-fields
+  to: advanced-logic
+  type: has_many
+  via: path nesting
+- from: custom-fields
+  to: answers
+  type: has_many
+  via: path nesting
+- from: custom-fields
+  to: translations
+  type: has_many
+  via: path nesting
+- from: details
+  to: overview
+  type: has_many
+  via: path nesting
+- from: discounts
+  to: agenda-items
+  type: has_many
+  via: path nesting
+- from: docs
+  to: filter
+  type: has_many
+  via: path nesting
+- from: donation-items
+  to: filter
+  type: has_many
+  via: path nesting
+- from: email-templates
+  to: email
+  type: has_many
+  via: path nesting
+- from: emails
+  to: status
+  type: has_many
+  via: path nesting
+- from: emarketing
+  to: campaigns
+  type: has_many
+  via: path nesting
+- from: emarketing
+  to: emails
+  type: has_many
+  via: path nesting
+- from: enrollment
+  to: filter
+  type: has_many
+  via: path nesting
+- from: event-questions
+  to: choices
+  type: has_many
+  via: path nesting
+- from: event-roles
+  to: assignments
+  type: has_many
+  via: path nesting
+- from: event-travel
+  to: air-actuals
+  type: has_many
+  via: path nesting
+- from: event-travel
+  to: air-requests
+  type: has_many
+  via: path nesting
+- from: event-travel
+  to: alternate-answers
+  type: has_many
+  via: path nesting
+- from: event-travel
+  to: hotel-requests
+  type: has_many
+  via: path nesting
+- from: event-travel
+  to: housing-reservation-requests
+  type: has_many
+  via: path nesting
+- from: events
+  to: async
+  type: has_many
+  via: path nesting
+- from: events
+  to: attendee-messages
+  type: has_many
+  via: path nesting
+- from: events
+  to: badge-print-jobs
+  type: has_many
+  via: path nesting
+- from: events
+  to: badge-printer-pools
+  type: has_many
+  via: path nesting
+- from: events
+  to: badges
+  type: has_many
+  via: path nesting
+- from: events
+  to: budget-items
+  type: has_many
+  via: path nesting
+- from: events
+  to: budget-payments
+  type: has_many
+  via: path nesting
+- from: events
+  to: budget-totals
+  type: has_many
+  via: path nesting
+- from: events
+  to: check-in
+  type: has_many
+  via: path nesting
+- from: events
+  to: copy
+  type: has_many
+  via: path nesting
+- from: events
+  to: custom-fields
+  type: has_many
+  via: path nesting
+- from: events
+  to: discounts
+  type: has_many
+  via: path nesting
+- from: events
+  to: donation-items
+  type: has_many
+  via: path nesting
+- from: events
+  to: emails
+  type: has_many
+  via: path nesting
+- from: events
+  to: event-travel
+  type: has_many
+  via: path nesting
+- from: events
+  to: exhibitor-categories
+  type: has_many
+  via: path nesting
+- from: events
+  to: exhibitor-questions
+  type: has_many
+  via: path nesting
+- from: events
+  to: exhibitors
+  type: has_many
+  via: path nesting
+- from: events
+  to: features
+  type: has_many
+  via: path nesting
+- from: events
+  to: fee-items
+  type: has_many
+  via: path nesting
+- from: events
+  to: filter
+  type: has_many
+  via: path nesting
+- from: events
+  to: invitation-lists
+  type: has_many
+  via: path nesting
+- from: events
+  to: meeting-requests
+  type: has_many
+  via: path nesting
+- from: events
+  to: membership-items
+  type: has_many
+  via: path nesting
+- from: events
+  to: orders
+  type: has_many
+  via: path nesting
+- from: events
+  to: planning-documents
+  type: has_many
+  via: path nesting
+- from: events
+  to: quantity-items
+  type: has_many
+  via: path nesting
+- from: events
+  to: registration-paths
+  type: has_many
+  via: path nesting
+- from: events
+  to: registration-types
+  type: has_many
+  via: path nesting
+- from: events
+  to: seatings
+  type: has_many
+  via: path nesting
+- from: events
+  to: session-locations
+  type: has_many
+  via: path nesting
+- from: events
+  to: sponsorship-levels
+  type: has_many
+  via: path nesting
+- from: events
+  to: surveys
+  type: has_many
+  via: path nesting
+- from: events
+  to: taxes
+  type: has_many
+  via: path nesting
+- from: events
+  to: transactions
+  type: has_many
+  via: path nesting
+- from: events
+  to: user-groups
+  type: has_many
+  via: path nesting
+- from: events
+  to: vouchers
+  type: has_many
+  via: path nesting
+- from: events
+  to: weblinks
+  type: has_many
+  via: path nesting
+- from: exhibitor-categories
+  to: banner-files
+  type: has_many
+  via: path nesting
+- from: exhibitor-categories
+  to: exhibitors
+  type: has_many
+  via: path nesting
+- from: exhibitors
+  to: admins
+  type: has_many
+  via: path nesting
+- from: exhibitors
+  to: banner-files
+  type: has_many
+  via: path nesting
+- from: exhibitors
+  to: booth-staff
+  type: has_many
+  via: path nesting
+- from: exhibitors
+  to: exhibitor-answers
+  type: has_many
+  via: path nesting
+- from: exhibitors
+  to: exhibitor-categories
+  type: has_many
+  via: path nesting
+- from: exhibitors
+  to: files
+  type: has_many
+  via: path nesting
+- from: exhibitors
+  to: leads
+  type: has_many
+  via: path nesting
+- from: exhibitors
+  to: logo-files
+  type: has_many
+  via: path nesting
+- from: exhibitors
+  to: questions
+  type: has_many
+  via: path nesting
+- from: exhibitors
+  to: registration-packs
+  type: has_many
+  via: path nesting
+- from: exhibitors
+  to: weblinks
+  type: has_many
+  via: path nesting
+- from: external
+  to: metadata
+  type: has_many
+  via: path nesting
+- from: features
+  to: launch
+  type: has_many
+  via: path nesting
+- from: hotels
+  to: available-nights
+  type: has_many
+  via: path nesting
+- from: hotels
+  to: room-types
+  type: has_many
+  via: path nesting
+- from: housing-events
+  to: hotels
+  type: has_many
+  via: path nesting
+- from: housing-events
+  to: inventory
+  type: has_many
+  via: path nesting
+- from: housing-events
+  to: reservations
+  type: has_many
+  via: path nesting
+- from: housing-events
+  to: summaries
+  type: has_many
+  via: path nesting
+- from: housing-hotels
+  to: rooms
+  type: has_many
+  via: path nesting
+- from: hubs
+  to: members
+  type: has_many
+  via: path nesting
+- from: items
+  to: discounts
+  type: has_many
+  via: path nesting
+- from: lead-sources
+  to: sections
+  type: has_many
+  via: path nesting
+- from: leads
+  to: answers
+  type: has_many
+  via: path nesting
+- from: leads
+  to: filter
+  type: has_many
+  via: path nesting
+- from: logs
+  to: communications
+  type: has_many
+  via: path nesting
+- from: meeting-request-forms
+  to: requests
+  type: has_many
+  via: path nesting
+- from: meeting-requests
+  to: documents
+  type: has_many
+  via: path nesting
+- from: meeting-rooms
+  to: overview
+  type: has_many
+  via: path nesting
+- from: meeting-rooms
+  to: overviews
+  type: has_many
+  via: path nesting
+- from: membership-items
+  to: filter
+  type: has_many
+  via: path nesting
+- from: messages
+  to: filter
+  type: has_many
+  via: path nesting
+- from: oauth2
+  to: authorize
+  type: has_many
+  via: path nesting
+- from: oauth2
+  to: token
+  type: has_many
+  via: path nesting
+- from: obfuscate
+  to: status
+  type: has_many
+  via: path nesting
+- from: orders
+  to: items
+  type: has_many
+  via: path nesting
+- from: process-forms
+  to: submissions
+  type: has_many
+  via: path nesting
+- from: program-items
+  to: docs
+  type: has_many
+  via: path nesting
+- from: program-items
+  to: filter
+  type: has_many
+  via: path nesting
+- from: program-items
+  to: speakers
+  type: has_many
+  via: path nesting
+- from: quantity-items
+  to: filter
+  type: has_many
+  via: path nesting
+- from: recipients
+  to: history
+  type: has_many
+  via: path nesting
+- from: reservation-requests
+  to: reservations
+  type: has_many
+  via: path nesting
+- from: respondents
+  to: email-templates
+  type: has_many
+  via: path nesting
+- from: respondents
+  to: responses
+  type: has_many
+  via: path nesting
+- from: rfps
+  to: agenda-items
+  type: has_many
+  via: path nesting
+- from: rfps
+  to: attachments
+  type: has_many
+  via: path nesting
+- from: rfps
+  to: custom-fields
+  type: has_many
+  via: path nesting
+- from: rfps
+  to: guest-rooms
+  type: has_many
+  via: path nesting
+- from: rfps
+  to: internal-documents
+  type: has_many
+  via: path nesting
+- from: rfps
+  to: lead-sources
+  type: has_many
+  via: path nesting
+- from: rfps
+  to: past-events
+  type: has_many
+  via: path nesting
+- from: rfps
+  to: questions
+  type: has_many
+  via: path nesting
+- from: rfps
+  to: recipients
+  type: has_many
+  via: path nesting
+- from: rfps
+  to: suppliers
+  type: has_many
+  via: path nesting
+- from: room-types
+  to: inventory
+  type: has_many
+  via: path nesting
+- from: rooms
+  to: rates
+  type: has_many
+  via: path nesting
+- from: scim
+  to: v2
+  type: has_many
+  via: path nesting
+- from: seatings
+  to: assignments
+  type: has_many
+  via: path nesting
+- from: seatings
+  to: tables
+  type: has_many
+  via: path nesting
+- from: sessions
+  to: attendance
+  type: has_many
+  via: path nesting
+- from: sessions
+  to: check-in
+  type: has_many
+  via: path nesting
+- from: sessions
+  to: custom-fields
+  type: has_many
+  via: path nesting
+- from: sessions
+  to: docs
+  type: has_many
+  via: path nesting
+- from: sessions
+  to: enrollment
+  type: has_many
+  via: path nesting
+- from: sessions
+  to: filter
+  type: has_many
+  via: path nesting
+- from: sessions
+  to: speakers
+  type: has_many
+  via: path nesting
+- from: speakers
+  to: docs
+  type: has_many
+  via: path nesting
+- from: speakers
+  to: filter
+  type: has_many
+  via: path nesting
+- from: speakers
+  to: profile-images
+  type: has_many
+  via: path nesting
+- from: speakers
+  to: sessions
+  type: has_many
+  via: path nesting
+- from: standard-surveys
+  to: email-templates
+  type: has_many
+  via: path nesting
+- from: standard-surveys
+  to: questions
+  type: has_many
+  via: path nesting
+- from: standard-surveys
+  to: respondents
+  type: has_many
+  via: path nesting
+- from: standard-surveys
+  to: responses
+  type: has_many
+  via: path nesting
+- from: surveys
+  to: questions
+  type: has_many
+  via: path nesting
+- from: surveys
+  to: respondents
+  type: has_many
+  via: path nesting
+- from: surveys
+  to: responses
+  type: has_many
+  via: path nesting
+- from: tables
+  to: seats
+  type: has_many
+  via: path nesting
+- from: transactions
+  to: items
+  type: has_many
+  via: path nesting
+- from: travel-accounts
+  to: supplier-accounts
+  type: has_many
+  via: path nesting
+- from: travel-programs
+  to: questions
+  type: has_many
+  via: path nesting
+- from: travel-proposals
+  to: bids
+  type: has_many
+  via: path nesting
+- from: travel-suppliers
+  to: brands
+  type: has_many
+  via: path nesting
+- from: travel-suppliers
+  to: chains
+  type: has_many
+  via: path nesting
+- from: travel-suppliers
+  to: properties
+  type: has_many
+  via: path nesting
+- from: travel-suppliers
+  to: property-rooms
+  type: has_many
+  via: path nesting
+- from: usage
+  to: tier
+  type: has_many
+  via: path nesting
+- from: v2
+  to: Groups
+  type: has_many
+  via: path nesting
+- from: v2
+  to: ResourceTypes
+  type: has_many
+  via: path nesting
+- from: v2
+  to: Schemas
+  type: has_many
+  via: path nesting
+- from: v2
+  to: ServiceProviderConfig
+  type: has_many
+  via: path nesting
+- from: v2
+  to: Users
+  type: has_many
+  via: path nesting
+- from: venues
+  to: details
+  type: has_many
+  via: path nesting
+- from: venues
+  to: facility
+  type: has_many
+  via: path nesting
+- from: venues
+  to: meeting-rooms
+  type: has_many
+  via: path nesting
+- from: videos
+  to: audio-tracks
+  type: has_many
+  via: path nesting
+- from: videos
+  to: renditions
+  type: has_many
+  via: path nesting
+- from: videos
+  to: text-tracks
+  type: has_many
+  via: path nesting
+- from: videos
+  to: views
+  type: has_many
+  via: path nesting
+- from: vouchers
+  to: attendees
+  type: has_many
+  via: path nesting
+- from: vouchers
+  to: filter
+  type: has_many
+  via: path nesting
+- from: webcasts
+  to: attendee-links
+  type: has_many
+  via: path nesting
+- from: webcasts
+  to: players
+  type: has_many
+  via: path nesting
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

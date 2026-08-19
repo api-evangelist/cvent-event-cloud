@@ -1,0 +1,1040 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cvent REST APIs — Event Cloud Budget API",
+    "version": "ea"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Budget",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Budget Items",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/budget-items",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been modified after this time point."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been modified before this point"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field            | Operators  |\n|:-----------------|:-----------|\n| event.id         | `eq`, `ne` |\n| rfp.id           | `eq`, `ne` |\n| budgetVersion.id | `eq`, `ne` |\n| id               | `eq`, `ne` |\n| category.id      | `eq`, `ne` |\n| category.name    | `eq`, `ne` |\n| subCategory.id   | `eq`, `ne` |\n| subCategory.name | `eq`, `ne` |\n\nThe following logical operators are supported for combining filters:\n* and\n* or\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of budget items across all events linked to the account associated with the access token. The data can be filtered by the specified after and before date parameters, based on the last modified date, for a maximum duration of 1 year per request."
+        },
+        {
+          "info": {
+            "name": "List Account Vendors",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/budget-vendors",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field         | Operators                          |\n|:--------------|:-----------------------------------|\n| id            | `eq`, `ne`                         |\n| lastModified  | `eq`, `ne`, `lt`, `le`, `gt`, `ge` |\n| active        | `eq`, `ne`                         |\n\nThe following logical operators are supported for combining filters:\n* and\n* or\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of account-level budget vendors configured in Admin > Budget > Vendors for your account. Event-scoped vendors and CSN-only vendors are not included in this endpoint."
+        },
+        {
+          "info": {
+            "name": "List Cards",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/cards",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field    | Operators |\n|:---------|:----------|\n| event.id | `eq`      |\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of payment cards associated to the account of the access token."
+        },
+        {
+          "info": {
+            "name": "List Card Transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/cards/transactions",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field                          | Operators              |\n|:-------------------------------|:-----------------------|\n| event.id                       | `eq`                   |\n| type                           | `eq`, `ne`             |\n| status                         | `eq`, `ne`             |\n| fromDate                       | `gt`, `ge`             |\n| toDate                         | `lt`, `le`             |\n| reconciliations.reconciledDate | `lt`, `le`, `gt`, `ge` |\n\nThe following logical operators are supported for combining filters:\n* and\n* or\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of card transactions associated with the account of the access token."
+        },
+        {
+          "info": {
+            "name": "Create Card Transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/cards/transactions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Creates a single card transaction record."
+        },
+        {
+          "info": {
+            "name": "Update Card Transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/cards/transactions/:transactionId",
+            "params": [
+              {
+                "name": "transactionId",
+                "value": "1VCAPITRAN18012023",
+                "type": "path",
+                "description": "Unique ID of a transaction."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Updates a card transaction record."
+        },
+        {
+          "info": {
+            "name": "Delete Card Transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-platform.cvent.com/ea/cards/transactions/:transactionId",
+            "params": [
+              {
+                "name": "transactionId",
+                "value": "1VCAPITRAN18012023",
+                "type": "path",
+                "description": "Unique ID of a transaction."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Deletes a card transaction record."
+        },
+        {
+          "info": {
+            "name": "List Currency Conversion Rates",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/currencies/:currency/conversion-rates",
+            "params": [
+              {
+                "name": "currency",
+                "value": "USD",
+                "type": "path",
+                "description": "The ISO 4217 standard format currency code."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field     | Operators                    |\n|:----------|:-----------------------------|\n| id        | `eq`                         |\n| startDate | `gt`, `ge`, `lt`, `le`, `eq` |\n| endDate   | `gt`, `ge`, `lt`, `le`, `eq` |\n\nThe following logical operators are supported for combining filters:\n* and\n* or\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of conversion rates for a currency in an account."
+        },
+        {
+          "info": {
+            "name": "Create Conversion Rate",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/currencies/:currency/conversion-rates",
+            "params": [
+              {
+                "name": "currency",
+                "value": "USD",
+                "type": "path",
+                "description": "The ISO 4217 standard format currency code."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Create conversion rate for a currency in an account."
+        },
+        {
+          "info": {
+            "name": "Update Conversion Rate",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/currencies/:currency/conversion-rates/:conversionRateId",
+            "params": [
+              {
+                "name": "currency",
+                "value": "USD",
+                "type": "path",
+                "description": "The ISO 4217 standard format currency code."
+              },
+              {
+                "name": "conversionRateId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of currency conversion rate."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Updates a conversion rate for a currency in an account."
+        },
+        {
+          "info": {
+            "name": "Delete Conversion Rate",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-platform.cvent.com/ea/currencies/:currency/conversion-rates/:conversionRateId",
+            "params": [
+              {
+                "name": "currency",
+                "value": "USD",
+                "type": "path",
+                "description": "The ISO 4217 standard format currency code."
+              },
+              {
+                "name": "conversionRateId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of currency conversion rate."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Deletes conversion rate defined for currency."
+        },
+        {
+          "info": {
+            "name": "List Event Budget Items",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/budget-items",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field               | Operators                          | Notes                                                                                                                                         |\n|:--------------------|:-----------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------|\n| id                  | `eq`                               |                                                                                                                                               |\n| costType            | `eq`, `ne`                         |                                                                                                                                               |\n| category.id         | `eq`, `ne`                         |                                                                                                                                               |\n| category.name       | `eq`, `ne`                         |                                                                                                                                               |\n| subCategory.id      | `eq`, `ne`                         |                                                                                                                                               |\n| subCategory.name    | `eq`, `ne`                         |                                                                                                                                               |\n| status              | `eq`, `ne`                         |                                                                                                                                               |\n| vendor.id           | `eq`, `ne`                         |                                                                                                                                               |\n| vendor.name         | `eq`, `ne`                         |                                                                                                                                               |\n| date                | `gt`, `ge`, `lt`, `le`             |                                                                                                                                               |\n| customFields.{uuid} | `eq`, `ne`, `lt`, `le`, `gt`, `ge` |                                                                                                                                               |\n| deleted             | `eq`, `ne`                         | Budget items that are deleted are available for 3 months after deletion. After this, they are removed and no longer appear in search results. |\n\nThe following logical operators are supported for combining filters:\n* and\n* or\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of budget items for event associated to the account of the access token."
+        },
+        {
+          "info": {
+            "name": "Create Budget Item",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/events/:id/budget-items",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Create single Budget Item based on the values provided."
+        },
+        {
+          "info": {
+            "name": "List Budget Allocations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/budget-items/allocations",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field            | Operators                    |\n|:-----------------|:-----------------------------|\n| budgetVersion.id | `eq`                         |\n| budgetItem.id    | `eq`                         |\n| category.id      | `eq`, `ne`                   |\n| subcategory.id   | `eq`, `ne`                   |\n| generalLedger.id | `eq`, `ne`                   |\n| value            | `lt`, `le`, `gt`, `ge`, `eq` |\n\nThe following logical operators are supported for combining filters:\n* and\n* or\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of budget allocations for all budget items within an event."
+        },
+        {
+          "info": {
+            "name": "Update Budget Item",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/events/:id/budget-items/:budgetItemId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "budgetItemId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of a budget item."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Update single Budget Item based on the values provided."
+        },
+        {
+          "info": {
+            "name": "Update Budget Allocations",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/events/:id/budget-items/:budgetItemId/allocations",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "budgetItemId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of a budget item."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Bulk add or update budget allocations in a budget item. If budget allocations already exist for the budget item, they will be updated."
+        },
+        {
+          "info": {
+            "name": "Delete  Budget Allocations",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-platform.cvent.com/ea/events/:id/budget-items/:budgetItemId/allocations",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "budgetItemId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of a budget item."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Delete all budget allocations for a given budget item."
+        },
+        {
+          "info": {
+            "name": "Create Budget Payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/events/:id/budget-items/:budgetItemId/budget-payments",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "budgetItemId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of a budget item."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Create single payment for the budget item given in an event."
+        },
+        {
+          "info": {
+            "name": "Update Budget Payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/events/:id/budget-items/:budgetItemId/budget-payments/:paymentId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "budgetItemId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of a budget item."
+              },
+              {
+                "name": "paymentId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of a payment."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Updates a payment for a budget item."
+        },
+        {
+          "info": {
+            "name": "Delete Budget Payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-platform.cvent.com/ea/events/:id/budget-items/:budgetItemId/budget-payments/:paymentId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "budgetItemId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of a budget item."
+              },
+              {
+                "name": "paymentId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of a payment."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Deletes a budget item payment."
+        },
+        {
+          "info": {
+            "name": "Update Budget Cstm Fld Answers",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/events/:id/budget-items/:budgetItemId/custom-fields/:customFieldId/answers",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "budgetItemId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of a budget item."
+              },
+              {
+                "name": "customFieldId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of the custom field."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Updates answers to a budget custom field using the details you provided in the body of the request. Answers must be formatted correctly according to the specific type of custom field. The available fields and their formats are listed below:\n* **Open Ended Text - Date/Time**. This field type has several possible user-selected answer formats:\n  - Date/Time (2022-01-01T12:00:00.000Z). Denoted by *DateTime* in the response payload.\n  - Date (2022-01-01). Denoted by *Date* in the response payload.\n* "
+        },
+        {
+          "info": {
+            "name": "List Budget Payments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/budget-payments",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field            | Operators              | Notes                                                                                                                                                                                         |\n|:-----------------|:-----------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n| budgetItem.id    | `eq`                   |                                                                                                                                                                                               |\n| id               | `eq`                   |                                                                                                                                                                                               |\n| budgetVersion.id | `eq`                   |                                                                                                                                                                                               |\n| lastModified     | `gt`, `ge`, `lt`, `le` | `lastModified` refers to the date the associated budget item was last modified. Filtering by `lastModified` returns payments linked to budget items modified within the specified date range. |\n\nThe following logical operators are supported for combining filters:\n* and\n* or\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of payments for budget items in an event."
+        },
+        {
+          "info": {
+            "name": "Assign Invoice To Payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/events/:id/budget-payments/:paymentId/invoices/:invoiceId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "paymentId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of a payment."
+              },
+              {
+                "name": "invoiceId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an invoice."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Assign a single invoice to a payment using the ID of file. Upload files via the <a href=\"#operation/uploadFile\">file upload</a> endpoint."
+        },
+        {
+          "info": {
+            "name": "List Budget Totals",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/budget-totals",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field           | Operators  |\n|:----------------|:-----------|\n| version.id      | `eq`       |\n| version.name    | `eq`       |\n| version.default | `eq`, `ne` |\n\nThe following logical operators are supported for combining filters:\n* and\n* or\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of budget totals for event associated to the account of the access token."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

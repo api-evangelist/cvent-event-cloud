@@ -1,0 +1,112 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cvent REST APIs — Event Cloud Events+ Hub API",
+    "version": "ea"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Events+ Hub",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Events+ Hubs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/hubs",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field | Operators  |\n|-------|------------|\n| id    | `eq`, `ne` |\n\nLimit for the number of fields that can be passed in a filter is 35.\n\nThe following logical operators are supported for combining filters:\n* or\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://api-platform.cvent.com/ea/oauth2/authorize",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get a paginated list of all Events+ hubs associated with your account. Each Events+ hub returned contains owner and theme information as well as the current status."
+        },
+        {
+          "info": {
+            "name": "Get Events+ Hub Members",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/hubs/:hubId/members",
+            "params": [
+              {
+                "name": "hubId",
+                "value": "",
+                "type": "path",
+                "description": "The identifier of an Events+ Hub"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field                   | Operators  |\n|-------------------------|------------|\n| firstName               | `contains` |\n| lastName                | `contains` |\n| emailAddress            | `contains` |\n| jobTitle                | `contains` |\n| companyName             | `contains` |\n| designation             | `contains` |\n| workAddress.city        | `contains` |\n| workAddress.state       | `contains` |\n| workAddress.country     | `contains` |\n\nLimit for the number of fields that can be passed in a filter is 35.\n\nThe following logical operators are supported for combining filters:\n* and\n* or\n"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "The sort order passed as a parameter, used to control the order of the\nsearch results as a priority ordered list of sorts\n\nThere are two orders:\n  * ascending: ASC\n  * descending: DESC\n\nThe following fields are sortable:\n  * firstName (member first name)\n  * lastName (member last name)\n  * emailAddress (member email address)\n  * jobTitle (member job title)\n  * designation (Designation of member)\n  * workAddress.city (Work City of member)\n  * workAddress.state (Work State of member)\n  * workAddress.country (Work Country of member)\n  * companyName (member company)\n  * registrationDate (member registration date)\n  * lastLoginDate (member last login date)\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://api-platform.cvent.com/ea/oauth2/authorize",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Fetches a list of members associated with a particular Events+ hub."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,120 @@
+generated: '2026-08-13'
+method: searched
+source: https://developers.cvent.com/docs/webhooks/overview
+provider: Cvent Event Cloud
+providerId: cvent-event-cloud
+type: Webhooks
+asyncapi_published: false
+description: >-
+  Cvent publishes a full webhook catalogue on its developer portal — 40 documented message types
+  across eight subject areas, each with its own reference page — plus a REST surface for managing
+  subscriptions (the Hooks tag, /hooks and /contacts/hooks). It does NOT publish an AsyncAPI
+  description of any of it, so the event surface is documented for humans and unavailable to
+  machines except by reading the OpenAPI callback declaration.
+docs:
+  overview: https://developers.cvent.com/docs/webhooks/overview
+  understanding: https://developers.cvent.com/docs/webhooks/understanding-webhooks
+  messages: https://developers.cvent.com/docs/webhooks/messages/messages
+  technical_requirements: https://developers.cvent.com/docs/webhooks/technical-requirements
+  account_setup: https://developers.cvent.com/docs/webhooks/tutorials/account-setup
+  event_setup: https://developers.cvent.com/docs/webhooks/guides/event-setup
+  session_setup: https://developers.cvent.com/docs/webhooks/guides/session-setup
+  manual_sync: https://developers.cvent.com/docs/webhooks/guides/manual-sync
+  reports: https://developers.cvent.com/docs/webhooks/guides/webhooks-reports
+  troubleshooting: https://developers.cvent.com/docs/webhooks/reference/troubleshooting
+  timezone_names: https://developers.cvent.com/docs/webhooks/reference/timezone-names
+
+management_api:
+  tag: Hooks
+  openapi: openapi/cvent-event-cloud-hooks-api-openapi.yml
+  paths: [/hooks, /contacts/hooks]
+  callback_declared: true
+  callback_note: >-
+    POST /contacts/hooks is the one operation in the whole 458-operation spec that declares an
+    OpenAPI `callbacks` object, so the contact-hook payload shape IS machine-readable. The other
+    39 message types are documented only in prose.
+  callback_security:
+    - scheme: CallbackApiKeyAuth
+      type: apiKey
+      in: header
+      name: Authorization
+      description: >-
+        Tells Cvent to use API key auth when invoking YOUR callback endpoint. Cannot be used to call
+        Cvent.
+    - scheme: CallbackBasicAuth
+      type: http
+      scheme_name: basic
+      description: Tells Cvent to use HTTP Basic when invoking your callback endpoint.
+
+channels:
+  - group: Attendees
+    messages:
+      - {name: registered-for-event, docs: https://developers.cvent.com/docs/webhooks/messages/attendees/registered-for-event}
+      - {name: registered-for-session, docs: https://developers.cvent.com/docs/webhooks/messages/attendees/registered-for-session}
+      - {name: registration-modified, docs: https://developers.cvent.com/docs/webhooks/messages/attendees/registration-modified}
+      - {name: registration-cancelled, docs: https://developers.cvent.com/docs/webhooks/messages/attendees/registration-cancelled}
+      - {name: session-registration-cancelled, docs: https://developers.cvent.com/docs/webhooks/messages/attendees/session-registration-cancelled}
+      - {name: abandons-registration, docs: https://developers.cvent.com/docs/webhooks/messages/attendees/abandons-registration}
+      - {name: substituted-into-event-registration, docs: https://developers.cvent.com/docs/webhooks/messages/attendees/substituted-into-event-registration}
+      - {name: marked-as-no-show, docs: https://developers.cvent.com/docs/webhooks/messages/attendees/marked-as-no-show}
+      - {name: marked-session-no-show, docs: https://developers.cvent.com/docs/webhooks/messages/attendees/marked-session-no-show}
+      - {name: marked-event-participant, docs: https://developers.cvent.com/docs/webhooks/messages/attendees/marked-event-participant}
+      - {name: marked-session-participant, docs: https://developers.cvent.com/docs/webhooks/messages/attendees/marked-session-participant}
+  - group: Attendee Emails
+    messages:
+      - {name: email-sent, docs: https://developers.cvent.com/docs/webhooks/messages/attendee-emails/email-sent}
+      - {name: email-opened, docs: https://developers.cvent.com/docs/webhooks/messages/attendee-emails/email-opened}
+      - {name: email-bounces, docs: https://developers.cvent.com/docs/webhooks/messages/attendee-emails/email-bounces}
+      - {name: added-to-invitation-list, docs: https://developers.cvent.com/docs/webhooks/messages/attendee-emails/added-to-invitation-list}
+      - {name: declines-invitation, docs: https://developers.cvent.com/docs/webhooks/messages/attendee-emails/declines-invitation}
+      - {name: unsubscribed-from-event-email, docs: https://developers.cvent.com/docs/webhooks/messages/attendee-emails/unsubscribed-from-event-email}
+      - {name: resubscribes-to-event-email, docs: https://developers.cvent.com/docs/webhooks/messages/attendee-emails/resubscribes-to-event-email}
+  - group: Contacts
+    messages:
+      - {name: contact-created, docs: https://developers.cvent.com/docs/webhooks/messages/contacts/contact-created}
+      - {name: contact-edited, docs: https://developers.cvent.com/docs/webhooks/messages/contacts/contact-edited}
+      - {name: contact-deleted, docs: https://developers.cvent.com/docs/webhooks/messages/contacts/contact-deleted}
+      - {name: confirm-email-opt-in, docs: https://developers.cvent.com/docs/webhooks/messages/contacts/confirm-email-opt-in}
+      - {name: contact-opts-out-of-emails, docs: https://developers.cvent.com/docs/webhooks/messages/contacts/contact-opts-out-of-emails}
+      - {name: opts-back-in-to-emails, docs: https://developers.cvent.com/docs/webhooks/messages/contacts/opts-back-in-to-emails}
+  - group: Events
+    messages:
+      - {name: event-modified, docs: https://developers.cvent.com/docs/webhooks/messages/events/event-modified}
+      - {name: event-cancelled, docs: https://developers.cvent.com/docs/webhooks/messages/events/event-cancelled}
+      - {name: event-deleted, docs: https://developers.cvent.com/docs/webhooks/messages/events/event-deleted}
+  - group: Event Sessions
+    messages:
+      - {name: session-created, docs: https://developers.cvent.com/docs/webhooks/messages/event-sessions/session-created}
+      - {name: session-modified, docs: https://developers.cvent.com/docs/webhooks/messages/event-sessions/session-modified}
+      - {name: session-deleted, docs: https://developers.cvent.com/docs/webhooks/messages/event-sessions/session-deleted}
+  - group: Event Speakers
+    messages:
+      - {name: speaker-created, docs: https://developers.cvent.com/docs/webhooks/messages/event-speakers/speaker-created}
+      - {name: speaker-modified, docs: https://developers.cvent.com/docs/webhooks/messages/event-speakers/speaker-modified}
+      - {name: speaker-deleted, docs: https://developers.cvent.com/docs/webhooks/messages/event-speakers/speaker-deleted}
+  - group: Meeting Requests
+    messages:
+      - {name: meeting-request-submitted, docs: https://developers.cvent.com/docs/webhooks/messages/meeting-requests/meeting-request-submitted}
+      - {name: meeting-request-modified, docs: https://developers.cvent.com/docs/webhooks/messages/meeting-requests/meeting-request-modified}
+  - group: Manual sync
+    note: Operator-triggered re-emission of a record, used to backfill or repair a downstream system.
+    messages:
+      - {name: manual-event, docs: https://developers.cvent.com/docs/webhooks/messages/manual/manual-event}
+      - {name: manual-session, docs: https://developers.cvent.com/docs/webhooks/messages/manual/manual-session}
+      - {name: manual-speaker, docs: https://developers.cvent.com/docs/webhooks/messages/manual/manual-speaker}
+      - {name: manual-attendee, docs: https://developers.cvent.com/docs/webhooks/messages/manual/manual-attendee}
+      - {name: manual-attendee-abandoned, docs: https://developers.cvent.com/docs/webhooks/messages/manual/manual-attendee-abandoned}
+
+summary:
+  message_types: 40
+  groups: 8
+  asyncapi_document: false
+  machine_readable_payloads: 1
+  note: >-
+    40 documented message types, exactly one of which has a machine-readable payload contract. An
+    AsyncAPI document over this catalogue is the single largest missing artifact on Cvent's event
+    surface.
+
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

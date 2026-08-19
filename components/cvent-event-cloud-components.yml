@@ -1,0 +1,81 @@
+generated: '2026-08-13'
+method: searched
+source: https://developers.cvent.com/docs/custom-widgets/overview
+provider: Cvent Event Cloud
+providerId: cvent-event-cloud
+description: >-
+  Cvent's client-side extensibility surface is Custom Widgets — developer-authored components that
+  render inside Cvent-hosted event websites and registration flows, with a browser-side SDK for
+  reading event objects and driving registration. This is distinct from the REST SDKs in packages/:
+  a Custom Widget runs in Cvent's page, not in your server.
+families:
+  - name: Custom Widgets
+    kind: embedded page component
+    docs: https://developers.cvent.com/docs/custom-widgets/overview
+    description: >-
+      A packaged widget with three required assets — an element (what renders), an editor (what the
+      planner configures in Cvent's designer) and a configuration manifest — published into a Cvent
+      account and then dropped onto event pages by non-developers.
+    required_assets:
+      - name: Custom Widget Element
+        docs: https://developers.cvent.com/docs/custom-widgets/required-assets/custom-widget-element
+        description: The rendered component itself.
+      - name: Custom Widget Editor
+        docs: https://developers.cvent.com/docs/custom-widgets/required-assets/custom-widget-editor
+        description: The configuration UI a planner sees inside Cvent's page designer.
+      - name: Custom Widget Configuration
+        docs: https://developers.cvent.com/docs/custom-widgets/required-assets/custom-widget-configuration
+        description: The manifest describing the widget and its configurable properties.
+    publishing:
+      docs: https://developers.cvent.com/docs/custom-widgets/publishing
+    sdk:
+      name: Custom Widget SDK
+      kind: browser JavaScript
+      docs: https://developers.cvent.com/docs/custom-widgets/sdk/retrieving-event-objects
+      capabilities:
+        - name: Retrieving event objects
+          docs: https://developers.cvent.com/docs/custom-widgets/sdk/retrieving-event-objects
+          description: Read the event, session, speaker and attendee objects for the page the widget is on.
+        - name: Registration methods
+          docs: https://developers.cvent.com/docs/custom-widgets/sdk/registration-methods
+          description: Drive registration actions from inside a widget.
+        - name: Navigation
+          docs: https://developers.cvent.com/docs/custom-widgets/sdk/navigation
+          description: Move the visitor between pages in the Cvent-hosted flow.
+        - name: Supported expressions
+          docs: https://developers.cvent.com/docs/custom-widgets/sdk/supported-expressions
+          description: The binding/expression grammar available to widget templates.
+    examples:
+      - name: Registration widget
+        docs: https://developers.cvent.com/docs/custom-widgets/examples/registration-widget
+      - name: Featured session widget
+        docs: https://developers.cvent.com/docs/custom-widgets/examples/featured-session-widget
+      - name: Featured session logic
+        docs: https://developers.cvent.com/docs/custom-widgets/examples/featured-session-logic
+    registry: none
+    npm_package: null
+    note: >-
+      Cvent publishes no npm package for the widget SDK and no CDN loader URL in the public docs —
+      the SDK is ambient inside the Cvent-hosted page. There is therefore no version to record and
+      no way for a consumer to pin one. Recorded as an honest gap, not a missing check.
+
+related_surfaces:
+  - name: Attendee Hub
+    kind: hosted end-user experience
+    url: https://www.cvent.com/en/attendee-hub
+    note: Cvent-hosted virtual/hybrid event experience that Custom Widgets extend.
+  - name: White label
+    docs_prefix: /docs/white-label
+    note: A separate white-label documentation section exists on the developer portal.
+  - name: SSO
+    docs_prefix: /docs/sso
+    note: Single sign-on into Cvent-hosted attendee experiences.
+
+summary:
+  families: 1
+  loader_libraries: 0
+  registry_published: false
+
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

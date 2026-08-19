@@ -3,98 +3,142 @@ specificationVersion: '0.1'
 schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
 provider: Cvent Event Cloud
 providerId: cvent-event-cloud
+generated: '2026-08-13'
+method: searched
+source: https://developers.cvent.com/docs/rest-api/guides/handling-rate-limits
+sources:
+  - https://developers.cvent.com/docs/rest-api/guides/handling-rate-limits
+  - https://github.com/cvent/rest-sdks/blob/main/cvent-public-spec/openapi.yaml
 created: '2026-05-04'
-modified: '2026-05-04'
-tags:
-  - Attendee Hub
-  - Attendees
-  - Event Cloud
-  - Event Management
-  - Event Marketing
-  - Events
-  - Hybrid Events
-  - OAuth 2.0
-  - Onsite
-  - Registration
-  - REST
-  - Sessions
-  - Speakers
-  - Surveys
-  - Virtual Events
-  - Webhooks
-  - Rate Limiting
-  - Quotas
-  - Throttling
-description: Machine-readable rate limit definitions for the Cvent Event Cloud API surface. Captures per-tier
-  quotas, burst behavior, response signaling, and recovery semantics. Defaults are scaffold values to
-  be replaced with published provider limits.
+modified: '2026-08-13'
+supersedes: >-
+  The 2026-05-04 bulk-sweep scaffold, which asserted invented per-tier limits (10 rpm free, 100 rpm
+  professional, 1000 rpm enterprise) and headers Cvent does not return. Every value below is now read
+  from Cvent's own published usage-tier table and rate-limit guide.
+limit_count: 6
+description: >-
+  Cvent enforces two independent limits per account: a daily call quota and a per-second call rate,
+  both set by the account's usage tier. Every request counts against the daily quota — including
+  requests that are themselves rejected with 429.
+
+tiers_published: true
+tiers_source: >-
+  info.description of Cvent's published OpenAPI ("Usage Tiers" table) and the Handling Rate Limits guide.
+self_service_discovery:
+  operation: getUsageTier
+  method: GET
+  path: /ea/usage/tier
+  description: Returns the usage tier assigned to the calling account.
+  usage_metrics:
+    method: GET
+    path: /ea/usage
+    description: Poll current usage to monitor quota consumption.
+
 headers:
   limit: X-RateLimit-Limit
   remaining: X-RateLimit-Remaining
   reset: X-RateLimit-Reset
-  retryAfter: Retry-After
-  policy: RateLimit-Policy
+  retryAfter: null
+  policy: null
+  note: >-
+    Cvent documents these three headers as present on every response, not only on 429s, so a client
+    can watch its own headroom. Cvent returns NO Retry-After header — the back-off interval must be
+    computed by the client from X-RateLimit-Reset or from Cvent's published back-off recipe.
+
 responseCodes:
   throttled: 429
   quotaExceeded: 429
-  serviceUnavailable: 503
+  note: >-
+    Both failure modes share status 429; they are distinguished by the message body. "Limit Exceeded"
+    means the daily quota is gone, "Too Many Requests" means the per-second rate was exceeded.
+
 limits:
-  - tier: free
-    name: Free Tier Default
-    scope: api-key
-    metric: requests_per_minute
+  - tier: Free
+    name: Free tier daily quota
+    scope: account
+    metric: calls_per_day
+    limit: 1000
+    timeFrame: day
+    reset: 00:00 GMT (midnight UTC)
+    applies: [Cvent REST APIs]
+  - tier: Free
+    name: Free tier call rate
+    scope: account
+    metric: calls_per_second
+    limit: 2
+    burst: 1
+    timeFrame: second
+    applies: [Cvent REST APIs]
+  - tier: Standard
+    name: Standard tier daily quota
+    scope: account
+    metric: calls_per_day
+    limit: 15000
+    timeFrame: day
+    reset: 00:00 GMT (midnight UTC)
+    applies: [Cvent REST APIs]
+  - tier: Standard
+    name: Standard tier call rate
+    scope: account
+    metric: calls_per_second
     limit: 10
-    burst: 20
-    timeFrame: minute
-    applies:
-      - Cvent Platform REST API (Event Cloud)
-  - tier: free
-    name: Free Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 1000
-    timeFrame: month
-    applies:
-      - Cvent Platform REST API (Event Cloud)
-  - tier: professional
-    name: Professional Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 100
-    burst: 200
-    timeFrame: minute
-    applies:
-      - Cvent Platform REST API (Event Cloud)
-  - tier: professional
-    name: Professional Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 100000
-    timeFrame: month
-    applies:
-      - Cvent Platform REST API (Event Cloud)
-  - tier: enterprise
-    name: Enterprise Negotiated Limit
-    scope: contract
-    metric: requests_per_minute
-    limit: 1000
-    burst: 5000
-    timeFrame: minute
-    applies:
-      - Cvent Platform REST API (Event Cloud)
+    burst: 10
+    timeFrame: second
+    applies: [Cvent REST APIs]
+  - tier: Premium
+    name: Premium tier daily quota
+    scope: account
+    metric: calls_per_day
+    limit: 500000
+    timeFrame: day
+    reset: 00:00 GMT (midnight UTC)
+    applies: [Cvent REST APIs]
+  - tier: Premium
+    name: Premium tier call rate
+    scope: account
+    metric: calls_per_second
+    limit: 25
+    burst: 25
+    timeFrame: second
+    applies: [Cvent REST APIs]
+
 policies:
-  - name: Backoff Strategy
-    description: Clients should implement exponential backoff with jitter, honoring the Retry-After header
-      when present.
-  - name: Burst Handling
-    description: Short bursts above the steady-state limit are tolerated up to the documented burst ceiling
-      before throttling engages.
-  - name: Quota Reset
-    description: Monthly quotas reset at the start of each calendar month in UTC. Per-minute and per-second
-      windows reset on a sliding-window basis.
-  - name: Fair Use
-    description: Even on uncapped enterprise tiers, sustained usage that materially impacts shared infrastructure
-      may be subject to fair-use throttling.
+  - name: Daily quota exhaustion
+    description: >-
+      On a daily-quota 429, stop making requests and wait until after midnight UTC. Retrying does
+      not help and each rejected request still consumes quota.
+  - name: Per-second back-off
+    description: >-
+      Cvent's published recipe: wait 2 seconds plus a random 1–1000 ms, then double the wait for each
+      retry up to a 16-second maximum. After five failed attempts, stop and log the error for review.
+    initial_wait_seconds: 2
+    jitter_ms: [1, 1000]
+    multiplier: 2
+    max_wait_seconds: 16
+    max_attempts: 5
+  - name: Rejected requests still count
+    description: >-
+      "Every request, even those that return a 429 error, still counts against your quota." A naive
+      retry loop therefore burns the remaining daily allowance faster than doing nothing.
+  - name: Proactive monitoring
+    description: >-
+      Cvent recommends reading the X-RateLimit-* headers on every response and setting usage alerts,
+      rather than discovering limits by hitting them.
+
+sdk_support:
+  automatic_retries: true
+  note: >-
+    All three first-party SDKs ship configurable retry/back-off; the retries behaviour is applied to
+    the generated clients by Cvent's own retries_overlay.yaml
+    (overlays/cvent-event-cloud-retries-overlay.yaml).
+
+spec_coverage:
+  operations_declaring_429: 456
+  operations_total: 458
+  note: >-
+    456 of 458 operations declare a 429 response in the OpenAPI, so a generated client has typed
+    handling for throttling on nearly the whole surface.
+
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com

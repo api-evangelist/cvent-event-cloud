@@ -1,0 +1,142 @@
+generated: '2026-08-13'
+method: derived
+source: openapi/_original/cvent-rest-apis-openapi.yaml
+enriched_from: https://developers.cvent.com/docs/rest-api/reference/reference
+provider: Cvent Event Cloud
+providerId: cvent-event-cloud
+format: proprietary
+rfc9457: false
+media_type: application/json
+description: >-
+  Error catalogue derived from every 4xx/5xx response declared across the 458 operations of Cvent's
+  published OpenAPI, cross-read against the REST API reference page. Cvent does NOT use RFC 9457
+  problem+json: every error is application/json shaped by the ErrorResponse schema.
+
+envelope:
+  schema: ErrorResponse
+  required: [code, message]
+  properties:
+    code:
+      type: integer
+      description: The HTTP status code representing the error, repeated inside the body.
+      example: 400
+    message:
+      type: string
+      description: A brief description of the error.
+      example: Bad Request
+    target:
+      type: string
+      description: The target resource of the error.
+    details:
+      type: array
+      description: >-
+        Cascading error messages. Each item has the same code/message/target shape as the base
+        object, so a single failure can carry a list of field-level causes.
+  variants:
+    - schema: ErrorResponse
+      usage: 2042 response declarations — the default envelope
+    - schema: ErrorResponse2
+      usage: 46 response declarations
+    - schema: segments-error-response
+      usage: Audience Segments operations
+    - schema: error-response
+      usage: 4 declarations on Program Item document/speaker conflict responses
+
+problem_types:
+  - status: 400
+    title: Bad request
+    occurrences: 366
+    meaning: >-
+      Malformed request — an invalid query parameter, an unparseable filter expression, or a body
+      that fails schema validation.
+    remediation: >-
+      Read `details[]` for the field-level causes. Validate filter syntax against
+      https://developers.cvent.com/docs/rest-api/reference/filters before retrying; the request
+      will fail identically until the input changes.
+    retryable: false
+  - status: 401
+    title: Unauthorized
+    spec_description: Bad or expired token
+    occurrences: 457
+    meaning: >-
+      Missing, malformed or expired bearer token. Cvent access tokens expire after 3600 seconds.
+    remediation: >-
+      Request a fresh token from POST /ea/oauth2/token using HTTP Basic client credentials, then
+      retry. Do not retry with the same token.
+    retryable: true
+    retry_after_reauth: true
+  - status: 403
+    title: Forbidden
+    spec_description: You do not have access to the resource
+    occurrences: 456
+    meaning: >-
+      The token is valid but the application was not granted the OAuth scope the operation requires,
+      or the account does not have the product entitlement behind that resource.
+    remediation: >-
+      Compare the operation's declared scopes in scopes/cvent-event-cloud-scopes.yml against the
+      scopes assigned to the application in the Cvent developer console. A 403 is a provisioning
+      problem, never a transient one.
+    retryable: false
+  - status: 404
+    title: Not Found
+    spec_description: Resource not found
+    occurrences: 345
+    meaning: The addressed resource does not exist, or is not visible to this account.
+    remediation: Verify the identifier and the region host — a record in the EMEA data centre is not visible on the North American host.
+    retryable: false
+  - status: 409
+    title: Conflict
+    spec_description: The request conflicts with current state of the target resource
+    occurrences: 16
+    meaning: Optimistic-concurrency or state conflict, e.g. writing a program item document that already exists.
+    remediation: Re-read the resource, reconcile, and re-submit.
+    retryable: false
+  - status: 422
+    title: Unprocessable Entity
+    spec_description: Was not able to process the request.
+    occurrences: 9
+    meaning: Syntactically valid request that violates a business rule.
+    remediation: Read `details[]`; the violated rule is named there.
+    retryable: false
+  - status: 429
+    title: Too Many Requests
+    occurrences: 456
+    meaning: >-
+      Either the per-second rate limit or the daily quota for the account's usage tier has been
+      exceeded. Cvent's guide notes the message distinguishes the two: "Limit Exceeded" for the
+      daily quota, "Too Many Requests" for the per-second rate.
+    remediation: >-
+      For a daily-quota 429, stop and wait until after midnight UTC — retrying will not succeed and
+      every request, including the ones that 429, still counts against the quota. For a per-second
+      429, back off exponentially: wait 2 seconds plus 1–1000 ms of jitter, double each attempt to a
+      16-second ceiling, and give up after five attempts.
+    retryable: true
+    detail: rate-limits/cvent-event-cloud-rate-limits.yml
+
+specialised_errors:
+  - name: DataLimitExceeded
+    description: Exceeded limit for number of job data records
+    surface: Bulk
+  - name: JobLimitExceeded
+    description: Exceeded limit for number of concurrently running bulk jobs
+    surface: Bulk
+  - name: SegmentsErrorResponse
+    description: Segments error response details
+    surface: Audience Segments
+
+gaps:
+  - no_5xx_declared: >-
+      Not one of the 458 operations declares a 5xx response. Cvent's servers certainly return them;
+      the contract simply does not describe them, so a generated client has no typed handling for a
+      500 or a 503.
+  - no_retry_after: >-
+      Cvent returns no Retry-After header on 429. The client must compute back-off itself from the
+      X-RateLimit-Reset epoch or from Cvent's published back-off recipe.
+  - no_error_code_vocabulary: >-
+      There is no stable machine-readable error identifier beyond the HTTP status. `code` is the
+      HTTP status repeated as an integer, and `message` is prose. Clients cannot branch on a
+      symbolic error code.
+
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

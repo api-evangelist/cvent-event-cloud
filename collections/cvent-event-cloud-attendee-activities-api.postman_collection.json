@@ -1,0 +1,2375 @@
+{
+  "item": [
+    {
+      "id": "7009ee50-3468-4f9d-96f5-d7a2ed0d6cbd",
+      "name": "Attendee Activities",
+      "description": {
+        "content": "The Attendee Activities API gives valuable insight into your customer's experience at your Cvent event.\nNow, you can get a fuller picture of your customer's journey, including onsite activities, offsite meetings,\nbreakout sessions, booth visits, and virtual seminars. You can use that data to compile a unified customer\nprofile that integrates with your external systems and data.\n\nBy gathering all this info into a single interface, the API allows you to see your customer's engagement\nat every step of the journey, create engagement models, and integrate that data with your external tools.\nYou can use this data to understand what your customers are looking for, keep them engaged, build loyalty,\ndrive upsell, and increase the long-term value of your events.\n\nPlease note that attendee activities data is retained for a maximum of 2 years and is purged thereafter.\n\nFor more details on [attendee activities](https://developers.cvent.com/docs/rest-api/explanation/attendee-activities).\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "bdd58574-2592-4180-b20f-04b284d363d7",
+          "name": "List Activities",
+          "request": {
+            "name": "List Activities",
+            "description": {
+              "content": "Gets a paginated list of attendee activities.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "attendees",
+                "activities"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "after",
+                  "value": "<dateTime>",
+                  "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+                },
+                {
+                  "disabled": false,
+                  "key": "before",
+                  "value": "<dateTime>",
+                  "description": "Used to query records that have been added or updated before this time point."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "100",
+                  "description": "The maximum number of records to return per page."
+                },
+                {
+                  "disabled": false,
+                  "key": "token",
+                  "value": "<string>",
+                  "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field                | Operators                          |\n|----------------------|------------------------------------|\n| id                   | `eq`, `ne`                         |\n| created              | `eq`, `ne`, `lt`, `le`, `gt`, `ge` |\n| event.id             | `eq`, `ne`                         |\n| attendee.id          | `eq`, `ne`                         |\n| type                 | `eq`, `ne`                         |\n| exhibitor.id         | `eq`, `ne`                         |\n| session.id           | `eq`, `ne`                         |\n| appointment.id       | `eq`, `ne`                         |\n| speaker.id           | `eq`, `ne`                         |\n| data.id              | `eq`, `ne`                         |\n| name                 | `eq`, `ne`                         |\n| externalActivityDate | `eq`, `ne`, `lt`, `le`, `gt`, `ge` |\n| time                 | `eq`, `ne`, `lt`, `le`, `gt`, `ge` |\n\nThe following logical operators are supported for combining filters:\n* and\n* or\n"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "account/hooks:delete account/hooks:read account/hooks:write account/user-groups:delete account/user-groups:read account/user-groups:write account/users:delete account/users:read account/users:write appointments/appointment-attendees:read appointments/appointment-events:read appointments/appointment-types:read appointments/appointments:read appointments/appointments:write appointments/available-times:read appointments/locations:read attendee-insights/attendee-insights:read attendee-insights/scores:read attendee-insights/stats:read budget/budget-items:delete budget/budget-items:read budget/budget-items:write budget/budget-totals:read budget/budget-vendors:read budget/cards:read budget/currency-conversion-rate:delete budget/currency-conversion-rate:read budget/currency-conversion-rate:write budget/payments:delete budget/payments:read budget/payments:write budget/transactions:delete budget/transactions:read budget/transactions:write bulk/bulk-jobs:read bulk/bulk-jobs:write business-transient/bids:read business-transient/proposals:read business-transient/supplier-brands:read business-transient/supplier-chains:read business-transient/supplier-properties:read business-transient/supplier-property-rooms:read business-transient/travel-accounts:read business-transient/travel-program-questions:read business-transient/travel-programs:read business-transient/travel-supplier-accounts:read business-travel/bids:read business-travel/proposals:read business-travel/travel-accounts:read business-travel/travel-program-questions:read business-travel/travel-programs:read compliance/communications:read compliance/communications:write email/bounces:read email/email-status:read email/emails:read eMarketing/campaigns:read emarketing/emarketing-email-status:read eMarketing/eMarketing-email-templates:read eMarketing/eMarketing-send-emails:write event/admission-items:read event/air-request:read event/alternate-travel:read event/attendance-durations:read event/attendee-activities-metadata:delete event/attendee-activities-metadata:read event/attendee-activities-metadata:write event/attendee-activities:read event/attendee-activities:write event/attendee-credits:read event/attendee-links:delete event/attendee-links:read event/attendee-links:write event/attendee-messages:read event/attendees:read event/attendees:write event/audience-segments:read event/audience-segments:write event/contact-groups:read event/contact-groups:write event/contact-types:read event/contacts:delete event/contacts:read event/contacts:write event/contacts:write-sensitive event/custom-fields:read event/custom-fields:write event/discounts:write event/donation-items:read event/event-discounts:read event/event-discounts:write event/event-email-status:read event/event-emails:read event/event-emails:write event/event-features:read event/event-features:write event/event-user-groups:read event/event-user-groups:write event/events:read event/events:write event/fee-items:read event/hotel-request:read event/invitation-lists:read event/meeting-request-forms:read event/meeting-requests:read event/meeting-requests:write event/membership-items:read event/orders:read event/planning-documents:read event/players:read event/process-form-submissions:read event/program-items:delete event/program-items:read event/program-items:write event/quantity-items:read event/quantity-items:write event/registration-paths:read event/registration-types:read event/registration-types:write event/role-assignments:read event/session-attendance:read event/session-attendance:write event/session-categories:read event/session-categories:write event/session-enrollment:delete event/session-enrollment:read event/session-enrollment:write event/session-segments:read event/sessions:delete event/sessions:read event/sessions:write event/speaker-categories:read event/speaker-categories:write event/speakers:delete event/speakers:read event/speakers:write event/taxes:read event/transactions:read event/transactions:write event/video-views:read event/videos:read event/videos:write event/vouchers:read event/webcasts:delete event/webcasts:read event/webcasts:write event/weblinks:read events-plus/hubs:read exhibitor/badges:read exhibitor/badges:write exhibitor/booth-staff:delete exhibitor/booth-staff:read exhibitor/booth-staff:write exhibitor/eliterature-requests:read exhibitor/exhibitor-admins:read exhibitor/exhibitor-admins:write exhibitor/exhibitor-answers:read exhibitor/exhibitor-answers:write exhibitor/exhibitor-categories:delete exhibitor/exhibitor-categories:read exhibitor/exhibitor-categories:write exhibitor/exhibitor-contents:delete exhibitor/exhibitor-contents:read exhibitor/exhibitor-contents:write exhibitor/exhibitor-questions:read exhibitor/exhibitors:delete exhibitor/exhibitors:read exhibitor/exhibitors:write exhibitor/lead-qualification-answers:read exhibitor/lead-qualification-questions:read exhibitor/leads:read exhibitor/registration-packs:delete exhibitor/registration-packs:read exhibitor/registration-packs:write exhibitor/sponsorship-levels:read file/file:read file/file:write housing/connections:write housing/hotel-room-rates:write housing/housing-event-available-nights:read housing/housing-event-hotels:read housing/housing-event-inventory:read housing/housing-event-room-types:read housing/housing-events:read housing/reservation-requests:delete housing/reservation-requests:read housing/reservation-requests:write housing/reservations-link:delete housing/reservations-link:write housing/reservations:delete housing/reservations:read housing/reservations:write onsite/signatures:read proposal/proposals:write remote-printing/badge-print-jobs:read remote-printing/badge-print-jobs:write remote-printing/badge-printer-pools:read rfp/rfp-agenda-items:read rfp/rfp-attachments:read rfp/rfp-custom-fields:read rfp/rfp-guest-rooms:read rfp/rfp-internal-documents:read rfp/rfp-lead-sources:read rfp/rfp-past-events:read rfp/rfp-questions:read rfp/rfp-recipients-history:read rfp/rfp-suppliers:read rfp/rfps:read seating/assignments:read seating/event-seatings:read seating/seats:read seating/tables:read secure-ecommerce/card-tokens:write survey/questions:read survey/respondents:read survey/responses:read survey/standard-survey-email-templates:read survey/standard-survey-email:write survey/standard-survey-questions:read survey/standard-survey-respondents:read survey/standard-survey-respondents:write survey/standard-survey-responses:read survey/standard-survey-responses:write survey/standard-surveys:read survey/survey-questions:read survey/survey-respondents:read survey/survey-respondents:write survey/survey-responses:read survey/survey-responses:write survey/surveys:read venue/meeting-room-overviews:read venue/meeting-rooms:write venue/venue-details-overview:read venue/venue-details:write venue/venue-facility:write"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api-platform.cvent.com/ea/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "8ed6d166-0d35-4de9-9589-b86d72f1ae3a",
+              "name": "Successfully retrieved a paginated list of attendee activities and their related details.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "after",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "before",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "type eq 'event.registered' or type eq 'session.enrolled' and (attendee.id eq 'uuid1' or attendee.id eq 'uuid2')"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"paging\": {\n    \"_links\": {\n      \"next\": {\n        \"href\": \"?token=90c5f062-76ad-4ea4-aa53-00eb698d9262\"\n      },\n      \"self\": {\n        \"href\": \"?token=90c5f062-76ad-4ea4-aa53-00eb698d9262\"\n      },\n      \"prev\": {\n        \"href\": \"?token=90c5f062-76ad-4ea4-aa53-00eb698d9262\"\n      }\n    },\n    \"previousToken\": \"1a2b3c4d5e6f7g8h9i10j11k\",\n    \"nextToken\": \"1a2b3c4d5e6f7g8h9i10j11k\",\n    \"currentToken\": \"1a2b3c4d5e6f7g8h9i10j11k\",\n    \"limit\": 100,\n    \"totalCount\": 2\n  },\n  \"data\": [\n    {\n      \"attendee\": {\n        \"id\": \"04ca6ae2-0dc3-487b-953e-86d6abbdf7d3\"\n      },\n      \"event\": {\n        \"id\": \"d84855b0-eeda-41c4-8e7a-53e80364cb95\",\n        \"title\": \"Cvent Connect 2020\",\n        \"code\": \"XRNGB4YY3CX\",\n        \"timezone\": \"America/New_York\"\n      },\n      \"name\": \"Registered for Event\",\n      \"type\": \"event.registered\",\n      \"data\": {\n        \"appointment\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"contact\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"id\": \"9463c74e-18c6-401a-a710-ae0f485bf059\",\n      \"time\": \"2019-08-24T14:15:22Z\",\n      \"created\": \"2019-08-24T14:15:22Z\"\n    },\n    {\n      \"attendee\": {\n        \"id\": \"04ca6ae2-0dc3-487b-953e-86d6abbdf7d3\"\n      },\n      \"event\": {\n        \"id\": \"d84855b0-eeda-41c4-8e7a-53e80364cb95\",\n        \"title\": \"Cvent Connect 2020\",\n        \"code\": \"XRNGB4YY3CX\",\n        \"timezone\": \"America/New_York\"\n      },\n      \"name\": \"Registered for Event\",\n      \"type\": \"event.registered\",\n      \"data\": {\n        \"appointment\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"contact\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"id\": \"9463c74e-18c6-401a-a710-ae0f485bf059\",\n      \"time\": \"2019-08-24T14:15:22Z\",\n      \"created\": \"2019-08-24T14:15:22Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fa5ad734-1048-4294-80c3-5eb245966a0a",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "after",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "before",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "type eq 'event.registered' or type eq 'session.enrolled' and (attendee.id eq 'uuid1' or attendee.id eq 'uuid2')"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "27d6274b-2a95-442b-9461-6254624cf850",
+              "name": "Bad or expired token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "after",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "before",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "type eq 'event.registered' or type eq 'session.enrolled' and (attendee.id eq 'uuid1' or attendee.id eq 'uuid2')"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b42bab8a-ecd6-4bfd-9dfa-f76994db5d5b",
+              "name": "You do not have access to the resource",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "after",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "before",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "type eq 'event.registered' or type eq 'session.enrolled' and (attendee.id eq 'uuid1' or attendee.id eq 'uuid2')"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"Access Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "371e4bb3-004b-4d54-bc85-f9c1e482e0c0",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "after",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "before",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "type eq 'event.registered' or type eq 'session.enrolled' and (attendee.id eq 'uuid1' or attendee.id eq 'uuid2')"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a5c30eb6-b3d2-4153-9995-c03c3ab8b490",
+              "name": "Too many requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "after",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "before",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "type eq 'event.registered' or type eq 'session.enrolled' and (attendee.id eq 'uuid1' or attendee.id eq 'uuid2')"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 429,\n  \"message\": \"Limit Exceeded\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ef5f02d0-a97d-4812-9d4c-62bcbcb447d4",
+          "name": "Add External Activity",
+          "request": {
+            "name": "Add External Activity",
+            "description": {
+              "content": "Create an external attendee activity.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "attendees",
+                "activities"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "account/hooks:delete account/hooks:read account/hooks:write account/user-groups:delete account/user-groups:read account/user-groups:write account/users:delete account/users:read account/users:write appointments/appointment-attendees:read appointments/appointment-events:read appointments/appointment-types:read appointments/appointments:read appointments/appointments:write appointments/available-times:read appointments/locations:read attendee-insights/attendee-insights:read attendee-insights/scores:read attendee-insights/stats:read budget/budget-items:delete budget/budget-items:read budget/budget-items:write budget/budget-totals:read budget/budget-vendors:read budget/cards:read budget/currency-conversion-rate:delete budget/currency-conversion-rate:read budget/currency-conversion-rate:write budget/payments:delete budget/payments:read budget/payments:write budget/transactions:delete budget/transactions:read budget/transactions:write bulk/bulk-jobs:read bulk/bulk-jobs:write business-transient/bids:read business-transient/proposals:read business-transient/supplier-brands:read business-transient/supplier-chains:read business-transient/supplier-properties:read business-transient/supplier-property-rooms:read business-transient/travel-accounts:read business-transient/travel-program-questions:read business-transient/travel-programs:read business-transient/travel-supplier-accounts:read business-travel/bids:read business-travel/proposals:read business-travel/travel-accounts:read business-travel/travel-program-questions:read business-travel/travel-programs:read compliance/communications:read compliance/communications:write email/bounces:read email/email-status:read email/emails:read eMarketing/campaigns:read emarketing/emarketing-email-status:read eMarketing/eMarketing-email-templates:read eMarketing/eMarketing-send-emails:write event/admission-items:read event/air-request:read event/alternate-travel:read event/attendance-durations:read event/attendee-activities-metadata:delete event/attendee-activities-metadata:read event/attendee-activities-metadata:write event/attendee-activities:read event/attendee-activities:write event/attendee-credits:read event/attendee-links:delete event/attendee-links:read event/attendee-links:write event/attendee-messages:read event/attendees:read event/attendees:write event/audience-segments:read event/audience-segments:write event/contact-groups:read event/contact-groups:write event/contact-types:read event/contacts:delete event/contacts:read event/contacts:write event/contacts:write-sensitive event/custom-fields:read event/custom-fields:write event/discounts:write event/donation-items:read event/event-discounts:read event/event-discounts:write event/event-email-status:read event/event-emails:read event/event-emails:write event/event-features:read event/event-features:write event/event-user-groups:read event/event-user-groups:write event/events:read event/events:write event/fee-items:read event/hotel-request:read event/invitation-lists:read event/meeting-request-forms:read event/meeting-requests:read event/meeting-requests:write event/membership-items:read event/orders:read event/planning-documents:read event/players:read event/process-form-submissions:read event/program-items:delete event/program-items:read event/program-items:write event/quantity-items:read event/quantity-items:write event/registration-paths:read event/registration-types:read event/registration-types:write event/role-assignments:read event/session-attendance:read event/session-attendance:write event/session-categories:read event/session-categories:write event/session-enrollment:delete event/session-enrollment:read event/session-enrollment:write event/session-segments:read event/sessions:delete event/sessions:read event/sessions:write event/speaker-categories:read event/speaker-categories:write event/speakers:delete event/speakers:read event/speakers:write event/taxes:read event/transactions:read event/transactions:write event/video-views:read event/videos:read event/videos:write event/vouchers:read event/webcasts:delete event/webcasts:read event/webcasts:write event/weblinks:read events-plus/hubs:read exhibitor/badges:read exhibitor/badges:write exhibitor/booth-staff:delete exhibitor/booth-staff:read exhibitor/booth-staff:write exhibitor/eliterature-requests:read exhibitor/exhibitor-admins:read exhibitor/exhibitor-admins:write exhibitor/exhibitor-answers:read exhibitor/exhibitor-answers:write exhibitor/exhibitor-categories:delete exhibitor/exhibitor-categories:read exhibitor/exhibitor-categories:write exhibitor/exhibitor-contents:delete exhibitor/exhibitor-contents:read exhibitor/exhibitor-contents:write exhibitor/exhibitor-questions:read exhibitor/exhibitors:delete exhibitor/exhibitors:read exhibitor/exhibitors:write exhibitor/lead-qualification-answers:read exhibitor/lead-qualification-questions:read exhibitor/leads:read exhibitor/registration-packs:delete exhibitor/registration-packs:read exhibitor/registration-packs:write exhibitor/sponsorship-levels:read file/file:read file/file:write housing/connections:write housing/hotel-room-rates:write housing/housing-event-available-nights:read housing/housing-event-hotels:read housing/housing-event-inventory:read housing/housing-event-room-types:read housing/housing-events:read housing/reservation-requests:delete housing/reservation-requests:read housing/reservation-requests:write housing/reservations-link:delete housing/reservations-link:write housing/reservations:delete housing/reservations:read housing/reservations:write onsite/signatures:read proposal/proposals:write remote-printing/badge-print-jobs:read remote-printing/badge-print-jobs:write remote-printing/badge-printer-pools:read rfp/rfp-agenda-items:read rfp/rfp-attachments:read rfp/rfp-custom-fields:read rfp/rfp-guest-rooms:read rfp/rfp-internal-documents:read rfp/rfp-lead-sources:read rfp/rfp-past-events:read rfp/rfp-questions:read rfp/rfp-recipients-history:read rfp/rfp-suppliers:read rfp/rfps:read seating/assignments:read seating/event-seatings:read seating/seats:read seating/tables:read secure-ecommerce/card-tokens:write survey/questions:read survey/respondents:read survey/responses:read survey/standard-survey-email-templates:read survey/standard-survey-email:write survey/standard-survey-questions:read survey/standard-survey-respondents:read survey/standard-survey-respondents:write survey/standard-survey-responses:read survey/standard-survey-responses:write survey/standard-surveys:read survey/survey-questions:read survey/survey-respondents:read survey/survey-respondents:write survey/survey-responses:read survey/survey-responses:write survey/surveys:read venue/meeting-room-overviews:read venue/meeting-rooms:write venue/venue-details-overview:read venue/venue-details:write venue/venue-facility:write"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api-platform.cvent.com/ea/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"attendee\": {\n    \"id\": \"<uuid>\"\n  },\n  \"data\": {\n    \"id\": \"<uuid>\",\n    \"externalActivityDate\": \"<dateTime>\",\n    \"additionalFields\": {\n      \"key_0\": \"<string>\",\n      \"key_1\": \"<string>\",\n      \"key_2\": \"<string>\"\n    }\n  },\n  \"event\": {\n    \"id\": \"<uuid>\"\n  },\n  \"name\": \"<string>\",\n  \"type\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8a934b60-aa37-4035-bbdc-cffec9884972",
+              "name": "Successfully created an external attendee activity.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attendee\": {\n    \"id\": \"04ca6ae2-0dc3-487b-953e-86d6abbdf7d3\"\n  },\n  \"data\": {\n    \"id\": \"04ca6ae2-0dc3-487b-953e-86d6abbdf7d3\",\n    \"externalActivityDate\": \"2019-08-24T14:15:22Z\",\n    \"additionalFields\": {\n      \"venue\": \"tokyo\",\n      \"submitted\": \"true\"\n    }\n  },\n  \"event\": {\n    \"id\": \"d84855b0-eeda-41c4-8e7a-53e80364cb95\"\n  },\n  \"name\": \"Registered for Event\",\n  \"type\": \"event.external\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"attendee\": {\n    \"id\": \"04ca6ae2-0dc3-487b-953e-86d6abbdf7d3\"\n  },\n  \"data\": {\n    \"id\": \"04ca6ae2-0dc3-487b-953e-86d6abbdf7d3\",\n    \"externalActivityDate\": \"2019-08-24T14:15:22Z\",\n    \"additionalFields\": {\n      \"venue\": \"tokyo\",\n      \"submitted\": \"true\"\n    }\n  },\n  \"event\": {\n    \"id\": \"d84855b0-eeda-41c4-8e7a-53e80364cb95\",\n    \"title\": \"Cvent Connect 2020\",\n    \"code\": \"XRNGB4YY3CX\",\n    \"timezone\": \"America/New_York\"\n  },\n  \"name\": \"Registered for Event\",\n  \"type\": \"event.external\",\n  \"id\": \"9463c74e-18c6-401a-a710-ae0f485bf059\",\n  \"time\": \"2019-08-24T14:15:22Z\",\n  \"created\": \"2019-08-24T14:15:22Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b8466226-38b0-40e6-a78e-9942575b1220",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attendee\": {\n    \"id\": \"04ca6ae2-0dc3-487b-953e-86d6abbdf7d3\"\n  },\n  \"data\": {\n    \"id\": \"04ca6ae2-0dc3-487b-953e-86d6abbdf7d3\",\n    \"externalActivityDate\": \"2019-08-24T14:15:22Z\",\n    \"additionalFields\": {\n      \"venue\": \"tokyo\",\n      \"submitted\": \"true\"\n    }\n  },\n  \"event\": {\n    \"id\": \"d84855b0-eeda-41c4-8e7a-53e80364cb95\"\n  },\n  \"name\": \"Registered for Event\",\n  \"type\": \"event.external\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "782408ff-2a04-46d1-a811-b65b2d330df6",
+              "name": "Bad or expired token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attendee\": {\n    \"id\": \"04ca6ae2-0dc3-487b-953e-86d6abbdf7d3\"\n  },\n  \"data\": {\n    \"id\": \"04ca6ae2-0dc3-487b-953e-86d6abbdf7d3\",\n    \"externalActivityDate\": \"2019-08-24T14:15:22Z\",\n    \"additionalFields\": {\n      \"venue\": \"tokyo\",\n      \"submitted\": \"true\"\n    }\n  },\n  \"event\": {\n    \"id\": \"d84855b0-eeda-41c4-8e7a-53e80364cb95\"\n  },\n  \"name\": \"Registered for Event\",\n  \"type\": \"event.external\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4af3c5d9-3300-4481-b2dc-d2b9d320d0bc",
+              "name": "You do not have access to the resource",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attendee\": {\n    \"id\": \"04ca6ae2-0dc3-487b-953e-86d6abbdf7d3\"\n  },\n  \"data\": {\n    \"id\": \"04ca6ae2-0dc3-487b-953e-86d6abbdf7d3\",\n    \"externalActivityDate\": \"2019-08-24T14:15:22Z\",\n    \"additionalFields\": {\n      \"venue\": \"tokyo\",\n      \"submitted\": \"true\"\n    }\n  },\n  \"event\": {\n    \"id\": \"d84855b0-eeda-41c4-8e7a-53e80364cb95\"\n  },\n  \"name\": \"Registered for Event\",\n  \"type\": \"event.external\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"Access Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5bbdcce6-1f59-46b5-9ef3-2f974fbcafff",
+              "name": "Too many requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"attendee\": {\n    \"id\": \"04ca6ae2-0dc3-487b-953e-86d6abbdf7d3\"\n  },\n  \"data\": {\n    \"id\": \"04ca6ae2-0dc3-487b-953e-86d6abbdf7d3\",\n    \"externalActivityDate\": \"2019-08-24T14:15:22Z\",\n    \"additionalFields\": {\n      \"venue\": \"tokyo\",\n      \"submitted\": \"true\"\n    }\n  },\n  \"event\": {\n    \"id\": \"d84855b0-eeda-41c4-8e7a-53e80364cb95\"\n  },\n  \"name\": \"Registered for Event\",\n  \"type\": \"event.external\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 429,\n  \"message\": \"Limit Exceeded\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2ef70d3f-c95a-4819-b20a-b00c9b821c7d",
+          "name": "List Ext. Activities Metadata",
+          "request": {
+            "name": "List Ext. Activities Metadata",
+            "description": {
+              "content": "Gets a paginated list of external attendee activities metadata.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "attendees",
+                "activities",
+                "external",
+                "metadata"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "after",
+                  "value": "<dateTime>",
+                  "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+                },
+                {
+                  "disabled": false,
+                  "key": "before",
+                  "value": "<dateTime>",
+                  "description": "Used to query records that have been added or updated before this time point."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "100",
+                  "description": "The maximum number of records to return per page."
+                },
+                {
+                  "disabled": false,
+                  "key": "token",
+                  "value": "<string>",
+                  "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field        | Operators                          |\n|--------------|------------------------------------|\n| id           | `eq`, `ne`                         |\n| name         | `eq`, `ne`                         |\n| type         | `eq`, `ne`                         |\n| created      | `eq`, `ne`, `lt`, `le`, `gt`, `ge` |\n| lastModified | `eq`, `ne`, `lt`, `le`, `gt`, `ge` |\n\nThe following logical operators are supported for combining filters:\n* and\n* or\n"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "account/hooks:delete account/hooks:read account/hooks:write account/user-groups:delete account/user-groups:read account/user-groups:write account/users:delete account/users:read account/users:write appointments/appointment-attendees:read appointments/appointment-events:read appointments/appointment-types:read appointments/appointments:read appointments/appointments:write appointments/available-times:read appointments/locations:read attendee-insights/attendee-insights:read attendee-insights/scores:read attendee-insights/stats:read budget/budget-items:delete budget/budget-items:read budget/budget-items:write budget/budget-totals:read budget/budget-vendors:read budget/cards:read budget/currency-conversion-rate:delete budget/currency-conversion-rate:read budget/currency-conversion-rate:write budget/payments:delete budget/payments:read budget/payments:write budget/transactions:delete budget/transactions:read budget/transactions:write bulk/bulk-jobs:read bulk/bulk-jobs:write business-transient/bids:read business-transient/proposals:read business-transient/supplier-brands:read business-transient/supplier-chains:read business-transient/supplier-properties:read business-transient/supplier-property-rooms:read business-transient/travel-accounts:read business-transient/travel-program-questions:read business-transient/travel-programs:read business-transient/travel-supplier-accounts:read business-travel/bids:read business-travel/proposals:read business-travel/travel-accounts:read business-travel/travel-program-questions:read business-travel/travel-programs:read compliance/communications:read compliance/communications:write email/bounces:read email/email-status:read email/emails:read eMarketing/campaigns:read emarketing/emarketing-email-status:read eMarketing/eMarketing-email-templates:read eMarketing/eMarketing-send-emails:write event/admission-items:read event/air-request:read event/alternate-travel:read event/attendance-durations:read event/attendee-activities-metadata:delete event/attendee-activities-metadata:read event/attendee-activities-metadata:write event/attendee-activities:read event/attendee-activities:write event/attendee-credits:read event/attendee-links:delete event/attendee-links:read event/attendee-links:write event/attendee-messages:read event/attendees:read event/attendees:write event/audience-segments:read event/audience-segments:write event/contact-groups:read event/contact-groups:write event/contact-types:read event/contacts:delete event/contacts:read event/contacts:write event/contacts:write-sensitive event/custom-fields:read event/custom-fields:write event/discounts:write event/donation-items:read event/event-discounts:read event/event-discounts:write event/event-email-status:read event/event-emails:read event/event-emails:write event/event-features:read event/event-features:write event/event-user-groups:read event/event-user-groups:write event/events:read event/events:write event/fee-items:read event/hotel-request:read event/invitation-lists:read event/meeting-request-forms:read event/meeting-requests:read event/meeting-requests:write event/membership-items:read event/orders:read event/planning-documents:read event/players:read event/process-form-submissions:read event/program-items:delete event/program-items:read event/program-items:write event/quantity-items:read event/quantity-items:write event/registration-paths:read event/registration-types:read event/registration-types:write event/role-assignments:read event/session-attendance:read event/session-attendance:write event/session-categories:read event/session-categories:write event/session-enrollment:delete event/session-enrollment:read event/session-enrollment:write event/session-segments:read event/sessions:delete event/sessions:read event/sessions:write event/speaker-categories:read event/speaker-categories:write event/speakers:delete event/speakers:read event/speakers:write event/taxes:read event/transactions:read event/transactions:write event/video-views:read event/videos:read event/videos:write event/vouchers:read event/webcasts:delete event/webcasts:read event/webcasts:write event/weblinks:read events-plus/hubs:read exhibitor/badges:read exhibitor/badges:write exhibitor/booth-staff:delete exhibitor/booth-staff:read exhibitor/booth-staff:write exhibitor/eliterature-requests:read exhibitor/exhibitor-admins:read exhibitor/exhibitor-admins:write exhibitor/exhibitor-answers:read exhibitor/exhibitor-answers:write exhibitor/exhibitor-categories:delete exhibitor/exhibitor-categories:read exhibitor/exhibitor-categories:write exhibitor/exhibitor-contents:delete exhibitor/exhibitor-contents:read exhibitor/exhibitor-contents:write exhibitor/exhibitor-questions:read exhibitor/exhibitors:delete exhibitor/exhibitors:read exhibitor/exhibitors:write exhibitor/lead-qualification-answers:read exhibitor/lead-qualification-questions:read exhibitor/leads:read exhibitor/registration-packs:delete exhibitor/registration-packs:read exhibitor/registration-packs:write exhibitor/sponsorship-levels:read file/file:read file/file:write housing/connections:write housing/hotel-room-rates:write housing/housing-event-available-nights:read housing/housing-event-hotels:read housing/housing-event-inventory:read housing/housing-event-room-types:read housing/housing-events:read housing/reservation-requests:delete housing/reservation-requests:read housing/reservation-requests:write housing/reservations-link:delete housing/reservations-link:write housing/reservations:delete housing/reservations:read housing/reservations:write onsite/signatures:read proposal/proposals:write remote-printing/badge-print-jobs:read remote-printing/badge-print-jobs:write remote-printing/badge-printer-pools:read rfp/rfp-agenda-items:read rfp/rfp-attachments:read rfp/rfp-custom-fields:read rfp/rfp-guest-rooms:read rfp/rfp-internal-documents:read rfp/rfp-lead-sources:read rfp/rfp-past-events:read rfp/rfp-questions:read rfp/rfp-recipients-history:read rfp/rfp-suppliers:read rfp/rfps:read seating/assignments:read seating/event-seatings:read seating/seats:read seating/tables:read secure-ecommerce/card-tokens:write survey/questions:read survey/respondents:read survey/responses:read survey/standard-survey-email-templates:read survey/standard-survey-email:write survey/standard-survey-questions:read survey/standard-survey-respondents:read survey/standard-survey-respondents:write survey/standard-survey-responses:read survey/standard-survey-responses:write survey/standard-surveys:read survey/survey-questions:read survey/survey-respondents:read survey/survey-respondents:write survey/survey-responses:read survey/survey-responses:write survey/surveys:read venue/meeting-room-overviews:read venue/meeting-rooms:write venue/venue-details-overview:read venue/venue-details:write venue/venue-facility:write"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api-platform.cvent.com/ea/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ef50cf3b-418f-47eb-aecd-4f86e28195d6",
+              "name": "Successfully retrieved a paginated list of external attendee activities metadata.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities",
+                    "external",
+                    "metadata"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "after",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "before",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "id eq 'd94aff58-175d-41a5-9612-64e71202f8c3' and 'type eq 'event.external' and name ne 'social.media' and created ge '2021-03-15T09:33:13.750Z' and lastModified le '2021-03-15T09:33:13.750Z'"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"paging\": {\n    \"_links\": {\n      \"next\": {\n        \"href\": \"?token=90c5f062-76ad-4ea4-aa53-00eb698d9262\"\n      },\n      \"self\": {\n        \"href\": \"?token=90c5f062-76ad-4ea4-aa53-00eb698d9262\"\n      },\n      \"prev\": {\n        \"href\": \"?token=90c5f062-76ad-4ea4-aa53-00eb698d9262\"\n      }\n    },\n    \"previousToken\": \"1a2b3c4d5e6f7g8h9i10j11k\",\n    \"nextToken\": \"1a2b3c4d5e6f7g8h9i10j11k\",\n    \"currentToken\": \"1a2b3c4d5e6f7g8h9i10j11k\",\n    \"limit\": 100,\n    \"totalCount\": 2\n  },\n  \"data\": [\n    {\n      \"type\": \"event.external\",\n      \"name\": \"social.media\",\n      \"id\": \"9463c74e-18c6-401a-a710-ae0f485bf059\",\n      \"description\": \"This external activity contains data of social activities for an attendee.\",\n      \"fields\": [\n        {\n          \"name\": \"facebook_social.media\",\n          \"description\": \"Contains data for facebook social media activity.\"\n        },\n        {\n          \"name\": \"facebook_social.media\",\n          \"description\": \"Contains data for facebook social media activity.\"\n        }\n      ],\n      \"created\": \"2017-01-02T02:00:00Z\",\n      \"createdBy\": \"hporter\",\n      \"lastModified\": \"2019-02-12T03:00:00Z\",\n      \"lastModifiedBy\": \"hporter\"\n    },\n    {\n      \"type\": \"event.external\",\n      \"name\": \"social.media\",\n      \"id\": \"9463c74e-18c6-401a-a710-ae0f485bf059\",\n      \"description\": \"This external activity contains data of social activities for an attendee.\",\n      \"fields\": [\n        {\n          \"name\": \"facebook_social.media\",\n          \"description\": \"Contains data for facebook social media activity.\"\n        },\n        {\n          \"name\": \"facebook_social.media\",\n          \"description\": \"Contains data for facebook social media activity.\"\n        }\n      ],\n      \"created\": \"2017-01-02T02:00:00Z\",\n      \"createdBy\": \"hporter\",\n      \"lastModified\": \"2019-02-12T03:00:00Z\",\n      \"lastModifiedBy\": \"hporter\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "df5c31f2-32ad-4cb6-868b-7f5027ea7561",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities",
+                    "external",
+                    "metadata"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "after",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "before",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "id eq 'd94aff58-175d-41a5-9612-64e71202f8c3' and 'type eq 'event.external' and name ne 'social.media' and created ge '2021-03-15T09:33:13.750Z' and lastModified le '2021-03-15T09:33:13.750Z'"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4ba17872-352a-4189-b2b9-2e48c4a2802c",
+              "name": "Bad or expired token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities",
+                    "external",
+                    "metadata"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "after",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "before",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "id eq 'd94aff58-175d-41a5-9612-64e71202f8c3' and 'type eq 'event.external' and name ne 'social.media' and created ge '2021-03-15T09:33:13.750Z' and lastModified le '2021-03-15T09:33:13.750Z'"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "868d10b3-3a7a-4a64-8fa8-d726291aac34",
+              "name": "You do not have access to the resource",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities",
+                    "external",
+                    "metadata"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "after",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "before",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "id eq 'd94aff58-175d-41a5-9612-64e71202f8c3' and 'type eq 'event.external' and name ne 'social.media' and created ge '2021-03-15T09:33:13.750Z' and lastModified le '2021-03-15T09:33:13.750Z'"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"Access Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f2fb8d53-d1e9-4864-967c-dfba7b45fe1b",
+              "name": "Too many requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities",
+                    "external",
+                    "metadata"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "after",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "before",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "id eq 'd94aff58-175d-41a5-9612-64e71202f8c3' and 'type eq 'event.external' and name ne 'social.media' and created ge '2021-03-15T09:33:13.750Z' and lastModified le '2021-03-15T09:33:13.750Z'"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 429,\n  \"message\": \"Limit Exceeded\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "af8e7d49-71f7-43b5-a1e1-2efd9c4f0e12",
+          "name": "Add Ext. Activities Metadata",
+          "request": {
+            "name": "Add Ext. Activities Metadata",
+            "description": {
+              "content": "Creates external attendee activity metadata.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "attendees",
+                "activities",
+                "external",
+                "metadata"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "account/hooks:delete account/hooks:read account/hooks:write account/user-groups:delete account/user-groups:read account/user-groups:write account/users:delete account/users:read account/users:write appointments/appointment-attendees:read appointments/appointment-events:read appointments/appointment-types:read appointments/appointments:read appointments/appointments:write appointments/available-times:read appointments/locations:read attendee-insights/attendee-insights:read attendee-insights/scores:read attendee-insights/stats:read budget/budget-items:delete budget/budget-items:read budget/budget-items:write budget/budget-totals:read budget/budget-vendors:read budget/cards:read budget/currency-conversion-rate:delete budget/currency-conversion-rate:read budget/currency-conversion-rate:write budget/payments:delete budget/payments:read budget/payments:write budget/transactions:delete budget/transactions:read budget/transactions:write bulk/bulk-jobs:read bulk/bulk-jobs:write business-transient/bids:read business-transient/proposals:read business-transient/supplier-brands:read business-transient/supplier-chains:read business-transient/supplier-properties:read business-transient/supplier-property-rooms:read business-transient/travel-accounts:read business-transient/travel-program-questions:read business-transient/travel-programs:read business-transient/travel-supplier-accounts:read business-travel/bids:read business-travel/proposals:read business-travel/travel-accounts:read business-travel/travel-program-questions:read business-travel/travel-programs:read compliance/communications:read compliance/communications:write email/bounces:read email/email-status:read email/emails:read eMarketing/campaigns:read emarketing/emarketing-email-status:read eMarketing/eMarketing-email-templates:read eMarketing/eMarketing-send-emails:write event/admission-items:read event/air-request:read event/alternate-travel:read event/attendance-durations:read event/attendee-activities-metadata:delete event/attendee-activities-metadata:read event/attendee-activities-metadata:write event/attendee-activities:read event/attendee-activities:write event/attendee-credits:read event/attendee-links:delete event/attendee-links:read event/attendee-links:write event/attendee-messages:read event/attendees:read event/attendees:write event/audience-segments:read event/audience-segments:write event/contact-groups:read event/contact-groups:write event/contact-types:read event/contacts:delete event/contacts:read event/contacts:write event/contacts:write-sensitive event/custom-fields:read event/custom-fields:write event/discounts:write event/donation-items:read event/event-discounts:read event/event-discounts:write event/event-email-status:read event/event-emails:read event/event-emails:write event/event-features:read event/event-features:write event/event-user-groups:read event/event-user-groups:write event/events:read event/events:write event/fee-items:read event/hotel-request:read event/invitation-lists:read event/meeting-request-forms:read event/meeting-requests:read event/meeting-requests:write event/membership-items:read event/orders:read event/planning-documents:read event/players:read event/process-form-submissions:read event/program-items:delete event/program-items:read event/program-items:write event/quantity-items:read event/quantity-items:write event/registration-paths:read event/registration-types:read event/registration-types:write event/role-assignments:read event/session-attendance:read event/session-attendance:write event/session-categories:read event/session-categories:write event/session-enrollment:delete event/session-enrollment:read event/session-enrollment:write event/session-segments:read event/sessions:delete event/sessions:read event/sessions:write event/speaker-categories:read event/speaker-categories:write event/speakers:delete event/speakers:read event/speakers:write event/taxes:read event/transactions:read event/transactions:write event/video-views:read event/videos:read event/videos:write event/vouchers:read event/webcasts:delete event/webcasts:read event/webcasts:write event/weblinks:read events-plus/hubs:read exhibitor/badges:read exhibitor/badges:write exhibitor/booth-staff:delete exhibitor/booth-staff:read exhibitor/booth-staff:write exhibitor/eliterature-requests:read exhibitor/exhibitor-admins:read exhibitor/exhibitor-admins:write exhibitor/exhibitor-answers:read exhibitor/exhibitor-answers:write exhibitor/exhibitor-categories:delete exhibitor/exhibitor-categories:read exhibitor/exhibitor-categories:write exhibitor/exhibitor-contents:delete exhibitor/exhibitor-contents:read exhibitor/exhibitor-contents:write exhibitor/exhibitor-questions:read exhibitor/exhibitors:delete exhibitor/exhibitors:read exhibitor/exhibitors:write exhibitor/lead-qualification-answers:read exhibitor/lead-qualification-questions:read exhibitor/leads:read exhibitor/registration-packs:delete exhibitor/registration-packs:read exhibitor/registration-packs:write exhibitor/sponsorship-levels:read file/file:read file/file:write housing/connections:write housing/hotel-room-rates:write housing/housing-event-available-nights:read housing/housing-event-hotels:read housing/housing-event-inventory:read housing/housing-event-room-types:read housing/housing-events:read housing/reservation-requests:delete housing/reservation-requests:read housing/reservation-requests:write housing/reservations-link:delete housing/reservations-link:write housing/reservations:delete housing/reservations:read housing/reservations:write onsite/signatures:read proposal/proposals:write remote-printing/badge-print-jobs:read remote-printing/badge-print-jobs:write remote-printing/badge-printer-pools:read rfp/rfp-agenda-items:read rfp/rfp-attachments:read rfp/rfp-custom-fields:read rfp/rfp-guest-rooms:read rfp/rfp-internal-documents:read rfp/rfp-lead-sources:read rfp/rfp-past-events:read rfp/rfp-questions:read rfp/rfp-recipients-history:read rfp/rfp-suppliers:read rfp/rfps:read seating/assignments:read seating/event-seatings:read seating/seats:read seating/tables:read secure-ecommerce/card-tokens:write survey/questions:read survey/respondents:read survey/responses:read survey/standard-survey-email-templates:read survey/standard-survey-email:write survey/standard-survey-questions:read survey/standard-survey-respondents:read survey/standard-survey-respondents:write survey/standard-survey-responses:read survey/standard-survey-responses:write survey/standard-surveys:read survey/survey-questions:read survey/survey-respondents:read survey/survey-respondents:write survey/survey-responses:read survey/survey-responses:write survey/surveys:read venue/meeting-room-overviews:read venue/meeting-rooms:write venue/venue-details-overview:read venue/venue-details:write venue/venue-facility:write"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api-platform.cvent.com/ea/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"<string>\",\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"fields\": [\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2f2e4c6c-54df-432c-93be-386e3600b3aa",
+              "name": "Successfully created attendee activity metadata.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities",
+                    "external",
+                    "metadata"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"event.external\",\n  \"name\": \"social.media\",\n  \"description\": \"This external activity contains data of social activities for an attendee.\",\n  \"fields\": [\n    {\n      \"name\": \"facebook_social.media\",\n      \"description\": \"Contains data for facebook social media activity.\"\n    },\n    {\n      \"name\": \"facebook_social.media\",\n      \"description\": \"Contains data for facebook social media activity.\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"event.external\",\n  \"name\": \"social.media\",\n  \"id\": \"9463c74e-18c6-401a-a710-ae0f485bf059\",\n  \"description\": \"This external activity contains data of social activities for an attendee.\",\n  \"fields\": [\n    {\n      \"name\": \"facebook_social.media\",\n      \"description\": \"Contains data for facebook social media activity.\"\n    },\n    {\n      \"name\": \"facebook_social.media\",\n      \"description\": \"Contains data for facebook social media activity.\"\n    }\n  ],\n  \"created\": \"2017-01-02T02:00:00Z\",\n  \"createdBy\": \"hporter\",\n  \"lastModified\": \"2019-02-12T03:00:00Z\",\n  \"lastModifiedBy\": \"hporter\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "52b80c3f-a1e1-43d3-a255-4db365114669",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities",
+                    "external",
+                    "metadata"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"event.external\",\n  \"name\": \"social.media\",\n  \"description\": \"This external activity contains data of social activities for an attendee.\",\n  \"fields\": [\n    {\n      \"name\": \"facebook_social.media\",\n      \"description\": \"Contains data for facebook social media activity.\"\n    },\n    {\n      \"name\": \"facebook_social.media\",\n      \"description\": \"Contains data for facebook social media activity.\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7c3fb216-e3e7-41b4-8f57-39959f5c3d45",
+              "name": "Bad or expired token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities",
+                    "external",
+                    "metadata"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"event.external\",\n  \"name\": \"social.media\",\n  \"description\": \"This external activity contains data of social activities for an attendee.\",\n  \"fields\": [\n    {\n      \"name\": \"facebook_social.media\",\n      \"description\": \"Contains data for facebook social media activity.\"\n    },\n    {\n      \"name\": \"facebook_social.media\",\n      \"description\": \"Contains data for facebook social media activity.\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "17a428dc-25cb-4f63-a316-59e0efdb5844",
+              "name": "You do not have access to the resource",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities",
+                    "external",
+                    "metadata"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"event.external\",\n  \"name\": \"social.media\",\n  \"description\": \"This external activity contains data of social activities for an attendee.\",\n  \"fields\": [\n    {\n      \"name\": \"facebook_social.media\",\n      \"description\": \"Contains data for facebook social media activity.\"\n    },\n    {\n      \"name\": \"facebook_social.media\",\n      \"description\": \"Contains data for facebook social media activity.\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"Access Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0ddc2a37-bc85-408a-8bce-2a2ac72155db",
+              "name": "Too many requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities",
+                    "external",
+                    "metadata"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"event.external\",\n  \"name\": \"social.media\",\n  \"description\": \"This external activity contains data of social activities for an attendee.\",\n  \"fields\": [\n    {\n      \"name\": \"facebook_social.media\",\n      \"description\": \"Contains data for facebook social media activity.\"\n    },\n    {\n      \"name\": \"facebook_social.media\",\n      \"description\": \"Contains data for facebook social media activity.\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 429,\n  \"message\": \"Limit Exceeded\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a06d7e29-7a06-44bf-a486-bec508306973",
+          "name": "Delete Ext Activities Metadata",
+          "request": {
+            "name": "Delete Ext Activities Metadata",
+            "description": {
+              "content": "Deletes external attendee activity metadata.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "attendees",
+                "activities",
+                "external",
+                "metadata",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID of the activity metadata."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "account/hooks:delete account/hooks:read account/hooks:write account/user-groups:delete account/user-groups:read account/user-groups:write account/users:delete account/users:read account/users:write appointments/appointment-attendees:read appointments/appointment-events:read appointments/appointment-types:read appointments/appointments:read appointments/appointments:write appointments/available-times:read appointments/locations:read attendee-insights/attendee-insights:read attendee-insights/scores:read attendee-insights/stats:read budget/budget-items:delete budget/budget-items:read budget/budget-items:write budget/budget-totals:read budget/budget-vendors:read budget/cards:read budget/currency-conversion-rate:delete budget/currency-conversion-rate:read budget/currency-conversion-rate:write budget/payments:delete budget/payments:read budget/payments:write budget/transactions:delete budget/transactions:read budget/transactions:write bulk/bulk-jobs:read bulk/bulk-jobs:write business-transient/bids:read business-transient/proposals:read business-transient/supplier-brands:read business-transient/supplier-chains:read business-transient/supplier-properties:read business-transient/supplier-property-rooms:read business-transient/travel-accounts:read business-transient/travel-program-questions:read business-transient/travel-programs:read business-transient/travel-supplier-accounts:read business-travel/bids:read business-travel/proposals:read business-travel/travel-accounts:read business-travel/travel-program-questions:read business-travel/travel-programs:read compliance/communications:read compliance/communications:write email/bounces:read email/email-status:read email/emails:read eMarketing/campaigns:read emarketing/emarketing-email-status:read eMarketing/eMarketing-email-templates:read eMarketing/eMarketing-send-emails:write event/admission-items:read event/air-request:read event/alternate-travel:read event/attendance-durations:read event/attendee-activities-metadata:delete event/attendee-activities-metadata:read event/attendee-activities-metadata:write event/attendee-activities:read event/attendee-activities:write event/attendee-credits:read event/attendee-links:delete event/attendee-links:read event/attendee-links:write event/attendee-messages:read event/attendees:read event/attendees:write event/audience-segments:read event/audience-segments:write event/contact-groups:read event/contact-groups:write event/contact-types:read event/contacts:delete event/contacts:read event/contacts:write event/contacts:write-sensitive event/custom-fields:read event/custom-fields:write event/discounts:write event/donation-items:read event/event-discounts:read event/event-discounts:write event/event-email-status:read event/event-emails:read event/event-emails:write event/event-features:read event/event-features:write event/event-user-groups:read event/event-user-groups:write event/events:read event/events:write event/fee-items:read event/hotel-request:read event/invitation-lists:read event/meeting-request-forms:read event/meeting-requests:read event/meeting-requests:write event/membership-items:read event/orders:read event/planning-documents:read event/players:read event/process-form-submissions:read event/program-items:delete event/program-items:read event/program-items:write event/quantity-items:read event/quantity-items:write event/registration-paths:read event/registration-types:read event/registration-types:write event/role-assignments:read event/session-attendance:read event/session-attendance:write event/session-categories:read event/session-categories:write event/session-enrollment:delete event/session-enrollment:read event/session-enrollment:write event/session-segments:read event/sessions:delete event/sessions:read event/sessions:write event/speaker-categories:read event/speaker-categories:write event/speakers:delete event/speakers:read event/speakers:write event/taxes:read event/transactions:read event/transactions:write event/video-views:read event/videos:read event/videos:write event/vouchers:read event/webcasts:delete event/webcasts:read event/webcasts:write event/weblinks:read events-plus/hubs:read exhibitor/badges:read exhibitor/badges:write exhibitor/booth-staff:delete exhibitor/booth-staff:read exhibitor/booth-staff:write exhibitor/eliterature-requests:read exhibitor/exhibitor-admins:read exhibitor/exhibitor-admins:write exhibitor/exhibitor-answers:read exhibitor/exhibitor-answers:write exhibitor/exhibitor-categories:delete exhibitor/exhibitor-categories:read exhibitor/exhibitor-categories:write exhibitor/exhibitor-contents:delete exhibitor/exhibitor-contents:read exhibitor/exhibitor-contents:write exhibitor/exhibitor-questions:read exhibitor/exhibitors:delete exhibitor/exhibitors:read exhibitor/exhibitors:write exhibitor/lead-qualification-answers:read exhibitor/lead-qualification-questions:read exhibitor/leads:read exhibitor/registration-packs:delete exhibitor/registration-packs:read exhibitor/registration-packs:write exhibitor/sponsorship-levels:read file/file:read file/file:write housing/connections:write housing/hotel-room-rates:write housing/housing-event-available-nights:read housing/housing-event-hotels:read housing/housing-event-inventory:read housing/housing-event-room-types:read housing/housing-events:read housing/reservation-requests:delete housing/reservation-requests:read housing/reservation-requests:write housing/reservations-link:delete housing/reservations-link:write housing/reservations:delete housing/reservations:read housing/reservations:write onsite/signatures:read proposal/proposals:write remote-printing/badge-print-jobs:read remote-printing/badge-print-jobs:write remote-printing/badge-printer-pools:read rfp/rfp-agenda-items:read rfp/rfp-attachments:read rfp/rfp-custom-fields:read rfp/rfp-guest-rooms:read rfp/rfp-internal-documents:read rfp/rfp-lead-sources:read rfp/rfp-past-events:read rfp/rfp-questions:read rfp/rfp-recipients-history:read rfp/rfp-suppliers:read rfp/rfps:read seating/assignments:read seating/event-seatings:read seating/seats:read seating/tables:read secure-ecommerce/card-tokens:write survey/questions:read survey/respondents:read survey/responses:read survey/standard-survey-email-templates:read survey/standard-survey-email:write survey/standard-survey-questions:read survey/standard-survey-respondents:read survey/standard-survey-respondents:write survey/standard-survey-responses:read survey/standard-survey-responses:write survey/standard-surveys:read survey/survey-questions:read survey/survey-respondents:read survey/survey-respondents:write survey/survey-responses:read survey/survey-responses:write survey/surveys:read venue/meeting-room-overviews:read venue/meeting-rooms:write venue/venue-details-overview:read venue/venue-details:write venue/venue-facility:write"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api-platform.cvent.com/ea/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "af63011d-8ae1-4751-8799-2cbc6fda52b0",
+              "name": "Successfully deleted external attendee activity metadata.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities",
+                    "external",
+                    "metadata",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the activity metadata."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b81f913f-5f91-44e8-96e8-2eec5fa9127d",
+              "name": "Bad or expired token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities",
+                    "external",
+                    "metadata",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the activity metadata."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "428d249e-c191-44c5-9fd6-f840752e3e8a",
+              "name": "You do not have access to the resource",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities",
+                    "external",
+                    "metadata",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the activity metadata."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"Access Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5b1e705b-aaa7-4a31-9a5f-ed49b15b1d78",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities",
+                    "external",
+                    "metadata",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the activity metadata."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "851e19ce-6242-4d78-ae51-d2171e8c9844",
+              "name": "Too many requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities",
+                    "external",
+                    "metadata",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the activity metadata."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 429,\n  \"message\": \"Limit Exceeded\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7e73d9a1-7ed6-49e9-a111-6e35075eb402",
+          "name": "Update Ext Activities Metadata",
+          "request": {
+            "name": "Update Ext Activities Metadata",
+            "description": {
+              "content": "Update external attendee activity metadata.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "attendees",
+                "activities",
+                "external",
+                "metadata",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID of the activity metadata."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "account/hooks:delete account/hooks:read account/hooks:write account/user-groups:delete account/user-groups:read account/user-groups:write account/users:delete account/users:read account/users:write appointments/appointment-attendees:read appointments/appointment-events:read appointments/appointment-types:read appointments/appointments:read appointments/appointments:write appointments/available-times:read appointments/locations:read attendee-insights/attendee-insights:read attendee-insights/scores:read attendee-insights/stats:read budget/budget-items:delete budget/budget-items:read budget/budget-items:write budget/budget-totals:read budget/budget-vendors:read budget/cards:read budget/currency-conversion-rate:delete budget/currency-conversion-rate:read budget/currency-conversion-rate:write budget/payments:delete budget/payments:read budget/payments:write budget/transactions:delete budget/transactions:read budget/transactions:write bulk/bulk-jobs:read bulk/bulk-jobs:write business-transient/bids:read business-transient/proposals:read business-transient/supplier-brands:read business-transient/supplier-chains:read business-transient/supplier-properties:read business-transient/supplier-property-rooms:read business-transient/travel-accounts:read business-transient/travel-program-questions:read business-transient/travel-programs:read business-transient/travel-supplier-accounts:read business-travel/bids:read business-travel/proposals:read business-travel/travel-accounts:read business-travel/travel-program-questions:read business-travel/travel-programs:read compliance/communications:read compliance/communications:write email/bounces:read email/email-status:read email/emails:read eMarketing/campaigns:read emarketing/emarketing-email-status:read eMarketing/eMarketing-email-templates:read eMarketing/eMarketing-send-emails:write event/admission-items:read event/air-request:read event/alternate-travel:read event/attendance-durations:read event/attendee-activities-metadata:delete event/attendee-activities-metadata:read event/attendee-activities-metadata:write event/attendee-activities:read event/attendee-activities:write event/attendee-credits:read event/attendee-links:delete event/attendee-links:read event/attendee-links:write event/attendee-messages:read event/attendees:read event/attendees:write event/audience-segments:read event/audience-segments:write event/contact-groups:read event/contact-groups:write event/contact-types:read event/contacts:delete event/contacts:read event/contacts:write event/contacts:write-sensitive event/custom-fields:read event/custom-fields:write event/discounts:write event/donation-items:read event/event-discounts:read event/event-discounts:write event/event-email-status:read event/event-emails:read event/event-emails:write event/event-features:read event/event-features:write event/event-user-groups:read event/event-user-groups:write event/events:read event/events:write event/fee-items:read event/hotel-request:read event/invitation-lists:read event/meeting-request-forms:read event/meeting-requests:read event/meeting-requests:write event/membership-items:read event/orders:read event/planning-documents:read event/players:read event/process-form-submissions:read event/program-items:delete event/program-items:read event/program-items:write event/quantity-items:read event/quantity-items:write event/registration-paths:read event/registration-types:read event/registration-types:write event/role-assignments:read event/session-attendance:read event/session-attendance:write event/session-categories:read event/session-categories:write event/session-enrollment:delete event/session-enrollment:read event/session-enrollment:write event/session-segments:read event/sessions:delete event/sessions:read event/sessions:write event/speaker-categories:read event/speaker-categories:write event/speakers:delete event/speakers:read event/speakers:write event/taxes:read event/transactions:read event/transactions:write event/video-views:read event/videos:read event/videos:write event/vouchers:read event/webcasts:delete event/webcasts:read event/webcasts:write event/weblinks:read events-plus/hubs:read exhibitor/badges:read exhibitor/badges:write exhibitor/booth-staff:delete exhibitor/booth-staff:read exhibitor/booth-staff:write exhibitor/eliterature-requests:read exhibitor/exhibitor-admins:read exhibitor/exhibitor-admins:write exhibitor/exhibitor-answers:read exhibitor/exhibitor-answers:write exhibitor/exhibitor-categories:delete exhibitor/exhibitor-categories:read exhibitor/exhibitor-categories:write exhibitor/exhibitor-contents:delete exhibitor/exhibitor-contents:read exhibitor/exhibitor-contents:write exhibitor/exhibitor-questions:read exhibitor/exhibitors:delete exhibitor/exhibitors:read exhibitor/exhibitors:write exhibitor/lead-qualification-answers:read exhibitor/lead-qualification-questions:read exhibitor/leads:read exhibitor/registration-packs:delete exhibitor/registration-packs:read exhibitor/registration-packs:write exhibitor/sponsorship-levels:read file/file:read file/file:write housing/connections:write housing/hotel-room-rates:write housing/housing-event-available-nights:read housing/housing-event-hotels:read housing/housing-event-inventory:read housing/housing-event-room-types:read housing/housing-events:read housing/reservation-requests:delete housing/reservation-requests:read housing/reservation-requests:write housing/reservations-link:delete housing/reservations-link:write housing/reservations:delete housing/reservations:read housing/reservations:write onsite/signatures:read proposal/proposals:write remote-printing/badge-print-jobs:read remote-printing/badge-print-jobs:write remote-printing/badge-printer-pools:read rfp/rfp-agenda-items:read rfp/rfp-attachments:read rfp/rfp-custom-fields:read rfp/rfp-guest-rooms:read rfp/rfp-internal-documents:read rfp/rfp-lead-sources:read rfp/rfp-past-events:read rfp/rfp-questions:read rfp/rfp-recipients-history:read rfp/rfp-suppliers:read rfp/rfps:read seating/assignments:read seating/event-seatings:read seating/seats:read seating/tables:read secure-ecommerce/card-tokens:write survey/questions:read survey/respondents:read survey/responses:read survey/standard-survey-email-templates:read survey/standard-survey-email:write survey/standard-survey-questions:read survey/standard-survey-respondents:read survey/standard-survey-respondents:write survey/standard-survey-responses:read survey/standard-survey-responses:write survey/standard-surveys:read survey/survey-questions:read survey/survey-respondents:read survey/survey-respondents:write survey/survey-responses:read survey/survey-responses:write survey/surveys:read venue/meeting-room-overviews:read venue/meeting-rooms:write venue/venue-details-overview:read venue/venue-details:write venue/venue-facility:write"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api-platform.cvent.com/ea/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"<string>\",\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"fields\": [\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1c3497c7-38b1-4894-b8d8-b50d2cf7f744",
+              "name": "External Attendee Activity Metadata was successfully updated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities",
+                    "external",
+                    "metadata",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the activity metadata."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"event.external\",\n  \"name\": \"social.media\",\n  \"description\": \"This external activity contains data of social activities for an attendee.\",\n  \"fields\": [\n    {\n      \"name\": \"facebook_social.media\",\n      \"description\": \"Contains data for facebook social media activity.\"\n    },\n    {\n      \"name\": \"facebook_social.media\",\n      \"description\": \"Contains data for facebook social media activity.\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"event.external\",\n  \"name\": \"social.media\",\n  \"id\": \"9463c74e-18c6-401a-a710-ae0f485bf059\",\n  \"description\": \"This external activity contains data of social activities for an attendee.\",\n  \"fields\": [\n    {\n      \"name\": \"facebook_social.media\",\n      \"description\": \"Contains data for facebook social media activity.\"\n    },\n    {\n      \"name\": \"facebook_social.media\",\n      \"description\": \"Contains data for facebook social media activity.\"\n    }\n  ],\n  \"created\": \"2017-01-02T02:00:00Z\",\n  \"createdBy\": \"hporter\",\n  \"lastModified\": \"2019-02-12T03:00:00Z\",\n  \"lastModifiedBy\": \"hporter\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "72b8b1b4-b3bd-46de-b16a-15f16c11bbbf",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities",
+                    "external",
+                    "metadata",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the activity metadata."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"event.external\",\n  \"name\": \"social.media\",\n  \"description\": \"This external activity contains data of social activities for an attendee.\",\n  \"fields\": [\n    {\n      \"name\": \"facebook_social.media\",\n      \"description\": \"Contains data for facebook social media activity.\"\n    },\n    {\n      \"name\": \"facebook_social.media\",\n      \"description\": \"Contains data for facebook social media activity.\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "55bf5446-33e0-4002-b465-f46e3c581087",
+              "name": "Bad or expired token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities",
+                    "external",
+                    "metadata",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the activity metadata."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"event.external\",\n  \"name\": \"social.media\",\n  \"description\": \"This external activity contains data of social activities for an attendee.\",\n  \"fields\": [\n    {\n      \"name\": \"facebook_social.media\",\n      \"description\": \"Contains data for facebook social media activity.\"\n    },\n    {\n      \"name\": \"facebook_social.media\",\n      \"description\": \"Contains data for facebook social media activity.\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d48e9805-110b-4903-8511-14c9ca1a34d4",
+              "name": "You do not have access to the resource",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities",
+                    "external",
+                    "metadata",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the activity metadata."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"event.external\",\n  \"name\": \"social.media\",\n  \"description\": \"This external activity contains data of social activities for an attendee.\",\n  \"fields\": [\n    {\n      \"name\": \"facebook_social.media\",\n      \"description\": \"Contains data for facebook social media activity.\"\n    },\n    {\n      \"name\": \"facebook_social.media\",\n      \"description\": \"Contains data for facebook social media activity.\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"Access Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "63a40f2a-a744-4055-9aba-c36e047f09aa",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities",
+                    "external",
+                    "metadata",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the activity metadata."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"event.external\",\n  \"name\": \"social.media\",\n  \"description\": \"This external activity contains data of social activities for an attendee.\",\n  \"fields\": [\n    {\n      \"name\": \"facebook_social.media\",\n      \"description\": \"Contains data for facebook social media activity.\"\n    },\n    {\n      \"name\": \"facebook_social.media\",\n      \"description\": \"Contains data for facebook social media activity.\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "40433aea-aa5a-42bf-acac-f50cdca414df",
+              "name": "Too many requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attendees",
+                    "activities",
+                    "external",
+                    "metadata",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the activity metadata."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": \"event.external\",\n  \"name\": \"social.media\",\n  \"description\": \"This external activity contains data of social activities for an attendee.\",\n  \"fields\": [\n    {\n      \"name\": \"facebook_social.media\",\n      \"description\": \"Contains data for facebook social media activity.\"\n    },\n    {\n      \"name\": \"facebook_social.media\",\n      \"description\": \"Contains data for facebook social media activity.\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 429,\n  \"message\": \"Limit Exceeded\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-platform.cvent.com/ea",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "440e448b-44d1-4bed-bcb7-6a2789198bdd",
+    "name": "Cvent REST APIs — Event Cloud Attendee Activities API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Event Cloud scope of the Cvent REST APIs. This document is a TAG-SCOPED SUBSET of the OpenAPI specification Cvent publishes at https://github.com/cvent/rest-sdks/blob/main/cvent-public-spec/openapi.yaml (the source of truth for Cvent's official TypeScript/.NET/Java SDKs). Venue-sourcing, RFP, housing-supplier and travel-supplier tags were removed because they belong to Cvent Hospitality Cloud; every path, operation, parameter, schema and security requirement below is verbatim from Cvent's published spec.\n\n# Introduction\nThe Cvent API Platform is built around REST. We aim to provide intuitive endpoints that can be easily\ndiscovered to help leverage the Cvent platform for your event needs. The RESTful APIs outlined here\nuse JSON-encoded request and response format, along with HTTP codes, to convey processing status of\nrequests received. The Cvent resources are protected using OAuth2.\n\n# Getting Started\n\nIf you're new to the Cvent API Platform, start by reading our\n[Developer Quickstart](https://developers.cvent.com/docs/rest-api/tutorials/developer-quickstart) guide. This will\ngive you an overview of how to authenticate and make requests using our APIs.\n\n## Authentication\n\nThe Cvent REST API uses [OAuth2](https://oauth.net/2/) to authorize requests to the platform. The client\ncredentials authorization flow is supported.\n\n<a name=\"oauth2-auth-code-planner-admin\"></a>\n\nAuthorization code flow is only supported for planner users with the administrator role in Cvent. Developer users\ncannot use authorization code flow.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\nHere's an example of using client credential flow to authorize. You'll supply your application's id and secret to\nmake a [Token](#operation/oauth2Token) request.\n\n```bash\ncurl --location --request POST '{hostName}/{version}/oauth2/token' \\\n--header 'Content-Type: application/x-www-form-urlencoded' \\\n--header 'Authorization: Basic {api_credentials}' \\\n--data-urlencode 'grant_type=client_credentials' \\\n--data-urlencode 'client_id={client_id}'\n```\n\n| Key               | Description                                          | Value                                                                                                        |\n| :---------------- | :--------------------------------------------------- | :----------------------------------------------------------------------------------------------------------- |\n| {hostName}        | https://api-platform.cvent.com                       | Location if your account is in the North American datacenter.                                                |\n|                   | https://api-platform-eur.cvent.com                   | Location if your account is in the European data center.                                                     |\n| {version}         | ea                                                   | The version of the API you're using. Only `ea` is currently supported.                                       |\n| {api_credentials} | {client_id}:{client_secret} in base64 encoded format | Supply your client id & client credentials in a base 64 encoded format.                                      |\n| {client_id}       | Retrieved from your application                      | Your application's client id.                                                                                |\n| {client_secret}   | Retrieved from your application                      | Your application's client secret.                                                                            |\n\nOn a successful call, you'll receive the following response:\n\n```json\n{\n  \"access_token\": \"{accessToken}\",\n  \"expires_in\": 3600,\n  \"token_type\": \"Bearer\"\n}\n```\n\nThis bearer token is valid for 3600 seconds (60 minutes) and must be used in subsequent calls.\n\n## Endpoints\n\nEndpoints start with `hostName` and `version`.\n\nThe `hostname` will depend on the region that your Cvent account is hosted in. Please see the table\nbelow to identify which hostname you should be using.\n\n| Region        |\tHostname                           |\n|:--------------|:-----------------------------------|\n| North America\t| https://api-platform.cvent.com     |\n| Europe        | https://api-platform-eur.cvent.com |\n\nThe current `version` of the Cvent API is `ea`.\n\n## Rate Limits\n\nCvent APIs enforce rate limits to ensure platform stability. Your limits depend on your tier: Free,\nStandard, or Premium.\n\n<br />\n\n### Usage Tiers\n\n| Tier     | Daily Calls | Calls per Second | Max Burst |\n| -------- | ----------- | ---------------- | --------- |\n| Free     | 1,000       | 2                | 1         |\n| Standard | 15,000      | 10               | 10        |\n| Premium  | 500,000     | 25               | 25        |\n\n- **Daily calls** define how many requests you can make in a 24-hour period. Quota\n  resets at 12 midnight (+0 GMT).\n- **Calls per second** define how many requests you can make in a 1-second window.\n- **Max Burst** defines how many requests you can make at once.\n\nIf you are unsure what usage tier applies to your account, you can check via\n[Get Current Usage Tier](#operation/getUsageTier).\n\nPlease note that these limits may change as the Cvent API Platform evolves.\n\n<br />\n\n### Handling Rate Limits\n\nSometimes, you may exceed your rate limits. When this happens, the API will return a `429 Too Many Requests`. See\n[handling rate limits](https://developers.cvent.com/docs/rest-api/guides/handling-rate-limits) for best practices on how to handle this.\n\n## Pagination\n\nSome APIs use pagination to manage records. Each page of records has a token associated to identify it.\n\nIf an API uses pagination, you’ll find up to three tokens in the response:\n- **currentToken**: Describes the token of the current page.\n- **nextToken**: Provides a token for the next page of records, if one exists.\n- **previousToken**: Provides a token for the previous page of records, if one exists. Not all APIs will return\n  this token.\n\nYou specify which page of records to view via the `token` parameter in your API call. To navigate through pages,\ntake the `nextToken` or `previousToken` value and pass it to your next call’s `token` parameter to get the\nrespective page of records. For example, if you made this request:\n\n```bash\ncurl -X GET {hostname}/{version}/contacts?limit=100 \\\n-H 'Accept: application/json' \\\n-H 'Authorization: Bearer {accessToken}'\n```\n\nThe response contains a paging array where you'll find the token information.\n\n```json\n{\n  \"paging\": {\n    \"currentToken\": \"90c5f062-76ad-4ea4-aa53-00eb698d9262\",\n    \"nextToken\": \"3b2359a7-4583-40ed-8afd-67e5f15373d3\",\n    \"limit\": 100,\n    \"totalCount\": 102,\n    \"_links\": {...}\n  },\n  \"data\": [...]\n}\n```\n\nTake the `nextToken` and use it in the `token` parameter on your subsequent call.\n\n```bash\ncurl -X GET {hostname}/{version}/contacts?limit=100&token=3b2359a7-4583-40ed-8afd-67e5f15373d3 \\\n-H 'Accept: application/json' \\\n-H 'Authorization: Bearer {accessToken}'\n```\n\nWhen the response doesn’t contain a `nextToken` field, you’ve reached the last page. Occasionally, you might\nencounter an empty page at the end of results. This typically happens when the results were evenly divisible.\nEnsure your client code handles the possibility of receiving an empty data array when using the `nextToken`.\n\n## Filtering\n\nUse filters to narrow down results. The filter follows the pattern\n`filter='field' comparisonType 'value'`. The value can be enclosed with single\nquotes (') or double quotes (\").\n\n```bash\nGET {hostName}/{version}/contacts?filter=lastName eq 'Smith'\n````\n\nTo correctly pass a single quote in the filter's value, use double quotes around\nthe string.\n\n```bash\nGET {hostName}/{version}/contacts?filter=lastName eq \"O'Keenan\"\n```\n\nTo correctly pass a double quote in the filter's value, use double quotes around\nthe string and add an escape character `\\` to each quote that is part of the\nstring.\n\n```bash\nGET {hostName}/{version}/events?filter=eventName eq \"\\\"Yearly\\\" Conference\"\n```\n\n## Versioning\n\nChange is inevitable in API development. Planning for it is crucial. We track\nboth backward-compatible and backward-incompatible changes.\n\n<br />\n\n### Backward Compatible Changes\n\nBackward compatible changes will be made often and are intended to avoid\nany adverse impact on our customers. It is highly advisable that when reading\nJSON payloads from Cvent, you are able to handle \"unknown\" attributes that\ncan be added over time. We consider the following changes backward-compatible:\n\n- Adding new resources\n- Adding new optional request parameters to existing operations\n- Adding new attributes to requests or responses\n- Changing the length or format (not type) of resource identifiers. For example, an ID can change from\n  \"1234/1234\" to \"1234::1234\".\n- Increasing the length of string fields\n\n<br />\n\n### Backward Incompatible Changes\n\nBackward-incompatible changes are made infrequently, however, they can be\ndisruptive to consumers. Due to this, our APIs are versioned to avoid\ndisruptions to customers. We leverage a URI-based versioning scheme,\nwhich means that a version value is included in the Cvent API URL.\nWhen breaking changes occur, a new version of the API is made available\nwhile the existing version is deprecated but remains available for a\nlimited period of time. We consider the following backward-incompatible changes:\n\n- Adding a new required parameter (query string param or payload attribute)\n- Deleting API resources\n- Deleting any attribute from API responses\n- Changing the data type on any parameter or attribute\n\n## Standards\nAs you begin working with our APIs, it's essential to be aware of standards around\ncountry codes, time formats, and other important details that ensure smooth integration.\nLearn more about our [API Standards](https://developers.cvent.com/docs/rest-api/reference/api-standards)\n\n\nContact Support:\n Name: Cvent Development Platform",
+      "type": "text/plain"
+    }
+  }
+}

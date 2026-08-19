@@ -1,0 +1,118 @@
+generated: '2026-08-13'
+method: probed
+source: direct HTTP probe of every Cvent host named in apis.yml and the OpenAPI servers[]
+provider: Cvent Event Cloud
+providerId: cvent-event-cloud
+checked: '2026-08-13'
+description: >-
+  /.well-known/ probe across every Cvent host. The REST API hosts, the developer portal and the
+  marketing site serve nothing at any well-known path. Cvent's MCP host does: mcp.cvent.com serves
+  RFC 8414 authorization-server metadata and RFC 9728 protected-resource metadata, which is how its
+  MCP endpoint advertises its OAuth 2.1 requirements to an agent.
+hosts:
+  - host: mcp.cvent.com
+    role: MCP server (remote)
+    paths:
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        content_type: application/json
+        file: well-known/cvent-event-cloud-oauth-authorization-server.json
+        document: true
+        note: >-
+          RFC 8414. issuer https://mcp.cvent.com, authorization_endpoint /oauth2/authorize,
+          token_endpoint /oauth2/token, response_types [code], grant_types
+          [authorization_code, refresh_token], PKCE S256 required, token endpoint auth
+          client_secret_basic / client_secret_post.
+      - path: /.well-known/oauth-protected-resource/mcp
+        status: 200
+        content_type: application/json
+        file: well-known/cvent-event-cloud-oauth-protected-resource.json
+        document: true
+        note: >-
+          RFC 9728. resource https://mcp.cvent.com/mcp, authorization_servers
+          [https://mcp.cvent.com], bearer_methods_supported [header]. This exact URL is named in
+          the WWW-Authenticate challenge returned by POST https://mcp.cvent.com/mcp.
+      - path: /.well-known/oauth-protected-resource
+        status: 401
+        document: false
+        note: Unsuffixed path is itself bearer-protected; the /mcp-suffixed resource document is public.
+      - path: /.well-known/openid-configuration
+        status: 404
+        document: false
+      - path: /.well-known/security.txt
+        status: 404
+        document: false
+      - path: /.well-known/api-catalog
+        status: 404
+        document: false
+      - path: /.well-known/ai-plugin.json
+        status: 404
+        document: false
+      - path: /.well-known/agent-card.json
+        status: 404
+        document: false
+      - path: /.well-known/agent.json
+        status: 404
+        document: false
+  - host: api-platform.cvent.com
+    role: REST API base (North America)
+    note: >-
+      Every path returns the API gateway's own JSON 404 body
+      {"message":"Unrecognized request URL ...","code":"Not Found"} — a genuine 404, not an SPA shell.
+    paths:
+      - {path: /.well-known/security.txt, status: 404, document: false}
+      - {path: /.well-known/openid-configuration, status: 404, document: false}
+      - {path: /.well-known/oauth-authorization-server, status: 404, document: false}
+      - {path: /.well-known/oauth-protected-resource, status: 404, document: false}
+      - {path: /.well-known/api-catalog, status: 404, document: false}
+      - {path: /.well-known/ai-plugin.json, status: 404, document: false}
+      - {path: /.well-known/agent-card.json, status: 404, document: false}
+      - {path: /.well-known/agent.json, status: 404, document: false}
+  - host: api-platform-eur.cvent.com
+    role: REST API base (Europe)
+    note: Same gateway 404 body as the North American host on every path.
+    paths:
+      - {path: /.well-known/security.txt, status: 404, document: false}
+      - {path: /.well-known/openid-configuration, status: 404, document: false}
+      - {path: /.well-known/oauth-authorization-server, status: 404, document: false}
+      - {path: /.well-known/oauth-protected-resource, status: 404, document: false}
+      - {path: /.well-known/api-catalog, status: 404, document: false}
+      - {path: /.well-known/ai-plugin.json, status: 404, document: false}
+      - {path: /.well-known/agent-card.json, status: 404, document: false}
+      - {path: /.well-known/agent.json, status: 404, document: false}
+  - host: developers.cvent.com
+    role: Developer portal (Next.js / Nextra SPA)
+    note: >-
+      Returns HTTP 404 with a 2,955-byte HTML shell on every path. Recorded as a miss, not a hit.
+    paths:
+      - {path: /.well-known/security.txt, status: 404, document: false}
+      - {path: /.well-known/openid-configuration, status: 404, document: false}
+      - {path: /.well-known/oauth-authorization-server, status: 404, document: false}
+      - {path: /.well-known/oauth-protected-resource, status: 404, document: false}
+      - {path: /.well-known/api-catalog, status: 404, document: false}
+      - {path: /.well-known/ai-plugin.json, status: 404, document: false}
+      - {path: /.well-known/agent-card.json, status: 404, document: false}
+      - {path: /.well-known/agent.json, status: 404, document: false}
+  - host: www.cvent.com
+    role: Marketing site
+    note: >-
+      Returns HTTP 404 with a ~107 KB HTML page (the site's own 404 template) on most paths.
+      HTML, not a document — recorded as a miss.
+    paths:
+      - {path: /.well-known/security.txt, status: 404, document: false}
+      - {path: /.well-known/openid-configuration, status: 404, document: false}
+      - {path: /.well-known/oauth-authorization-server, status: 404, document: false}
+      - {path: /.well-known/oauth-protected-resource, status: 404, document: false}
+      - {path: /.well-known/api-catalog, status: 404, document: false}
+      - {path: /.well-known/ai-plugin.json, status: 404, document: false}
+      - {path: /.well-known/agent-card.json, status: 404, document: false}
+      - {path: /.well-known/agent.json, status: 404, document: false}
+summary:
+  hosts_probed: 5
+  paths_probed: 41
+  documents_served: 2
+  security_txt: false
+  agent_card: false
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

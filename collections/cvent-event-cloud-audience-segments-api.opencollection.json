@@ -1,0 +1,494 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cvent REST APIs — Event Cloud Audience Segments API",
+    "version": "ea"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Audience Segments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Associated Segments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/attendees/:attendeeId/audience-segments",
+            "params": [
+              {
+                "name": "attendeeId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an attendee."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field            | Operators                           |\n|------------------|-------------------------------------|\n| segment.id       | `eq`, `in`                          |\n\nNo logical operators are supported.\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of ACTIVE audience segment associations for the attendee. Use the filter query parameter to filter by segment ID."
+        },
+        {
+          "info": {
+            "name": "Delete Attendee Associations",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-platform.cvent.com/ea/attendees/:attendeeId/audience-segments",
+            "params": [
+              {
+                "name": "attendeeId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an attendee."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "disassociate an attendee from all audience segments"
+        },
+        {
+          "info": {
+            "name": "List Associated Segments",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/attendees/:attendeeId/audience-segments/filter",
+            "params": [
+              {
+                "name": "attendeeId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an attendee."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of ACTIVE audience segment associations for the attendee by sending filter in the body of the request. This method returns the same data as [GET List Associated Segments](#operation/listAttendeeAudienceSegments) but allows for longer filters.\n"
+        },
+        {
+          "info": {
+            "name": "List Audience Segments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/audience-segments",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "The sort order passed as a parameter, used to control the order of the\nsearch results as a priority ordered list of sorts. By default, data is sorted by lastModified ASC.\n\nThere are two orders:\n  * ascending: ASC\n  * descending: DESC\n\nThe following fields are sortable:\n  * name\n  * lastModified\n  * lastModifiedBy\n  * creationType\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field            | Operators                           | Notes                                                 |\n|------------------|-------------------------------------|-------------------------------------------------------|\n| event.id         | `eq`, `in`                          | Filters the list of all segments present in an event. |\n| id               | `eq`, `in`                          |                                                       |\n| deleted          | `eq`                                |                                                       |\n| creationType     | `eq`, `in`                          |                                                       |\n\nThe following logical operators are supported for combining filters:\n* and\n"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of audience segments for your account. By default,\nthe results include all segments present, at the account level, unless you specify\notherwise using the filter query parameter.\n"
+        },
+        {
+          "info": {
+            "name": "Create Audience Segment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/audience-segments",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Creates an audience segment in the given event based on the details supplied in the request body."
+        },
+        {
+          "info": {
+            "name": "List Audience Segments",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/audience-segments/filter",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "The sort order passed as a parameter, used to control the order of the\nsearch results as a priority ordered list of sorts. By default, data is sorted by lastModified ASC.\n\nThere are two orders:\n  * ascending: ASC\n  * descending: DESC\n\nThe following fields are sortable:\n  * name\n  * lastModified\n  * lastModifiedBy\n  * creationType\n"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of audience segments for an account by sending a filter\nin the body of the request. By default, the results include all\naudience segments at the account level unless you specify otherwise in the filter. This\nmethod returns the same data as\n[GET List Audience Segments](#operation/listAudienceSegments) but\nallows for longer filters.\n"
+        },
+        {
+          "info": {
+            "name": "Get Audience Segment",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/audience-segments/:audienceSegmentId",
+            "params": [
+              {
+                "name": "audienceSegmentId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an audience segment."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets an audience segment based on the given ID."
+        },
+        {
+          "info": {
+            "name": "Update Audience Segment",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/audience-segments/:audienceSegmentId",
+            "params": [
+              {
+                "name": "audienceSegmentId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an audience segment."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Updates the given audience segment based on the values provided in the request body."
+        },
+        {
+          "info": {
+            "name": "Delete Audience Segment",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-platform.cvent.com/ea/audience-segments/:audienceSegmentId",
+            "params": [
+              {
+                "name": "audienceSegmentId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an audience segment."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Deletes the given audience segment."
+        },
+        {
+          "info": {
+            "name": "List Associated Attendees",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/audience-segments/:audienceSegmentId/attendees",
+            "params": [
+              {
+                "name": "audienceSegmentId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an audience segment."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field            | Operators                           | Notes                                    |\n|------------------|-------------------------------------|------------------------------------------|\n| disassociated    | `eq`                                | To use this filter, `includeDisassociated` query parameter must be true. |\n"
+              },
+              {
+                "name": "includeDisassociated",
+                "value": "",
+                "type": "query",
+                "description": "Use the `includeDisassociated` query parameter to include disassociated attendees in the result. Note: Disassociated attendees older than 30 days will not be returned in result.\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of attendees associated or disassociated to/from an audience segment. Use the `filter` query parameter to return only associated or only disassociated attendees.\n"
+        },
+        {
+          "info": {
+            "name": "Associate Attendee to Segment",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/audience-segments/:audienceSegmentId/attendees/:attendeeId",
+            "params": [
+              {
+                "name": "audienceSegmentId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an audience segment."
+              },
+              {
+                "name": "attendeeId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an attendee."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Associates an attendee to a given audience segment."
+        },
+        {
+          "info": {
+            "name": "Disassociate Attendee",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-platform.cvent.com/ea/audience-segments/:audienceSegmentId/attendees/:attendeeId",
+            "params": [
+              {
+                "name": "audienceSegmentId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an audience segment."
+              },
+              {
+                "name": "attendeeId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an attendee."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Disassociate an attendee from an audience segment."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

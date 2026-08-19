@@ -1,0 +1,896 @@
+{
+  "item": [
+    {
+      "id": "a49391c7-a563-40ff-b820-c7a36c48daee",
+      "name": "Events+ Hub",
+      "description": {
+        "content": "An Events+ Hub persists basic information needed to assign an owner and optionally customize the public presentation.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "cfceabd6-2763-4511-994b-4ceedd405d7f",
+          "name": "List Events+ Hubs",
+          "request": {
+            "name": "List Events+ Hubs",
+            "description": {
+              "content": "Get a paginated list of all Events+ hubs associated with your account. Each Events+ hub returned contains owner and theme information as well as the current status.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "hubs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "100",
+                  "description": "The maximum number of records to return per page."
+                },
+                {
+                  "disabled": false,
+                  "key": "token",
+                  "value": "<string>",
+                  "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field | Operators  |\n|-------|------------|\n| id    | `eq`, `ne` |\n\nLimit for the number of fields that can be passed in a filter is 35.\n\nThe following logical operators are supported for combining filters:\n* or\n"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "account/hooks:delete account/hooks:read account/hooks:write account/user-groups:delete account/user-groups:read account/user-groups:write account/users:delete account/users:read account/users:write appointments/appointment-attendees:read appointments/appointment-events:read appointments/appointment-types:read appointments/appointments:read appointments/appointments:write appointments/available-times:read appointments/locations:read attendee-insights/attendee-insights:read attendee-insights/scores:read attendee-insights/stats:read budget/budget-items:delete budget/budget-items:read budget/budget-items:write budget/budget-totals:read budget/budget-vendors:read budget/cards:read budget/currency-conversion-rate:delete budget/currency-conversion-rate:read budget/currency-conversion-rate:write budget/payments:delete budget/payments:read budget/payments:write budget/transactions:delete budget/transactions:read budget/transactions:write business-transient/bids:read business-transient/proposals:read business-travel/bids:read business-travel/proposals:read compliance/communications:read compliance/communications:write email/bounces:read email/email-status:read email/emails:read eMarketing/campaigns:read emarketing/emarketing-email-status:read eMarketing/eMarketing-email-templates:read eMarketing/eMarketing-send-emails:write event/admission-items:read event/air-request:read event/alternate-travel:read event/attendance-durations:read event/attendee-activities-metadata:delete event/attendee-activities-metadata:read event/attendee-activities-metadata:write event/attendee-activities:read event/attendee-activities:write event/attendee-credits:read event/attendee-links:delete event/attendee-links:read event/attendee-links:write event/attendee-messages:read event/attendees:read event/attendees:write event/audience-segments:read event/audience-segments:write event/contact-groups:read event/contact-groups:write event/contact-types:read event/contacts:delete event/contacts:read event/contacts:write event/contacts:write-sensitive event/custom-fields:read event/custom-fields:write event/discounts:write event/donation-items:read event/event-discounts:read event/event-discounts:write event/event-email-status:read event/event-emails:read event/event-emails:write event/event-features:read event/event-features:write event/event-user-groups:read event/event-user-groups:write event/events:read event/events:write event/fee-items:read event/hotel-request:read event/invitation-lists:read event/meeting-request-forms:read event/meeting-requests:read event/meeting-requests:write event/membership-items:read event/orders:read event/planning-documents:read event/players:read event/process-form-submissions:read event/program-items:delete event/program-items:read event/program-items:write event/quantity-items:read event/quantity-items:write event/registration-paths:read event/registration-types:read event/registration-types:write event/role-assignments:read event/session-attendance:read event/session-attendance:write event/session-categories:read event/session-categories:write event/session-enrollment:delete event/session-enrollment:read event/session-enrollment:write event/session-segments:read event/sessions:delete event/sessions:read event/sessions:write event/speaker-categories:read event/speaker-categories:write event/speakers:delete event/speakers:read event/speakers:write event/taxes:read event/transactions:read event/transactions:write event/video-views:read event/videos:read event/videos:write event/vouchers:read event/webcasts:delete event/webcasts:read event/webcasts:write event/weblinks:read events-plus/hubs:read exhibitor/badges:read exhibitor/badges:write exhibitor/booth-staff:delete exhibitor/booth-staff:read exhibitor/booth-staff:write exhibitor/eliterature-requests:read exhibitor/exhibitor-admins:read exhibitor/exhibitor-admins:write exhibitor/exhibitor-answers:read exhibitor/exhibitor-answers:write exhibitor/exhibitor-categories:delete exhibitor/exhibitor-categories:read exhibitor/exhibitor-categories:write exhibitor/exhibitor-contents:delete exhibitor/exhibitor-contents:read exhibitor/exhibitor-contents:write exhibitor/exhibitor-questions:read exhibitor/exhibitors:delete exhibitor/exhibitors:read exhibitor/exhibitors:write exhibitor/lead-qualification-answers:read exhibitor/lead-qualification-questions:read exhibitor/leads:read exhibitor/registration-packs:delete exhibitor/registration-packs:read exhibitor/registration-packs:write exhibitor/sponsorship-levels:read file/file:read file/file:write onsite/signatures:read remote-printing/badge-print-jobs:read remote-printing/badge-print-jobs:write remote-printing/badge-printer-pools:read rfp/rfp-agenda-items:read rfp/rfp-attachments:read rfp/rfp-custom-fields:read rfp/rfp-guest-rooms:read rfp/rfp-internal-documents:read rfp/rfp-lead-sources:read rfp/rfp-past-events:read rfp/rfp-questions:read rfp/rfp-recipients-history:read rfp/rfp-suppliers:read rfp/rfps:read seating/assignments:read seating/event-seatings:read seating/seats:read seating/tables:read survey/questions:read survey/respondents:read survey/responses:read survey/standard-survey-email-templates:read survey/standard-survey-email:write survey/standard-survey-questions:read survey/standard-survey-respondents:read survey/standard-survey-respondents:write survey/standard-survey-responses:read survey/standard-survey-responses:write survey/standard-surveys:read survey/survey-questions:read survey/survey-respondents:read survey/survey-respondents:write survey/survey-responses:read survey/survey-responses:write survey/surveys:read venue/meeting-room-overviews:read venue/meeting-rooms:write venue/venue-details-overview:read venue/venue-details:write venue/venue-facility:write"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api-platform.cvent.com/ea/oauth2/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://api-platform.cvent.com/ea/oauth2/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "d771ba6a-dc9a-475a-83d4-6149c6df95ca",
+              "name": "Successfully retrieved a paginated list of Events+ hubs and their related details.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hubs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "(id eq '76f2b9e2-fcce-4d93-be29-a008b76a050c') OR (id eq '16322408-bae8-4b29-a559-702d2023e13a')"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"paging\": {\n    \"_links\": {\n      \"next\": {\n        \"href\": \"?token=90c5f062-76ad-4ea4-aa53-00eb698d9262\"\n      },\n      \"self\": {\n        \"href\": \"?token=90c5f062-76ad-4ea4-aa53-00eb698d9262\"\n      },\n      \"prev\": {\n        \"href\": \"?token=90c5f062-76ad-4ea4-aa53-00eb698d9262\"\n      }\n    },\n    \"previousToken\": \"1a2b3c4d5e6f7g8h9i10j11k\",\n    \"nextToken\": \"1a2b3c4d5e6f7g8h9i10j11k\",\n    \"currentToken\": \"1a2b3c4d5e6f7g8h9i10j11k\",\n    \"limit\": 100,\n    \"totalCount\": 2\n  },\n  \"data\": [\n    {\n      \"title\": \"Future Technologies\",\n      \"owner\": {\n        \"firstName\": \"Achuthanandan\",\n        \"lastName\": \"Velikkakathu Sankaran\",\n        \"email\": \"owner@example.com\"\n      },\n      \"id\": \"1e7e0f38-d73c-4326-9f93-422086b91304\",\n      \"status\": \"Deleted\",\n      \"customDomain\": \"example.com\",\n      \"url\": \"https://web.cvent.com/eventsplus\",\n      \"colors\": {\n        \"action\": \"#0F0F0F\",\n        \"background\": \"#0F0F0F\",\n        \"main\": \"#0F0F0F\",\n        \"mood\": \"#0F0F0F\"\n      },\n      \"themeSafeMode\": true,\n      \"logo\": {\n        \"url\": \"https://images.cvent.com/ab5d5f790f6b4a90b29a3711d4ec381f/video-center/4833fde2-eedf-4751-92a5-f788cfa70674/43c5b520abf9635f4168a2ce37a89d89!_!6fbef1a131b81d4bed2b16c175ef57cd.jpeg\",\n        \"originalUrl\": \"https://custom.cvent.com/ab5d5f790f6b4a90b29a3711d4ec381f/video-center/4833fde2-eedf-4751-92a5-f788cfa70674/43c5b520abf9635f4168a2ce37a89d89.jpeg\",\n        \"altText\": \"A mostly empty conference room.\"\n      },\n      \"background\": {\n        \"url\": \"https://images.cvent.com/ab5d5f790f6b4a90b29a3711d4ec381f/video-center/4833fde2-eedf-4751-92a5-f788cfa70674/43c5b520abf9635f4168a2ce37a89d89!_!6fbef1a131b81d4bed2b16c175ef57cd.jpeg\",\n        \"originalUrl\": \"https://custom.cvent.com/ab5d5f790f6b4a90b29a3711d4ec381f/video-center/4833fde2-eedf-4751-92a5-f788cfa70674/43c5b520abf9635f4168a2ce37a89d89.jpeg\",\n        \"altText\": \"A mostly empty conference room.\"\n      },\n      \"locale\": \"en-GB\",\n      \"calendar\": {\n        \"id\": \"1e7e0f38-d73c-4326-9f93-422086b91304\",\n        \"layout\": \"List\"\n      },\n      \"helpEmailAddress\": \"abc@example.com\",\n      \"autoDetectBrowserLocale\": true,\n      \"faviconUrl\": \"https://cvent.com/bucket/scope/logo.png\",\n      \"utmOverride\": \"use-custom-parameter\",\n      \"fonts\": {\n        \"headingId\": \"04ca6ae2-0dc3-487b-953e-86d6abbdf7d3\",\n        \"bodyId\": \"04ca6ae2-0dc3-487b-953e-86d6abbdf7d3\"\n      },\n      \"login\": {\n        \"type\": \"MAGIC_LINK\",\n        \"organizationId\": \"OneloginforFlexGuestside\",\n        \"idpUrl\": \"https://login.cvent.com/redirect?redirectUrl=https://cvent-login.com/oauth2/oauth-redirect&productId=0oaztigu7sVcS4PHM0h7&identityProviderName=OneloginforFlexGuestside\"\n      },\n      \"websiteTheming\": true,\n      \"created\": \"2017-01-02T02:00:00Z\",\n      \"createdBy\": \"hporter\",\n      \"lastModified\": \"2019-02-12T03:00:00Z\",\n      \"lastModifiedBy\": \"hporter\"\n    },\n    {\n      \"title\": \"Future Technologies\",\n      \"owner\": {\n        \"firstName\": \"Achuthanandan\",\n        \"lastName\": \"Velikkakathu Sankaran\",\n        \"email\": \"owner@example.com\"\n      },\n      \"id\": \"1e7e0f38-d73c-4326-9f93-422086b91304\",\n      \"status\": \"Deleted\",\n      \"customDomain\": \"example.com\",\n      \"url\": \"https://web.cvent.com/eventsplus\",\n      \"colors\": {\n        \"action\": \"#0F0F0F\",\n        \"background\": \"#0F0F0F\",\n        \"main\": \"#0F0F0F\",\n        \"mood\": \"#0F0F0F\"\n      },\n      \"themeSafeMode\": true,\n      \"logo\": {\n        \"url\": \"https://images.cvent.com/ab5d5f790f6b4a90b29a3711d4ec381f/video-center/4833fde2-eedf-4751-92a5-f788cfa70674/43c5b520abf9635f4168a2ce37a89d89!_!6fbef1a131b81d4bed2b16c175ef57cd.jpeg\",\n        \"originalUrl\": \"https://custom.cvent.com/ab5d5f790f6b4a90b29a3711d4ec381f/video-center/4833fde2-eedf-4751-92a5-f788cfa70674/43c5b520abf9635f4168a2ce37a89d89.jpeg\",\n        \"altText\": \"A mostly empty conference room.\"\n      },\n      \"background\": {\n        \"url\": \"https://images.cvent.com/ab5d5f790f6b4a90b29a3711d4ec381f/video-center/4833fde2-eedf-4751-92a5-f788cfa70674/43c5b520abf9635f4168a2ce37a89d89!_!6fbef1a131b81d4bed2b16c175ef57cd.jpeg\",\n        \"originalUrl\": \"https://custom.cvent.com/ab5d5f790f6b4a90b29a3711d4ec381f/video-center/4833fde2-eedf-4751-92a5-f788cfa70674/43c5b520abf9635f4168a2ce37a89d89.jpeg\",\n        \"altText\": \"A mostly empty conference room.\"\n      },\n      \"locale\": \"en-GB\",\n      \"calendar\": {\n        \"id\": \"1e7e0f38-d73c-4326-9f93-422086b91304\",\n        \"layout\": \"List\"\n      },\n      \"helpEmailAddress\": \"abc@example.com\",\n      \"autoDetectBrowserLocale\": true,\n      \"faviconUrl\": \"https://cvent.com/bucket/scope/logo.png\",\n      \"utmOverride\": \"use-custom-parameter\",\n      \"fonts\": {\n        \"headingId\": \"04ca6ae2-0dc3-487b-953e-86d6abbdf7d3\",\n        \"bodyId\": \"04ca6ae2-0dc3-487b-953e-86d6abbdf7d3\"\n      },\n      \"login\": {\n        \"type\": \"MAGIC_LINK\",\n        \"organizationId\": \"OneloginforFlexGuestside\",\n        \"idpUrl\": \"https://login.cvent.com/redirect?redirectUrl=https://cvent-login.com/oauth2/oauth-redirect&productId=0oaztigu7sVcS4PHM0h7&identityProviderName=OneloginforFlexGuestside\"\n      },\n      \"websiteTheming\": true,\n      \"created\": \"2017-01-02T02:00:00Z\",\n      \"createdBy\": \"hporter\",\n      \"lastModified\": \"2019-02-12T03:00:00Z\",\n      \"lastModifiedBy\": \"hporter\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d7911f98-7c9b-4a65-bb93-df851ffbe767",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hubs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "(id eq '76f2b9e2-fcce-4d93-be29-a008b76a050c') OR (id eq '16322408-bae8-4b29-a559-702d2023e13a')"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ee335e47-7db5-4acd-982f-46de80d8f536",
+              "name": "Bad or expired token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hubs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "(id eq '76f2b9e2-fcce-4d93-be29-a008b76a050c') OR (id eq '16322408-bae8-4b29-a559-702d2023e13a')"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f270fadd-1ecf-4d64-8073-8cbaafcef5bc",
+              "name": "You do not have access to the resource",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hubs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "(id eq '76f2b9e2-fcce-4d93-be29-a008b76a050c') OR (id eq '16322408-bae8-4b29-a559-702d2023e13a')"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"Access Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b2eaac8e-d83b-4e8b-8bcf-a6b9f9d04aad",
+              "name": "Too many requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hubs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "(id eq '76f2b9e2-fcce-4d93-be29-a008b76a050c') OR (id eq '16322408-bae8-4b29-a559-702d2023e13a')"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 429,\n  \"message\": \"Limit Exceeded\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "29345b6f-e0d6-4891-83ac-0a34b08cb0b5",
+          "name": "Get Events+ Hub Members",
+          "request": {
+            "name": "Get Events+ Hub Members",
+            "description": {
+              "content": "Fetches a list of members associated with a particular Events+ hub.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "hubs",
+                ":hubId",
+                "members"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "100",
+                  "description": "The maximum number of records to return per page."
+                },
+                {
+                  "disabled": false,
+                  "key": "token",
+                  "value": "<string>",
+                  "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field                   | Operators  |\n|-------------------------|------------|\n| firstName               | `contains` |\n| lastName                | `contains` |\n| emailAddress            | `contains` |\n| jobTitle                | `contains` |\n| companyName             | `contains` |\n| designation             | `contains` |\n| workAddress.city        | `contains` |\n| workAddress.state       | `contains` |\n| workAddress.country     | `contains` |\n\nLimit for the number of fields that can be passed in a filter is 35.\n\nThe following logical operators are supported for combining filters:\n* and\n* or\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "<string>",
+                  "description": "The sort order passed as a parameter, used to control the order of the\nsearch results as a priority ordered list of sorts\n\nThere are two orders:\n  * ascending: ASC\n  * descending: DESC\n\nThe following fields are sortable:\n  * firstName (member first name)\n  * lastName (member last name)\n  * emailAddress (member email address)\n  * jobTitle (member job title)\n  * designation (Designation of member)\n  * workAddress.city (Work City of member)\n  * workAddress.state (Work State of member)\n  * workAddress.country (Work Country of member)\n  * companyName (member company)\n  * registrationDate (member registration date)\n  * lastLoginDate (member last login date)\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "hubId",
+                  "description": "(Required) The identifier of an Events+ Hub"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "account/hooks:delete account/hooks:read account/hooks:write account/user-groups:delete account/user-groups:read account/user-groups:write account/users:delete account/users:read account/users:write appointments/appointment-attendees:read appointments/appointment-events:read appointments/appointment-types:read appointments/appointments:read appointments/appointments:write appointments/available-times:read appointments/locations:read attendee-insights/attendee-insights:read attendee-insights/scores:read attendee-insights/stats:read budget/budget-items:delete budget/budget-items:read budget/budget-items:write budget/budget-totals:read budget/budget-vendors:read budget/cards:read budget/currency-conversion-rate:delete budget/currency-conversion-rate:read budget/currency-conversion-rate:write budget/payments:delete budget/payments:read budget/payments:write budget/transactions:delete budget/transactions:read budget/transactions:write business-transient/bids:read business-transient/proposals:read business-travel/bids:read business-travel/proposals:read compliance/communications:read compliance/communications:write email/bounces:read email/email-status:read email/emails:read eMarketing/campaigns:read emarketing/emarketing-email-status:read eMarketing/eMarketing-email-templates:read eMarketing/eMarketing-send-emails:write event/admission-items:read event/air-request:read event/alternate-travel:read event/attendance-durations:read event/attendee-activities-metadata:delete event/attendee-activities-metadata:read event/attendee-activities-metadata:write event/attendee-activities:read event/attendee-activities:write event/attendee-credits:read event/attendee-links:delete event/attendee-links:read event/attendee-links:write event/attendee-messages:read event/attendees:read event/attendees:write event/audience-segments:read event/audience-segments:write event/contact-groups:read event/contact-groups:write event/contact-types:read event/contacts:delete event/contacts:read event/contacts:write event/contacts:write-sensitive event/custom-fields:read event/custom-fields:write event/discounts:write event/donation-items:read event/event-discounts:read event/event-discounts:write event/event-email-status:read event/event-emails:read event/event-emails:write event/event-features:read event/event-features:write event/event-user-groups:read event/event-user-groups:write event/events:read event/events:write event/fee-items:read event/hotel-request:read event/invitation-lists:read event/meeting-request-forms:read event/meeting-requests:read event/meeting-requests:write event/membership-items:read event/orders:read event/planning-documents:read event/players:read event/process-form-submissions:read event/program-items:delete event/program-items:read event/program-items:write event/quantity-items:read event/quantity-items:write event/registration-paths:read event/registration-types:read event/registration-types:write event/role-assignments:read event/session-attendance:read event/session-attendance:write event/session-categories:read event/session-categories:write event/session-enrollment:delete event/session-enrollment:read event/session-enrollment:write event/session-segments:read event/sessions:delete event/sessions:read event/sessions:write event/speaker-categories:read event/speaker-categories:write event/speakers:delete event/speakers:read event/speakers:write event/taxes:read event/transactions:read event/transactions:write event/video-views:read event/videos:read event/videos:write event/vouchers:read event/webcasts:delete event/webcasts:read event/webcasts:write event/weblinks:read events-plus/hubs:read exhibitor/badges:read exhibitor/badges:write exhibitor/booth-staff:delete exhibitor/booth-staff:read exhibitor/booth-staff:write exhibitor/eliterature-requests:read exhibitor/exhibitor-admins:read exhibitor/exhibitor-admins:write exhibitor/exhibitor-answers:read exhibitor/exhibitor-answers:write exhibitor/exhibitor-categories:delete exhibitor/exhibitor-categories:read exhibitor/exhibitor-categories:write exhibitor/exhibitor-contents:delete exhibitor/exhibitor-contents:read exhibitor/exhibitor-contents:write exhibitor/exhibitor-questions:read exhibitor/exhibitors:delete exhibitor/exhibitors:read exhibitor/exhibitors:write exhibitor/lead-qualification-answers:read exhibitor/lead-qualification-questions:read exhibitor/leads:read exhibitor/registration-packs:delete exhibitor/registration-packs:read exhibitor/registration-packs:write exhibitor/sponsorship-levels:read file/file:read file/file:write onsite/signatures:read remote-printing/badge-print-jobs:read remote-printing/badge-print-jobs:write remote-printing/badge-printer-pools:read rfp/rfp-agenda-items:read rfp/rfp-attachments:read rfp/rfp-custom-fields:read rfp/rfp-guest-rooms:read rfp/rfp-internal-documents:read rfp/rfp-lead-sources:read rfp/rfp-past-events:read rfp/rfp-questions:read rfp/rfp-recipients-history:read rfp/rfp-suppliers:read rfp/rfps:read seating/assignments:read seating/event-seatings:read seating/seats:read seating/tables:read survey/questions:read survey/respondents:read survey/responses:read survey/standard-survey-email-templates:read survey/standard-survey-email:write survey/standard-survey-questions:read survey/standard-survey-respondents:read survey/standard-survey-respondents:write survey/standard-survey-responses:read survey/standard-survey-responses:write survey/standard-surveys:read survey/survey-questions:read survey/survey-respondents:read survey/survey-respondents:write survey/survey-responses:read survey/survey-responses:write survey/surveys:read venue/meeting-room-overviews:read venue/meeting-rooms:write venue/venue-details-overview:read venue/venue-details:write venue/venue-facility:write"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api-platform.cvent.com/ea/oauth2/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://api-platform.cvent.com/ea/oauth2/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "31704da9-86fa-49e2-bba9-982f50c0c4c9",
+              "name": "Members fetched successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hubs",
+                    ":hubId",
+                    "members"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "(firstName contains 'tim') and (lastName contains 'wood')"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "firstName:ASC,lastName:ASC"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "hubId",
+                      "description": "(Required) The identifier of an Events+ Hub"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"paging\": {\n    \"_links\": {\n      \"next\": {\n        \"href\": \"?token=90c5f062-76ad-4ea4-aa53-00eb698d9262\"\n      },\n      \"self\": {\n        \"href\": \"?token=90c5f062-76ad-4ea4-aa53-00eb698d9262\"\n      },\n      \"prev\": {\n        \"href\": \"?token=90c5f062-76ad-4ea4-aa53-00eb698d9262\"\n      }\n    },\n    \"previousToken\": \"1a2b3c4d5e6f7g8h9i10j11k\",\n    \"nextToken\": \"1a2b3c4d5e6f7g8h9i10j11k\",\n    \"currentToken\": \"1a2b3c4d5e6f7g8h9i10j11k\",\n    \"limit\": 100,\n    \"totalCount\": 2\n  },\n  \"data\": [\n    {\n      \"firstName\": \"Mateo\",\n      \"lastName\": \"Allende\",\n      \"id\": \"c764fb48-a62b-4c5f-b98f-01b5dae2c2ff\",\n      \"prefix\": \"Dr.\",\n      \"designation\": \"White Wolf\",\n      \"jobTitle\": \"Director\",\n      \"companyName\": \"Cvent.inc\",\n      \"headline\": \"A visionary in the field of event planning.\",\n      \"pronouns\": \"she/her\",\n      \"socialMediaLinks\": {\n        \"facebookUrl\": {\n          \"href\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"twitterUrl\": {\n          \"href\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"linkedinUrl\": {\n          \"href\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"websiteUrl\": {\n          \"href\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"profileImageUrl\": {\n        \"href\": \"?token=90c5f062-76ad-4ea4-aa53-00eb698d9262\"\n      },\n      \"emailAddress\": \"abc@example.com\",\n      \"mobileNumber\": \"555-555-5555\",\n      \"workAddress\": {\n        \"city\": \"New York\",\n        \"state\": \"New York\",\n        \"country\": \"USA\"\n      },\n      \"compliance\": {\n        \"creationTime\": \"2021-03-08T17:30:01.727Z\",\n        \"complianceScope\": \"CCPA\",\n        \"action\": \"DO_NOT_SELL\",\n        \"createdBy\": \"PLANNER\"\n      },\n      \"locale\": \"en-US\",\n      \"registrationDate\": \"2017-01-02T02:00:00Z\",\n      \"lastLoginDate\": \"2017-01-02T02:00:00Z\",\n      \"visible\": false\n    },\n    {\n      \"firstName\": \"Mateo\",\n      \"lastName\": \"Allende\",\n      \"id\": \"c764fb48-a62b-4c5f-b98f-01b5dae2c2ff\",\n      \"prefix\": \"Dr.\",\n      \"designation\": \"White Wolf\",\n      \"jobTitle\": \"Director\",\n      \"companyName\": \"Cvent.inc\",\n      \"headline\": \"A visionary in the field of event planning.\",\n      \"pronouns\": \"she/her\",\n      \"socialMediaLinks\": {\n        \"facebookUrl\": {\n          \"href\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"twitterUrl\": {\n          \"href\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"linkedinUrl\": {\n          \"href\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"websiteUrl\": {\n          \"href\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"profileImageUrl\": {\n        \"href\": \"?token=90c5f062-76ad-4ea4-aa53-00eb698d9262\"\n      },\n      \"emailAddress\": \"abc@example.com\",\n      \"mobileNumber\": \"555-555-5555\",\n      \"workAddress\": {\n        \"city\": \"New York\",\n        \"state\": \"New York\",\n        \"country\": \"USA\"\n      },\n      \"compliance\": {\n        \"creationTime\": \"2021-03-08T17:30:01.727Z\",\n        \"complianceScope\": \"CCPA\",\n        \"action\": \"DO_NOT_SELL\",\n        \"createdBy\": \"PLANNER\"\n      },\n      \"locale\": \"en-US\",\n      \"registrationDate\": \"2017-01-02T02:00:00Z\",\n      \"lastLoginDate\": \"2017-01-02T02:00:00Z\",\n      \"visible\": false\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "54ff01ba-640b-4204-afef-f8a22af5ff8b",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hubs",
+                    ":hubId",
+                    "members"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "(firstName contains 'tim') and (lastName contains 'wood')"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "firstName:ASC,lastName:ASC"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "hubId",
+                      "description": "(Required) The identifier of an Events+ Hub"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c59bd8e8-a017-430b-860a-c6f7bf1ab22a",
+              "name": "Bad or expired token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hubs",
+                    ":hubId",
+                    "members"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "(firstName contains 'tim') and (lastName contains 'wood')"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "firstName:ASC,lastName:ASC"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "hubId",
+                      "description": "(Required) The identifier of an Events+ Hub"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "31942d2f-c1da-417b-8301-a6a7bf145e65",
+              "name": "You do not have access to the resource",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hubs",
+                    ":hubId",
+                    "members"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "(firstName contains 'tim') and (lastName contains 'wood')"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "firstName:ASC,lastName:ASC"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "hubId",
+                      "description": "(Required) The identifier of an Events+ Hub"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"Access Forbidden\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ec9a52cd-01b8-4943-8d70-43e43b6a3da9",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hubs",
+                    ":hubId",
+                    "members"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "(firstName contains 'tim') and (lastName contains 'wood')"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "firstName:ASC,lastName:ASC"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "hubId",
+                      "description": "(Required) The identifier of an Events+ Hub"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cb810304-84f1-44d7-a4c6-d71450def872",
+              "name": "Too many requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hubs",
+                    ":hubId",
+                    "members"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "(firstName contains 'tim') and (lastName contains 'wood')"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "firstName:ASC,lastName:ASC"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "hubId",
+                      "description": "(Required) The identifier of an Events+ Hub"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 429,\n  \"message\": \"Limit Exceeded\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-platform.cvent.com/ea",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "6f321e60-87e1-4517-b5b2-ab2cc6a35d8d",
+    "name": "Cvent REST APIs — Event Cloud Events+ Hub API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Event Cloud scope of the Cvent REST APIs. This document is a TAG-SCOPED SUBSET of the OpenAPI specification Cvent publishes at https://github.com/cvent/rest-sdks/blob/main/cvent-public-spec/openapi.yaml (the source of truth for Cvent's official TypeScript/.NET/Java SDKs). Venue-sourcing, RFP, housing-supplier and travel-supplier tags were removed because they belong to Cvent Hospitality Cloud; every path, operation, parameter, schema and security requirement below is verbatim from Cvent's published spec.\n\n# Introduction\nThe Cvent API Platform is built around REST. We aim to provide intuitive endpoints that can be easily\ndiscovered to help leverage the Cvent platform for your event needs. The RESTful APIs outlined here\nuse JSON-encoded request and response format, along with HTTP codes, to convey processing status of\nrequests received. The Cvent resources are protected using OAuth2.\n\n# Getting Started\n\nIf you're new to the Cvent API Platform, start by reading our\n[Developer Quickstart](https://developers.cvent.com/docs/rest-api/tutorials/developer-quickstart) guide. This will\ngive you an overview of how to authenticate and make requests using our APIs.\n\n## Authentication\n\nThe Cvent REST API uses [OAuth2](https://oauth.net/2/) to authorize requests to the platform. The client\ncredentials authorization flow is supported.\n\n<a name=\"oauth2-auth-code-planner-admin\"></a>\n\nAuthorization code flow is only supported for planner users with the administrator role in Cvent. Developer users\ncannot use authorization code flow.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\nHere's an example of using client credential flow to authorize. You'll supply your application's id and secret to\nmake a [Token](#operation/oauth2Token) request.\n\n```bash\ncurl --location --request POST '{hostName}/{version}/oauth2/token' \\\n--header 'Content-Type: application/x-www-form-urlencoded' \\\n--header 'Authorization: Basic {api_credentials}' \\\n--data-urlencode 'grant_type=client_credentials' \\\n--data-urlencode 'client_id={client_id}'\n```\n\n| Key               | Description                                          | Value                                                                                                        |\n| :---------------- | :--------------------------------------------------- | :----------------------------------------------------------------------------------------------------------- |\n| {hostName}        | https://api-platform.cvent.com                       | Location if your account is in the North American datacenter.                                                |\n|                   | https://api-platform-eur.cvent.com                   | Location if your account is in the European data center.                                                     |\n| {version}         | ea                                                   | The version of the API you're using. Only `ea` is currently supported.                                       |\n| {api_credentials} | {client_id}:{client_secret} in base64 encoded format | Supply your client id & client credentials in a base 64 encoded format.                                      |\n| {client_id}       | Retrieved from your application                      | Your application's client id.                                                                                |\n| {client_secret}   | Retrieved from your application                      | Your application's client secret.                                                                            |\n\nOn a successful call, you'll receive the following response:\n\n```json\n{\n  \"access_token\": \"{accessToken}\",\n  \"expires_in\": 3600,\n  \"token_type\": \"Bearer\"\n}\n```\n\nThis bearer token is valid for 3600 seconds (60 minutes) and must be used in subsequent calls.\n\n## Endpoints\n\nEndpoints start with `hostName` and `version`.\n\nThe `hostname` will depend on the region that your Cvent account is hosted in. Please see the table\nbelow to identify which hostname you should be using.\n\n| Region        |\tHostname                           |\n|:--------------|:-----------------------------------|\n| North America\t| https://api-platform.cvent.com     |\n| Europe        | https://api-platform-eur.cvent.com |\n\nThe current `version` of the Cvent API is `ea`.\n\n## Rate Limits\n\nCvent APIs enforce rate limits to ensure platform stability. Your limits depend on your tier: Free,\nStandard, or Premium.\n\n<br />\n\n### Usage Tiers\n\n| Tier     | Daily Calls | Calls per Second | Max Burst |\n| -------- | ----------- | ---------------- | --------- |\n| Free     | 1,000       | 2                | 1         |\n| Standard | 15,000      | 10               | 10        |\n| Premium  | 500,000     | 25               | 25        |\n\n- **Daily calls** define how many requests you can make in a 24-hour period. Quota\n  resets at 12 midnight (+0 GMT).\n- **Calls per second** define how many requests you can make in a 1-second window.\n- **Max Burst** defines how many requests you can make at once.\n\nIf you are unsure what usage tier applies to your account, you can check via\n[Get Current Usage Tier](#operation/getUsageTier).\n\nPlease note that these limits may change as the Cvent API Platform evolves.\n\n<br />\n\n### Handling Rate Limits\n\nSometimes, you may exceed your rate limits. When this happens, the API will return a `429 Too Many Requests`. See\n[handling rate limits](https://developers.cvent.com/docs/rest-api/guides/handling-rate-limits) for best practices on how to handle this.\n\n## Pagination\n\nSome APIs use pagination to manage records. Each page of records has a token associated to identify it.\n\nIf an API uses pagination, you’ll find up to three tokens in the response:\n- **currentToken**: Describes the token of the current page.\n- **nextToken**: Provides a token for the next page of records, if one exists.\n- **previousToken**: Provides a token for the previous page of records, if one exists. Not all APIs will return\n  this token.\n\nYou specify which page of records to view via the `token` parameter in your API call. To navigate through pages,\ntake the `nextToken` or `previousToken` value and pass it to your next call’s `token` parameter to get the\nrespective page of records. For example, if you made this request:\n\n```bash\ncurl -X GET {hostname}/{version}/contacts?limit=100 \\\n-H 'Accept: application/json' \\\n-H 'Authorization: Bearer {accessToken}'\n```\n\nThe response contains a paging array where you'll find the token information.\n\n```json\n{\n  \"paging\": {\n    \"currentToken\": \"90c5f062-76ad-4ea4-aa53-00eb698d9262\",\n    \"nextToken\": \"3b2359a7-4583-40ed-8afd-67e5f15373d3\",\n    \"limit\": 100,\n    \"totalCount\": 102,\n    \"_links\": {...}\n  },\n  \"data\": [...]\n}\n```\n\nTake the `nextToken` and use it in the `token` parameter on your subsequent call.\n\n```bash\ncurl -X GET {hostname}/{version}/contacts?limit=100&token=3b2359a7-4583-40ed-8afd-67e5f15373d3 \\\n-H 'Accept: application/json' \\\n-H 'Authorization: Bearer {accessToken}'\n```\n\nWhen the response doesn’t contain a `nextToken` field, you’ve reached the last page. Occasionally, you might\nencounter an empty page at the end of results. This typically happens when the results were evenly divisible.\nEnsure your client code handles the possibility of receiving an empty data array when using the `nextToken`.\n\n## Filtering\n\nUse filters to narrow down results. The filter follows the pattern\n`filter='field' comparisonType 'value'`. The value can be enclosed with single\nquotes (') or double quotes (\").\n\n```bash\nGET {hostName}/{version}/contacts?filter=lastName eq 'Smith'\n````\n\nTo correctly pass a single quote in the filter's value, use double quotes around\nthe string.\n\n```bash\nGET {hostName}/{version}/contacts?filter=lastName eq \"O'Keenan\"\n```\n\nTo correctly pass a double quote in the filter's value, use double quotes around\nthe string and add an escape character `\\` to each quote that is part of the\nstring.\n\n```bash\nGET {hostName}/{version}/events?filter=eventName eq \"\\\"Yearly\\\" Conference\"\n```\n\n## Versioning\n\nChange is inevitable in API development. Planning for it is crucial. We track\nboth backward-compatible and backward-incompatible changes.\n\n<br />\n\n### Backward Compatible Changes\n\nBackward compatible changes will be made often and are intended to avoid\nany adverse impact on our customers. It is highly advisable that when reading\nJSON payloads from Cvent, you are able to handle \"unknown\" attributes that\ncan be added over time. We consider the following changes backward-compatible:\n\n- Adding new resources\n- Adding new optional request parameters to existing operations\n- Adding new attributes to requests or responses\n- Changing the length or format (not type) of resource identifiers. For example, an ID can change from\n  \"1234/1234\" to \"1234::1234\".\n- Increasing the length of string fields\n\n<br />\n\n### Backward Incompatible Changes\n\nBackward-incompatible changes are made infrequently, however, they can be\ndisruptive to consumers. Due to this, our APIs are versioned to avoid\ndisruptions to customers. We leverage a URI-based versioning scheme,\nwhich means that a version value is included in the Cvent API URL.\nWhen breaking changes occur, a new version of the API is made available\nwhile the existing version is deprecated but remains available for a\nlimited period of time. We consider the following backward-incompatible changes:\n\n- Adding a new required parameter (query string param or payload attribute)\n- Deleting API resources\n- Deleting any attribute from API responses\n- Changing the data type on any parameter or attribute\n\n## Standards\nAs you begin working with our APIs, it's essential to be aware of standards around\ncountry codes, time formats, and other important details that ensure smooth integration.\nLearn more about our [API Standards](https://developers.cvent.com/docs/rest-api/reference/api-standards)\n\n\nContact Support:\n Name: Cvent Development Platform",
+      "type": "text/plain"
+    }
+  }
+}

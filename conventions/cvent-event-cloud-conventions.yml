@@ -1,0 +1,201 @@
+generated: '2026-08-13'
+method: searched
+source: https://developers.cvent.com/docs/rest-api/reference/api-standards
+provider: Cvent Event Cloud
+providerId: cvent-event-cloud
+docs:
+  - https://developers.cvent.com/docs/rest-api/reference/api-standards
+  - https://developers.cvent.com/docs/rest-api/reference/reference
+  - https://developers.cvent.com/docs/rest-api/reference/filters
+  - https://developers.cvent.com/docs/rest-api/guides/handling-rate-limits
+  - https://github.com/cvent/rest-sdks/blob/main/cvent-public-spec/openapi.yaml
+description: >-
+  Cross-cutting runtime semantics for the Cvent REST API, read from the published API Standards
+  reference, the REST API reference page, and the info.description of Cvent's own OpenAPI.
+
+base_url:
+  pattern: '{hostName}/{version}'
+  version_segment: ea
+  hosts:
+    - url: https://api-platform.cvent.com/ea
+      region: North America
+    - url: https://api-platform-eur.cvent.com/ea
+      region: Europe
+  note: >-
+    The host is determined by which Cvent data centre the customer account lives in. A client
+    cannot pick; it must use the host for its account's region. `ea` is the only version currently
+    supported.
+
+authentication:
+  style: OAuth 2.0 bearer
+  flows:
+    - flow: clientCredentials
+      token_url: https://api-platform.cvent.com/ea/oauth2/token
+      token_request_auth: HTTP Basic with base64({client_id}:{client_secret})
+      grant_type: client_credentials
+      recommended_for: server-to-server integrations
+    - flow: authorizationCode
+      restriction: >-
+        Only supported for planner users holding the administrator role in Cvent. Developer users
+        cannot use authorization code flow.
+  access_token_lifetime_seconds: 3600
+  request_header: 'Authorization: Bearer {accessToken}'
+  scopes: 235
+  detail: scopes/cvent-event-cloud-scopes.yml
+  profile: authentication/cvent-event-cloud-authentication.yml
+
+pagination:
+  style: cursor / opaque page token
+  request_params:
+    - name: limit
+      in: query
+      description: Page size.
+    - name: token
+      in: query
+      description: Opaque token identifying the page to return. Omit for the first page.
+  response_envelope: paging
+  response_fields:
+    - name: paging.currentToken
+      description: Token of the page being returned.
+    - name: paging.nextToken
+      description: Token for the next page. Absent when the current page is the last one.
+    - name: paging.previousToken
+      description: Token for the previous page. Not returned by every operation.
+    - name: paging.limit
+      description: Echo of the requested page size.
+    - name: paging.totalCount
+      description: Total records matching the request.
+    - name: paging._links
+      description: HAL-style self / next / prev hrefs carrying the token query parameter.
+    - name: data
+      description: The array of records for this page.
+  termination: >-
+    Iterate until the response contains no nextToken. Cvent warns explicitly that an empty final
+    page can occur when the result count divides evenly by the limit, so clients must tolerate a
+    nextToken that resolves to an empty data array.
+  sdk_support: The first-party SDKs iterate pages automatically.
+
+filtering:
+  style: expression string in a `filter` query parameter
+  syntax: "filter='field' comparisonType 'value'"
+  quoting: >-
+    Values may be wrapped in single or double quotes. To pass a literal single quote, wrap the value
+    in double quotes (lastName eq "O'Keenan"); to pass a literal double quote, wrap in double quotes
+    and backslash-escape the inner quotes.
+  comparison_operators: [in, eq, ne, sw, ew, co, gt, ge, lt, le]
+  logical_operators: [and, or]
+  note: >-
+    The set of filterable fields and the operators each accepts is declared per operation in the
+    OpenAPI, in a markdown table inside the `filter` parameter description. Logical and/or support
+    was extended to the Orders, Order Items, Transactions and Transaction Items list operations
+    in a 2026 changelog entry, which means operator support is per-operation, not global.
+  docs: https://developers.cvent.com/docs/rest-api/reference/filters
+
+data_conventions:
+  date_time:
+    format: ISO 8601 with a zero UTC offset, Z suffix
+    timezone: Coordinated Universal Time (UTC)
+  currency_codes: ISO 4217 three-letter
+  country_codes: ISO 3166-1 alpha-2 two-letter
+  region_codes: >-
+    Cvent-defined region/province/state codes, enumerated in the API Standards reference. Only
+    countries with explicit region mappings in Cvent's system appear; all others are country-level only.
+  note: >-
+    Country code format is actively migrating. A 2026 changelog entry records housing endpoints
+    moving from ISO 3166-1 alpha-3 to alpha-2, so a client that hard-codes three-letter codes
+    against older operations will break.
+
+change_tracking:
+  mechanism: query parameters on list operations to return only records changed since a point in time
+  docs: https://developers.cvent.com/docs/rest-api/reference/api-standards
+  guide: https://developers.cvent.com/docs/rest-api/guides/managing-change-history
+  audit_fields: [created, createdBy, lastModified, lastModifiedBy]
+  soft_delete: >-
+    Several list operations accept a `deleted` boolean query parameter; when true, soft-deleted
+    records are included in the response. Defaults to false.
+
+error_envelope:
+  format: proprietary JSON
+  rfc9457: false
+  media_type: application/json
+  schema: ErrorResponse
+  required_fields: [code, message]
+  fields:
+    - name: code
+      type: integer
+      description: The HTTP status code representing the error.
+    - name: message
+      type: string
+      description: A brief description of the error.
+    - name: target
+      type: string
+      description: The target resource of the error.
+    - name: details
+      type: array
+      description: Cascading error messages, each shaped like the base error object.
+  note: >-
+    Cvent does not emit application/problem+json. The envelope is its own shape and duplicates the
+    HTTP status inside the body.
+  catalog: errors/cvent-event-cloud-problem-types.yml
+
+rate_limiting:
+  signalled_by_headers: [X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset]
+  exhausted_status: 429
+  retry_after_header: false
+  detail: rate-limits/cvent-event-cloud-rate-limits.yml
+
+idempotency:
+  supported: false
+  idempotency_key_header: null
+  note: >-
+    Cvent documents no idempotency key and the OpenAPI declares no Idempotency-Key header on any of
+    its 458 operations. Retry safety is achieved only through HTTP method semantics: GET/PUT/DELETE
+    are idempotent by definition, POST is not. Cvent's own rate-limit guide instructs clients to
+    retry 429s with exponential back-off, which on a POST is an at-least-once delivery with no
+    server-side de-duplication.
+
+versioning:
+  scheme: URI path segment
+  current: ea
+  policy_url: https://github.com/cvent/rest-sdks/blob/main/cvent-public-spec/openapi.yaml
+  backward_compatible_changes:
+    - Adding new resources
+    - Adding new optional request parameters to existing operations
+    - Adding new attributes to requests or responses
+    - Changing the length or format (not type) of resource identifiers
+    - Increasing the length of string fields
+  breaking_changes:
+    - Adding a new required parameter (query string or payload attribute)
+    - Deleting API resources
+    - Deleting any attribute from API responses
+    - Changing the data type on any parameter or attribute
+  client_obligation: >-
+    Cvent requires clients to tolerate unknown attributes appearing in JSON payloads over time.
+  detail: lifecycle/cvent-event-cloud-lifecycle.yml
+
+field_expansion:
+  supported: false
+  note: No documented expand / sparse-fieldset parameter.
+
+request_tracing:
+  request_id_header: null
+  note: >-
+    No client-visible correlation-id header is documented. Responses from the AWS API Gateway edge
+    carry x-amzn-requestid and x-amz-apigw-id, but Cvent does not document either as a supported
+    support-reference identifier.
+
+bulk:
+  supported: true
+  pattern: asynchronous job
+  operations:
+    - 'POST /bulk-jobs'
+    - 'GET /bulk-jobs/{id}/results'
+  guide: https://developers.cvent.com/docs/rest-api/guides/bulk-api-user-guide
+  caveat: >-
+    Cvent documents that when a bulk target operation returns 207 Multi-Status the `failed` flag
+    reflects only the top-level HTTP status and will be false even when individual items failed;
+    consumers must inspect each result record's `data` field.
+
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

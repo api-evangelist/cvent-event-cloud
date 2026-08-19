@@ -1,0 +1,350 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cvent REST APIs — Event Cloud Exhibitor Team API",
+    "version": "ea"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Exhibitor Team",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Exhibitor Admins",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/admins",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves a paginated list of exhibitor admins for an exhibitor within an event."
+        },
+        {
+          "info": {
+            "name": "Create Exhibitor Admin",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/admins",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Creates an exhibitor admin for the given exhibitor."
+        },
+        {
+          "info": {
+            "name": "Get Exhibitor Admin",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/admins/:adminId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              },
+              {
+                "name": "adminId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor admin."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets the details of a single exhibitor admin, such as name or contact email."
+        },
+        {
+          "info": {
+            "name": "Update Exhibitor Admin",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/admins/:adminId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              },
+              {
+                "name": "adminId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor admin."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Updates a single exhibitor admin."
+        },
+        {
+          "info": {
+            "name": "List Booth Staff",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/booth-staff",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a list of booth staff members for a given event and exhibitor id."
+        },
+        {
+          "info": {
+            "name": "Create Booth Staff",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/booth-staff",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Associates a registered attendee as a booth staff to a specific exhibitor id within an event."
+        },
+        {
+          "info": {
+            "name": "Get Booth Staff member",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/booth-staff/:boothstaffId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              },
+              {
+                "name": "boothstaffId",
+                "value": "",
+                "type": "path",
+                "description": "ID of a booth staff member."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves the attendee id associated with an exhibitor booth staff member."
+        },
+        {
+          "info": {
+            "name": "Delete Booth Staff member",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/booth-staff/:boothstaffId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              },
+              {
+                "name": "boothstaffId",
+                "value": "",
+                "type": "path",
+                "description": "ID of a booth staff member."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Disassociate a single booth staff member from a single exhibitor."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

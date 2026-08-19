@@ -1,0 +1,2622 @@
+{
+  "item": [
+    {
+      "id": "48cb8d36-92d1-4af5-8cb4-c071582de6f9",
+      "name": "Bulk",
+      "description": {
+        "content": "The Bulk API provides a simple interface to upload large amounts of data into Cvent.  The API processes the uploaded data asynchronously making API calls on behalf of the caller.\n\nConsumers of the bulk API will do the following:\n* [Create a bulk job](#operation/createBulkJob) with or without data\n* *(Optional)* If a bulk job was created without data, then [upload bulk job data](#operation/uploadBulkJobData) as many times as needed\n* *(Optional)* [Run bulk job](#operation/runBulkJob)\n* Use [get bulk job](#operation/getBulkJobById) to track status\n* Use [list bulk job results](#operation/listBulkJobResult) to get details of items uploaded\n\nFor more details, see the [Bulk Job User Guide](https://developers.cvent.com/docs/rest-api/guides/bulk-api-user-guide).\n\n**Note:** These bulk jobs have a TTL and will expire once they are complete or never ran. Bulk jobs will expire\n1 week after creation, and this one week is refreshed when data is uploaded and the job is run. The Bulk Job\nwill be available for 1 week after completion to get results. Right now we do NOT support bulk GET requests.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c96debfb-6db2-4209-9bcf-2adff0f64252",
+          "name": "Create Bulk Job",
+          "request": {
+            "name": "Create Bulk Job",
+            "description": {
+              "content": "Creates a bulk job.\n\n**Note:** When creating a bulk job you can optionally include the data in the create request.\nIf data is supplied the job will be started and there is no need to call the [run bulk job](#operation/runBulkJob) endpoint.\nIf data is NOT supplied then the [upload bulk job data](#operation/uploadBulkJobData) endpoint can be called\nto upload data and then using [run bulk job](#operation/runBulkJob).\nIn addition, if data is supplied and your account has reached its limit for concurrently running bulk jobs,\nthe job will not be created.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bulk-jobs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "account/hooks:delete account/hooks:read account/hooks:write account/user-groups:delete account/user-groups:read account/user-groups:write account/users:delete account/users:read account/users:write appointments/appointment-attendees:read appointments/appointment-events:read appointments/appointment-types:read appointments/appointments:read appointments/appointments:write appointments/available-times:read appointments/locations:read attendee-insights/attendee-insights:read attendee-insights/scores:read attendee-insights/stats:read budget/budget-items:delete budget/budget-items:read budget/budget-items:write budget/budget-totals:read budget/budget-vendors:read budget/cards:read budget/currency-conversion-rate:delete budget/currency-conversion-rate:read budget/currency-conversion-rate:write budget/payments:delete budget/payments:read budget/payments:write budget/transactions:delete budget/transactions:read budget/transactions:write bulk/bulk-jobs:read bulk/bulk-jobs:write business-transient/bids:read business-transient/proposals:read business-transient/supplier-brands:read business-transient/supplier-chains:read business-transient/supplier-properties:read business-transient/supplier-property-rooms:read business-transient/travel-accounts:read business-transient/travel-program-questions:read business-transient/travel-programs:read business-transient/travel-supplier-accounts:read business-travel/bids:read business-travel/proposals:read business-travel/travel-accounts:read business-travel/travel-program-questions:read business-travel/travel-programs:read compliance/communications:read compliance/communications:write email/bounces:read email/email-status:read email/emails:read eMarketing/campaigns:read emarketing/emarketing-email-status:read eMarketing/eMarketing-email-templates:read eMarketing/eMarketing-send-emails:write event/admission-items:read event/air-request:read event/alternate-travel:read event/attendance-durations:read event/attendee-activities-metadata:delete event/attendee-activities-metadata:read event/attendee-activities-metadata:write event/attendee-activities:read event/attendee-activities:write event/attendee-credits:read event/attendee-links:delete event/attendee-links:read event/attendee-links:write event/attendee-messages:read event/attendees:read event/attendees:write event/audience-segments:read event/audience-segments:write event/contact-groups:read event/contact-groups:write event/contact-types:read event/contacts:delete event/contacts:read event/contacts:write event/contacts:write-sensitive event/custom-fields:read event/custom-fields:write event/discounts:write event/donation-items:read event/event-discounts:read event/event-discounts:write event/event-email-status:read event/event-emails:read event/event-emails:write event/event-features:read event/event-features:write event/event-user-groups:read event/event-user-groups:write event/events:read event/events:write event/fee-items:read event/hotel-request:read event/invitation-lists:read event/meeting-request-forms:read event/meeting-requests:read event/meeting-requests:write event/membership-items:read event/orders:read event/planning-documents:read event/players:read event/process-form-submissions:read event/program-items:delete event/program-items:read event/program-items:write event/quantity-items:read event/quantity-items:write event/registration-paths:read event/registration-types:read event/registration-types:write event/role-assignments:read event/session-attendance:read event/session-attendance:write event/session-categories:read event/session-categories:write event/session-enrollment:delete event/session-enrollment:read event/session-enrollment:write event/session-segments:read event/sessions:delete event/sessions:read event/sessions:write event/speaker-categories:read event/speaker-categories:write event/speakers:delete event/speakers:read event/speakers:write event/taxes:read event/transactions:read event/transactions:write event/video-views:read event/videos:read event/videos:write event/vouchers:read event/webcasts:delete event/webcasts:read event/webcasts:write event/weblinks:read events-plus/hubs:read exhibitor/badges:read exhibitor/badges:write exhibitor/booth-staff:delete exhibitor/booth-staff:read exhibitor/booth-staff:write exhibitor/eliterature-requests:read exhibitor/exhibitor-admins:read exhibitor/exhibitor-admins:write exhibitor/exhibitor-answers:read exhibitor/exhibitor-answers:write exhibitor/exhibitor-categories:delete exhibitor/exhibitor-categories:read exhibitor/exhibitor-categories:write exhibitor/exhibitor-contents:delete exhibitor/exhibitor-contents:read exhibitor/exhibitor-contents:write exhibitor/exhibitor-questions:read exhibitor/exhibitors:delete exhibitor/exhibitors:read exhibitor/exhibitors:write exhibitor/lead-qualification-answers:read exhibitor/lead-qualification-questions:read exhibitor/leads:read exhibitor/registration-packs:delete exhibitor/registration-packs:read exhibitor/registration-packs:write exhibitor/sponsorship-levels:read file/file:read file/file:write housing/connections:write housing/hotel-room-rates:write housing/housing-event-available-nights:read housing/housing-event-hotels:read housing/housing-event-inventory:read housing/housing-event-room-types:read housing/housing-events:read housing/reservation-requests:delete housing/reservation-requests:read housing/reservation-requests:write housing/reservations-link:delete housing/reservations-link:write housing/reservations:delete housing/reservations:read housing/reservations:write onsite/signatures:read proposal/proposals:write remote-printing/badge-print-jobs:read remote-printing/badge-print-jobs:write remote-printing/badge-printer-pools:read rfp/rfp-agenda-items:read rfp/rfp-attachments:read rfp/rfp-custom-fields:read rfp/rfp-guest-rooms:read rfp/rfp-internal-documents:read rfp/rfp-lead-sources:read rfp/rfp-past-events:read rfp/rfp-questions:read rfp/rfp-recipients-history:read rfp/rfp-suppliers:read rfp/rfps:read seating/assignments:read seating/event-seatings:read seating/seats:read seating/tables:read secure-ecommerce/card-tokens:write survey/questions:read survey/respondents:read survey/responses:read survey/standard-survey-email-templates:read survey/standard-survey-email:write survey/standard-survey-questions:read survey/standard-survey-respondents:read survey/standard-survey-respondents:write survey/standard-survey-responses:read survey/standard-survey-responses:write survey/standard-surveys:read survey/survey-questions:read survey/survey-respondents:read survey/survey-respondents:write survey/survey-responses:read survey/survey-responses:write survey/surveys:read venue/meeting-room-overviews:read venue/meeting-rooms:write venue/venue-details-overview:read venue/venue-details:write venue/venue-facility:write"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api-platform.cvent.com/ea/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"url\": \"<string>\",\n  \"operation\": \"<string>\",\n  \"data\": [\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\",\n        \"key_1\": \"<object>\"\n      },\n      \"pathParams\": {\n        \"key_0\": \"<string>\",\n        \"key_1\": \"<string>\"\n      },\n      \"queryParams\": {\n        \"key_0\": \"<string>\",\n        \"key_1\": \"<string>\"\n      },\n      \"headers\": {\n        \"key_0\": \"<string>\"\n      }\n    },\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\",\n        \"key_1\": \"<object>\"\n      },\n      \"pathParams\": {\n        \"key_0\": \"<string>\",\n        \"key_1\": \"<string>\"\n      },\n      \"queryParams\": {\n        \"key_0\": \"<string>\",\n        \"key_1\": \"<string>\"\n      },\n      \"headers\": {\n        \"key_0\": \"<string>\"\n      }\n    }\n  ],\n  \"description\": \"<string>\",\n  \"headers\": {\n    \"key_0\": \"<string>\"\n  },\n  \"queryParams\": {\n    \"key_0\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3413738c-812a-4cdd-89b9-fa9630fe33b1",
+              "name": "The bulk job has been created.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"url\": \"/contacts/{id}\",\n  \"operation\": \"PUT\",\n  \"data\": [\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\",\n        \"key_1\": \"<object>\",\n        \"key_2\": \"<object>\",\n        \"key_3\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    },\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    }\n  ],\n  \"description\": \"Q1 Contact Import\",\n  \"headers\": {\n    \"header1\": \"header1Value\",\n    \"header2\": \"header2Value\"\n  },\n  \"queryParams\": {\n    \"param1\": \"param1Value\",\n    \"param2\": \"param2Value\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"url\": \"/contacts/{id}\",\n  \"operation\": \"PUT\",\n  \"data\": [\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    },\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\",\n        \"key_1\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    }\n  ],\n  \"id\": \"766d1986-9aaa-454f-86f5-d605c45b3131\",\n  \"description\": \"Q1 Contact Import\",\n  \"headers\": {\n    \"header1\": \"header1Value\",\n    \"header2\": \"header2Value\"\n  },\n  \"queryParams\": {\n    \"param1\": \"param1Value\",\n    \"param2\": \"param2Value\"\n  },\n  \"started\": \"2017-01-02T02:00:00Z\",\n  \"completed\": \"2017-01-02T02:30:00Z\",\n  \"status\": \"COMPLETED\",\n  \"totalRecords\": 5000,\n  \"successful\": 4950,\n  \"failed\": 50,\n  \"created\": \"2017-01-02T02:00:00Z\",\n  \"createdBy\": \"hporter\",\n  \"lastModified\": \"2019-02-12T03:00:00Z\",\n  \"lastModifiedBy\": \"hporter\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "94ef4989-17ec-4755-bdc7-c1807ea093dc",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"url\": \"/contacts/{id}\",\n  \"operation\": \"PUT\",\n  \"data\": [\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\",\n        \"key_1\": \"<object>\",\n        \"key_2\": \"<object>\",\n        \"key_3\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    },\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    }\n  ],\n  \"description\": \"Q1 Contact Import\",\n  \"headers\": {\n    \"header1\": \"header1Value\",\n    \"header2\": \"header2Value\"\n  },\n  \"queryParams\": {\n    \"param1\": \"param1Value\",\n    \"param2\": \"param2Value\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\",\n  \"details\": [\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    },\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    }\n  ],\n  \"target\": \"example target\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bd35bb31-6142-48a5-89f8-b445c9fca948",
+              "name": "Bad or expired token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"url\": \"/contacts/{id}\",\n  \"operation\": \"PUT\",\n  \"data\": [\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\",\n        \"key_1\": \"<object>\",\n        \"key_2\": \"<object>\",\n        \"key_3\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    },\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    }\n  ],\n  \"description\": \"Q1 Contact Import\",\n  \"headers\": {\n    \"header1\": \"header1Value\",\n    \"header2\": \"header2Value\"\n  },\n  \"queryParams\": {\n    \"param1\": \"param1Value\",\n    \"param2\": \"param2Value\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\",\n  \"details\": [\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    },\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    }\n  ],\n  \"target\": \"example target\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bfbf9796-51e7-412f-9a0d-b6c736fcc5d9",
+              "name": "You do not have access to the resource",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"url\": \"/contacts/{id}\",\n  \"operation\": \"PUT\",\n  \"data\": [\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\",\n        \"key_1\": \"<object>\",\n        \"key_2\": \"<object>\",\n        \"key_3\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    },\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    }\n  ],\n  \"description\": \"Q1 Contact Import\",\n  \"headers\": {\n    \"header1\": \"header1Value\",\n    \"header2\": \"header2Value\"\n  },\n  \"queryParams\": {\n    \"param1\": \"param1Value\",\n    \"param2\": \"param2Value\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\",\n  \"details\": [\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    },\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    }\n  ],\n  \"target\": \"example target\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b80994ce-fd74-491c-9e25-1631edf1a3f3",
+              "name": "Exceeded limit for number of concurrently running bulk jobs",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"url\": \"/contacts/{id}\",\n  \"operation\": \"PUT\",\n  \"data\": [\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\",\n        \"key_1\": \"<object>\",\n        \"key_2\": \"<object>\",\n        \"key_3\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    },\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    }\n  ],\n  \"description\": \"Q1 Contact Import\",\n  \"headers\": {\n    \"header1\": \"header1Value\",\n    \"header2\": \"header2Value\"\n  },\n  \"queryParams\": {\n    \"param1\": \"param1Value\",\n    \"param2\": \"param2Value\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 409,\n  \"message\": \"Conflict\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c3f34ff7-38b4-474d-86ba-e9b2964f0f18",
+              "name": "Too many requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"url\": \"/contacts/{id}\",\n  \"operation\": \"PUT\",\n  \"data\": [\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\",\n        \"key_1\": \"<object>\",\n        \"key_2\": \"<object>\",\n        \"key_3\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    },\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    }\n  ],\n  \"description\": \"Q1 Contact Import\",\n  \"headers\": {\n    \"header1\": \"header1Value\",\n    \"header2\": \"header2Value\"\n  },\n  \"queryParams\": {\n    \"param1\": \"param1Value\",\n    \"param2\": \"param2Value\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\",\n  \"details\": [\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    },\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    }\n  ],\n  \"target\": \"example target\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3dcd85c4-9768-4f9a-bc41-29cd0475de98",
+          "name": "Get Bulk Job",
+          "request": {
+            "name": "Get Bulk Job",
+            "description": {
+              "content": "Gets a bulk job by its identifier.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bulk-jobs",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) A uuid path parameter."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "account/hooks:delete account/hooks:read account/hooks:write account/user-groups:delete account/user-groups:read account/user-groups:write account/users:delete account/users:read account/users:write appointments/appointment-attendees:read appointments/appointment-events:read appointments/appointment-types:read appointments/appointments:read appointments/appointments:write appointments/available-times:read appointments/locations:read attendee-insights/attendee-insights:read attendee-insights/scores:read attendee-insights/stats:read budget/budget-items:delete budget/budget-items:read budget/budget-items:write budget/budget-totals:read budget/budget-vendors:read budget/cards:read budget/currency-conversion-rate:delete budget/currency-conversion-rate:read budget/currency-conversion-rate:write budget/payments:delete budget/payments:read budget/payments:write budget/transactions:delete budget/transactions:read budget/transactions:write bulk/bulk-jobs:read bulk/bulk-jobs:write business-transient/bids:read business-transient/proposals:read business-transient/supplier-brands:read business-transient/supplier-chains:read business-transient/supplier-properties:read business-transient/supplier-property-rooms:read business-transient/travel-accounts:read business-transient/travel-program-questions:read business-transient/travel-programs:read business-transient/travel-supplier-accounts:read business-travel/bids:read business-travel/proposals:read business-travel/travel-accounts:read business-travel/travel-program-questions:read business-travel/travel-programs:read compliance/communications:read compliance/communications:write email/bounces:read email/email-status:read email/emails:read eMarketing/campaigns:read emarketing/emarketing-email-status:read eMarketing/eMarketing-email-templates:read eMarketing/eMarketing-send-emails:write event/admission-items:read event/air-request:read event/alternate-travel:read event/attendance-durations:read event/attendee-activities-metadata:delete event/attendee-activities-metadata:read event/attendee-activities-metadata:write event/attendee-activities:read event/attendee-activities:write event/attendee-credits:read event/attendee-links:delete event/attendee-links:read event/attendee-links:write event/attendee-messages:read event/attendees:read event/attendees:write event/audience-segments:read event/audience-segments:write event/contact-groups:read event/contact-groups:write event/contact-types:read event/contacts:delete event/contacts:read event/contacts:write event/contacts:write-sensitive event/custom-fields:read event/custom-fields:write event/discounts:write event/donation-items:read event/event-discounts:read event/event-discounts:write event/event-email-status:read event/event-emails:read event/event-emails:write event/event-features:read event/event-features:write event/event-user-groups:read event/event-user-groups:write event/events:read event/events:write event/fee-items:read event/hotel-request:read event/invitation-lists:read event/meeting-request-forms:read event/meeting-requests:read event/meeting-requests:write event/membership-items:read event/orders:read event/planning-documents:read event/players:read event/process-form-submissions:read event/program-items:delete event/program-items:read event/program-items:write event/quantity-items:read event/quantity-items:write event/registration-paths:read event/registration-types:read event/registration-types:write event/role-assignments:read event/session-attendance:read event/session-attendance:write event/session-categories:read event/session-categories:write event/session-enrollment:delete event/session-enrollment:read event/session-enrollment:write event/session-segments:read event/sessions:delete event/sessions:read event/sessions:write event/speaker-categories:read event/speaker-categories:write event/speakers:delete event/speakers:read event/speakers:write event/taxes:read event/transactions:read event/transactions:write event/video-views:read event/videos:read event/videos:write event/vouchers:read event/webcasts:delete event/webcasts:read event/webcasts:write event/weblinks:read events-plus/hubs:read exhibitor/badges:read exhibitor/badges:write exhibitor/booth-staff:delete exhibitor/booth-staff:read exhibitor/booth-staff:write exhibitor/eliterature-requests:read exhibitor/exhibitor-admins:read exhibitor/exhibitor-admins:write exhibitor/exhibitor-answers:read exhibitor/exhibitor-answers:write exhibitor/exhibitor-categories:delete exhibitor/exhibitor-categories:read exhibitor/exhibitor-categories:write exhibitor/exhibitor-contents:delete exhibitor/exhibitor-contents:read exhibitor/exhibitor-contents:write exhibitor/exhibitor-questions:read exhibitor/exhibitors:delete exhibitor/exhibitors:read exhibitor/exhibitors:write exhibitor/lead-qualification-answers:read exhibitor/lead-qualification-questions:read exhibitor/leads:read exhibitor/registration-packs:delete exhibitor/registration-packs:read exhibitor/registration-packs:write exhibitor/sponsorship-levels:read file/file:read file/file:write housing/connections:write housing/hotel-room-rates:write housing/housing-event-available-nights:read housing/housing-event-hotels:read housing/housing-event-inventory:read housing/housing-event-room-types:read housing/housing-events:read housing/reservation-requests:delete housing/reservation-requests:read housing/reservation-requests:write housing/reservations-link:delete housing/reservations-link:write housing/reservations:delete housing/reservations:read housing/reservations:write onsite/signatures:read proposal/proposals:write remote-printing/badge-print-jobs:read remote-printing/badge-print-jobs:write remote-printing/badge-printer-pools:read rfp/rfp-agenda-items:read rfp/rfp-attachments:read rfp/rfp-custom-fields:read rfp/rfp-guest-rooms:read rfp/rfp-internal-documents:read rfp/rfp-lead-sources:read rfp/rfp-past-events:read rfp/rfp-questions:read rfp/rfp-recipients-history:read rfp/rfp-suppliers:read rfp/rfps:read seating/assignments:read seating/event-seatings:read seating/seats:read seating/tables:read secure-ecommerce/card-tokens:write survey/questions:read survey/respondents:read survey/responses:read survey/standard-survey-email-templates:read survey/standard-survey-email:write survey/standard-survey-questions:read survey/standard-survey-respondents:read survey/standard-survey-respondents:write survey/standard-survey-responses:read survey/standard-survey-responses:write survey/standard-surveys:read survey/survey-questions:read survey/survey-respondents:read survey/survey-respondents:write survey/survey-responses:read survey/survey-responses:write survey/surveys:read venue/meeting-room-overviews:read venue/meeting-rooms:write venue/venue-details-overview:read venue/venue-details:write venue/venue-facility:write"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api-platform.cvent.com/ea/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "939205ff-8f52-4514-8d13-4f10b2ada0bc",
+              "name": "Successfully retrieved a bulk job.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"url\": \"/contacts/{id}\",\n  \"operation\": \"PUT\",\n  \"id\": \"766d1986-9aaa-454f-86f5-d605c45b3131\",\n  \"description\": \"Q1 Contact Import\",\n  \"headers\": {\n    \"header1\": \"header1Value\",\n    \"header2\": \"header2Value\"\n  },\n  \"queryParams\": {\n    \"param1\": \"param1Value\",\n    \"param2\": \"param2Value\"\n  },\n  \"started\": \"2017-01-02T02:00:00Z\",\n  \"completed\": \"2017-01-02T02:30:00Z\",\n  \"status\": \"COMPLETED\",\n  \"totalRecords\": 5000,\n  \"successful\": 4950,\n  \"failed\": 50,\n  \"created\": \"2017-01-02T02:00:00Z\",\n  \"createdBy\": \"hporter\",\n  \"lastModified\": \"2019-02-12T03:00:00Z\",\n  \"lastModifiedBy\": \"hporter\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c3a2e0d7-d9f3-45d0-bfea-3a4d8a2b6bf0",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\",\n  \"details\": [\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    },\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    }\n  ],\n  \"target\": \"example target\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1679f0d7-f7e2-4865-8267-2a74060308b4",
+              "name": "Bad or expired token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\",\n  \"details\": [\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    },\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    }\n  ],\n  \"target\": \"example target\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a12b35ce-ea84-4de8-9480-f4e32192569b",
+              "name": "You do not have access to the resource",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\",\n  \"details\": [\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    },\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    }\n  ],\n  \"target\": \"example target\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8b7fe8a1-fd4e-4b0e-9287-7258722e2e7f",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\",\n  \"details\": [\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    },\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    }\n  ],\n  \"target\": \"example target\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "99042216-b278-4206-99b8-b188006504c0",
+              "name": "Too many requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\",\n  \"details\": [\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    },\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    }\n  ],\n  \"target\": \"example target\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d617404b-9820-45fd-9636-eb9a3923dd6a",
+          "name": "Cancel Bulk Job",
+          "request": {
+            "name": "Cancel Bulk Job",
+            "description": {
+              "content": "Cancels the bulk job. The job will stop processing after it finishes processing its current batch, if any.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bulk-jobs",
+                ":id",
+                "cancel"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) A uuid path parameter."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "account/hooks:delete account/hooks:read account/hooks:write account/user-groups:delete account/user-groups:read account/user-groups:write account/users:delete account/users:read account/users:write appointments/appointment-attendees:read appointments/appointment-events:read appointments/appointment-types:read appointments/appointments:read appointments/appointments:write appointments/available-times:read appointments/locations:read attendee-insights/attendee-insights:read attendee-insights/scores:read attendee-insights/stats:read budget/budget-items:delete budget/budget-items:read budget/budget-items:write budget/budget-totals:read budget/budget-vendors:read budget/cards:read budget/currency-conversion-rate:delete budget/currency-conversion-rate:read budget/currency-conversion-rate:write budget/payments:delete budget/payments:read budget/payments:write budget/transactions:delete budget/transactions:read budget/transactions:write bulk/bulk-jobs:read bulk/bulk-jobs:write business-transient/bids:read business-transient/proposals:read business-transient/supplier-brands:read business-transient/supplier-chains:read business-transient/supplier-properties:read business-transient/supplier-property-rooms:read business-transient/travel-accounts:read business-transient/travel-program-questions:read business-transient/travel-programs:read business-transient/travel-supplier-accounts:read business-travel/bids:read business-travel/proposals:read business-travel/travel-accounts:read business-travel/travel-program-questions:read business-travel/travel-programs:read compliance/communications:read compliance/communications:write email/bounces:read email/email-status:read email/emails:read eMarketing/campaigns:read emarketing/emarketing-email-status:read eMarketing/eMarketing-email-templates:read eMarketing/eMarketing-send-emails:write event/admission-items:read event/air-request:read event/alternate-travel:read event/attendance-durations:read event/attendee-activities-metadata:delete event/attendee-activities-metadata:read event/attendee-activities-metadata:write event/attendee-activities:read event/attendee-activities:write event/attendee-credits:read event/attendee-links:delete event/attendee-links:read event/attendee-links:write event/attendee-messages:read event/attendees:read event/attendees:write event/audience-segments:read event/audience-segments:write event/contact-groups:read event/contact-groups:write event/contact-types:read event/contacts:delete event/contacts:read event/contacts:write event/contacts:write-sensitive event/custom-fields:read event/custom-fields:write event/discounts:write event/donation-items:read event/event-discounts:read event/event-discounts:write event/event-email-status:read event/event-emails:read event/event-emails:write event/event-features:read event/event-features:write event/event-user-groups:read event/event-user-groups:write event/events:read event/events:write event/fee-items:read event/hotel-request:read event/invitation-lists:read event/meeting-request-forms:read event/meeting-requests:read event/meeting-requests:write event/membership-items:read event/orders:read event/planning-documents:read event/players:read event/process-form-submissions:read event/program-items:delete event/program-items:read event/program-items:write event/quantity-items:read event/quantity-items:write event/registration-paths:read event/registration-types:read event/registration-types:write event/role-assignments:read event/session-attendance:read event/session-attendance:write event/session-categories:read event/session-categories:write event/session-enrollment:delete event/session-enrollment:read event/session-enrollment:write event/session-segments:read event/sessions:delete event/sessions:read event/sessions:write event/speaker-categories:read event/speaker-categories:write event/speakers:delete event/speakers:read event/speakers:write event/taxes:read event/transactions:read event/transactions:write event/video-views:read event/videos:read event/videos:write event/vouchers:read event/webcasts:delete event/webcasts:read event/webcasts:write event/weblinks:read events-plus/hubs:read exhibitor/badges:read exhibitor/badges:write exhibitor/booth-staff:delete exhibitor/booth-staff:read exhibitor/booth-staff:write exhibitor/eliterature-requests:read exhibitor/exhibitor-admins:read exhibitor/exhibitor-admins:write exhibitor/exhibitor-answers:read exhibitor/exhibitor-answers:write exhibitor/exhibitor-categories:delete exhibitor/exhibitor-categories:read exhibitor/exhibitor-categories:write exhibitor/exhibitor-contents:delete exhibitor/exhibitor-contents:read exhibitor/exhibitor-contents:write exhibitor/exhibitor-questions:read exhibitor/exhibitors:delete exhibitor/exhibitors:read exhibitor/exhibitors:write exhibitor/lead-qualification-answers:read exhibitor/lead-qualification-questions:read exhibitor/leads:read exhibitor/registration-packs:delete exhibitor/registration-packs:read exhibitor/registration-packs:write exhibitor/sponsorship-levels:read file/file:read file/file:write housing/connections:write housing/hotel-room-rates:write housing/housing-event-available-nights:read housing/housing-event-hotels:read housing/housing-event-inventory:read housing/housing-event-room-types:read housing/housing-events:read housing/reservation-requests:delete housing/reservation-requests:read housing/reservation-requests:write housing/reservations-link:delete housing/reservations-link:write housing/reservations:delete housing/reservations:read housing/reservations:write onsite/signatures:read proposal/proposals:write remote-printing/badge-print-jobs:read remote-printing/badge-print-jobs:write remote-printing/badge-printer-pools:read rfp/rfp-agenda-items:read rfp/rfp-attachments:read rfp/rfp-custom-fields:read rfp/rfp-guest-rooms:read rfp/rfp-internal-documents:read rfp/rfp-lead-sources:read rfp/rfp-past-events:read rfp/rfp-questions:read rfp/rfp-recipients-history:read rfp/rfp-suppliers:read rfp/rfps:read seating/assignments:read seating/event-seatings:read seating/seats:read seating/tables:read secure-ecommerce/card-tokens:write survey/questions:read survey/respondents:read survey/responses:read survey/standard-survey-email-templates:read survey/standard-survey-email:write survey/standard-survey-questions:read survey/standard-survey-respondents:read survey/standard-survey-respondents:write survey/standard-survey-responses:read survey/standard-survey-responses:write survey/standard-surveys:read survey/survey-questions:read survey/survey-respondents:read survey/survey-respondents:write survey/survey-responses:read survey/survey-responses:write survey/surveys:read venue/meeting-room-overviews:read venue/meeting-rooms:write venue/venue-details-overview:read venue/venue-details:write venue/venue-facility:write"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api-platform.cvent.com/ea/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "76b9c1ee-10f8-48bf-853a-b1dcf074ee4c",
+              "name": "Bulk job details with status that shows the job has been canceled.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"url\": \"/contacts/{id}\",\n  \"operation\": \"PUT\",\n  \"id\": \"766d1986-9aaa-454f-86f5-d605c45b3131\",\n  \"description\": \"Q1 Contact Import\",\n  \"headers\": {\n    \"header1\": \"header1Value\",\n    \"header2\": \"header2Value\"\n  },\n  \"queryParams\": {\n    \"param1\": \"param1Value\",\n    \"param2\": \"param2Value\"\n  },\n  \"started\": \"2017-01-02T02:00:00Z\",\n  \"completed\": \"2017-01-02T02:30:00Z\",\n  \"status\": \"COMPLETED\",\n  \"totalRecords\": 5000,\n  \"successful\": 4950,\n  \"failed\": 50,\n  \"created\": \"2017-01-02T02:00:00Z\",\n  \"createdBy\": \"hporter\",\n  \"lastModified\": \"2019-02-12T03:00:00Z\",\n  \"lastModifiedBy\": \"hporter\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "db3bc2a6-6f87-44fe-a242-432b3ce497b8",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\",\n  \"details\": [\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    },\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    }\n  ],\n  \"target\": \"example target\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "56c0c42d-7a93-4e41-8b7d-3d8bf6f7145a",
+              "name": "Bad or expired token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\",\n  \"details\": [\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    },\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    }\n  ],\n  \"target\": \"example target\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b6534793-d314-4452-9cac-b8b74a31ae10",
+              "name": "You do not have access to the resource",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\",\n  \"details\": [\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    },\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    }\n  ],\n  \"target\": \"example target\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8327796d-fffc-4a79-b1d7-f42bafde7003",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\",\n  \"details\": [\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    },\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    }\n  ],\n  \"target\": \"example target\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a6017802-cf76-4fb2-ab53-38be9382d4e9",
+              "name": "Too many requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\",\n  \"details\": [\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    },\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    }\n  ],\n  \"target\": \"example target\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e2234755-5eaa-4223-a84c-0d5d9f2c6b2a",
+          "name": "Upload Bulk Job Data",
+          "request": {
+            "name": "Upload Bulk Job Data",
+            "description": {
+              "content": "This will upload data to be processed by a bulk job. There is a limit on the number of records that\ncan be uploaded per call and this endpoint can be called multiple times before starting a job run.\n\nNote: there is a maximum _total_ number of 50,000 records that can be uploaded for a job.\nIf you have a need for a greater limit, this can be increased for your account (up to a hard limit of 150,000)\nby contacting Cvent support.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bulk-jobs",
+                ":id",
+                "data"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) A uuid path parameter."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "account/hooks:delete account/hooks:read account/hooks:write account/user-groups:delete account/user-groups:read account/user-groups:write account/users:delete account/users:read account/users:write appointments/appointment-attendees:read appointments/appointment-events:read appointments/appointment-types:read appointments/appointments:read appointments/appointments:write appointments/available-times:read appointments/locations:read attendee-insights/attendee-insights:read attendee-insights/scores:read attendee-insights/stats:read budget/budget-items:delete budget/budget-items:read budget/budget-items:write budget/budget-totals:read budget/budget-vendors:read budget/cards:read budget/currency-conversion-rate:delete budget/currency-conversion-rate:read budget/currency-conversion-rate:write budget/payments:delete budget/payments:read budget/payments:write budget/transactions:delete budget/transactions:read budget/transactions:write bulk/bulk-jobs:read bulk/bulk-jobs:write business-transient/bids:read business-transient/proposals:read business-transient/supplier-brands:read business-transient/supplier-chains:read business-transient/supplier-properties:read business-transient/supplier-property-rooms:read business-transient/travel-accounts:read business-transient/travel-program-questions:read business-transient/travel-programs:read business-transient/travel-supplier-accounts:read business-travel/bids:read business-travel/proposals:read business-travel/travel-accounts:read business-travel/travel-program-questions:read business-travel/travel-programs:read compliance/communications:read compliance/communications:write email/bounces:read email/email-status:read email/emails:read eMarketing/campaigns:read emarketing/emarketing-email-status:read eMarketing/eMarketing-email-templates:read eMarketing/eMarketing-send-emails:write event/admission-items:read event/air-request:read event/alternate-travel:read event/attendance-durations:read event/attendee-activities-metadata:delete event/attendee-activities-metadata:read event/attendee-activities-metadata:write event/attendee-activities:read event/attendee-activities:write event/attendee-credits:read event/attendee-links:delete event/attendee-links:read event/attendee-links:write event/attendee-messages:read event/attendees:read event/attendees:write event/audience-segments:read event/audience-segments:write event/contact-groups:read event/contact-groups:write event/contact-types:read event/contacts:delete event/contacts:read event/contacts:write event/contacts:write-sensitive event/custom-fields:read event/custom-fields:write event/discounts:write event/donation-items:read event/event-discounts:read event/event-discounts:write event/event-email-status:read event/event-emails:read event/event-emails:write event/event-features:read event/event-features:write event/event-user-groups:read event/event-user-groups:write event/events:read event/events:write event/fee-items:read event/hotel-request:read event/invitation-lists:read event/meeting-request-forms:read event/meeting-requests:read event/meeting-requests:write event/membership-items:read event/orders:read event/planning-documents:read event/players:read event/process-form-submissions:read event/program-items:delete event/program-items:read event/program-items:write event/quantity-items:read event/quantity-items:write event/registration-paths:read event/registration-types:read event/registration-types:write event/role-assignments:read event/session-attendance:read event/session-attendance:write event/session-categories:read event/session-categories:write event/session-enrollment:delete event/session-enrollment:read event/session-enrollment:write event/session-segments:read event/sessions:delete event/sessions:read event/sessions:write event/speaker-categories:read event/speaker-categories:write event/speakers:delete event/speakers:read event/speakers:write event/taxes:read event/transactions:read event/transactions:write event/video-views:read event/videos:read event/videos:write event/vouchers:read event/webcasts:delete event/webcasts:read event/webcasts:write event/weblinks:read events-plus/hubs:read exhibitor/badges:read exhibitor/badges:write exhibitor/booth-staff:delete exhibitor/booth-staff:read exhibitor/booth-staff:write exhibitor/eliterature-requests:read exhibitor/exhibitor-admins:read exhibitor/exhibitor-admins:write exhibitor/exhibitor-answers:read exhibitor/exhibitor-answers:write exhibitor/exhibitor-categories:delete exhibitor/exhibitor-categories:read exhibitor/exhibitor-categories:write exhibitor/exhibitor-contents:delete exhibitor/exhibitor-contents:read exhibitor/exhibitor-contents:write exhibitor/exhibitor-questions:read exhibitor/exhibitors:delete exhibitor/exhibitors:read exhibitor/exhibitors:write exhibitor/lead-qualification-answers:read exhibitor/lead-qualification-questions:read exhibitor/leads:read exhibitor/registration-packs:delete exhibitor/registration-packs:read exhibitor/registration-packs:write exhibitor/sponsorship-levels:read file/file:read file/file:write housing/connections:write housing/hotel-room-rates:write housing/housing-event-available-nights:read housing/housing-event-hotels:read housing/housing-event-inventory:read housing/housing-event-room-types:read housing/housing-events:read housing/reservation-requests:delete housing/reservation-requests:read housing/reservation-requests:write housing/reservations-link:delete housing/reservations-link:write housing/reservations:delete housing/reservations:read housing/reservations:write onsite/signatures:read proposal/proposals:write remote-printing/badge-print-jobs:read remote-printing/badge-print-jobs:write remote-printing/badge-printer-pools:read rfp/rfp-agenda-items:read rfp/rfp-attachments:read rfp/rfp-custom-fields:read rfp/rfp-guest-rooms:read rfp/rfp-internal-documents:read rfp/rfp-lead-sources:read rfp/rfp-past-events:read rfp/rfp-questions:read rfp/rfp-recipients-history:read rfp/rfp-suppliers:read rfp/rfps:read seating/assignments:read seating/event-seatings:read seating/seats:read seating/tables:read secure-ecommerce/card-tokens:write survey/questions:read survey/respondents:read survey/responses:read survey/standard-survey-email-templates:read survey/standard-survey-email:write survey/standard-survey-questions:read survey/standard-survey-respondents:read survey/standard-survey-respondents:write survey/standard-survey-responses:read survey/standard-survey-responses:write survey/standard-surveys:read survey/survey-questions:read survey/survey-respondents:read survey/survey-respondents:write survey/survey-responses:read survey/survey-responses:write survey/surveys:read venue/meeting-room-overviews:read venue/meeting-rooms:write venue/venue-details-overview:read venue/venue-details:write venue/venue-facility:write"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api-platform.cvent.com/ea/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": [\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\",\n        \"key_1\": \"<object>\",\n        \"key_2\": \"<object>\"\n      },\n      \"pathParams\": {\n        \"key_0\": \"<string>\",\n        \"key_1\": \"<string>\"\n      },\n      \"queryParams\": {\n        \"key_0\": \"<string>\",\n        \"key_1\": \"<string>\"\n      },\n      \"headers\": {\n        \"key_0\": \"<string>\",\n        \"key_1\": \"<string>\",\n        \"key_2\": \"<string>\",\n        \"key_3\": \"<string>\"\n      }\n    },\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\",\n        \"key_1\": \"<object>\",\n        \"key_2\": \"<object>\"\n      },\n      \"pathParams\": {\n        \"key_0\": \"<string>\"\n      },\n      \"queryParams\": {\n        \"key_0\": \"<string>\"\n      },\n      \"headers\": {\n        \"key_0\": \"<string>\",\n        \"key_1\": \"<string>\"\n      }\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "086f8858-3e0c-47d7-9398-a56b873e0ace",
+              "name": "Information regarding the uploaded data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": [\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    },\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\",\n        \"key_1\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\",\n        \"key_1\": \"<object>\",\n        \"key_2\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    },\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    }\n  ],\n  \"count\": 100\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1d0c3888-bfc2-4a11-9e24-fc96fbd5f9f8",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": [\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    },\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\",\n        \"key_1\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\",\n  \"details\": [\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    },\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    }\n  ],\n  \"target\": \"example target\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "754a8d89-3705-4f73-b9dd-c010aa7ad197",
+              "name": "Bad or expired token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": [\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    },\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\",\n        \"key_1\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\",\n  \"details\": [\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    },\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    }\n  ],\n  \"target\": \"example target\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "85e6bf90-9e99-4bd1-ae35-780035798984",
+              "name": "You do not have access to the resource",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": [\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    },\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\",\n        \"key_1\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\",\n  \"details\": [\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    },\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    }\n  ],\n  \"target\": \"example target\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1bb2846d-2b1f-4afd-82b9-d3c9b4e0043d",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": [\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    },\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\",\n        \"key_1\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\",\n  \"details\": [\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    },\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    }\n  ],\n  \"target\": \"example target\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f5e0ccd3-ab3e-49a8-9202-ed60c41723b2",
+              "name": "Exceeded limit for number of job data records",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": [\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    },\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\",\n        \"key_1\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 409,\n  \"message\": \"Conflict\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "48ba7cfe-c3c0-4220-8f3a-cfd66f56549f",
+              "name": "Too many requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id",
+                    "data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": [\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    },\n    {\n      \"dataRecord\": {\n        \"key_0\": \"<object>\",\n        \"key_1\": \"<object>\"\n      },\n      \"pathParams\": {},\n      \"queryParams\": {\n        \"param1\": \"param1Value\",\n        \"param2\": \"param2Value\"\n      },\n      \"headers\": {\n        \"header1\": \"header1Value\",\n        \"header2\": \"header2Value\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\",\n  \"details\": [\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    },\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    }\n  ],\n  \"target\": \"example target\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f25d5ffa-0501-4977-aad3-f92127b1e0ac",
+          "name": "List Bulk Job Result",
+          "request": {
+            "name": "List Bulk Job Result",
+            "description": {
+              "content": "Used to list the results of a bulk job.\n\n**Note:** A bulk job is designed to wrap individual, non-batch API operations. When a target operation\nis itself batch in nature and returns a `207 Multi-Status` response, the `failed` flag on each result record\nreflects only whether the target operation returned an HTTP error — it does not capture partial item-level\nfailures within the multi-status response body. For these operations, inspect each result record's `data` field\nto determine which items succeeded or failed.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bulk-jobs",
+                ":id",
+                "results"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "after",
+                  "value": "<dateTime>",
+                  "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+                },
+                {
+                  "disabled": false,
+                  "key": "before",
+                  "value": "<dateTime>",
+                  "description": "Used to query records that have been added or updated before this time point."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "100",
+                  "description": "The maximum number of records to return per page."
+                },
+                {
+                  "disabled": false,
+                  "key": "token",
+                  "value": "<string>",
+                  "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "A filter query string narrows search results and supports the combination of logical and comparison operators.\nThe filter adheres to the pattern filter='field' comparisonType 'value'.\n\nThese are the comparison types that can be used in filter expressions:\n* equal: eq\n* not equal: ne\n\nThe following fields are filterable:\n* failed (eq|ne)\n\n  **Note:** this filters for the top-level HTTP status of the target operation.\n  For operations that return 207 (Multi-Status), filter results may not capture all failed records.\n  Inspect individual record statuses in the `data` field for a complete picture.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) A uuid path parameter."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "account/hooks:delete account/hooks:read account/hooks:write account/user-groups:delete account/user-groups:read account/user-groups:write account/users:delete account/users:read account/users:write appointments/appointment-attendees:read appointments/appointment-events:read appointments/appointment-types:read appointments/appointments:read appointments/appointments:write appointments/available-times:read appointments/locations:read attendee-insights/attendee-insights:read attendee-insights/scores:read attendee-insights/stats:read budget/budget-items:delete budget/budget-items:read budget/budget-items:write budget/budget-totals:read budget/budget-vendors:read budget/cards:read budget/currency-conversion-rate:delete budget/currency-conversion-rate:read budget/currency-conversion-rate:write budget/payments:delete budget/payments:read budget/payments:write budget/transactions:delete budget/transactions:read budget/transactions:write bulk/bulk-jobs:read bulk/bulk-jobs:write business-transient/bids:read business-transient/proposals:read business-transient/supplier-brands:read business-transient/supplier-chains:read business-transient/supplier-properties:read business-transient/supplier-property-rooms:read business-transient/travel-accounts:read business-transient/travel-program-questions:read business-transient/travel-programs:read business-transient/travel-supplier-accounts:read business-travel/bids:read business-travel/proposals:read business-travel/travel-accounts:read business-travel/travel-program-questions:read business-travel/travel-programs:read compliance/communications:read compliance/communications:write email/bounces:read email/email-status:read email/emails:read eMarketing/campaigns:read emarketing/emarketing-email-status:read eMarketing/eMarketing-email-templates:read eMarketing/eMarketing-send-emails:write event/admission-items:read event/air-request:read event/alternate-travel:read event/attendance-durations:read event/attendee-activities-metadata:delete event/attendee-activities-metadata:read event/attendee-activities-metadata:write event/attendee-activities:read event/attendee-activities:write event/attendee-credits:read event/attendee-links:delete event/attendee-links:read event/attendee-links:write event/attendee-messages:read event/attendees:read event/attendees:write event/audience-segments:read event/audience-segments:write event/contact-groups:read event/contact-groups:write event/contact-types:read event/contacts:delete event/contacts:read event/contacts:write event/contacts:write-sensitive event/custom-fields:read event/custom-fields:write event/discounts:write event/donation-items:read event/event-discounts:read event/event-discounts:write event/event-email-status:read event/event-emails:read event/event-emails:write event/event-features:read event/event-features:write event/event-user-groups:read event/event-user-groups:write event/events:read event/events:write event/fee-items:read event/hotel-request:read event/invitation-lists:read event/meeting-request-forms:read event/meeting-requests:read event/meeting-requests:write event/membership-items:read event/orders:read event/planning-documents:read event/players:read event/process-form-submissions:read event/program-items:delete event/program-items:read event/program-items:write event/quantity-items:read event/quantity-items:write event/registration-paths:read event/registration-types:read event/registration-types:write event/role-assignments:read event/session-attendance:read event/session-attendance:write event/session-categories:read event/session-categories:write event/session-enrollment:delete event/session-enrollment:read event/session-enrollment:write event/session-segments:read event/sessions:delete event/sessions:read event/sessions:write event/speaker-categories:read event/speaker-categories:write event/speakers:delete event/speakers:read event/speakers:write event/taxes:read event/transactions:read event/transactions:write event/video-views:read event/videos:read event/videos:write event/vouchers:read event/webcasts:delete event/webcasts:read event/webcasts:write event/weblinks:read events-plus/hubs:read exhibitor/badges:read exhibitor/badges:write exhibitor/booth-staff:delete exhibitor/booth-staff:read exhibitor/booth-staff:write exhibitor/eliterature-requests:read exhibitor/exhibitor-admins:read exhibitor/exhibitor-admins:write exhibitor/exhibitor-answers:read exhibitor/exhibitor-answers:write exhibitor/exhibitor-categories:delete exhibitor/exhibitor-categories:read exhibitor/exhibitor-categories:write exhibitor/exhibitor-contents:delete exhibitor/exhibitor-contents:read exhibitor/exhibitor-contents:write exhibitor/exhibitor-questions:read exhibitor/exhibitors:delete exhibitor/exhibitors:read exhibitor/exhibitors:write exhibitor/lead-qualification-answers:read exhibitor/lead-qualification-questions:read exhibitor/leads:read exhibitor/registration-packs:delete exhibitor/registration-packs:read exhibitor/registration-packs:write exhibitor/sponsorship-levels:read file/file:read file/file:write housing/connections:write housing/hotel-room-rates:write housing/housing-event-available-nights:read housing/housing-event-hotels:read housing/housing-event-inventory:read housing/housing-event-room-types:read housing/housing-events:read housing/reservation-requests:delete housing/reservation-requests:read housing/reservation-requests:write housing/reservations-link:delete housing/reservations-link:write housing/reservations:delete housing/reservations:read housing/reservations:write onsite/signatures:read proposal/proposals:write remote-printing/badge-print-jobs:read remote-printing/badge-print-jobs:write remote-printing/badge-printer-pools:read rfp/rfp-agenda-items:read rfp/rfp-attachments:read rfp/rfp-custom-fields:read rfp/rfp-guest-rooms:read rfp/rfp-internal-documents:read rfp/rfp-lead-sources:read rfp/rfp-past-events:read rfp/rfp-questions:read rfp/rfp-recipients-history:read rfp/rfp-suppliers:read rfp/rfps:read seating/assignments:read seating/event-seatings:read seating/seats:read seating/tables:read secure-ecommerce/card-tokens:write survey/questions:read survey/respondents:read survey/responses:read survey/standard-survey-email-templates:read survey/standard-survey-email:write survey/standard-survey-questions:read survey/standard-survey-respondents:read survey/standard-survey-respondents:write survey/standard-survey-responses:read survey/standard-survey-responses:write survey/standard-surveys:read survey/survey-questions:read survey/survey-respondents:read survey/survey-respondents:write survey/survey-responses:read survey/survey-responses:write survey/surveys:read venue/meeting-room-overviews:read venue/meeting-rooms:write venue/venue-details-overview:read venue/venue-details:write venue/venue-facility:write"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api-platform.cvent.com/ea/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "f1c2f710-dc35-4a01-8f96-bd56cba94d74",
+              "name": "Retrieved a paginated list of bulk responses.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id",
+                    "results"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "after",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "before",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "failed eq \"true\""
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"status\": 400,\n      \"data\": {\n        \"dataRecord\": {\n          \"event\": {},\n          \"title\": \"Day 1 Keynote Session\",\n          \"start\": \"2020-02-03T13:00:00.000Z\",\n          \"end\": \"2020-02-07T17:00:00.000Z\",\n          \"status\": \"Active\"\n        },\n        \"pathParams\": {},\n        \"queryParams\": {\n          \"param1\": \"param1Value\",\n          \"param2\": \"param2Value\"\n        },\n        \"headers\": {\n          \"header1\": \"header1Value\",\n          \"header2\": \"header2Value\"\n        }\n      },\n      \"id\": 1234,\n      \"job\": {},\n      \"failed\": true,\n      \"message\": \"Example error message.\",\n      \"request\": {\n        \"operation\": \"PUT\",\n        \"headers\": {\n          \"header1\": \"header1Value\",\n          \"header2\": \"header2Value\"\n        },\n        \"queryParams\": {\n          \"param1\": \"param1Value\",\n          \"param2\": \"param2Value\"\n        }\n      }\n    },\n    {\n      \"status\": 400,\n      \"data\": {\n        \"dataRecord\": {\n          \"event\": {},\n          \"title\": \"Day 1 Keynote Session\",\n          \"start\": \"2020-02-03T13:00:00.000Z\",\n          \"end\": \"2020-02-07T17:00:00.000Z\",\n          \"status\": \"Active\"\n        },\n        \"pathParams\": {},\n        \"queryParams\": {\n          \"param1\": \"param1Value\",\n          \"param2\": \"param2Value\"\n        },\n        \"headers\": {\n          \"header1\": \"header1Value\",\n          \"header2\": \"header2Value\"\n        }\n      },\n      \"id\": 1234,\n      \"job\": {},\n      \"failed\": true,\n      \"message\": \"Example error message.\",\n      \"request\": {\n        \"operation\": \"PUT\",\n        \"headers\": {\n          \"header1\": \"header1Value\",\n          \"header2\": \"header2Value\"\n        },\n        \"queryParams\": {\n          \"param1\": \"param1Value\",\n          \"param2\": \"param2Value\"\n        }\n      }\n    }\n  ],\n  \"paging\": {\n    \"_links\": {\n      \"next\": {\n        \"href\": \"?token=90c5f062-76ad-4ea4-aa53-00eb698d9262\"\n      },\n      \"self\": {\n        \"href\": \"?token=90c5f062-76ad-4ea4-aa53-00eb698d9262\"\n      },\n      \"prev\": {\n        \"href\": \"?token=90c5f062-76ad-4ea4-aa53-00eb698d9262\"\n      }\n    },\n    \"previousToken\": \"1a2b3c4d5e6f7g8h9i10j11k\",\n    \"nextToken\": \"1a2b3c4d5e6f7g8h9i10j11k\",\n    \"currentToken\": \"1a2b3c4d5e6f7g8h9i10j11k\",\n    \"limit\": 100,\n    \"totalCount\": 2\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "06d0f6c0-c03e-4f51-b0de-2b235c5a253f",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id",
+                    "results"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "after",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "before",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "failed eq \"true\""
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\",\n  \"details\": [\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    },\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    }\n  ],\n  \"target\": \"example target\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f11ebd30-3d01-49d3-9b2a-262a1078b2d4",
+              "name": "Bad or expired token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id",
+                    "results"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "after",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "before",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "failed eq \"true\""
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\",\n  \"details\": [\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    },\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    }\n  ],\n  \"target\": \"example target\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cc24c3e3-b32e-4b02-9ba5-606322fb711d",
+              "name": "You do not have access to the resource",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id",
+                    "results"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "after",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "before",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "failed eq \"true\""
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\",\n  \"details\": [\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    },\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    }\n  ],\n  \"target\": \"example target\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6de6c99b-d317-4398-9bff-b54ea12888b1",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id",
+                    "results"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "after",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "before",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "failed eq \"true\""
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\",\n  \"details\": [\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    },\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    }\n  ],\n  \"target\": \"example target\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4b37351d-2a4d-422e-a5c2-5ff420b6b930",
+              "name": "Too many requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id",
+                    "results"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "after",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "before",
+                      "value": "2017-01-02T02:00:00Z"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "token",
+                      "value": "0e28af57-511f-47ab-ae46-46cd1ca51a1a"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "failed eq \"true\""
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\",\n  \"details\": [\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    },\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    }\n  ],\n  \"target\": \"example target\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d9eeddda-fb7b-4226-ac9c-4b8df1309929",
+          "name": "Run Bulk Job",
+          "request": {
+            "name": "Run Bulk Job",
+            "description": {
+              "content": "Begins the processing of data uploaded in a bulk job.\n\n **Note**: You can have a maximum of two bulk jobs running concurrently.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bulk-jobs",
+                ":id",
+                "run"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) A uuid path parameter."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "account/hooks:delete account/hooks:read account/hooks:write account/user-groups:delete account/user-groups:read account/user-groups:write account/users:delete account/users:read account/users:write appointments/appointment-attendees:read appointments/appointment-events:read appointments/appointment-types:read appointments/appointments:read appointments/appointments:write appointments/available-times:read appointments/locations:read attendee-insights/attendee-insights:read attendee-insights/scores:read attendee-insights/stats:read budget/budget-items:delete budget/budget-items:read budget/budget-items:write budget/budget-totals:read budget/budget-vendors:read budget/cards:read budget/currency-conversion-rate:delete budget/currency-conversion-rate:read budget/currency-conversion-rate:write budget/payments:delete budget/payments:read budget/payments:write budget/transactions:delete budget/transactions:read budget/transactions:write bulk/bulk-jobs:read bulk/bulk-jobs:write business-transient/bids:read business-transient/proposals:read business-transient/supplier-brands:read business-transient/supplier-chains:read business-transient/supplier-properties:read business-transient/supplier-property-rooms:read business-transient/travel-accounts:read business-transient/travel-program-questions:read business-transient/travel-programs:read business-transient/travel-supplier-accounts:read business-travel/bids:read business-travel/proposals:read business-travel/travel-accounts:read business-travel/travel-program-questions:read business-travel/travel-programs:read compliance/communications:read compliance/communications:write email/bounces:read email/email-status:read email/emails:read eMarketing/campaigns:read emarketing/emarketing-email-status:read eMarketing/eMarketing-email-templates:read eMarketing/eMarketing-send-emails:write event/admission-items:read event/air-request:read event/alternate-travel:read event/attendance-durations:read event/attendee-activities-metadata:delete event/attendee-activities-metadata:read event/attendee-activities-metadata:write event/attendee-activities:read event/attendee-activities:write event/attendee-credits:read event/attendee-links:delete event/attendee-links:read event/attendee-links:write event/attendee-messages:read event/attendees:read event/attendees:write event/audience-segments:read event/audience-segments:write event/contact-groups:read event/contact-groups:write event/contact-types:read event/contacts:delete event/contacts:read event/contacts:write event/contacts:write-sensitive event/custom-fields:read event/custom-fields:write event/discounts:write event/donation-items:read event/event-discounts:read event/event-discounts:write event/event-email-status:read event/event-emails:read event/event-emails:write event/event-features:read event/event-features:write event/event-user-groups:read event/event-user-groups:write event/events:read event/events:write event/fee-items:read event/hotel-request:read event/invitation-lists:read event/meeting-request-forms:read event/meeting-requests:read event/meeting-requests:write event/membership-items:read event/orders:read event/planning-documents:read event/players:read event/process-form-submissions:read event/program-items:delete event/program-items:read event/program-items:write event/quantity-items:read event/quantity-items:write event/registration-paths:read event/registration-types:read event/registration-types:write event/role-assignments:read event/session-attendance:read event/session-attendance:write event/session-categories:read event/session-categories:write event/session-enrollment:delete event/session-enrollment:read event/session-enrollment:write event/session-segments:read event/sessions:delete event/sessions:read event/sessions:write event/speaker-categories:read event/speaker-categories:write event/speakers:delete event/speakers:read event/speakers:write event/taxes:read event/transactions:read event/transactions:write event/video-views:read event/videos:read event/videos:write event/vouchers:read event/webcasts:delete event/webcasts:read event/webcasts:write event/weblinks:read events-plus/hubs:read exhibitor/badges:read exhibitor/badges:write exhibitor/booth-staff:delete exhibitor/booth-staff:read exhibitor/booth-staff:write exhibitor/eliterature-requests:read exhibitor/exhibitor-admins:read exhibitor/exhibitor-admins:write exhibitor/exhibitor-answers:read exhibitor/exhibitor-answers:write exhibitor/exhibitor-categories:delete exhibitor/exhibitor-categories:read exhibitor/exhibitor-categories:write exhibitor/exhibitor-contents:delete exhibitor/exhibitor-contents:read exhibitor/exhibitor-contents:write exhibitor/exhibitor-questions:read exhibitor/exhibitors:delete exhibitor/exhibitors:read exhibitor/exhibitors:write exhibitor/lead-qualification-answers:read exhibitor/lead-qualification-questions:read exhibitor/leads:read exhibitor/registration-packs:delete exhibitor/registration-packs:read exhibitor/registration-packs:write exhibitor/sponsorship-levels:read file/file:read file/file:write housing/connections:write housing/hotel-room-rates:write housing/housing-event-available-nights:read housing/housing-event-hotels:read housing/housing-event-inventory:read housing/housing-event-room-types:read housing/housing-events:read housing/reservation-requests:delete housing/reservation-requests:read housing/reservation-requests:write housing/reservations-link:delete housing/reservations-link:write housing/reservations:delete housing/reservations:read housing/reservations:write onsite/signatures:read proposal/proposals:write remote-printing/badge-print-jobs:read remote-printing/badge-print-jobs:write remote-printing/badge-printer-pools:read rfp/rfp-agenda-items:read rfp/rfp-attachments:read rfp/rfp-custom-fields:read rfp/rfp-guest-rooms:read rfp/rfp-internal-documents:read rfp/rfp-lead-sources:read rfp/rfp-past-events:read rfp/rfp-questions:read rfp/rfp-recipients-history:read rfp/rfp-suppliers:read rfp/rfps:read seating/assignments:read seating/event-seatings:read seating/seats:read seating/tables:read secure-ecommerce/card-tokens:write survey/questions:read survey/respondents:read survey/responses:read survey/standard-survey-email-templates:read survey/standard-survey-email:write survey/standard-survey-questions:read survey/standard-survey-respondents:read survey/standard-survey-respondents:write survey/standard-survey-responses:read survey/standard-survey-responses:write survey/standard-surveys:read survey/survey-questions:read survey/survey-respondents:read survey/survey-respondents:write survey/survey-responses:read survey/survey-responses:write survey/surveys:read venue/meeting-room-overviews:read venue/meeting-rooms:write venue/venue-details-overview:read venue/venue-details:write venue/venue-facility:write"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api-platform.cvent.com/ea/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "0cc73c96-f3af-4426-b315-af1fd428420b",
+              "name": "Bulk job details with status that shows the job has begun processing.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id",
+                    "run"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"url\": \"/contacts/{id}\",\n  \"operation\": \"PUT\",\n  \"id\": \"766d1986-9aaa-454f-86f5-d605c45b3131\",\n  \"description\": \"Q1 Contact Import\",\n  \"headers\": {\n    \"header1\": \"header1Value\",\n    \"header2\": \"header2Value\"\n  },\n  \"queryParams\": {\n    \"param1\": \"param1Value\",\n    \"param2\": \"param2Value\"\n  },\n  \"started\": \"2017-01-02T02:00:00Z\",\n  \"completed\": \"2017-01-02T02:30:00Z\",\n  \"status\": \"COMPLETED\",\n  \"totalRecords\": 5000,\n  \"successful\": 4950,\n  \"failed\": 50,\n  \"created\": \"2017-01-02T02:00:00Z\",\n  \"createdBy\": \"hporter\",\n  \"lastModified\": \"2019-02-12T03:00:00Z\",\n  \"lastModifiedBy\": \"hporter\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c6637ccf-6209-4dc3-976c-dc3589c695e0",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id",
+                    "run"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\",\n  \"details\": [\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    },\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    }\n  ],\n  \"target\": \"example target\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e579d365-c8d9-4165-bc17-b82ba6c24b08",
+              "name": "Bad or expired token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id",
+                    "run"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\",\n  \"details\": [\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    },\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    }\n  ],\n  \"target\": \"example target\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9c2255c7-aa08-4aee-8706-cc66654a1f4e",
+              "name": "You do not have access to the resource",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id",
+                    "run"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\",\n  \"details\": [\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    },\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    }\n  ],\n  \"target\": \"example target\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7b3eeb36-214a-4c27-8953-85e23b2ec509",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id",
+                    "run"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\",\n  \"details\": [\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    },\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    }\n  ],\n  \"target\": \"example target\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "45737a7a-6a0b-4723-9d59-f203417fc669",
+              "name": "Exceeded limit for number of concurrently running bulk jobs",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id",
+                    "run"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 409,\n  \"message\": \"Conflict\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eaeb6014-0366-4447-82ad-227d80657a07",
+              "name": "Too many requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk-jobs",
+                    ":id",
+                    "run"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) A uuid path parameter."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Bad Request\",\n  \"details\": [\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    },\n    {\n      \"code\": 400,\n      \"message\": \"Bad Request\",\n      \"target\": \"example target\"\n    }\n  ],\n  \"target\": \"example target\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-platform.cvent.com/ea",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "ea30b800-92ee-4e80-b774-555a470e4872",
+    "name": "Cvent REST APIs — Event Cloud Bulk API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Event Cloud scope of the Cvent REST APIs. This document is a TAG-SCOPED SUBSET of the OpenAPI specification Cvent publishes at https://github.com/cvent/rest-sdks/blob/main/cvent-public-spec/openapi.yaml (the source of truth for Cvent's official TypeScript/.NET/Java SDKs). Venue-sourcing, RFP, housing-supplier and travel-supplier tags were removed because they belong to Cvent Hospitality Cloud; every path, operation, parameter, schema and security requirement below is verbatim from Cvent's published spec.\n\n# Introduction\nThe Cvent API Platform is built around REST. We aim to provide intuitive endpoints that can be easily\ndiscovered to help leverage the Cvent platform for your event needs. The RESTful APIs outlined here\nuse JSON-encoded request and response format, along with HTTP codes, to convey processing status of\nrequests received. The Cvent resources are protected using OAuth2.\n\n# Getting Started\n\nIf you're new to the Cvent API Platform, start by reading our\n[Developer Quickstart](https://developers.cvent.com/docs/rest-api/tutorials/developer-quickstart) guide. This will\ngive you an overview of how to authenticate and make requests using our APIs.\n\n## Authentication\n\nThe Cvent REST API uses [OAuth2](https://oauth.net/2/) to authorize requests to the platform. The client\ncredentials authorization flow is supported.\n\n<a name=\"oauth2-auth-code-planner-admin\"></a>\n\nAuthorization code flow is only supported for planner users with the administrator role in Cvent. Developer users\ncannot use authorization code flow.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\nHere's an example of using client credential flow to authorize. You'll supply your application's id and secret to\nmake a [Token](#operation/oauth2Token) request.\n\n```bash\ncurl --location --request POST '{hostName}/{version}/oauth2/token' \\\n--header 'Content-Type: application/x-www-form-urlencoded' \\\n--header 'Authorization: Basic {api_credentials}' \\\n--data-urlencode 'grant_type=client_credentials' \\\n--data-urlencode 'client_id={client_id}'\n```\n\n| Key               | Description                                          | Value                                                                                                        |\n| :---------------- | :--------------------------------------------------- | :----------------------------------------------------------------------------------------------------------- |\n| {hostName}        | https://api-platform.cvent.com                       | Location if your account is in the North American datacenter.                                                |\n|                   | https://api-platform-eur.cvent.com                   | Location if your account is in the European data center.                                                     |\n| {version}         | ea                                                   | The version of the API you're using. Only `ea` is currently supported.                                       |\n| {api_credentials} | {client_id}:{client_secret} in base64 encoded format | Supply your client id & client credentials in a base 64 encoded format.                                      |\n| {client_id}       | Retrieved from your application                      | Your application's client id.                                                                                |\n| {client_secret}   | Retrieved from your application                      | Your application's client secret.                                                                            |\n\nOn a successful call, you'll receive the following response:\n\n```json\n{\n  \"access_token\": \"{accessToken}\",\n  \"expires_in\": 3600,\n  \"token_type\": \"Bearer\"\n}\n```\n\nThis bearer token is valid for 3600 seconds (60 minutes) and must be used in subsequent calls.\n\n## Endpoints\n\nEndpoints start with `hostName` and `version`.\n\nThe `hostname` will depend on the region that your Cvent account is hosted in. Please see the table\nbelow to identify which hostname you should be using.\n\n| Region        |\tHostname                           |\n|:--------------|:-----------------------------------|\n| North America\t| https://api-platform.cvent.com     |\n| Europe        | https://api-platform-eur.cvent.com |\n\nThe current `version` of the Cvent API is `ea`.\n\n## Rate Limits\n\nCvent APIs enforce rate limits to ensure platform stability. Your limits depend on your tier: Free,\nStandard, or Premium.\n\n<br />\n\n### Usage Tiers\n\n| Tier     | Daily Calls | Calls per Second | Max Burst |\n| -------- | ----------- | ---------------- | --------- |\n| Free     | 1,000       | 2                | 1         |\n| Standard | 15,000      | 10               | 10        |\n| Premium  | 500,000     | 25               | 25        |\n\n- **Daily calls** define how many requests you can make in a 24-hour period. Quota\n  resets at 12 midnight (+0 GMT).\n- **Calls per second** define how many requests you can make in a 1-second window.\n- **Max Burst** defines how many requests you can make at once.\n\nIf you are unsure what usage tier applies to your account, you can check via\n[Get Current Usage Tier](#operation/getUsageTier).\n\nPlease note that these limits may change as the Cvent API Platform evolves.\n\n<br />\n\n### Handling Rate Limits\n\nSometimes, you may exceed your rate limits. When this happens, the API will return a `429 Too Many Requests`. See\n[handling rate limits](https://developers.cvent.com/docs/rest-api/guides/handling-rate-limits) for best practices on how to handle this.\n\n## Pagination\n\nSome APIs use pagination to manage records. Each page of records has a token associated to identify it.\n\nIf an API uses pagination, you’ll find up to three tokens in the response:\n- **currentToken**: Describes the token of the current page.\n- **nextToken**: Provides a token for the next page of records, if one exists.\n- **previousToken**: Provides a token for the previous page of records, if one exists. Not all APIs will return\n  this token.\n\nYou specify which page of records to view via the `token` parameter in your API call. To navigate through pages,\ntake the `nextToken` or `previousToken` value and pass it to your next call’s `token` parameter to get the\nrespective page of records. For example, if you made this request:\n\n```bash\ncurl -X GET {hostname}/{version}/contacts?limit=100 \\\n-H 'Accept: application/json' \\\n-H 'Authorization: Bearer {accessToken}'\n```\n\nThe response contains a paging array where you'll find the token information.\n\n```json\n{\n  \"paging\": {\n    \"currentToken\": \"90c5f062-76ad-4ea4-aa53-00eb698d9262\",\n    \"nextToken\": \"3b2359a7-4583-40ed-8afd-67e5f15373d3\",\n    \"limit\": 100,\n    \"totalCount\": 102,\n    \"_links\": {...}\n  },\n  \"data\": [...]\n}\n```\n\nTake the `nextToken` and use it in the `token` parameter on your subsequent call.\n\n```bash\ncurl -X GET {hostname}/{version}/contacts?limit=100&token=3b2359a7-4583-40ed-8afd-67e5f15373d3 \\\n-H 'Accept: application/json' \\\n-H 'Authorization: Bearer {accessToken}'\n```\n\nWhen the response doesn’t contain a `nextToken` field, you’ve reached the last page. Occasionally, you might\nencounter an empty page at the end of results. This typically happens when the results were evenly divisible.\nEnsure your client code handles the possibility of receiving an empty data array when using the `nextToken`.\n\n## Filtering\n\nUse filters to narrow down results. The filter follows the pattern\n`filter='field' comparisonType 'value'`. The value can be enclosed with single\nquotes (') or double quotes (\").\n\n```bash\nGET {hostName}/{version}/contacts?filter=lastName eq 'Smith'\n````\n\nTo correctly pass a single quote in the filter's value, use double quotes around\nthe string.\n\n```bash\nGET {hostName}/{version}/contacts?filter=lastName eq \"O'Keenan\"\n```\n\nTo correctly pass a double quote in the filter's value, use double quotes around\nthe string and add an escape character `\\` to each quote that is part of the\nstring.\n\n```bash\nGET {hostName}/{version}/events?filter=eventName eq \"\\\"Yearly\\\" Conference\"\n```\n\n## Versioning\n\nChange is inevitable in API development. Planning for it is crucial. We track\nboth backward-compatible and backward-incompatible changes.\n\n<br />\n\n### Backward Compatible Changes\n\nBackward compatible changes will be made often and are intended to avoid\nany adverse impact on our customers. It is highly advisable that when reading\nJSON payloads from Cvent, you are able to handle \"unknown\" attributes that\ncan be added over time. We consider the following changes backward-compatible:\n\n- Adding new resources\n- Adding new optional request parameters to existing operations\n- Adding new attributes to requests or responses\n- Changing the length or format (not type) of resource identifiers. For example, an ID can change from\n  \"1234/1234\" to \"1234::1234\".\n- Increasing the length of string fields\n\n<br />\n\n### Backward Incompatible Changes\n\nBackward-incompatible changes are made infrequently, however, they can be\ndisruptive to consumers. Due to this, our APIs are versioned to avoid\ndisruptions to customers. We leverage a URI-based versioning scheme,\nwhich means that a version value is included in the Cvent API URL.\nWhen breaking changes occur, a new version of the API is made available\nwhile the existing version is deprecated but remains available for a\nlimited period of time. We consider the following backward-incompatible changes:\n\n- Adding a new required parameter (query string param or payload attribute)\n- Deleting API resources\n- Deleting any attribute from API responses\n- Changing the data type on any parameter or attribute\n\n## Standards\nAs you begin working with our APIs, it's essential to be aware of standards around\ncountry codes, time formats, and other important details that ensure smooth integration.\nLearn more about our [API Standards](https://developers.cvent.com/docs/rest-api/reference/api-standards)\n\n\nContact Support:\n Name: Cvent Development Platform",
+      "type": "text/plain"
+    }
+  }
+}

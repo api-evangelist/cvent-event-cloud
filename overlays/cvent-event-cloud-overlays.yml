@@ -1,0 +1,56 @@
+generated: '2026-08-13'
+method: searched
+source: https://github.com/cvent/rest-sdks/tree/main/overlays
+provider: Cvent Event Cloud
+providerId: cvent-event-cloud
+description: >-
+  Cvent authors and publishes its own OpenAPI Overlay 1.0.0 documents. They are not our
+  enhancements — these five files are saved verbatim from Cvent's rest-sdks repository, where its
+  Speakeasy workflow applies them in order on top of cvent-public-spec/openapi.yaml before
+  generating the TypeScript, .NET and Java SDKs. That makes Cvent one of the small number of
+  providers using Overlay in production rather than as a demo.
+applied_to: openapi/_original/cvent-rest-apis-openapi.yaml
+workflow: https://github.com/cvent/rest-sdks/blob/main/.speakeasy/workflow.yaml
+speakeasy_version: 1.752.0
+registry: registry.speakeasyapi.dev/cvent/rest-sdks/public
+overlays:
+  - file: overlays/cvent-event-cloud-public-overlay.yaml
+    name: public_overlay
+    order: 1
+    source: https://github.com/cvent/rest-sdks/blob/main/overlays/public_overlay.yaml
+    jsonpath: rfc9535
+    purpose: >-
+      Sets the document-level security to clientCredentials + authorizationCode, adds a
+      basicHttpAuthentication scheme and pins it to POST /oauth2/token, replaces servers[] with the
+      two regional bases (api-platform.cvent.com/ea and api-platform-eur.cvent.com/ea), and repairs
+      a long list of $ref targets so error responses resolve to error-response.
+  - file: overlays/cvent-event-cloud-operation-level-pagination-overlay.yaml
+    name: operation_level_pagination_overlay
+    order: 2
+    source: https://github.com/cvent/rest-sdks/blob/main/overlays/operation_level_pagination_overlay.yaml
+    purpose: Marks operations as paginated so the generated SDKs auto-iterate the token cursor.
+  - file: overlays/cvent-event-cloud-description-overlay.yaml
+    name: description_overlay
+    order: 3
+    source: https://github.com/cvent/rest-sdks/blob/main/overlays/description_overlay.yaml
+    purpose: >-
+      Replaces the long info.description with the short SDK-package blurb, so the registry listing
+      reads as a package description rather than an API manual.
+  - file: overlays/cvent-event-cloud-segments-error-response-overlay.yaml
+    name: segments_error_response_overlay
+    order: 4
+    source: https://github.com/cvent/rest-sdks/blob/main/overlays/segments_error_response_overlay.yaml
+    purpose: Normalises the Audience Segments error response shape.
+  - file: overlays/cvent-event-cloud-retries-overlay.yaml
+    name: retries_overlay
+    order: 5
+    source: https://github.com/cvent/rest-sdks/blob/main/overlays/retries_overlay.yaml
+    purpose: >-
+      Declares the retry/back-off behaviour baked into the generated clients — the SDK-side
+      counterpart to the 429 handling documented in rate-limits/.
+note: >-
+  The overlays are the reason the SDK-facing spec and the raw published spec differ. Anyone diffing
+  @cvent/sdk's surface against cvent-public-spec/openapi.yaml must apply these five in order first.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

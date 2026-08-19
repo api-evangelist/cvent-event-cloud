@@ -1,0 +1,216 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cvent REST APIs — Event Cloud Bulk API",
+    "version": "ea"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Bulk",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create Bulk Job",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/bulk-jobs",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Creates a bulk job.\n\n**Note:** When creating a bulk job you can optionally include the data in the create request.\nIf data is supplied the job will be started and there is no need to call the [run bulk job](#operation/runBulkJob) endpoint.\nIf data is NOT supplied then the [upload bulk job data](#operation/uploadBulkJobData) endpoint can be called\nto upload data and then using [run bulk job](#operation/runBulkJob).\nIn addition, if data is supplied and your account has reached its limit for concur"
+        },
+        {
+          "info": {
+            "name": "Get Bulk Job",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/bulk-jobs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "A uuid path parameter."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a bulk job by its identifier."
+        },
+        {
+          "info": {
+            "name": "Cancel Bulk Job",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/bulk-jobs/:id/cancel",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "A uuid path parameter."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Cancels the bulk job. The job will stop processing after it finishes processing its current batch, if any."
+        },
+        {
+          "info": {
+            "name": "Upload Bulk Job Data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/bulk-jobs/:id/data",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "A uuid path parameter."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This will upload data to be processed by a bulk job. There is a limit on the number of records that\ncan be uploaded per call and this endpoint can be called multiple times before starting a job run.\n\nNote: there is a maximum _total_ number of 50,000 records that can be uploaded for a job.\nIf you have a need for a greater limit, this can be increased for your account (up to a hard limit of 150,000)\nby contacting Cvent support.\n"
+        },
+        {
+          "info": {
+            "name": "List Bulk Job Result",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/bulk-jobs/:id/results",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "A uuid path parameter."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "A filter query string narrows search results and supports the combination of logical and comparison operators.\nThe filter adheres to the pattern filter='field' comparisonType 'value'.\n\nThese are the comparison types that can be used in filter expressions:\n* equal: eq\n* not equal: ne\n\nThe following fields are filterable:\n* failed (eq|ne)\n\n  **Note:** this filters for the top-level HTTP status of the target operation.\n  For operations that return 207 (Multi-Status), filter results may not capture all failed records.\n  Inspect individual record statuses in the `data` field for a complete picture.\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Used to list the results of a bulk job.\n\n**Note:** A bulk job is designed to wrap individual, non-batch API operations. When a target operation\nis itself batch in nature and returns a `207 Multi-Status` response, the `failed` flag on each result record\nreflects only whether the target operation returned an HTTP error — it does not capture partial item-level\nfailures within the multi-status response body. For these operations, inspect each result record's `data` field\nto determine which items suc"
+        },
+        {
+          "info": {
+            "name": "Run Bulk Job",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/bulk-jobs/:id/run",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "A uuid path parameter."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Begins the processing of data uploaded in a bulk job.\n\n **Note**: You can have a maximum of two bulk jobs running concurrently."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

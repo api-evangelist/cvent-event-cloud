@@ -1,0 +1,191 @@
+generated: '2026-08-13'
+method: derived
+source: openapi/_original/cvent-rest-apis-openapi.yaml
+enriched_from: https://developers.cvent.com/docs/rest-api/reference/api-standards
+provider: Cvent Event Cloud
+providerId: cvent-event-cloud
+description: >-
+  Cross-cutting standards assertions for the Cvent REST API, each backed by evidence from Cvent's
+  own published OpenAPI, documentation, or a live probe. Non-conformance is recorded as plainly as
+  conformance.
+
+conformance:
+  - id: openapi
+    name: OpenAPI Specification
+    conforms: true
+    version: 3.0.2
+    evidence: >-
+      Cvent publishes and maintains its own OpenAPI at
+      github.com/cvent/rest-sdks/blob/main/cvent-public-spec/openapi.yaml — 346 paths, 458
+      operations, 1,302 schemas. It is the generation source for all three first-party SDKs.
+  - id: openapi-overlay
+    name: OpenAPI Overlay Specification
+    conforms: true
+    version: 1.0.0
+    evidence: >-
+      Cvent publishes five Overlay 1.0.0 documents in the same repository (public_overlay,
+      operation_level_pagination_overlay, description_overlay, segments_error_response_overlay,
+      retries_overlay), applied in order by its Speakeasy workflow. Saved verbatim under overlays/.
+  - id: oauth2
+    name: OAuth 2.0
+    conforms: true
+    evidence: >-
+      Two flows declared in the spec: clientCredentials (token endpoint
+      https://api-platform.cvent.com/ea/oauth2/token, 235 scopes) and authorizationCode, the latter
+      restricted to planner administrator users. Bearer tokens, 3600-second lifetime.
+  - id: oauth21-pkce
+    name: OAuth 2.1 / PKCE
+    conforms: true
+    scope: MCP server only
+    evidence: >-
+      https://mcp.cvent.com/.well-known/oauth-authorization-server (HTTP 200) declares
+      code_challenge_methods_supported ["S256"] with authorization_code + refresh_token grants.
+  - id: rfc8414
+    name: OAuth 2.0 Authorization Server Metadata
+    conforms: partial
+    evidence: >-
+      Served at https://mcp.cvent.com/.well-known/oauth-authorization-server (200). NOT served on
+      the REST API hosts — api-platform.cvent.com/.well-known/oauth-authorization-server returns 404,
+      so the REST OAuth endpoints are discoverable only from documentation.
+  - id: rfc9728
+    name: OAuth 2.0 Protected Resource Metadata
+    conforms: true
+    scope: MCP server only
+    evidence: >-
+      https://mcp.cvent.com/.well-known/oauth-protected-resource/mcp returns 200 with
+      resource https://mcp.cvent.com/mcp, and the 401 WWW-Authenticate challenge on the MCP
+      endpoint names that exact document.
+  - id: mcp
+    name: Model Context Protocol
+    conforms: true
+    evidence: >-
+      Live remote server at https://mcp.cvent.com/mcp. tools/list POST returns 401 with an MCP
+      OAuth challenge (realm="mcp"), which is protocol-correct behaviour for a protected server.
+      Tool schemas were not readable anonymously.
+  - id: scim
+    name: SCIM 2.0 (RFC 7643 / 7644)
+    conforms: true
+    evidence: >-
+      Eleven operations under /scim/v2/ — Users, Groups, Schemas, ResourceTypes and
+      ServiceProviderConfig. Serving ServiceProviderConfig and the Schemas/ResourceTypes discovery
+      endpoints is the part of SCIM most implementations skip, and Cvent ships it.
+  - id: rfc9457
+    name: RFC 9457 Problem Details for HTTP APIs
+    conforms: false
+    evidence: >-
+      Zero operations return application/problem+json. All 2,097 error response declarations are
+      application/json carrying Cvent's own ErrorResponse schema (code/message/target/details).
+  - id: idempotency
+    name: Idempotency keys
+    conforms: false
+    evidence: >-
+      No Idempotency-Key header appears anywhere in the 2 MB specification, and the documentation
+      does not mention idempotency. Retry safety rests on HTTP method semantics alone.
+  - id: pagination
+    name: Cursor pagination
+    conforms: true
+    evidence: >-
+      Documented, uniform opaque-token pagination — request `limit` + `token`, response
+      paging.{currentToken,nextToken,previousToken,limit,totalCount,_links}. Cvent additionally
+      publishes an operation-level pagination Overlay so its SDKs auto-iterate.
+  - id: rate-limit-headers
+    name: Rate limit response headers
+    conforms: partial
+    evidence: >-
+      X-RateLimit-Limit / -Remaining / -Reset are documented on every response and 456 of 458
+      operations declare a 429. The draft IETF RateLimit-* header field names are not used, and no
+      Retry-After is returned.
+  - id: rfc8594
+    name: RFC 8594 Sunset header
+    conforms: false
+    evidence: >-
+      Deprecation is communicated only via `deprecated: true` in the spec and a Deprecated section
+      in the changelog. Neither Sunset nor Deprecation headers are emitted, so a client cannot
+      detect a pending removal at runtime.
+  - id: iso8601
+    name: ISO 8601 date-time
+    conforms: true
+    evidence: >-
+      "Most date-time values in Cvent's REST API are returned in Coordinated Universal Time (UTC)
+      using the ISO 8601 format with a zero UTC offset" — API Standards reference.
+  - id: iso4217
+    name: ISO 4217 currency codes
+    conforms: true
+    evidence: API Standards reference names ISO 4217 three-letter codes.
+  - id: iso3166
+    name: ISO 3166-1 country codes
+    conforms: partial
+    evidence: >-
+      API Standards names ISO 3166-1 alpha-2. Migration is still in progress: a 2026 changelog entry
+      records housing endpoints moving from alpha-3 to alpha-2, so both forms are live across the
+      surface at once.
+  - id: arazzo
+    name: Arazzo Specification
+    conforms: true
+    version: 1.0.1
+    evidence: >-
+      Cvent publishes generated Arazzo 1.0.1 test-suite documents per SDK target
+      (packages/*/.speakeasy/tests.arazzo.yaml). Saved verbatim under arazzo/. These are SDK test
+      workflows rather than hand-authored customer journeys.
+  - id: asyncapi
+    name: AsyncAPI
+    conforms: false
+    evidence: >-
+      Cvent operates a documented webhook surface (40 published message types) but ships no AsyncAPI
+      description of it. See asyncapi/cvent-event-cloud-webhooks.yml.
+  - id: graphql
+    name: GraphQL
+    conforms: false
+    evidence: No GraphQL surface is published or documented.
+  - id: json-api
+    name: JSON:API
+    conforms: false
+    evidence: Responses use Cvent's own {paging, data} envelope, not the JSON:API media type or document structure.
+  - id: odata
+    name: OData
+    conforms: false
+    evidence: >-
+      Filtering uses a Cvent-specific expression grammar (filter='field' op 'value' with in/eq/ne/
+      sw/ew/co and and/or). It resembles OData's $filter but is not OData and there is no
+      $metadata document.
+  - id: hal
+    name: HAL / hypermedia links
+    conforms: partial
+    evidence: paging._links carries self / next / prev hrefs. Links appear only in the paging envelope, not on resources.
+  - id: fapi
+    name: FAPI
+    conforms: false
+    evidence: Not applicable — Cvent is not an open-banking provider and makes no FAPI claim.
+  - id: pci-dss
+    name: PCI DSS
+    conforms: claimed
+    evidence: >-
+      Cvent's trust centre lists PCI DSS among its certifications, and the API exposes a Card Tokens
+      surface that issues short-lived single-use card tokens (secure-ecommerce/card-tokens:write)
+      so that raw card numbers are not carried in other API methods. See
+      security/cvent-event-cloud-trust-center.yml.
+  - id: soc2
+    name: SOC 2
+    conforms: claimed
+    evidence: Named in Cvent's published trust centre. See security/cvent-event-cloud-trust-center.yml.
+  - id: iso27001
+    name: ISO/IEC 27001
+    conforms: claimed
+    evidence: Named in Cvent's published trust centre, alongside ISO 27017 and ISO 27018.
+  - id: gdpr
+    name: GDPR / data residency
+    conforms: claimed
+    evidence: >-
+      Cvent operates a separate European data centre (api-platform-eur.cvent.com) with no
+      cross-region read, and publishes a Compliance guide and a Compliance API tag.
+
+summary:
+  asserted: 27
+  conforms: 13
+  partial: 4
+  does_not_conform: 7
+  claimed_by_provider: 4
+
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

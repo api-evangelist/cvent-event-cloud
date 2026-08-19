@@ -1,0 +1,64 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cvent REST APIs — Event Cloud Attendee Messages API",
+    "version": "ea"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Attendee Messages",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Messaging Members",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:eventId/attendee-messages/members",
+            "params": [
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "Unique ID of an event"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Filters narrow results returned based on the criteria you supply.\n\nFilters follow the pattern `filter='field' operator 'value'`.\n\nThe following comparison operators are supported:\n- `eq`: equals to\n- `in`: match any of the values in the list\n\nThe following fields are supported:\n\n| Field            | Operators                          |\n|------------------|------------------------------------|\n| channel.id       | `eq`, `in`                         |\n\nThe following logical operators are supported for combining filters:\n- `or`\n\n**Examples:**\n\nFilter channel IDs:\n* `filter=channel.id in ('production_group_0cb93bab-32d2-4f82-b430-e1911f2348ac', 'production_group_f6dfb98a-c734-487c-97e1-7c7a09a9125f')`\n* `filter=channel.id eq 'production_attendee_616241fd-e97d-48c5-8c4b-4b926f50e8c3' or channel.id eq 'production_group_616241fd-e97d-48c5-8c4b-4b926f50e8c3'`\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "When attendee initiates a chat with other attendee(s), a channel is created for attendees to communicate over.\nThis endpoint is used to retrieve the members of these channels using channel ids to filter the results.\nThe results will include all the channel members; even the ones that left the channel at some point.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

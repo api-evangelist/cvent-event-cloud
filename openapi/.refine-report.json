@@ -1,26 +1,58 @@
 {
   "provider": "cvent-event-cloud",
   "sources": [
-    "cvent-event-cloud-attendees-api-openapi.yml",
-    "cvent-event-cloud-contacts-api-openapi.yml",
-    "cvent-event-cloud-events-api-openapi.yml",
-    "cvent-event-cloud-exhibitors-api-openapi.yml",
-    "cvent-event-cloud-oauth-api-openapi.yml",
-    "cvent-event-cloud-sessions-api-openapi.yml",
-    "cvent-event-cloud-webhooks-api-openapi.yml"
+    "cvent-event-cloud-rest-openapi.yml"
   ],
   "outputs": [
+    "cvent-event-cloud-appointments-api-openapi.yml",
+    "cvent-event-cloud-attendee-activities-api-openapi.yml",
+    "cvent-event-cloud-attendee-insights-api-openapi.yml",
+    "cvent-event-cloud-attendee-messages-api-openapi.yml",
     "cvent-event-cloud-attendees-api-openapi.yml",
+    "cvent-event-cloud-audience-segments-api-openapi.yml",
+    "cvent-event-cloud-authentication-api-openapi.yml",
+    "cvent-event-cloud-badge-print-job-api-openapi.yml",
+    "cvent-event-cloud-badge-printer-pools-api-openapi.yml",
+    "cvent-event-cloud-budget-api-openapi.yml",
+    "cvent-event-cloud-bulk-api-openapi.yml",
+    "cvent-event-cloud-campaigns-api-openapi.yml",
+    "cvent-event-cloud-card-tokens-api-openapi.yml",
+    "cvent-event-cloud-compliance-api-openapi.yml",
     "cvent-event-cloud-contacts-api-openapi.yml",
+    "cvent-event-cloud-custom-fields-api-openapi.yml",
+    "cvent-event-cloud-discounts-api-openapi.yml",
+    "cvent-event-cloud-emails-api-openapi.yml",
+    "cvent-event-cloud-event-credits-api-openapi.yml",
+    "cvent-event-cloud-event-features-api-openapi.yml",
+    "cvent-event-cloud-event-role-api-openapi.yml",
+    "cvent-event-cloud-event-travel-api-openapi.yml",
     "cvent-event-cloud-events-api-openapi.yml",
-    "cvent-event-cloud-exhibitors-api-openapi.yml",
-    "cvent-event-cloud-oauth-api-openapi.yml",
+    "cvent-event-cloud-events-hub-api-openapi.yml",
+    "cvent-event-cloud-exhibitor-api-openapi.yml",
+    "cvent-event-cloud-exhibitor-content-api-openapi.yml",
+    "cvent-event-cloud-exhibitor-team-api-openapi.yml",
+    "cvent-event-cloud-file-api-openapi.yml",
+    "cvent-event-cloud-hooks-api-openapi.yml",
+    "cvent-event-cloud-leads-api-openapi.yml",
+    "cvent-event-cloud-process-form-api-openapi.yml",
+    "cvent-event-cloud-seating-api-openapi.yml",
     "cvent-event-cloud-sessions-api-openapi.yml",
-    "cvent-event-cloud-webhooks-api-openapi.yml"
+    "cvent-event-cloud-signatures-api-openapi.yml",
+    "cvent-event-cloud-speakers-api-openapi.yml",
+    "cvent-event-cloud-surveys-api-openapi.yml",
+    "cvent-event-cloud-usage-api-openapi.yml",
+    "cvent-event-cloud-user-scim-api-openapi.yml",
+    "cvent-event-cloud-users-api-openapi.yml",
+    "cvent-event-cloud-video-api-openapi.yml",
+    "cvent-event-cloud-webcasts-api-openapi.yml"
   ],
-  "archived": [],
+  "archived": [
+    "archived openapi/cvent-event-cloud-rest-openapi.yml"
+  ],
   "errors": [],
   "warnings": [],
-  "notes": [],
+  "notes": [
+    "cvent-event-cloud-rest-openapi.yml: upgraded openapi 3.0.2 -> OpenAPI 3.2.0"
+  ],
   "skipped": []
 }

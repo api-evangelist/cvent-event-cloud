@@ -1,0 +1,528 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cvent REST APIs — Event Cloud Attendees API",
+    "version": "ea"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Attendees",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Attendance Duration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/attendance-durations",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of attendance duration records returned per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "The sort order passed as a parameter, used to control the order of the\nsearch results as a priority ordered list of sorts\n\nThere are two orders:\n  * ascending: ASC\n  * descending: DESC\n\nThe following fields are sortable:\n  * event\n  * session\n  * attendee\n  * type\n  * firstSeen\n  * duration\n  * lastModified - default\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field       | Operators                          |\n|-------------|------------------------------------|\n| id          | `eq`, `ne`                         |\n| event.id    | `eq`, `ne`, `in`                   |\n| session.id  | `eq`, `ne`, `in`                   |\n| attendee.id | `eq`, `ne`, `in`                   |\n| type        | `contains`, `eq`, `ne`, `in`       |\n| deleted     | `eq`, `ne`                         |\n| firstSeen   | `eq`, `ne`, `lt`, `le`, `gt`, `ge` |\n| lastSeen    | `eq`, `ne`, `lt`, `le`, `gt`, `ge` |\n| duration    | `eq`, `ne`, `lt`, `le`, `gt`, `ge` |\n| created     | `eq`, `ne`, `lt`, `le`, `gt`, `ge` |\n\nThe following logical operators are supported for combining filters:\n* and\n* or\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of durations attendees were engaged (in person or virtually) in a session, appointment or watching a video."
+        },
+        {
+          "info": {
+            "name": "List Attendees",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/attendees",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "expand",
+                "value": "answers.question,registrationType",
+                "type": "query",
+                "description": "This endpoint allows you to request additional information as an expanded response using the expand query parameter.\nThe expanded entity is retrieved and displayed inline for each specified expand value.\n\nAn object contains the ID of a related object in its response properties. You can expand these objects,\nalong with others, in line using the expand query parameter.\n\nYou can expand multiple objects at the same time by identifying multiple items in the expand array.\n\nThe respective scopes for each expansion are required.\n\nThe following fields are expandable:\n  * answers.question\n    * **Scope**: event/events:read\n    * **Reference**: <a href=\"#operation/getEventQuestions\">List Event Questions</a>\n  * registrationType\n    * **Scope**: event/registration-types:read\n    * **Reference**: <a href=\"#operation/listRegistrationTypes\">List Registration Types</a>\n"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "The `sort` query parameter sorts items in the list of results and organizes them according to your preference.\nThere are two orders:\n  * ascending: ASC\n  * descending: DESC\n\nThe following fields are sortable:\n  * contact.firstName\n  * contact.lastName\n  * contact.title\n  * contact.company\n  * registeredAt\n  * checkIn\n"
+              },
+              {
+                "name": "includeDeletedGuests",
+                "value": "",
+                "type": "query",
+                "description": "True indicates the request should include deleted guests in the response. By default, deleted guests are excluded.\nThe `deletedGuest` filter has no effect unless this parameter is `true`.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Use filter query parameters to limit results\nto data that matches your criteria. See\n[Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.\n\nSupported fields and operators are listed below:\n\n| Field            | Operators                          | Notes                                    |\n|------------------|-------------------------------------|------------------------------------------|\n| event.id         | `eq`, `ne`                          |                                          |\n| id               | `eq`, `ne`                          |                                          |\n| confirmationNumber | `eq`, `ne`                          |                                          |\n| checkedIn        | `eq`, `ne`                          |                                          |\n| checkIn          | `eq`, `ne`, `lt`, `le`, `gt`, `ge`  |                                          |\n| checkOut         | `eq`, `ne`, `lt`, `le`, `gt`, `ge`  |                                          |\n| registrationPath.id | `eq`, `ne`                          |                                          |\n| invitationList.id | `eq`, `ne`                          |                                          |\n| registrationType.id | `eq`, `ne`, `is null`, `is not null`, `is empty`, `is not empty` |                                          |\n| referenceId      | `eq`, `ne`                          |                                          |\n| externalReference.type | `eq`                                |                                          |\n| externalReference.id | `eq`                                |                                          |\n| externalReference.referenceId | `eq`                                |                                          |\n| note             | `eq`, `ne`                          |                                          |\n| guest            | `eq`, `ne`                          |                                          |\n| group.leader     | `eq`, `ne`                          |                                          |\n| group.id         | `eq`, `ne`                          |                                          |\n| unsubscribed     | `eq`, `ne`                          | Read-only. To update an attendee's subscription status, use [PUT /attendees/{id}/email-subscriptions](#operation/updateAttendeeSubscriptionStatus) |\n| registeredAt     | `eq`, `ne`, `lt`, `le`, `gt`, `ge`  |                                          |\n| registrationLastModified | `eq`, `ne`, `lt`, `le`, `gt`, `ge`  |                                          |\n| invitedBy        | `eq`, `ne`                          |                                          |\n| responseMethod   | `eq`, `ne`                          |                                          |\n| status           | `eq`, `ne`                          |                                          |\n| lastModified     | `eq`, `ne`, `lt`, `le`, `gt`, `ge`  | Will be updated when any field in the response has changed. Used by the 'before' and 'after' filters. |\n| created          | `eq`, `ne`, `lt`, `le`, `gt`, `ge`  |                                          |\n| contact.id       | `eq`, `ne`                          |                                          |\n| visibility       | `eq`, `ne`                          |                                          |\n| contact.title    | `eq`, `ne`, `sw`                    |                                          |\n| contact.company  | `eq`, `ne`, `sw`                    |                                          |\n| contact.firstName | `eq`, `ne`, `sw`                    |                                          |\n| contact.lastName | `eq`, `ne`, `sw`                    |                                          |\n| answers.question.{question id} | `eq`, `ne`                          |                                          |\n| contact.email    | `eq`, `ne`, `sw`                    |                                          |\n| attendeeLastModified | `eq`, `ne`, `lt`, `le`, `gt`, `ge`  | Will be updated only when some field other than contact.* has changed. Not used by the 'before' and 'after' filters. |\n| appointmentGroup.id | `eq`, `ne`                          |                                          |\n| contact.deleted  | `eq`, `ne`                          |                                          |\n| primaryId        | `eq`, `ne`                          |                                          |\n| deletedGuest     | `eq`, `ne`                          | Filter returns guests marked as deleted. This filter works only when the query parameter `includeDeletedGuests` is `true`. |\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of attendees in your account."
+        },
+        {
+          "info": {
+            "name": "Add Attendees",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/attendees",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Adds given contacts to an event as attendees, either inviting them or registering them directly."
+        },
+        {
+          "info": {
+            "name": "List Attendees",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/attendees/filter",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "expand",
+                "value": "answers.question,registrationType",
+                "type": "query",
+                "description": "This endpoint allows you to request additional information as an expanded response using the expand query parameter.\nThe expanded entity is retrieved and displayed inline for each specified expand value.\n\nAn object contains the ID of a related object in its response properties. You can expand these objects,\nalong with others, in line using the expand query parameter.\n\nYou can expand multiple objects at the same time by identifying multiple items in the expand array.\n\nThe respective scopes for each expansion are required.\n\nThe following fields are expandable:\n  * answers.question\n    * **Scope**: event/events:read\n    * **Reference**: <a href=\"#operation/getEventQuestions\">List Event Questions</a>\n  * registrationType\n    * **Scope**: event/registration-types:read\n    * **Reference**: <a href=\"#operation/listRegistrationTypes\">List Registration Types</a>\n"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "The `sort` query parameter sorts items in the list of results and organizes them according to your preference.\nThere are two orders:\n  * ascending: ASC\n  * descending: DESC\n\nThe following fields are sortable:\n  * contact.firstName\n  * contact.lastName\n  * contact.title\n  * contact.company\n  * registeredAt\n  * checkIn\n"
+              },
+              {
+                "name": "includeDeletedGuests",
+                "value": "",
+                "type": "query",
+                "description": "True indicates the request should include deleted guests in the response. By default, deleted guests are excluded.\nThe `deletedGuest` filter has no effect unless this parameter is `true`.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of attendees by sending a filter in the body of the request. This method will return the same data as  [GET List Attendees](#operation/listAttendees) but allows for longer filters.\n"
+        },
+        {
+          "info": {
+            "name": "Get Attendee",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/attendees/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique ID of an attendee."
+              },
+              {
+                "name": "expand",
+                "value": "answers.question,registrationType",
+                "type": "query",
+                "description": "This endpoint allows you to request additional information as an expanded response using the expand query parameter.\nThe expanded entity is retrieved and displayed inline for each specified expand value.\n\nAn object contains the ID of a related object in its response properties. You can expand these objects,\nalong with others, in line using the expand query parameter.\n\nYou can expand multiple objects at the same time by identifying multiple items in the expand array.\n\nThe respective scopes for each expansion are required.\n\nThe following fields are expandable:\n  * answers.question\n    * **Scope**: event/events:read\n    * **Reference**: <a href=\"#operation/getEventQuestions\">List Event Questions</a>\n  * registrationType\n    * **Scope**: event/registration-types:read\n    * **Reference**: <a href=\"#operation/listRegistrationTypes\">List Registration Types</a>\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a single attendee based on their ID."
+        },
+        {
+          "info": {
+            "name": "Update Attendee",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/attendees/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique ID of an attendee."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Updates a single attendee based on their ID."
+        },
+        {
+          "info": {
+            "name": "Update Email Subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/attendees/:id/email-subscriptions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique ID of an attendee."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Updates an attendee's email subscription status for a specific event."
+        },
+        {
+          "info": {
+            "name": "Update Internal Information",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/attendees/:id/internal-information-questions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique ID of an attendee."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Update internal information answers for an attendee. Use either question code or id to identify which question's answers are being updated."
+        },
+        {
+          "info": {
+            "name": "Get Badge",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/badges",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "A filter query string narrows search results and supports the combination of logical and comparison operators.\nThe filter adheres to the pattern filter='field' comparisonType 'value'.\n\nThese are the comparison types that can be used in filter expressions:\n* equal: eq\n\nThe following fields are filterable:\n* id (eq)\n* attendee.id (eq)\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves a list of third-party badge associations for attendees within the event."
+        },
+        {
+          "info": {
+            "name": "Create Badge",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/events/:id/badges",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Create a badge for an attendee associated with an event."
+        },
+        {
+          "info": {
+            "name": "Get Badges",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/events/:id/badges/filter",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of Badges by sending a filter in the body of the request. This method will return the same data as the getBadge but allows for longer filters."
+        },
+        {
+          "info": {
+            "name": "Update Badge",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/events/:id/badges/:badgeId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "badgeId",
+                "value": "",
+                "type": "path",
+                "description": "ID of a badge."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Update a badge for an attendee associated with an event."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

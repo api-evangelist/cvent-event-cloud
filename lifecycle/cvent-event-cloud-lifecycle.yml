@@ -1,0 +1,125 @@
+generated: '2026-08-13'
+method: searched
+source: https://developers.cvent.com/docs/rest-api/changelog
+provider: Cvent Event Cloud
+providerId: cvent-event-cloud
+description: >-
+  Versioning, deprecation, change communication and operational-status posture for the Cvent REST
+  API, read from Cvent's published versioning policy (carried in the OpenAPI info.description), the
+  dated changelog, and the public status page.
+
+versioning:
+  scheme: URI path segment
+  current_version: ea
+  example_base: https://api-platform.cvent.com/ea
+  policy_published: true
+  policy_source: https://github.com/cvent/rest-sdks/blob/main/cvent-public-spec/openapi.yaml
+  statement: >-
+    "We leverage a URI-based versioning scheme, which means that a version value is included in the
+    Cvent API URL. When breaking changes occur, a new version of the API is made available while the
+    existing version is deprecated but remains available for a limited period of time."
+  backward_compatible:
+    - Adding new resources
+    - Adding new optional request parameters to existing operations
+    - Adding new attributes to requests or responses
+    - Changing the length or format (not type) of resource identifiers
+    - Increasing the length of string fields
+  backward_incompatible:
+    - Adding a new required parameter (query string param or payload attribute)
+    - Deleting API resources
+    - Deleting any attribute from API responses
+    - Changing the data type on any parameter or attribute
+  client_obligation: >-
+    Clients must tolerate unknown attributes appearing in JSON payloads over time; Cvent adds them
+    without a version bump.
+
+deprecation:
+  policy_published: true
+  policy_strength: qualitative
+  window: >-
+    "remains available for a limited period of time" — Cvent commits to a grace period but never
+    states its length. There is no published number of days or months.
+  headers:
+    sunset: false
+    deprecation: false
+    note: >-
+      Cvent signals deprecation only in the OpenAPI (`deprecated: true`) and in the changelog's
+      "Deprecated" section. It emits neither the RFC 8594 Sunset header nor the Deprecation header,
+      so a running client cannot detect a deprecation at runtime — only a human reading the
+      changelog can.
+  changelog_section: Deprecated
+  deprecated_operations:
+    count: 3
+    source: openapi/_original/cvent-rest-apis-openapi.yaml
+    operations:
+      - operationId: getEmailStatus
+        method: GET
+        path: /emails/{emailRequestId}/status
+      - operationId: getProgramItemDocuments
+        method: GET
+        path: /program-items/{programItemId}/docs
+      - operationId: listWebcastAttendeeLinks
+        method: GET
+        path: /webcasts/{id}/attendee-links
+  deprecated_fields:
+    note: >-
+      Field-level deprecation is used more heavily than operation-level. Examples carried in the
+      spec include CategoryItemsCost and supplier concession fields, marked deprecated because the
+      vendor marketplace product itself is sunset. Cvent also un-deprecates: a 2026 changelog entry
+      records `attendeeTypeCode` on Create Reservation Request being made active again, and the
+      `deprecated` marker being removed from `unsubscribed` on the attendee schemas as a
+      documentation correction.
+
+change_communication:
+  changelog: https://developers.cvent.com/docs/rest-api/changelog
+  cadence: biweekly, dated
+  artifact: changelog/cvent-event-cloud-changelog.yml
+  spec_repository: https://github.com/cvent/rest-sdks
+  spec_path: cvent-public-spec/openapi.yaml
+  note: >-
+    The spec is versioned in public git, so a consumer can diff releases directly rather than
+    relying on prose. That is a stronger change signal than the changelog alone.
+
+status:
+  status_page: https://status.cvent.com/
+  published: true
+  incident_history: true
+  subscribe: true
+
+support:
+  url: https://support.cvent.com/
+  developer_portal: https://developers.cvent.com/
+
+sla:
+  published: false
+  note: >-
+    No public uptime SLA. Availability commitments are contractual and negotiated; nothing is
+    published on the developer portal or the pricing page.
+
+regions:
+  hosts:
+    - name: North America
+      host: https://api-platform.cvent.com
+    - name: Europe
+      host: https://api-platform-eur.cvent.com
+  note: >-
+    Data residency is fixed by the account's data centre. There is no cross-region read, so an
+    integration must know which host its customer lives on.
+  docs: https://developers.cvent.com/docs/rest-api/csn-regions
+
+legacy_surfaces:
+  - name: Cvent SOAP API
+    status: legacy, superseded
+    docs: https://developers.cvent.com/docs/legacy-api/soap-api/api-management
+    changelog: https://developers.cvent.com/docs/legacy-api/soap-api/changelog
+    migration_guide: https://developers.cvent.com/docs/rest-api/migration-guide/benefits
+    note: >-
+      Cvent maintains a full REST migration guide with call-by-call and object-by-object mappings,
+      which is a stronger deprecation posture than a bare notice — the replacement path is written
+      down for every legacy call.
+  - name: HTTP POST integration
+    docs: https://developers.cvent.com/docs/http-post/reference/endpoints
+
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

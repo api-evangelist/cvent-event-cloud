@@ -1,0 +1,372 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cvent REST APIs — Event Cloud Exhibitor Content API",
+    "version": "ea"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Exhibitor Content",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Exhibitor Files",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/files",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves a list of files associated with an exhibitor."
+        },
+        {
+          "info": {
+            "name": "Get Exhibitor File",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/files/:fileId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              },
+              {
+                "name": "fileId",
+                "value": "",
+                "type": "path",
+                "description": "ID of a file."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get a single file for an exhibitor."
+        },
+        {
+          "info": {
+            "name": "Associate Exhibitor File",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/files/:fileId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              },
+              {
+                "name": "fileId",
+                "value": "",
+                "type": "path",
+                "description": "ID of a file."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Associate a file to an exhibitor using a file ID taken from the <a href=\"#operation/uploadFile\">file upload</a> endpoint.\n"
+        },
+        {
+          "info": {
+            "name": "Disassociate Exhibitor File",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/files/:fileId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              },
+              {
+                "name": "fileId",
+                "value": "",
+                "type": "path",
+                "description": "ID of a file."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Disassociate a single file from an exhibitor."
+        },
+        {
+          "info": {
+            "name": "List Exhibitor Weblinks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/weblinks",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves a list of content weblinks associated with an exhibitor."
+        },
+        {
+          "info": {
+            "name": "Create Exhibitor Weblink",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/weblinks",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Creates a single content weblink for an exhibitor."
+        },
+        {
+          "info": {
+            "name": "Get Exhibitor Weblink",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/weblinks/:weblinkId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              },
+              {
+                "name": "weblinkId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor weblink."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves a single content weblink for an exhibitor."
+        },
+        {
+          "info": {
+            "name": "Update Exhibitor Weblink",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/weblinks/:weblinkId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              },
+              {
+                "name": "weblinkId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor weblink."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Updates content weblink data in an event for a given exhibitor ID."
+        },
+        {
+          "info": {
+            "name": "Delete Exhibitor Weblink",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-platform.cvent.com/ea/events/:id/exhibitors/:exhibitorId/weblinks/:weblinkId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "exhibitorId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor."
+              },
+              {
+                "name": "weblinkId",
+                "value": "",
+                "type": "path",
+                "description": "ID of an exhibitor weblink."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Deletes a single exhibitor content weblink."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

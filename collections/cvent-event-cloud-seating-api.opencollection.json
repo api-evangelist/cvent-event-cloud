@@ -1,0 +1,416 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cvent REST APIs — Event Cloud Seating API",
+    "version": "ea"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Seating",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Seating",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/seatings",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "A filter string passed in the body of the request, narrows search results and supports the combination of logical and comparison operators.\nThe filter adheres to the pattern filter='field' comparisonType 'value'.\n\nThere are eight comparison types that can be used in filter expressions:\n  * equal: eq\n  * not equal: ne\n  * greater than: gt\n  * greater or equal: ge\n  * less than: lt\n  * less than or equal: le\n  * starts with: sw\n  * contains a value: contains\n  * includes value(s): in\n\nThe following fields are filterable:\n  * id (eq)\n\nThe following operators are available:\n  * and\n  * or\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get seating details for the given event."
+        },
+        {
+          "info": {
+            "name": "List All Seating Assignments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/seatings/assignments",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "A filter string passed in the query parameter of the request, narrows search results and supports the combination of logical and comparison operators.\nThe filter adheres to the pattern filter='field' comparisonType 'value'.\n\nThere is only one comparison type that can be used in filter expressions:\n  * equal: eq\n\nThe following fields are filterable:\n  * seating.id (eq)\n  * attendee.id (eq)\n  * table.id (eq)\n  * seat.id (eq)\n\nThe following operators are available:\n  * and\n  * or\n"
+              },
+              {
+                "name": "expand",
+                "value": "seating,table",
+                "type": "query",
+                "description": "This endpoint allows you to request additional information as an expanded response using the expand query parameter. The expanded entity is retrieved and displayed inline for each specified expand value.\n\nAn object contains the ID of a related object in its response properties. For example, a seating assignment will have the table or seat ID associated with the assignment. You can expand these objects, along with others, in line using the expand query parameter.\n\nYou can expand multiple objects at the same time by identifying multiple items in the expand array.\n\nThe respective scopes for each expansion are required.\n\nThe following fields are expandable:\n  * seating\n    * **Scope**: seating/event-seatings:read\n    * **Reference**: <a href=\"#operation/getSeating\">Get Seating</a>\n  * table\n    * **Scope**: seating/tables:read\n    * **Reference**: <a href=\"#operation/getTable\">Get Table</a>\n  * seat\n    * **Scope**: seating/seats:read\n    * **Reference**: <a href=\"#operation/getSeat\">Get Seat</a>\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets all the table assignments across all the seatings in an event."
+        },
+        {
+          "info": {
+            "name": "Get Seating",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/seatings/:seatingId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "seatingId",
+                "value": "",
+                "type": "path",
+                "description": "ID of a seating."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get seating details for the given event by seating ID."
+        },
+        {
+          "info": {
+            "name": "List Seating Assignments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/seatings/:seatingId/assignments",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "seatingId",
+                "value": "",
+                "type": "path",
+                "description": "ID of a seating."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "A filter string passed in the query parameter of the request, narrows search results and supports the combination of logical and comparison operators.\nThe filter adheres to the pattern filter='field' comparisonType 'value'.\n\nThere is only one comparison type that can be used in filter expressions:\n  * equal: eq\n\nThe following fields are filterable:\n  * seating.id (eq)\n  * attendee.id (eq)\n  * table.id (eq)\n  * seat.id (eq)\n\nThe following operators are available:\n  * and\n  * or\n"
+              },
+              {
+                "name": "expand",
+                "value": "seating,table",
+                "type": "query",
+                "description": "This endpoint allows you to request additional information as an expanded response using the expand query parameter. The expanded entity is retrieved and displayed inline for each specified expand value.\n\nAn object contains the ID of a related object in its response properties. For example, a seating assignment will have the table or seat ID associated with the assignment. You can expand these objects, along with others, in line using the expand query parameter.\n\nYou can expand multiple objects at the same time by identifying multiple items in the expand array.\n\nThe respective scopes for each expansion are required.\n\nThe following fields are expandable:\n  * seating\n    * **Scope**: seating/event-seatings:read\n    * **Reference**: <a href=\"#operation/getSeating\">Get Seating</a>\n  * table\n    * **Scope**: seating/tables:read\n    * **Reference**: <a href=\"#operation/getTable\">Get Table</a>\n  * seat\n    * **Scope**: seating/seats:read\n    * **Reference**: <a href=\"#operation/getSeat\">Get Seat</a>\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets the table assignments for a given seating ID in an event."
+        },
+        {
+          "info": {
+            "name": "List Tables",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/seatings/:seatingId/tables",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "seatingId",
+                "value": "",
+                "type": "path",
+                "description": "ID of a seating."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "A filter string passed in the body of the request, narrows search results and supports the combination of logical and comparison operators.\nThe filter adheres to the pattern filter='field' comparisonType 'value'.\n\nThere are eight comparison types that can be used in filter expressions:\n  * equal: eq\n  * not equal: ne\n  * greater than: gt\n  * greater or equal: ge\n  * less than: lt\n  * less than or equal: le\n  * starts with: sw\n  * contains a value: contains\n  * includes value(s): in\n\nThe following fields are filterable:\n  * id (eq)\n\nThe following operators are available:\n  * and\n  * or\n"
+              },
+              {
+                "name": "expand",
+                "value": "seats",
+                "type": "query",
+                "description": "This endpoint allows you to request additional information as an expanded response using the expand query parameter. The expanded entity is retrieved and displayed inline for each specified expand value.\n\nAn object contains the ID of a related object in its response properties. For example, a table will have the list of seats IDs associated with the table. You can expand these objects in-line using the expand query parameter.\n\nThe respective scopes for each expansion are required.\n\nThe following fields are expandable:\n  * seats\n    * **Scope**: seating/seats:read\n    * **Reference**: <a href=\"#operation/getSeat\">Get Seat</a>\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get table details for a given seating."
+        },
+        {
+          "info": {
+            "name": "Get Table",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/seatings/:seatingId/tables/:tableId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "seatingId",
+                "value": "",
+                "type": "path",
+                "description": "ID of a seating."
+              },
+              {
+                "name": "tableId",
+                "value": "",
+                "type": "path",
+                "description": "ID of a table."
+              },
+              {
+                "name": "expand",
+                "value": "seats",
+                "type": "query",
+                "description": "This endpoint allows you to request additional information as an expanded response using the expand query parameter. The expanded entity is retrieved and displayed inline for each specified expand value.\n\nAn object contains the ID of a related object in its response properties. For example, a table will have the list of seats IDs associated with the table. You can expand these objects in-line using the expand query parameter.\n\nThe respective scopes for each expansion are required.\n\nThe following fields are expandable:\n  * seats\n    * **Scope**: seating/seats:read\n    * **Reference**: <a href=\"#operation/getSeat\">Get Seat</a>\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get table info for given event by seating ID and table ID."
+        },
+        {
+          "info": {
+            "name": "List Seats",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/seatings/:seatingId/tables/:tableId/seats",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "seatingId",
+                "value": "",
+                "type": "path",
+                "description": "ID of a seating."
+              },
+              {
+                "name": "tableId",
+                "value": "",
+                "type": "path",
+                "description": "ID of a table."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of records to return per page."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "A filter string passed in the body of the request, narrows search results and supports the combination of logical and comparison operators.\nThe filter adheres to the pattern filter='field' comparisonType 'value'.\n\nThere are eight comparison types that can be used in filter expressions:\n  * equal: eq\n  * not equal: ne\n  * greater than: gt\n  * greater or equal: ge\n  * less than: lt\n  * less than or equal: le\n  * starts with: sw\n  * contains a value: contains\n  * includes value(s): in\n\nThe following fields are filterable:\n  * id (eq)\n\nThe following operators are available:\n  * and\n  * or\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get seat details for given table ID."
+        },
+        {
+          "info": {
+            "name": "Get Seat",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/events/:id/seatings/:seatingId/tables/:tableId/seats/:seatId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of an event."
+              },
+              {
+                "name": "seatingId",
+                "value": "",
+                "type": "path",
+                "description": "ID of a seating."
+              },
+              {
+                "name": "tableId",
+                "value": "",
+                "type": "path",
+                "description": "ID of a table."
+              },
+              {
+                "name": "seatId",
+                "value": "",
+                "type": "path",
+                "description": "ID of a seat."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get seat info for given event by seating ID, table ID, and seat ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

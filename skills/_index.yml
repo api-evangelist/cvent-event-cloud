@@ -1,0 +1,37 @@
+generated: '2026-08-13'
+method: generated
+source: openapi/_original/cvent-rest-apis-openapi.yaml
+provider: Cvent Event Cloud
+providerId: cvent-event-cloud
+description: >-
+  Packaged Agent Skills for the Cvent REST APIs. Every operationId referenced in these skills was
+  grepped out of Cvent's own published OpenAPI (github.com/cvent/rest-sdks, cvent-public-spec/
+  openapi.yaml) — none is invented. Each skill carries the conventions that actually bite: the
+  regional host split, the 3600-second token, cursor pagination that can end on an empty page, the
+  429 semantics where rejected requests still consume quota, and the absence of any idempotency key.
+provider_published_skills: false
+provider_published_agents_md: false
+note: >-
+  Cvent publishes no AGENTS.md, no skills/ directory and no MCP tool documentation, so these are
+  generated from the contract rather than harvested. Cvent DOES run a live MCP server
+  (https://mcp.cvent.com/mcp) whose tools are OAuth-gated; if those tools are ever documented, these
+  skills should be re-grounded against them.
+skills:
+  - name: cvent-register-attendee
+    file: skills/cvent-event-cloud-register-attendee.md
+    description: Register a contact as an attendee on a Cvent event, choosing the correct registration path and type.
+    operations: 8
+    tags: [Events, Attendees, Contacts]
+  - name: cvent-build-agenda
+    file: skills/cvent-event-cloud-build-agenda.md
+    description: Build an event agenda — sessions, categories, locations, speakers, documents, enrollment and attendance.
+    operations: 18
+    tags: [Sessions, Speakers, Events]
+  - name: cvent-sync-webhooks
+    file: skills/cvent-event-cloud-sync-webhooks.md
+    description: Keep a downstream system in sync via contact hooks, change history and the Bulk API.
+    operations: 12
+    tags: [Hooks, Bulk, Contacts, Usage]
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

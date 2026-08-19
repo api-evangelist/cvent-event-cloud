@@ -1,0 +1,76 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cvent REST APIs — Event Cloud Process Form API",
+    "version": "ea"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Process Form",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Process Form Submissions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-platform.cvent.com/ea/process-forms/submissions",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of requests or forms that can be fetched at once."
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "query",
+                "description": "The continuation token returned from a previous class. This must be a valid UUID v4 if provided.\nThis will override any other pageable parameters provided.\n"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Used to query records that have been added or updated before this time point."
+              },
+              {
+                "name": "expand",
+                "value": "process-form",
+                "type": "query",
+                "description": "This endpoint enables users to request the process form name in an extended response by utilizing the expand query parameter. The expanded process form including the name is fetched and presented inline for each specified expand value.\n\nA process form submission includes the ID of a corresponding process form in its response properties. By employing the expand query parameter, users can access the process form name within the process form submission.\n\nThe following fields are expandable:\n  * process-form\n"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "A filter query string narrows search results and supports the combination of logical and comparison operators. The filter adheres to the pattern filter='field' comparisonType 'value'.\nThis is the comparison type that can be used in filter expressions:\n  * equal: eq\n\nThe following fields are filterable:\n  * event.id (eq)\n  * process-form.id (eq)\n  * status (eq)\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api-platform.cvent.com/ea/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Gets a paginated list of process form submissions."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
