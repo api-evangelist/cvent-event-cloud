@@ -51,6 +51,32 @@ tags:
   - Event Cloud
   - Event Management
   - Event Marketing
+  - Event
+  - Exhibitors
+  - Hybrid Events
+  - MCP
+  - Authentication
+  - OnSite
+  - OpenAPI
+  - Overlay
+  - Registration
+  - REST
+  - SCIM
+  - SDK
+  - Sessions
+  - Speakers
+  - Surveys
+  - Virtual Events
+  - Webcasts
+  - Webhook
+tags_raw:
+  - Attendee Hub
+  - Attendees
+  - Bulk
+  - Contacts
+  - Event Cloud
+  - Event Management
+  - Event Marketing
   - Events
   - Exhibitors
   - Hybrid Events
@@ -80,6 +106,16 @@ apis:
   humanURL: https://developers.cvent.com/docs/rest-api/overview
   baseURL: https://api-platform.cvent.com
   tags:
+  - Attendees
+  - Contacts
+  - Event
+  - Authentication
+  - Registration
+  - REST
+  - Sessions
+  - Surveys
+  - Webhook
+  tags_raw:
   - Attendees
   - Contacts
   - Events
@@ -136,6 +172,8 @@ apis:
   humanURL: https://developers.cvent.com/docs/rest-api/overview
   baseURL: https://api-platform.cvent.com
   tags:
+  - Event
+  tags_raw:
   - Events
   properties:
   - type: OpenAPI
@@ -885,6 +923,8 @@ apis:
   humanURL: https://developers.cvent.com/docs/rest-api/overview
   baseURL: https://api-platform.cvent.com
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
