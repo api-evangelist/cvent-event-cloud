@@ -982,6 +982,9 @@ apis:
   - type: OpenCollection
     url: collections/cvent-event-cloud-webcasts-api.opencollection.json
 common:
+  - type: CapabilityMap
+    url: capabilities/cvent-event-cloud-capability-edges.yml
+    name: Cvent Event Cloud Business Capability Map
   - type: AgenticAccess
     url: agentic-access/cvent-event-cloud-agentic-access.yml
   - type: TrustCenter
