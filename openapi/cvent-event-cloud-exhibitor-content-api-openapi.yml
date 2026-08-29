@@ -1,11 +1,11 @@
 openapi: 3.2.0
 info:
-  title: Cvent REST APIs — Event Cloud Exhibitor Content API
-  description: "Event Cloud scope of the Cvent REST APIs. This document is a TAG-SCOPED SUBSET of the OpenAPI specification Cvent publishes at https://github.com/cvent/rest-sdks/blob/main/cvent-public-spec/openapi.yaml (the source of truth for Cvent's official TypeScript/.NET/Java SDKs). Venue-sourcing, RFP, housing-supplier and travel-supplier tags were removed because they belong to Cvent Hospitality Cloud; every path, operation, parameter, schema and security requirement below is verbatim from Cvent's published spec.\n\n# Introduction\nThe Cvent API Platform is built around REST. We aim to provide intuitive endpoints that can be easily\ndiscovered to help leverage the Cvent platform for your event needs. The RESTful APIs outlined here\nuse JSON-encoded request and response format, along with HTTP codes, to convey processing status of\nrequests received. The Cvent resources are protected using OAuth2.\n\n# Getting Started\n\nIf you're new to the Cvent API Platform, start by reading our\n[Developer Quickstart](https://developers.cvent.com/docs/rest-api/tutorials/developer-quickstart) guide. This will\ngive you an overview of how to authenticate and make requests using our APIs.\n\n## Authentication\n\nThe Cvent REST API uses [OAuth2](https://oauth.net/2/) to authorize requests to the platform. The client\ncredentials authorization flow is supported.\n\n<a name=\"oauth2-auth-code-planner-admin\"></a>\n\nAuthorization code flow is only supported for planner users with the administrator role in Cvent. Developer users\ncannot use authorization code flow.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\nHere's an example of using client credential flow to authorize. You'll supply your application's id and secret to\nmake a [Token](#operation/oauth2Token) request.\n\n```bash\ncurl --location --request POST '{hostName}/{version}/oauth2/token' \\\n--header 'Content-Type: application/x-www-form-urlencoded' \\\n--header 'Authorization: Basic {api_credentials}' \\\n--data-urlencode 'grant_type=client_credentials' \\\n--data-urlencode 'client_id={client_id}'\n```\n\n| Key               | Description                                          | Value                                                                                                        |\n| :---------------- | :--------------------------------------------------- | :----------------------------------------------------------------------------------------------------------- |\n| {hostName}        | https://api-platform.cvent.com                       | Location if your account is in the North American datacenter.                                                |\n|                   | https://api-platform-eur.cvent.com                   | Location if your account is in the European data center.                                                     |\n| {version}         | ea                                                   | The version of the API you're using. Only `ea` is currently supported.                                       |\n| {api_credentials} | {client_id}:{client_secret} in base64 encoded format | Supply your client id & client credentials in a base 64 encoded format.                                      |\n| {client_id}       | Retrieved from your application                      | Your application's client id.                                                                                |\n| {client_secret}   | Retrieved from your application                      | Your application's client secret.                                                                            |\n\nOn a successful call, you'll receive the following response:\n\n```json\n{\n  \"access_token\": \"{accessToken}\",\n  \"expires_in\": 3600,\n  \"token_type\": \"Bearer\"\n}\n```\n\nThis bearer token is valid for 3600 seconds (60 minutes) and must be used in subsequent calls.\n\n## Endpoints\n\nEndpoints start with `hostName` and `version`.\n\nThe `hostname` will depend on the region that your Cvent account is hosted in. Please see the table\nbelow to identify which hostname you should be using.\n\n| Region        |\tHostname                           |\n|:--------------|:-----------------------------------|\n| North America\t| https://api-platform.cvent.com     |\n| Europe        | https://api-platform-eur.cvent.com |\n\nThe current `version` of the Cvent API is `ea`.\n\n## Rate Limits\n\nCvent APIs enforce rate limits to ensure platform stability. Your limits depend on your tier: Free,\nStandard, or Premium.\n\n<br />\n\n### Usage Tiers\n\n| Tier     | Daily Calls | Calls per Second | Max Burst |\n| -------- | ----------- | ---------------- | --------- |\n| Free     | 1,000       | 2                | 1         |\n| Standard | 15,000      | 10               | 10        |\n| Premium  | 500,000     | 25               | 25        |\n\n- **Daily calls** define how many requests you can make in a 24-hour period. Quota\n  resets at 12 midnight (+0 GMT).\n- **Calls per second** define how many requests you can make in a 1-second window.\n- **Max Burst** defines how many requests you can make at once.\n\nIf you are unsure what usage tier applies to your account, you can check via\n[Get Current Usage Tier](#operation/getUsageTier).\n\nPlease note that these limits may change as the Cvent API Platform evolves.\n\n<br />\n\n### Handling Rate Limits\n\nSometimes, you may exceed your rate limits. When this happens, the API will return a `429 Too Many Requests`. See\n[handling rate limits](https://developers.cvent.com/docs/rest-api/guides/handling-rate-limits) for best practices on how to handle this.\n\n## Pagination\n\nSome APIs use pagination to manage records. Each page of records has a token associated to identify it.\n\nIf an API uses pagination, you’ll find up to three tokens in the response:\n- **currentToken**: Describes the token of the current page.\n- **nextToken**: Provides a token for the next page of records, if one exists.\n- **previousToken**: Provides a token for the previous page of records, if one exists. Not all APIs will return\n  this token.\n\nYou specify which page of records to view via the `token` parameter in your API call. To navigate through pages,\ntake the `nextToken` or `previousToken` value and pass it to your next call’s `token` parameter to get the\nrespective page of records. For example, if you made this request:\n\n```bash\ncurl -X GET {hostname}/{version}/contacts?limit=100 \\\n-H 'Accept: application/json' \\\n-H 'Authorization: Bearer {accessToken}'\n```\n\nThe response contains a paging array where you'll find the token information.\n\n```json\n{\n  \"paging\": {\n    \"currentToken\": \"90c5f062-76ad-4ea4-aa53-00eb698d9262\",\n    \"nextToken\": \"3b2359a7-4583-40ed-8afd-67e5f15373d3\",\n    \"limit\": 100,\n    \"totalCount\": 102,\n    \"_links\": {...}\n  },\n  \"data\": [...]\n}\n```\n\nTake the `nextToken` and use it in the `token` parameter on your subsequent call.\n\n```bash\ncurl -X GET {hostname}/{version}/contacts?limit=100&token=3b2359a7-4583-40ed-8afd-67e5f15373d3 \\\n-H 'Accept: application/json' \\\n-H 'Authorization: Bearer {accessToken}'\n```\n\nWhen the response doesn’t contain a `nextToken` field, you’ve reached the last page. Occasionally, you might\nencounter an empty page at the end of results. This typically happens when the results were evenly divisible.\nEnsure your client code handles the possibility of receiving an empty data array when using the `nextToken`.\n\n## Filtering\n\nUse filters to narrow down results. The filter follows the pattern\n`filter='field' comparisonType 'value'`. The value can be enclosed with single\nquotes (') or double quotes (\").\n\n```bash\nGET {hostName}/{version}/contacts?filter=lastName eq 'Smith'\n````\n\nTo correctly pass a single quote in the filter's value, use double quotes around\nthe string.\n\n```bash\nGET {hostName}/{version}/contacts?filter=lastName eq \"O'Keenan\"\n```\n\nTo correctly pass a double quote in the filter's value, use double quotes around\nthe string and add an escape character `\\` to each quote that is part of the\nstring.\n\n```bash\nGET {hostName}/{version}/events?filter=eventName eq \"\\\"Yearly\\\" Conference\"\n```\n\n## Versioning\n\nChange is inevitable in API development. Planning for it is crucial. We track\nboth backward-compatible and backward-incompatible changes.\n\n<br />\n\n### Backward Compatible Changes\n\nBackward compatible changes will be made often and are intended to avoid\nany adverse impact on our customers. It is highly advisable that when reading\nJSON payloads from Cvent, you are able to handle \"unknown\" attributes that\ncan be added over time. We consider the following changes backward-compatible:\n\n- Adding new resources\n- Adding new optional request parameters to existing operations\n- Adding new attributes to requests or responses\n- Changing the length or format (not type) of resource identifiers. For example, an ID can change from\n  \"1234/1234\" to \"1234::1234\".\n- Increasing the length of string fields\n\n<br />\n\n### Backward Incompatible Changes\n\nBackward-incompatible changes are made infrequently, however, they can be\ndisruptive to consumers. Due to this, our APIs are versioned to avoid\ndisruptions to customers. We leverage a URI-based versioning scheme,\nwhich means that a version value is included in the Cvent API URL.\nWhen breaking changes occur, a new version of the API is made available\nwhile the existing version is deprecated but remains available for a\nlimited period of time. We consider the following backward-incompatible changes:\n\n- Adding a new required parameter (query string param or payload attribute)\n- Deleting API resources\n- Deleting any attribute from API responses\n- Changing the data type on any parameter or attribute\n\n## Standards\nAs you begin working with our APIs, it's essential to be aware of standards around\ncountry codes, time formats, and other important details that ensure smooth integration.\nLearn more about our [API Standards](https://developers.cvent.com/docs/rest-api/reference/api-standards)\n"
+  title: Cvent Event Cloud Exhibitor Content API
+  version: ea
   contact:
     name: Cvent Development Platform
     url: https://developers.cvent.com/
-  version: ea
+  description: 'Operations tagged Exhibitor Content across 2 of this provider''s published API definitions: cvent-event-cloud-rest-openapi.yml, cvent-rest-apis-openapi.yaml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api-platform.cvent.com/ea
 - url: https://api-platform-eur.cvent.com/ea
@@ -51,6 +51,9 @@ paths:
       externalDocs:
         description: More about OAuth2 authorization code support for administrators
         url: '#oauth2-auth-code-planner-admin'
+    servers:
+    - url: https://api-platform.cvent.com/ea
+    - url: https://api-platform-eur.cvent.com/ea
   /events/{id}/exhibitors/{exhibitorId}/files/{fileId}:
     get:
       summary: Get Exhibitor File
@@ -167,6 +170,9 @@ paths:
       externalDocs:
         description: More about OAuth2 authorization code support for administrators
         url: '#oauth2-auth-code-planner-admin'
+    servers:
+    - url: https://api-platform.cvent.com/ea
+    - url: https://api-platform-eur.cvent.com/ea
   /events/{id}/exhibitors/{exhibitorId}/weblinks:
     get:
       summary: List Exhibitor Weblinks
@@ -247,6 +253,9 @@ paths:
       externalDocs:
         description: More about OAuth2 authorization code support for administrators
         url: '#oauth2-auth-code-planner-admin'
+    servers:
+    - url: https://api-platform.cvent.com/ea
+    - url: https://api-platform-eur.cvent.com/ea
   /events/{id}/exhibitors/{exhibitorId}/weblinks/{weblinkId}:
     get:
       summary: Get Exhibitor Weblink
@@ -361,126 +370,46 @@ paths:
       externalDocs:
         description: More about OAuth2 authorization code support for administrators
         url: '#oauth2-auth-code-planner-admin'
+    servers:
+    - url: https://api-platform.cvent.com/ea
+    - url: https://api-platform-eur.cvent.com/ea
 components:
+  parameters:
+    fileId1:
+      in: path
+      name: fileId
+      description: ID of a file.
+      required: true
+      schema:
+        $ref: '#/components/schemas/uuid-property'
+    id6:
+      in: path
+      name: id
+      description: ID of an event.
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: 3db28cfc-db22-11eb-8d19-0242ac130003
+    exhibitorId:
+      in: path
+      name: exhibitorId
+      description: ID of an exhibitor.
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: 4888db54-db22-11eb-8d19-0242ac130003
+    weblinkId:
+      in: path
+      name: weblinkId
+      description: ID of an exhibitor weblink.
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: 4d44b9e4-8c1a-403d-a20a-0b981f539935
   schemas:
-    Event3:
-      description: The Associated Event.
-      title: Event
-      type: object
-      required:
-      - id
-      properties:
-        id:
-          type: string
-          format: uuid
-          example: 3db28cfc-db22-11eb-8d19-0242ac130003
-          description: Event id
-    uuid-property:
-      title: UUID Property
-      description: A string that has to be a format matching the industry standard uuid
-      type: string
-      format: uuid
-      example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
-    existing-file:
-      description: Content of existing exhibitor file
-      title: File Response
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/file'
-      properties:
-        id:
-          description: Unique ID of the file.
-          readOnly: true
-          format: uuid
-          example: 3d44b9e4-8c1a-403d-a20a-0b981f539935
-          type: string
-    Audit:
-      title: Audit
-      description: Audit information
-      type: object
-      properties:
-        created:
-          type: string
-          format: date-time
-          description: The ISO 8601 zoned date time when this record was created.
-          readOnly: true
-          example: '2017-01-02T02:00:00Z'
-        createdBy:
-          type: string
-          description: The identifier of the user that created this record.
-          readOnly: true
-          example: hporter
-        lastModified:
-          type: string
-          format: date-time
-          description: The ISO 8601 zoned date time when this record was updated.
-          readOnly: true
-          example: '2019-02-12T03:00:00Z'
-        lastModifiedBy:
-          type: string
-          description: The identifier of the user that last updated this record.
-          readOnly: true
-          example: hporter
-    existing-weblink:
-      description: Content of existing exhibitor weblink
-      title: Weblink Response
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/weblink'
-      properties:
-        id:
-          description: Unique ID of the weblink.
-          readOnly: true
-          format: uuid
-          example: 4d44b9e4-8c1a-403d-a20a-0b981f539935
-          type: string
-    ErrorResponseBase:
-      title: ErrorResponseBase
-      type: object
-      description: Represents an error response with no additional details.
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          description: The HTTP status code representing the error.
-          example: 400
-        message:
-          type: string
-          description: A brief description of the error.
-          example: Bad Request
-        target:
-          type: string
-          description: The target resource of the error.
-          example: example target
-    ErrorResponse:
-      title: ErrorResponse
-      description: Represents an error response with additional details of cascading error messages.
-      allOf:
-      - $ref: '#/components/schemas/ErrorResponseBase'
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorResponseBase'
-          description: Additional details of cascading error messages.
-    Exhibitor:
-      description: The Associated Exhibitor.
-      title: Exhibitor
-      type: object
-      required:
-      - id
-      properties:
-        id:
-          type: string
-          format: uuid
-          example: 4888db54-db22-11eb-8d19-0242ac130003
-          description: Exhibitor id
     file:
       description: Content of exhibitor file.
       title: File Request
@@ -522,6 +451,51 @@ components:
           items:
             $ref: '#/components/schemas/existing-weblink'
           description: List of weblinks associated with an exhibitor.
+    existing-weblink:
+      description: Content of existing exhibitor weblink
+      title: Weblink Response
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/weblink'
+      properties:
+        id:
+          description: Unique ID of the weblink.
+          readOnly: true
+          format: uuid
+          example: 4d44b9e4-8c1a-403d-a20a-0b981f539935
+          type: string
+    uuid-property:
+      title: UUID Property
+      description: A string that has to be a format matching the industry standard uuid
+      type: string
+      format: uuid
+      example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
+    ErrorResponse:
+      title: ErrorResponse
+      description: Represents an error response with additional details of cascading error messages.
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponseBase'
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorResponseBase'
+          description: Additional details of cascading error messages.
+    file-list-response:
+      title: FileListResponse
+      description: A JSON object containing a list of files associated with an exhibitor.
+      type: object
+      properties:
+        data:
+          type: array
+          maxItems: 50
+          items:
+            $ref: '#/components/schemas/existing-file'
+          description: List of files associated with an exhibitor.
     weblink:
       description: Content of exhibitor weblink.
       title: Weblink Request
@@ -558,27 +532,91 @@ components:
       - url
       - name
       - order
-    file-list-response:
-      title: FileListResponse
-      description: A JSON object containing a list of files associated with an exhibitor.
+    Audit:
+      title: Audit
+      description: Audit information
       type: object
       properties:
-        data:
-          type: array
-          maxItems: 50
-          items:
-            $ref: '#/components/schemas/existing-file'
-          description: List of files associated with an exhibitor.
+        created:
+          type: string
+          format: date-time
+          description: The ISO 8601 zoned date time when this record was created.
+          readOnly: true
+          example: '2017-01-02T02:00:00Z'
+        createdBy:
+          type: string
+          description: The identifier of the user that created this record.
+          readOnly: true
+          example: hporter
+        lastModified:
+          type: string
+          format: date-time
+          description: The ISO 8601 zoned date time when this record was updated.
+          readOnly: true
+          example: '2019-02-12T03:00:00Z'
+        lastModifiedBy:
+          type: string
+          description: The identifier of the user that last updated this record.
+          readOnly: true
+          example: hporter
+    Exhibitor:
+      description: The Associated Exhibitor.
+      title: Exhibitor
+      type: object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 4888db54-db22-11eb-8d19-0242ac130003
+          description: Exhibitor id
+    ErrorResponseBase:
+      title: ErrorResponseBase
+      type: object
+      description: Represents an error response with no additional details.
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          description: The HTTP status code representing the error.
+          example: 400
+        message:
+          type: string
+          description: A brief description of the error.
+          example: Bad Request
+        target:
+          type: string
+          description: The target resource of the error.
+          example: example target
+    Event3:
+      description: The Associated Event.
+      title: Event
+      type: object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 3db28cfc-db22-11eb-8d19-0242ac130003
+          description: Event id
+    existing-file:
+      description: Content of existing exhibitor file
+      title: File Response
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/file'
+      properties:
+        id:
+          description: Unique ID of the file.
+          readOnly: true
+          format: uuid
+          example: 3d44b9e4-8c1a-403d-a20a-0b981f539935
+          type: string
   responses:
-    TooManyRequests1:
-      description: Too many requests
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 429
-            message: Limit Exceeded
     NotFound1:
       description: Resource not found
       content:
@@ -588,15 +626,6 @@ components:
           example:
             code: 404
             message: Not found
-    Unauthorized1:
-      description: Bad or expired token
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 401
-            message: Unauthorized
     Forbidden1:
       description: You do not have access to the resource
       content:
@@ -606,6 +635,15 @@ components:
           example:
             code: 403
             message: Access Forbidden
+    TooManyRequests1:
+      description: Too many requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 429
+            message: Limit Exceeded
     BadRequest1:
       description: Bad request
       content:
@@ -615,6 +653,15 @@ components:
           example:
             code: 400
             message: Bad Request
+    Unauthorized1:
+      description: Bad or expired token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 401
+            message: Unauthorized
     UnprocessableEntity1:
       description: Was not able to process the request.
       content:
@@ -624,41 +671,6 @@ components:
           example:
             code: 422
             message: Unprocessable Entity
-  parameters:
-    weblinkId:
-      in: path
-      name: weblinkId
-      description: ID of an exhibitor weblink.
-      required: true
-      schema:
-        type: string
-        format: uuid
-        example: 4d44b9e4-8c1a-403d-a20a-0b981f539935
-    fileId1:
-      in: path
-      name: fileId
-      description: ID of a file.
-      required: true
-      schema:
-        $ref: '#/components/schemas/uuid-property'
-    exhibitorId:
-      in: path
-      name: exhibitorId
-      description: ID of an exhibitor.
-      required: true
-      schema:
-        type: string
-        format: uuid
-        example: 4888db54-db22-11eb-8d19-0242ac130003
-    id6:
-      in: path
-      name: id
-      description: ID of an event.
-      required: true
-      schema:
-        type: string
-        format: uuid
-        example: 3db28cfc-db22-11eb-8d19-0242ac130003
   securitySchemes:
     OAuth2.authorizationCode:
       type: oauth2
@@ -1127,5 +1139,8 @@ components:
 externalDocs:
   description: Cvent Developer Documentation
   url: https://developers.cvent.com/docs
+x-refined-from:
+- cvent-event-cloud-rest-openapi.yml
+- cvent-rest-apis-openapi.yaml
 x-source: https://github.com/cvent/rest-sdks/blob/main/cvent-public-spec/openapi.yaml
 x-derived: tag-scoped subset (Event Cloud tags) of the published Cvent REST APIs OpenAPI

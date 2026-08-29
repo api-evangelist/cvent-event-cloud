@@ -1,54 +1,43 @@
 openapi: 3.2.0
 info:
-  title: Cvent Event Cloud Hooks API
-  version: ea
+  title: Cvent REST Travel Suppliers API
+  description: "# Introduction\nThe Cvent API Platform is built around REST. We aim to provide intuitive endpoints that can be easily\ndiscovered to help leverage the Cvent platform for your event needs. The RESTful APIs outlined here\nuse JSON-encoded request and response format, along with HTTP codes, to convey processing status of\nrequests received. The Cvent resources are protected using OAuth2.\n\n# Getting Started\n\nIf you're new to the Cvent API Platform, start by reading our\n[Developer Quickstart](https://developers.cvent.com/docs/rest-api/tutorials/developer-quickstart) guide. This will\ngive you an overview of how to authenticate and make requests using our APIs.\n\n## Authentication\n\nThe Cvent REST API uses [OAuth2](https://oauth.net/2/) to authorize requests to the platform. The client\ncredentials authorization flow is supported.\n\n<a name=\"oauth2-auth-code-planner-admin\"></a>\n\nAuthorization code flow is only supported for planner users with the administrator role in Cvent. Developer users\ncannot use authorization code flow.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\nHere's an example of using client credential flow to authorize. You'll supply your application's id and secret to\nmake a [Token](#operation/oauth2Token) request.\n\n```bash\ncurl --location --request POST '{hostName}/{version}/oauth2/token' \\\n--header 'Content-Type: application/x-www-form-urlencoded' \\\n--header 'Authorization: Basic {api_credentials}' \\\n--data-urlencode 'grant_type=client_credentials' \\\n--data-urlencode 'client_id={client_id}'\n```\n\n| Key               | Description                                          | Value                                                                                                        |\n| :---------------- | :--------------------------------------------------- | :----------------------------------------------------------------------------------------------------------- |\n| {hostName}        | https://api-platform.cvent.com                       | Location if your account is in the North American datacenter.                                                |\n|                   | https://api-platform-eur.cvent.com                   | Location if your account is in the European data center.                                                     |\n| {version}         | ea                                                   | The version of the API you're using. Only `ea` is currently supported.                                       |\n| {api_credentials} | {client_id}:{client_secret} in base64 encoded format | Supply your client id & client credentials in a base 64 encoded format.                                      |\n| {client_id}       | Retrieved from your application                      | Your application's client id.                                                                                |\n| {client_secret}   | Retrieved from your application                      | Your application's client secret.                                                                            |\n\nOn a successful call, you'll receive the following response:\n\n```json\n{\n  \"access_token\": \"{accessToken}\",\n  \"expires_in\": 3600,\n  \"token_type\": \"Bearer\"\n}\n```\n\nThis bearer token is valid for 3600 seconds (60 minutes) and must be used in subsequent calls.\n\n## Endpoints\n\nEndpoints start with `hostName` and `version`.\n\nThe `hostname` will depend on the region that your Cvent account is hosted in. Please see the table\nbelow to identify which hostname you should be using.\n\n| Region        |\tHostname                           |\n|:--------------|:-----------------------------------|\n| North America\t| https://api-platform.cvent.com     |\n| Europe        | https://api-platform-eur.cvent.com |\n\nThe current `version` of the Cvent API is `ea`.\n\n## Rate Limits\n\nCvent APIs enforce rate limits to ensure platform stability. Your limits depend on your tier: Free,\nStandard, or Premium.\n\n<br />\n\n### Usage Tiers\n\n| Tier     | Daily Calls | Calls per Second | Max Burst |\n| -------- | ----------- | ---------------- | --------- |\n| Free     | 1,000       | 2                | 1         |\n| Standard | 15,000      | 10               | 10        |\n| Premium  | 500,000     | 25               | 25        |\n\n- **Daily calls** define how many requests you can make in a 24-hour period. Quota\n  resets at 12 midnight (+0 GMT).\n- **Calls per second** define how many requests you can make in a 1-second window.\n- **Max Burst** defines how many requests you can make at once.\n\nIf you are unsure what usage tier applies to your account, you can check via\n[Get Current Usage Tier](#operation/getUsageTier).\n\nPlease note that these limits may change as the Cvent API Platform evolves.\n\n<br />\n\n### Handling Rate Limits\n\nSometimes, you may exceed your rate limits. When this happens, the API will return a `429 Too Many Requests`. See\n[handling rate limits](https://developers.cvent.com/docs/rest-api/guides/handling-rate-limits) for best practices on how to handle this.\n\n## Pagination\n\nSome APIs use pagination to manage records. Each page of records has a token associated to identify it.\n\nIf an API uses pagination, you’ll find up to three tokens in the response:\n- **currentToken**: Describes the token of the current page.\n- **nextToken**: Provides a token for the next page of records, if one exists.\n- **previousToken**: Provides a token for the previous page of records, if one exists. Not all APIs will return\n  this token.\n\nYou specify which page of records to view via the `token` parameter in your API call. To navigate through pages,\ntake the `nextToken` or `previousToken` value and pass it to your next call’s `token` parameter to get the\nrespective page of records. For example, if you made this request:\n\n```bash\ncurl -X GET {hostname}/{version}/contacts?limit=100 \\\n-H 'Accept: application/json' \\\n-H 'Authorization: Bearer {accessToken}'\n```\n\nThe response contains a paging array where you'll find the token information.\n\n```json\n{\n  \"paging\": {\n    \"currentToken\": \"90c5f062-76ad-4ea4-aa53-00eb698d9262\",\n    \"nextToken\": \"3b2359a7-4583-40ed-8afd-67e5f15373d3\",\n    \"limit\": 100,\n    \"totalCount\": 102,\n    \"_links\": {...}\n  },\n  \"data\": [...]\n}\n```\n\nTake the `nextToken` and use it in the `token` parameter on your subsequent call.\n\n```bash\ncurl -X GET {hostname}/{version}/contacts?limit=100&token=3b2359a7-4583-40ed-8afd-67e5f15373d3 \\\n-H 'Accept: application/json' \\\n-H 'Authorization: Bearer {accessToken}'\n```\n\nWhen the response doesn’t contain a `nextToken` field, you’ve reached the last page. Occasionally, you might\nencounter an empty page at the end of results. This typically happens when the results were evenly divisible.\nEnsure your client code handles the possibility of receiving an empty data array when using the `nextToken`.\n\n## Filtering\n\nUse filters to narrow down results. The filter follows the pattern\n`filter='field' comparisonType 'value'`. The value can be enclosed with single\nquotes (') or double quotes (\").\n\n```bash\nGET {hostName}/{version}/contacts?filter=lastName eq 'Smith'\n````\n\nTo correctly pass a single quote in the filter's value, use double quotes around\nthe string.\n\n```bash\nGET {hostName}/{version}/contacts?filter=lastName eq \"O'Keenan\"\n```\n\nTo correctly pass a double quote in the filter's value, use double quotes around\nthe string and add an escape character `\\` to each quote that is part of the\nstring.\n\n```bash\nGET {hostName}/{version}/events?filter=eventName eq \"\\\"Yearly\\\" Conference\"\n```\n\n## Versioning\n\nChange is inevitable in API development. Planning for it is crucial. We track\nboth backward-compatible and backward-incompatible changes.\n\n<br />\n\n### Backward Compatible Changes\n\nBackward compatible changes will be made often and are intended to avoid\nany adverse impact on our customers. It is highly advisable that when reading\nJSON payloads from Cvent, you are able to handle \"unknown\" attributes that\ncan be added over time. We consider the following changes backward-compatible:\n\n- Adding new resources\n- Adding new optional request parameters to existing operations\n- Adding new attributes to requests or responses\n- Changing the length or format (not type) of resource identifiers. For example, an ID can change from\n  \"1234/1234\" to \"1234::1234\".\n- Increasing the length of string fields\n\n<br />\n\n### Backward Incompatible Changes\n\nBackward-incompatible changes are made infrequently, however, they can be\ndisruptive to consumers. Due to this, our APIs are versioned to avoid\ndisruptions to customers. We leverage a URI-based versioning scheme,\nwhich means that a version value is included in the Cvent API URL.\nWhen breaking changes occur, a new version of the API is made available\nwhile the existing version is deprecated but remains available for a\nlimited period of time. We consider the following backward-incompatible changes:\n\n- Adding a new required parameter (query string param or payload attribute)\n- Deleting API resources\n- Deleting any attribute from API responses\n- Changing the data type on any parameter or attribute\n\n## Standards\nAs you begin working with our APIs, it's essential to be aware of standards around\ncountry codes, time formats, and other important details that ensure smooth integration.\nLearn more about our [API Standards](https://developers.cvent.com/docs/rest-api/reference/api-standards)\n"
   contact:
     name: Cvent Development Platform
     url: https://developers.cvent.com/
-  description: 'Operations tagged Hooks across 2 of this provider''s published API definitions: cvent-event-cloud-rest-openapi.yml, cvent-rest-apis-openapi.yaml. Each path carries the servers of the definition it was published in.'
+  version: ea
 servers:
 - url: https://api-platform.cvent.com/ea
 - url: https://api-platform-eur.cvent.com/ea
 tags:
-- name: Hooks
-  description: 'These APIs allow you to create hooks. When triggered, a hook sends a request to your service to
-
-    get updated data related to the related Cvent object.
-
-
-    For more information on using hooks, see the
-
-    [getting started guide](https://developers.cvent.com/docs/cid/attendee-identification-service).
-
-    '
+- name: Travel Suppliers
+  description: The Travel Supplier APIs provide access to Cvent data related to hotels, apartments, and other travel providers. This includes information related to properties, and sleeping rooms.
 paths:
-  /contacts/hooks:
+  /travel-suppliers/brands:
+    parameters: []
     get:
-      summary: List Contact Hooks
-      description: Gets a list of contact hooks configured in your account.
-      operationId: ListContactHooks
+      description: Gets a paginated list of supplier brands.
       tags:
-      - Hooks
+      - Travel Suppliers
+      operationId: PropertyApiListBrands
+      summary: List Supplier Brands
       security:
       - OAuth2.clientCredentials:
-        - account/hooks:read
-      - OAuth2.authorizationCode:
-        - account/hooks:read
+        - business-transient/supplier-brands:read
       parameters:
       - $ref: '#/components/parameters/after'
       - $ref: '#/components/parameters/before'
       - $ref: '#/components/parameters/limit'
       - $ref: '#/components/parameters/token'
-      - name: filter
-        in: query
-        required: false
-        description: "A filter query string narrows search results and supports the combination of logical and comparison operators.\nThe filter adheres to the pattern filter='field' comparisonType 'value'.\n\nThere are two comparison types that can be used in filter expressions:\n  * equal: eq\n  * not equal: ne\n  * greater than: gt\n  * greater or equal: ge\n  * less than: lt\n  * less than or equal: le\n\nThe following fields are filterable:\n  * id (eq|ne)\n  * name (eq|ne)\n  * created (eq|ne|lt|le|gt|ge)\n  * lastModified (eq|ne|lt|le|gt|ge)\n\nThe following operators are available:\n  * and\n  * or\n"
-        schema:
-          type: string
-          example: id eq '04ca6ae2-0dc3-487b-953e-86d6abbdf7d3' and name ne 'sampleIntegration'
+      - $ref: '#/components/parameters/brand-filter'
       responses:
         '200':
-          $ref: '#/components/responses/HooksPaginatedResponse'
+          description: Successfully retrieved a paginated list of supplier brands.
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/brand-paginated-response'
         '400':
           $ref: '#/components/responses/BadRequest1'
         '401':
@@ -57,94 +46,27 @@ paths:
           $ref: '#/components/responses/Forbidden1'
         '429':
           $ref: '#/components/responses/TooManyRequests1'
-      externalDocs:
-        description: More about OAuth2 authorization code support for administrators
-        url: '#oauth2-auth-code-planner-admin'
-    post:
-      summary: Create Contact Hook
-      description: Creates a contact hook. Contact hooks have a callback URI pointing to your system where Cvent will request contact information.
-      operationId: createContactHook
+  /travel-suppliers/brands/{brandId}:
+    parameters:
+    - $ref: '#/components/parameters/brandId'
+    get:
+      description: Get a supplier brand by brand code.
       tags:
-      - Hooks
+      - Travel Suppliers
+      operationId: PropertyApiGetBrand
+      summary: Get Supplier Brand
       security:
       - OAuth2.clientCredentials:
-        - account/hooks:write
-      - OAuth2.authorizationCode:
-        - account/hooks:write
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/hook'
-      responses:
-        '201':
-          $ref: '#/components/responses/HookCreated'
-        '400':
-          $ref: '#/components/responses/BadRequest1'
-        '401':
-          $ref: '#/components/responses/Unauthorized1'
-        '403':
-          $ref: '#/components/responses/Forbidden1'
-        '429':
-          $ref: '#/components/responses/TooManyRequests1'
-      callbacks:
-        contactTransaction:
-          '{$request.body#/callback}':
-            post:
-              summary: Contact Transaction Callback
-              description: 'This callback will be invoked on the URI you registered via <a href="#operation/contactHook">Create Contact Hook</a>.
-
-                Cvent will send a message requesting details on the contact that triggered the callback. All the non-blank
-
-                fields in your response will overwrite the related fields in Cvent.
-
-                '
-              operationId: contactTransactionCallback
-              security:
-              - CallbackApiKeyAuth: []
-              - CallbackBasicAuth: []
-              requestBody:
-                content:
-                  application/json:
-                    schema:
-                      $ref: '#/components/schemas/contact-transaction'
-              responses:
-                '200':
-                  $ref: '#/components/responses/ContactFieldsResponse'
-                '400':
-                  description: Your server rejected the callback because of some issue with the data. We will not retry on this response.
-                '404':
-                  description: Your server rejects the callback because the contact doesn't exist in your system. Our system will not retry on this response.
-                '429':
-                  $ref: '#/components/responses/TooManyRequests1'
-      externalDocs:
-        description: More about OAuth2 authorization code support for administrators
-        url: '#oauth2-auth-code-planner-admin'
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
-  /contacts/hooks/{id}:
-    put:
-      summary: Update Contact Hook
-      description: Update a contact hook's details, including its associated callback URI.
-      operationId: updateContactHook
-      tags:
-      - Hooks
-      security:
-      - OAuth2.clientCredentials:
-        - account/hooks:write
-      - OAuth2.authorizationCode:
-        - account/hooks:write
-      parameters:
-      - $ref: '#/components/parameters/id5'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/hook'
+        - business-transient/supplier-brands:read
+      parameters: []
       responses:
         '200':
-          $ref: '#/components/responses/HookUpdated'
+          description: Successfully retrieved a brand.
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/brand'
         '400':
           $ref: '#/components/responses/BadRequest1'
         '401':
@@ -155,25 +77,62 @@ paths:
           $ref: '#/components/responses/NotFound1'
         '429':
           $ref: '#/components/responses/TooManyRequests1'
-      externalDocs:
-        description: More about OAuth2 authorization code support for administrators
-        url: '#oauth2-auth-code-planner-admin'
-    delete:
-      summary: Delete Contact Hook
-      description: Delete a contact hook's details.
-      operationId: deleteContactHook
+  /travel-suppliers/chains:
+    parameters: []
+    get:
+      description: Gets a paginated list of supplier chains.
       tags:
-      - Hooks
+      - Travel Suppliers
+      operationId: PropertyApiListChains
+      summary: List Supplier Chains
       security:
       - OAuth2.clientCredentials:
-        - account/hooks:delete
-      - OAuth2.authorizationCode:
-        - account/hooks:delete
+        - business-transient/supplier-chains:read
       parameters:
-      - $ref: '#/components/parameters/id5'
+      - $ref: '#/components/parameters/after'
+      - $ref: '#/components/parameters/before'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/token'
+      - $ref: '#/components/parameters/chain-filter'
       responses:
-        '204':
-          description: Successfully deleted contact hook details.
+        '200':
+          description: Successfully retrieved a paginated list of chains.
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/chain-paginated-response'
+        '400':
+          $ref: '#/components/responses/BadRequest1'
+        '401':
+          $ref: '#/components/responses/Unauthorized1'
+        '403':
+          $ref: '#/components/responses/Forbidden1'
+        '429':
+          $ref: '#/components/responses/TooManyRequests1'
+  /travel-suppliers/chains/{chainId}:
+    parameters:
+    - $ref: '#/components/parameters/chainId'
+    get:
+      description: Get a supplier chain by chain ID.
+      tags:
+      - Travel Suppliers
+      operationId: PropertyApiGetChain
+      summary: Get Supplier Chain
+      security:
+      - OAuth2.clientCredentials:
+        - business-transient/supplier-chains:read
+      parameters: []
+      responses:
+        '200':
+          description: Successfully retrieved a chain.
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/chain'
+        '400':
+          $ref: '#/components/responses/BadRequest1'
         '401':
           $ref: '#/components/responses/Unauthorized1'
         '403':
@@ -182,22 +141,199 @@ paths:
           $ref: '#/components/responses/NotFound1'
         '429':
           $ref: '#/components/responses/TooManyRequests1'
-      externalDocs:
-        description: More about OAuth2 authorization code support for administrators
-        url: '#oauth2-auth-code-planner-admin'
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
+  /travel-suppliers/properties:
+    parameters: []
+    get:
+      description: Gets a paginated list of supplier properties.
+      tags:
+      - Travel Suppliers
+      operationId: PropertyApiListProperties
+      summary: List Supplier Properties
+      security:
+      - OAuth2.clientCredentials:
+        - business-transient/supplier-properties:read
+      parameters:
+      - $ref: '#/components/parameters/after'
+      - $ref: '#/components/parameters/before'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/token'
+      - $ref: '#/components/parameters/property-filter'
+      responses:
+        '200':
+          description: Successfully retrieved a paginated list of supplier properties.
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/property-paginated-response'
+        '400':
+          $ref: '#/components/responses/BadRequest1'
+        '401':
+          $ref: '#/components/responses/Unauthorized1'
+        '403':
+          $ref: '#/components/responses/Forbidden1'
+        '429':
+          $ref: '#/components/responses/TooManyRequests1'
+  /travel-suppliers/properties/{propertyId}:
+    parameters:
+    - $ref: '#/components/parameters/propertyId1'
+    get:
+      description: Get a supplier property by ID.
+      tags:
+      - Travel Suppliers
+      operationId: PropertyApiGetProperty
+      summary: Get Supplier Property
+      security:
+      - OAuth2.clientCredentials:
+        - business-transient/supplier-properties:read
+      parameters: []
+      responses:
+        '200':
+          description: Successfully retrieved a property.
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/property'
+        '400':
+          $ref: '#/components/responses/BadRequest1'
+        '401':
+          $ref: '#/components/responses/Unauthorized1'
+        '403':
+          $ref: '#/components/responses/Forbidden1'
+        '404':
+          $ref: '#/components/responses/NotFound1'
+        '429':
+          $ref: '#/components/responses/TooManyRequests1'
+  /travel-suppliers/property-rooms:
+    parameters: []
+    get:
+      description: Gets a paginated list of supplier property rooms.
+      tags:
+      - Travel Suppliers
+      operationId: BtApiGetPropertyRooms
+      summary: List Supplier Property Rooms
+      security:
+      - OAuth2.clientCredentials:
+        - business-transient/supplier-property-rooms:read
+      parameters:
+      - $ref: '#/components/parameters/after'
+      - $ref: '#/components/parameters/before'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/token'
+      - $ref: '#/components/parameters/property-room-filter'
+      responses:
+        '200':
+          description: Successfully retrieved a paginated list of property rooms.
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/property-room-paginated-response'
+        '400':
+          $ref: '#/components/responses/BadRequest1'
+        '401':
+          $ref: '#/components/responses/Unauthorized1'
+        '403':
+          $ref: '#/components/responses/Forbidden1'
+        '429':
+          $ref: '#/components/responses/TooManyRequests1'
+  /travel-suppliers/property-rooms/{roomId}:
+    parameters:
+    - $ref: '#/components/parameters/roomId'
+    get:
+      description: Read supplier property room data by room ID.
+      tags:
+      - Travel Suppliers
+      operationId: PropertyApiGetPropertyRoom
+      summary: Get Supplier Property Room
+      security:
+      - OAuth2.clientCredentials:
+        - business-transient/supplier-property-rooms:read
+      parameters: []
+      responses:
+        '200':
+          description: Successfully retrieved a property room.
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/property-room'
+        '400':
+          $ref: '#/components/responses/BadRequest1'
+        '401':
+          $ref: '#/components/responses/Unauthorized1'
+        '403':
+          $ref: '#/components/responses/Forbidden1'
+        '404':
+          $ref: '#/components/responses/NotFound1'
+        '429':
+          $ref: '#/components/responses/TooManyRequests1'
 components:
   schemas:
-    hook:
-      title: Hook
-      description: A hook with a callback URI.
+    external-code-type.json:
+      title: External Code Type
+      enum:
+      - amadeus_gds
+      - worldspan_gds
+      - galileo_gds
+      - sabre_gds
+      - crs
+      type: string
+      description: Type of the external Code.
+      example: amadeus
+    brand-paginated-response:
+      title: Brand paginated response
+      description: A list of brands.
       type: object
+      properties:
+        paging:
+          $ref: '#/components/schemas/paging.json'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/brand'
+          description: Collection of brands and their related details.
+    brand:
+      title: Brand
+      description: Brand details.
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/property/allOf/0'
+      properties:
+        id:
+          type: string
+          maxLength: 16
+          description: The ID of the travel supplier brand.
+          example: NorthernHotels
+        name:
+          type: string
+          description: The name of the travel supplier brand.
+          maxLength: 50
+          example: Northern Hotel Group
+        address:
+          $ref: '#/components/schemas/address.json1'
+        deleted:
+          type: boolean
+          description: True indicates the brand is deleted.
+          default: false
+          example: false
+          readOnly: false
+    link.json:
+      title: Link
       required:
-      - name
-      - callback
-      - security
+      - href
+      type: object
+      description: Represents a link to a related resource.
+      properties:
+        href:
+          type: string
+          description: A url provided that can be followed for linking
+          example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
+    property:
+      title: property
+      description: Details of the property
+      type: object
       allOf:
       - title: Audit
         description: Audit information
@@ -227,123 +363,196 @@ components:
             example: hporter
       properties:
         id:
-          type: string
-          description: The unique ID representing the hook
-          format: uuid
-          readOnly: true
-          example: 3b2359a7-4583-40ed-8afd-67e5f15373d3
-        name:
-          type: string
-          description: Name of the contact hook.
-          example: Attendee Identification
-          minLength: 1
-          maxLength: 100
-        callback:
-          type: string
-          format: uri
-          description: A client hosted callback URI to which callback would be invoked. TLS is mandatory. Callback URL should not contain any confidential information such as API keys or login credentials.
-          example: https://myserver.com/send/callback/here
-          minLength: 1
-          maxLength: 300
-        security:
-          $ref: '#/components/schemas/hook-security.json'
-    contact-field.json:
-      title: Contact Field
-      description: Contains contact data. For example, a User's email address.
-      type: object
-      required:
-      - id
-      - name
-      - maximumLength
-      - type
-      properties:
-        id:
-          title: Readonly UUID Property
-          description: The unique ID of the field supported by Cvent.
+          title: Property ID
+          description: The ID of the property.
           type: string
           format: uuid
-          readOnly: true
+          example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
         name:
           type: string
-          description: The name of the field.
-          example: Email Address
-        maximumLength:
-          type: integer
-          description: The maximum length allowed for a value.
-          example: 80
-        type:
+          maxLength: 50
+          example: The Grand Property
+          description: The name of the property.
+        chain:
+          description: The chain that the property belongs to.
+          type: object
+          properties:
+            id:
+              title: Chain ID
+              description: The ID of the chain.
+              type: string
+              format: uuid
+              example: 415079ab-4bee-491e-84ad-c2379f840379
+        brand:
+          description: The brand that the property belongs to.
+          type: object
+          properties:
+            id:
+              title: Brand ID
+              description: The ID of the brand.
+              type: string
+              example: NorthernHotels
+        code:
           type: string
-          description: The type of the field.
-          enum:
-          - String
-          - Integer
-          - Decimal
-          - Double
-          - DateTime
-          - SingleChoice
-          - MultiChoice
-          example: String
-        value:
+          maxLength: 15
+          example: GH101
+          description: The property code for the property.
+        deleted:
+          type: boolean
+          description: True indicates that the property is deleted.
+          default: false
+          example: false
+          readOnly: true
+        currencyCode:
+          type: string
+          minLength: 3
+          maxLength: 3
+          default: USD
+          example: USD
+          description: The ISO 4217 standard format currency code specified for the property.
+        address:
+          $ref: '#/components/schemas/address.json1'
+        externalCodes:
           type: array
           items:
-            type: string
-            example: johndoe@cvent.com
-          description: The value(s) of the field.
-    link.json:
-      title: Link
-      required:
-      - href
+            $ref: '#/components/schemas/property-external-code.json'
+          description: Collection of external codes for a property. This includes GDS nd other codes used to identify a property in external systems.
+          maxItems: 5
+    property-room:
+      title: Property Room
+      description: Property room details.
       type: object
-      description: Represents a link to a related resource.
+      allOf:
+      - $ref: '#/components/schemas/property/allOf/0'
       properties:
-        href:
+        id:
+          title: Property Room ID
+          description: The ID of the property room.
           type: string
-          description: A url provided that can be followed for linking
-          example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
-    contact-fields:
-      title: Contact Fields
-      description: An array of standard contact fields supported by Cvent.
-      required:
-      - data
+          format: uuid
+          example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
+        name:
+          type: string
+          description: The name of the property room.
+          maxLength: 30
+          example: Standard
+        code:
+          type: string
+          maxLength: 6
+          description: Room code of the property room.
+          example: std
+        property:
+          description: The property that the room belongs to.
+          type: object
+          properties:
+            id:
+              title: property ID
+              description: The ID of the property.
+              type: string
+              format: uuid
+              example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
+        deleted:
+          type: boolean
+          description: True indicates the property room is deleted.
+          default: false
+          example: false
+          readOnly: true
+        bedTypeCode:
+          $ref: '#/components/schemas/room-bed-type.json'
+        numberOfBeds:
+          type: integer
+          description: The number of beds in the room.
+          example: 2
+        capacity:
+          type: integer
+          description: Maximum capacity of people that can sleep in the room.
+          example: 6
+        description:
+          type: string
+          maxLength: 2000
+          description: A description of the room.
+          example: A standard room with two queen beds.
+        externalCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/property-room-external-code.json'
+          description: Collection of external codes for the room. This includes GDS and other codes used to identify a room in external systems.
+          maxItems: 5
+    property-external-code.json:
+      title: Property External Codes
+      description: The external chain and property codes for the property
       type: object
       properties:
+        type:
+          $ref: '#/components/schemas/external-code-type.json'
+        chainCode:
+          type: string
+          maxLength: 6
+          example: NH
+          description: The code identifying the property's chain in the given external system.
+        propertyCode:
+          type: string
+          maxLength: 15
+          example: GH1
+          description: The code identifying a property in the given external system.
+    property-paginated-response:
+      title: Property paginated response
+      description: A list of properties.
+      type: object
+      properties:
+        paging:
+          $ref: '#/components/schemas/paging.json'
         data:
           type: array
           items:
-            $ref: '#/components/schemas/contact-field.json'
-          description: Collection of standard contact fields.
-    uuid-property:
-      title: UUID Property
-      description: A string that has to be a format matching the industry standard uuid
-      type: string
-      format: uuid
-      example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
-    contact-transaction:
-      title: Contact Transaction
-      description: A changeset of contact fields.
-      required:
-      - transactionId
+            $ref: '#/components/schemas/property'
+          description: Collection of properties and their related details.
+    address.json1:
+      title: Address
+      description: A physical address.
       type: object
-      allOf:
-      - title: Contact Fields
-        description: An array of standard contact fields supported by Cvent.
-        required:
-        - data
-        type: object
-        properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/contact-field.json'
-            description: Collection of standard contact fields.
       properties:
-        transactionId:
-          title: Readonly UUID Property
-          description: A unique id corresponding to the contact transaction callback made to fetch contact information.
+        address1:
+          description: Address line 1.
           type: string
-          format: uuid
-          readOnly: true
-          example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
+          maxLength: 45
+          example: 717 N Harwood St
+        address2:
+          description: Address line 2.
+          type: string
+          maxLength: 45
+          example: Suite 2800
+        city:
+          description: City name.
+          type: string
+          maxLength: 50
+          example: Dallas
+        region:
+          description: Region name.
+          type: string
+          maxLength: 50
+          example: Texas
+        regionCode:
+          description: Region code.
+          type: string
+          maxLength: 3
+          example: TX
+        postalCode:
+          description: Postal code.
+          type: string
+          maxLength: 16
+          example: '75201'
+        country:
+          description: Country name.
+          type: string
+          maxLength: 50
+          example: United States
+        countryCode:
+          description: ISO 3166 alpha-2 country code.
+          type: string
+          maxLength: 2
+          minLength: 2
+          example: US
     ErrorResponse:
       title: ErrorResponse
       description: Represents an error response with additional details of cascading error messages.
@@ -359,6 +568,30 @@ components:
           items:
             $ref: '#/components/schemas/ErrorResponseBase'
           description: Additional details of cascading error messages.
+    property-room-external-code.json:
+      title: Property Room External Code
+      description: The external room codes for the room
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/external-code-type.json'
+        roomCode:
+          type: string
+          maxLength: 10
+          example: std887
+          description: The code identifying the room in the given external system.
+    chain-paginated-response:
+      title: Chain paginated response
+      description: A list of chains.
+      type: object
+      properties:
+        paging:
+          $ref: '#/components/schemas/paging.json'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/chain'
+          description: Collection of chains and their related details.
     paging.json:
       title: Paging
       required:
@@ -388,82 +621,33 @@ components:
           example: 2
         _links:
           $ref: '#/components/schemas/pagination-links.json'
-    hook-security.json:
-      title: Hook Security
-      description: Describe security for a web hook callback. Each option corresponds to an Authorization header variant.
+    property-room-paginated-response:
+      title: Property room paginated response
+      description: A list of property sleeping rooms.
       type: object
-      oneOf:
-      - title: API Key Authentication
-        description: API Key Authentication.
-        type: object
-        required:
-        - secret
-        allOf:
-        - title: Authorization Header
-          description: Authorization header support characterizing the authentication type to be used for callbacks to the client system.
-          type: object
-          required:
-          - type
-          properties:
-            type:
-              type: string
-              enum:
-              - apiKey
-              - basic
-              title: Authorization Header Type
-              description: Authorization header support characterizing the authentication type to be used for callbacks to the client system. API Key, or HTTP Basic Authentication, each configured with a corresponding option.
-              example: apiKey
-        properties:
-          secret:
-            type: string
-            title: API Key Value
-            description: An API key to be included in callback requests.
-            writeOnly: true
-            example: 2b3cc2bf083ff11206ce6b2f3ee09591
-            maxLength: 300
-          authHeaderKey:
-            type: string
-            title: Authorization Header Key
-            description: The header key for which API Key will be sent in callback requests. If this field is not set, the API key is sent in the 'Authorization' header.
-            example: x-api-key
-            minLength: 1
-            default: Authorization
-          apiKeyPrefix:
-            type: boolean
-            title: API Key Prefix
-            description: Whether API Key Value is prefixed by 'api_key'. When set to true, the authorization header's value in callback requests will be 'api_key 2b3cc2bf083ff11206ce6b2f3ee09591'
-            example: true
-            default: true
-      - title: Basic Authentication
-        description: HTTP Basic Authentication via Authorization header.
-        type: object
-        required:
-        - secret
-        allOf:
-        - $ref: '#/components/schemas/hook-security.json/oneOf/0/allOf/0'
-        properties:
-          secret:
-            type: string
-            title: Basic Auth Credentials
-            description: Base64 encoded Basic Authentication credentials.
-            writeOnly: true
-            example: ZGVtbzpwQDU1dzByZA==
-            maxLength: 300
-    hooks-paginated-response:
-      title: HooksPaginatedResponse
-      description: The response from a request to get the list of hooks with a callback URI. This includes the paging object as well as the collection of hooks.
-      type: object
-      required:
-      - paging
-      - data
       properties:
         paging:
           $ref: '#/components/schemas/paging.json'
         data:
           type: array
           items:
-            $ref: '#/components/schemas/hook'
-          description: Collection of contact hooks.
+            $ref: '#/components/schemas/property-room'
+          description: Collection of property rooms and related details.
+    room-bed-type.json:
+      title: Room bed type
+      enum:
+      - sofa_bed
+      - double
+      - full
+      - king
+      - murphy
+      - queen
+      - run_of_house
+      - single
+      - twin
+      type: string
+      description: Code representing the bed type.
+      example: queen
     ErrorResponseBase:
       title: ErrorResponseBase
       type: object
@@ -484,6 +668,46 @@ components:
           type: string
           description: The target resource of the error.
           example: example target
+    chain:
+      title: Chain
+      description: Chain details.
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/property/allOf/0'
+      properties:
+        id:
+          title: Chain ID
+          description: The ID of the chain.
+          type: string
+          format: uuid
+          example: 415079ab-4bee-491e-84ad-c2379f840379
+        name:
+          type: string
+          description: The name of the travel supplier chain.
+          maxLength: 50
+          example: Northern Hotels
+        code:
+          type: string
+          maxLength: 6
+          description: The code identifying the travel supplier chain.
+          example: NH
+        brand:
+          description: The brand that the chain belongs to.
+          type: object
+          properties:
+            id:
+              title: Brand ID
+              description: The ID of the brand that the chain belongs to.
+              type: string
+              example: NorthernHotels
+        address:
+          $ref: '#/components/schemas/address.json1'
+        deleted:
+          type: boolean
+          description: True indicates the chain is deleted.
+          default: false
+          example: false
+          readOnly: true
     pagination-links.json:
       title: PaginationLinks
       type: object
@@ -496,6 +720,35 @@ components:
         prev:
           $ref: '#/components/schemas/link.json'
   parameters:
+    chainId:
+      description: The ID of the chain.
+      name: chainId
+      required: true
+      in: path
+      schema:
+        title: Chain ID
+        type: string
+        format: uuid
+        example: 0ab9e863-a748-457f-81cd-f294ff66f5e6
+    roomId:
+      description: The ID of the property room.
+      name: roomId
+      required: true
+      in: path
+      schema:
+        title: Property Room ID
+        type: string
+        format: uuid
+        example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
+    after:
+      name: after
+      required: false
+      description: Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store.
+      in: query
+      schema:
+        type: string
+        format: date-time
+        example: '2017-01-02T02:00:00Z'
     token:
       name: token
       in: query
@@ -509,15 +762,92 @@ components:
       schema:
         type: string
         example: 0e28af57-511f-47ab-ae46-46cd1ca51a1a
-    after:
-      name: after
-      required: false
-      description: Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store.
+    property-filter:
+      name: filter
       in: query
+      required: false
+      description: 'A filter query string narrows search results and supports the combination of logical and comparison operators. The filter adheres to the pattern filter=''field'' comparisonType ''value''.
+
+
+        There are eight comparison types that can be used in filter expressions:
+
+        * equal: eq
+
+        * not equal: ne
+
+        * greater than: gt
+
+        * greater or equal: ge
+
+        * less than: lt
+
+        * less than or equal: le
+
+        * starts with: sw
+
+        * contains a value: contains
+
+
+        The following fields are filterable:
+
+        * id (eq|ne)
+
+        * name (eq|ne|sw|contains)
+
+        * code (eq|ne)
+
+        * brand.id (eq|ne|contains)
+
+        * chain.id (eq|ne)
+
+        * created (eq|ne|lt|le|gt|ge)
+
+        * lastModified (eq|ne|lt|le|gt|ge)
+
+        '
       schema:
         type: string
-        format: date-time
-        example: '2017-01-02T02:00:00Z'
+        example: code eq ABC123
+    chain-filter:
+      name: filter
+      in: query
+      required: false
+      description: 'A filter query string narrows search results and supports the combination of logical and comparison operators. The filter adheres to the pattern filter=''field'' comparisonType ''value''.
+
+
+        There are eight comparison types that can be used in filter expressions:
+
+        * equal: eq
+
+        * not equal: ne
+
+        * greater than: gt
+
+        * greater or equal: ge
+
+        * less than: lt
+
+        * less than or equal: le
+
+        * starts with: sw
+
+        * contains a value: contains
+
+
+        The following fields are filterable:
+
+        * id (eq|ne)
+
+        * name (eq|ne|sw|contains)
+
+        * code (eq|ne)
+
+        * brand.id (eq|ne|contains)
+
+        '
+      schema:
+        type: string
+        example: code eq NH
     before:
       name: before
       required: false
@@ -527,6 +857,52 @@ components:
         type: string
         format: date-time
         example: '2017-01-02T02:00:00Z'
+    brand-filter:
+      name: filter
+      in: query
+      required: false
+      description: 'A filter query string narrows search results and supports the combination of logical and comparison operators. The filter adheres to the pattern filter=''field'' comparisonType ''value''.
+
+
+        There are eight comparison types that can be used in filter expressions:
+
+        * equal: eq
+
+        * not equal: ne
+
+        * greater than: gt
+
+        * greater or equal: ge
+
+        * less than: lt
+
+        * less than or equal: le
+
+        * starts with: sw
+
+        * contains a value: contains
+
+
+        The following fields are filterable:
+
+        * id (eq|ne|contains)
+
+        * name (eq|ne|sw|contains)
+
+        '
+      schema:
+        type: string
+        example: name eq AB
+    propertyId1:
+      description: The ID of the property.
+      name: propertyId
+      required: true
+      in: path
+      schema:
+        title: property ID
+        type: string
+        format: uuid
+        example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
     limit:
       name: limit
       in: query
@@ -539,13 +915,59 @@ components:
         type: integer
         default: 100
         example: 100
-    id5:
-      in: path
-      name: id
+    brandId:
+      description: The ID of the brand.
+      name: brandId
       required: true
-      description: Unique ID of the contact hook.
+      in: path
       schema:
-        $ref: '#/components/schemas/uuid-property'
+        title: Brand Code
+        type: string
+        example: NorthernHotels
+    property-room-filter:
+      name: filter
+      in: query
+      required: false
+      description: 'A filter query string narrows search results and supports the combination of logical and comparison operators. The filter adheres to the pattern filter=''field'' comparisonType ''value''.
+
+
+        There are eight comparison types that can be used in filter expressions:
+
+        * equal: eq
+
+        * not equal: ne
+
+        * greater than: gt
+
+        * greater or equal: ge
+
+        * less than: lt
+
+        * less than or equal: le
+
+        * starts with: sw
+
+        * contains a value: contains
+
+
+        The following fields are filterable:
+
+        * id (eq|ne)
+
+        * name (eq|ne|sw|contains)
+
+        * code (eq|ne)
+
+        * property.id (eq|ne)
+
+        * created (eq|ne|lt|le|gt|ge)
+
+        * lastModified (eq|ne|lt|le|gt|ge)
+
+        '
+      schema:
+        type: string
+        example: code eq dlx
   responses:
     NotFound1:
       description: Resource not found
@@ -565,12 +987,6 @@ components:
           example:
             code: 403
             message: Access Forbidden
-    HooksPaginatedResponse:
-      description: Successfully retrieved a list of contact hooks and their details.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/hooks-paginated-response'
     TooManyRequests1:
       description: Too many requests
       content:
@@ -589,12 +1005,6 @@ components:
           example:
             code: 400
             message: Bad Request
-    HookCreated:
-      description: Successfully created a contact hook.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/hook'
     Unauthorized1:
       description: Bad or expired token
       content:
@@ -604,18 +1014,6 @@ components:
           example:
             code: 401
             message: Unauthorized
-    HookUpdated:
-      description: Successfully updated a contact hook.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/hook'
-    ContactFieldsResponse:
-      description: Your server returns this structure on a successful callback with the updated values for contact fields present in your system.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/contact-fields'
   securitySchemes:
     OAuth2.authorizationCode:
       type: oauth2
@@ -1084,8 +1482,3 @@ components:
 externalDocs:
   description: Cvent Developer Documentation
   url: https://developers.cvent.com/docs
-x-refined-from:
-- cvent-event-cloud-rest-openapi.yml
-- cvent-rest-apis-openapi.yaml
-x-source: https://github.com/cvent/rest-sdks/blob/main/cvent-public-spec/openapi.yaml
-x-derived: tag-scoped subset (Event Cloud tags) of the published Cvent REST APIs OpenAPI

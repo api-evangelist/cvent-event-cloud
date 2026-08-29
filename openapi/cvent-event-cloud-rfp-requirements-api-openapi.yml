@@ -1,74 +1,139 @@
 openapi: 3.2.0
 info:
-  title: Cvent Event Cloud Video API
-  version: ea
+  title: Cvent REST RFP Requirements API
+  description: "# Introduction\nThe Cvent API Platform is built around REST. We aim to provide intuitive endpoints that can be easily\ndiscovered to help leverage the Cvent platform for your event needs. The RESTful APIs outlined here\nuse JSON-encoded request and response format, along with HTTP codes, to convey processing status of\nrequests received. The Cvent resources are protected using OAuth2.\n\n# Getting Started\n\nIf you're new to the Cvent API Platform, start by reading our\n[Developer Quickstart](https://developers.cvent.com/docs/rest-api/tutorials/developer-quickstart) guide. This will\ngive you an overview of how to authenticate and make requests using our APIs.\n\n## Authentication\n\nThe Cvent REST API uses [OAuth2](https://oauth.net/2/) to authorize requests to the platform. The client\ncredentials authorization flow is supported.\n\n<a name=\"oauth2-auth-code-planner-admin\"></a>\n\nAuthorization code flow is only supported for planner users with the administrator role in Cvent. Developer users\ncannot use authorization code flow.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\nHere's an example of using client credential flow to authorize. You'll supply your application's id and secret to\nmake a [Token](#operation/oauth2Token) request.\n\n```bash\ncurl --location --request POST '{hostName}/{version}/oauth2/token' \\\n--header 'Content-Type: application/x-www-form-urlencoded' \\\n--header 'Authorization: Basic {api_credentials}' \\\n--data-urlencode 'grant_type=client_credentials' \\\n--data-urlencode 'client_id={client_id}'\n```\n\n| Key               | Description                                          | Value                                                                                                        |\n| :---------------- | :--------------------------------------------------- | :----------------------------------------------------------------------------------------------------------- |\n| {hostName}        | https://api-platform.cvent.com                       | Location if your account is in the North American datacenter.                                                |\n|                   | https://api-platform-eur.cvent.com                   | Location if your account is in the European data center.                                                     |\n| {version}         | ea                                                   | The version of the API you're using. Only `ea` is currently supported.                                       |\n| {api_credentials} | {client_id}:{client_secret} in base64 encoded format | Supply your client id & client credentials in a base 64 encoded format.                                      |\n| {client_id}       | Retrieved from your application                      | Your application's client id.                                                                                |\n| {client_secret}   | Retrieved from your application                      | Your application's client secret.                                                                            |\n\nOn a successful call, you'll receive the following response:\n\n```json\n{\n  \"access_token\": \"{accessToken}\",\n  \"expires_in\": 3600,\n  \"token_type\": \"Bearer\"\n}\n```\n\nThis bearer token is valid for 3600 seconds (60 minutes) and must be used in subsequent calls.\n\n## Endpoints\n\nEndpoints start with `hostName` and `version`.\n\nThe `hostname` will depend on the region that your Cvent account is hosted in. Please see the table\nbelow to identify which hostname you should be using.\n\n| Region        |\tHostname                           |\n|:--------------|:-----------------------------------|\n| North America\t| https://api-platform.cvent.com     |\n| Europe        | https://api-platform-eur.cvent.com |\n\nThe current `version` of the Cvent API is `ea`.\n\n## Rate Limits\n\nCvent APIs enforce rate limits to ensure platform stability. Your limits depend on your tier: Free,\nStandard, or Premium.\n\n<br />\n\n### Usage Tiers\n\n| Tier     | Daily Calls | Calls per Second | Max Burst |\n| -------- | ----------- | ---------------- | --------- |\n| Free     | 1,000       | 2                | 1         |\n| Standard | 15,000      | 10               | 10        |\n| Premium  | 500,000     | 25               | 25        |\n\n- **Daily calls** define how many requests you can make in a 24-hour period. Quota\n  resets at 12 midnight (+0 GMT).\n- **Calls per second** define how many requests you can make in a 1-second window.\n- **Max Burst** defines how many requests you can make at once.\n\nIf you are unsure what usage tier applies to your account, you can check via\n[Get Current Usage Tier](#operation/getUsageTier).\n\nPlease note that these limits may change as the Cvent API Platform evolves.\n\n<br />\n\n### Handling Rate Limits\n\nSometimes, you may exceed your rate limits. When this happens, the API will return a `429 Too Many Requests`. See\n[handling rate limits](https://developers.cvent.com/docs/rest-api/guides/handling-rate-limits) for best practices on how to handle this.\n\n## Pagination\n\nSome APIs use pagination to manage records. Each page of records has a token associated to identify it.\n\nIf an API uses pagination, you’ll find up to three tokens in the response:\n- **currentToken**: Describes the token of the current page.\n- **nextToken**: Provides a token for the next page of records, if one exists.\n- **previousToken**: Provides a token for the previous page of records, if one exists. Not all APIs will return\n  this token.\n\nYou specify which page of records to view via the `token` parameter in your API call. To navigate through pages,\ntake the `nextToken` or `previousToken` value and pass it to your next call’s `token` parameter to get the\nrespective page of records. For example, if you made this request:\n\n```bash\ncurl -X GET {hostname}/{version}/contacts?limit=100 \\\n-H 'Accept: application/json' \\\n-H 'Authorization: Bearer {accessToken}'\n```\n\nThe response contains a paging array where you'll find the token information.\n\n```json\n{\n  \"paging\": {\n    \"currentToken\": \"90c5f062-76ad-4ea4-aa53-00eb698d9262\",\n    \"nextToken\": \"3b2359a7-4583-40ed-8afd-67e5f15373d3\",\n    \"limit\": 100,\n    \"totalCount\": 102,\n    \"_links\": {...}\n  },\n  \"data\": [...]\n}\n```\n\nTake the `nextToken` and use it in the `token` parameter on your subsequent call.\n\n```bash\ncurl -X GET {hostname}/{version}/contacts?limit=100&token=3b2359a7-4583-40ed-8afd-67e5f15373d3 \\\n-H 'Accept: application/json' \\\n-H 'Authorization: Bearer {accessToken}'\n```\n\nWhen the response doesn’t contain a `nextToken` field, you’ve reached the last page. Occasionally, you might\nencounter an empty page at the end of results. This typically happens when the results were evenly divisible.\nEnsure your client code handles the possibility of receiving an empty data array when using the `nextToken`.\n\n## Filtering\n\nUse filters to narrow down results. The filter follows the pattern\n`filter='field' comparisonType 'value'`. The value can be enclosed with single\nquotes (') or double quotes (\").\n\n```bash\nGET {hostName}/{version}/contacts?filter=lastName eq 'Smith'\n````\n\nTo correctly pass a single quote in the filter's value, use double quotes around\nthe string.\n\n```bash\nGET {hostName}/{version}/contacts?filter=lastName eq \"O'Keenan\"\n```\n\nTo correctly pass a double quote in the filter's value, use double quotes around\nthe string and add an escape character `\\` to each quote that is part of the\nstring.\n\n```bash\nGET {hostName}/{version}/events?filter=eventName eq \"\\\"Yearly\\\" Conference\"\n```\n\n## Versioning\n\nChange is inevitable in API development. Planning for it is crucial. We track\nboth backward-compatible and backward-incompatible changes.\n\n<br />\n\n### Backward Compatible Changes\n\nBackward compatible changes will be made often and are intended to avoid\nany adverse impact on our customers. It is highly advisable that when reading\nJSON payloads from Cvent, you are able to handle \"unknown\" attributes that\ncan be added over time. We consider the following changes backward-compatible:\n\n- Adding new resources\n- Adding new optional request parameters to existing operations\n- Adding new attributes to requests or responses\n- Changing the length or format (not type) of resource identifiers. For example, an ID can change from\n  \"1234/1234\" to \"1234::1234\".\n- Increasing the length of string fields\n\n<br />\n\n### Backward Incompatible Changes\n\nBackward-incompatible changes are made infrequently, however, they can be\ndisruptive to consumers. Due to this, our APIs are versioned to avoid\ndisruptions to customers. We leverage a URI-based versioning scheme,\nwhich means that a version value is included in the Cvent API URL.\nWhen breaking changes occur, a new version of the API is made available\nwhile the existing version is deprecated but remains available for a\nlimited period of time. We consider the following backward-incompatible changes:\n\n- Adding a new required parameter (query string param or payload attribute)\n- Deleting API resources\n- Deleting any attribute from API responses\n- Changing the data type on any parameter or attribute\n\n## Standards\nAs you begin working with our APIs, it's essential to be aware of standards around\ncountry codes, time formats, and other important details that ensure smooth integration.\nLearn more about our [API Standards](https://developers.cvent.com/docs/rest-api/reference/api-standards)\n"
   contact:
     name: Cvent Development Platform
     url: https://developers.cvent.com/
-  description: 'Operations tagged Video across 2 of this provider''s published API definitions: cvent-event-cloud-rest-openapi.yml, cvent-rest-apis-openapi.yaml. Each path carries the servers of the definition it was published in.'
+  version: ea
 servers:
 - url: https://api-platform.cvent.com/ea
 - url: https://api-platform-eur.cvent.com/ea
 tags:
-- name: Video
-  description: Videos can be added to Cvent events with renditions at various resolutions, audio files, reactions tracks, and text tracks. Attendee viewership is tracked to get insight into durations, devices used and venue where the video is watched. Use these APIs to view and manage videos, related text tracks, and audio files. Use these APIs also to get insight into video viewership.
+- name: RFP Requirements
+  description: RFP requirements APIs for managing RFP-specific requirements including guest rooms, meeting rooms, custom questions, custom fields, and attachments (CRUD operations).
 paths:
-  /videos:
+  /rfps/{rfpId}/agenda-items:
     get:
       tags:
-      - Video
+      - RFP Requirements
+      summary: List RFP Agenda Items
+      description: Returns a paginated list of agenda items associated with an RFP.
+      operationId: listRfpAgendaItems
       security:
-      - OAuth2.authorizationCode:
-        - event/videos:read
       - OAuth2.clientCredentials:
-        - event/videos:read
-      summary: List Videos
-      description: Gets a paginated list of videos associated with your account or event.
-      operationId: listVideos
+        - rfp/rfp-agenda-items:read
+      - OAuth2.authorizationCode:
+        - rfp/rfp-agenda-items:read
       parameters:
-      - $ref: '#/components/parameters/after'
-      - $ref: '#/components/parameters/before'
+      - $ref: '#/components/parameters/rfpId'
       - $ref: '#/components/parameters/limit'
       - $ref: '#/components/parameters/token'
       - name: filter
         in: query
-        required: false
-        description: 'Use filter query parameters to limit results
+        description: 'A filter query string narrows search results and supports the combination of logical and comparison operators.
 
-          to data that matches your criteria. See
-
-          [Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.
+          The filter adheres to the pattern filter=''field'' comparisonType ''value''.
 
 
-          Supported fields and operators are listed below:
+          The following fields are filterable:
+
+          * id (in)
+
+          '
+        schema:
+          type: string
+          example: id in ('209a11d-5bf6-47d2-b81f-89360d7229b6')
+      responses:
+        '200':
+          description: Successfully retrieved a paginated list of agenda items associated with an RFP.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRfpAgendaItems'
+        '400':
+          $ref: '#/components/responses/BadRequest1'
+        '401':
+          $ref: '#/components/responses/Unauthorized1'
+        '403':
+          $ref: '#/components/responses/Forbidden1'
+        '404':
+          $ref: '#/components/responses/NotFound1'
+        '429':
+          $ref: '#/components/responses/TooManyRequests1'
+  /rfps/{rfpId}/agenda-items/schedules:
+    get:
+      tags:
+      - RFP Requirements
+      summary: List RFP Agenda Item Schedules
+      description: Returns paginated list of schedules for agenda items added on an RFP.
+      operationId: listRfpAgendaItemSchedules
+      security:
+      - OAuth2.clientCredentials:
+        - rfp/rfp-agenda-items:read
+      - OAuth2.authorizationCode:
+        - rfp/rfp-agenda-items:read
+      parameters:
+      - $ref: '#/components/parameters/rfpId'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/token'
+      responses:
+        '200':
+          description: Successfully retrieved a paginated list of RFP agenda item schedules.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRfpAgendaItemsSchedule'
+        '400':
+          $ref: '#/components/responses/BadRequest1'
+        '401':
+          $ref: '#/components/responses/Unauthorized1'
+        '403':
+          $ref: '#/components/responses/Forbidden1'
+        '404':
+          $ref: '#/components/responses/NotFound1'
+        '429':
+          $ref: '#/components/responses/TooManyRequests1'
+  /rfps/{rfpId}/attachments:
+    get:
+      tags:
+      - RFP Requirements
+      summary: List RFP Attachments
+      description: Returns paginated list of [attachments](#tag/RFP-Requirements) added on an RFP.
+      operationId: listRfpAttachments
+      security:
+      - OAuth2.clientCredentials:
+        - rfp/rfp-attachments:read
+      - OAuth2.authorizationCode:
+        - rfp/rfp-attachments:read
+      parameters:
+      - $ref: '#/components/parameters/rfpId'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/token'
+      - name: filter
+        in: query
+        description: 'A filter query string narrows search results and supports the combination of logical and comparison operators.
+
+          The filter adheres to the pattern filter=''field'' comparisonType ''value''.
 
 
-          | Field        | Operators  | Notes                            |
+          These are the comparison types that can be used in filter expressions:
 
-          |--------------|------------|----------------------------------|
+          * equal: eq
 
-          | id           | `eq`, `ne` |                                  |
-
-          | events       | `eq`, `ne` |                                  |
-
-          | sessions     | `eq`, `ne` |                                  |
-
-          | exhibitors   | `eq`, `ne` |                                  |
-
-          | speakers     | `eq`, `ne` |                                  |
-
-          | source.id    | `eq`, `ne` |                                  |
-
-          | status       | `eq`, `ne` |                                  |
-
-          | tags         | `eq`, `ne` |                                  |
-
-          | recording.id | `eq`, `ne` |                                  |
-
-          | event.id     | `eq`, `ne` | deprecated, use `events` instead |
+          * includes value(s): in
 
 
-          The following logical operators are supported for combining filters:
+          The following fields are filterable:
+
+          * sendInEmail (eq)
+
+          * supplier.id (in)
+
+          * supplierSpecific (eq)
+
+
+          The following operators are available:
 
           * and
 
@@ -77,172 +142,159 @@ paths:
           '
         schema:
           type: string
-          example: events eq '04ca6ae2-0dc3-487b-953e-86d6abbdf7d3' and source.id ne 'sampleWebcastSystemId'
-      - name: deleted
-        in: query
-        required: false
-        description: True means only videos marked as deleted will be queried. False means only non-deleted videos will be queried.
-        schema:
-          type: boolean
-          default: false
-          example: true
+          example: supplierSpecific eq 'false' or supplier.id in ('37f2de41-6f50-484a-a55d-3cf0ede2ebac','f56a51a4-84b0-46c9-a612-716dc95a1c96') AND sendInEmail eq 'false'
       responses:
         '200':
-          description: Successfully retrieved a paginated list of videos.
-          headers: {}
+          description: Successfully retrieved a paginated list of RFP Attachments.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/videos-paginated-response'
+                $ref: '#/components/schemas/PaginatedRfpAttachments'
         '400':
           $ref: '#/components/responses/BadRequest1'
         '401':
           $ref: '#/components/responses/Unauthorized1'
         '403':
           $ref: '#/components/responses/Forbidden1'
+        '404':
+          $ref: '#/components/responses/NotFound1'
         '429':
           $ref: '#/components/responses/TooManyRequests1'
-      deprecated: false
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
-  /videos/views:
+  /rfps/{rfpId}/custom-fields/answers:
     get:
       tags:
-      - Video
+      - RFP Requirements
+      summary: List RFP Custom Fields Answers
+      description: Returns a paginated list of answers for each custom field associated with a given RFP.
+      operationId: listRfpCustomFields
       security:
-      - OAuth2.authorizationCode:
-        - event/video-views:read
       - OAuth2.clientCredentials:
-        - event/video-views:read
-      summary: List Video Views
-      description: Gets a paginated list of video views
-      operationId: getVideoViews
+        - rfp/rfp-custom-fields:read
+      - OAuth2.authorizationCode:
+        - rfp/rfp-custom-fields:read
       parameters:
-      - $ref: '#/components/parameters/after'
-      - $ref: '#/components/parameters/before'
+      - $ref: '#/components/parameters/rfpId'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/token'
+      - $ref: '#/components/parameters/customFieldExpand'
+      responses:
+        '200':
+          description: Successfully retrieved a paginated list of RFP custom field answers.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRfpCustomField'
+        '400':
+          $ref: '#/components/responses/BadRequest1'
+        '401':
+          $ref: '#/components/responses/Unauthorized1'
+        '403':
+          $ref: '#/components/responses/Forbidden1'
+        '404':
+          $ref: '#/components/responses/NotFound1'
+        '429':
+          $ref: '#/components/responses/TooManyRequests1'
+  /rfps/{rfpId}/guest-rooms:
+    get:
+      tags:
+      - RFP Requirements
+      summary: Get RFP Guest Rooms
+      description: Returns guest room requirements associated with an RFP.
+      operationId: getRfpGuestRooms
+      security:
+      - OAuth2.clientCredentials:
+        - rfp/rfp-guest-rooms:read
+      - OAuth2.authorizationCode:
+        - rfp/rfp-guest-rooms:read
+      parameters:
+      - $ref: '#/components/parameters/rfpId'
+      responses:
+        '200':
+          description: Successfully returns the guest room requirements associated with an RFP.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RfpGuestRooms'
+        '401':
+          $ref: '#/components/responses/Unauthorized1'
+        '403':
+          $ref: '#/components/responses/Forbidden1'
+        '404':
+          $ref: '#/components/responses/NotFound1'
+        '429':
+          $ref: '#/components/responses/TooManyRequests1'
+  /rfps/{rfpId}/internal-documents:
+    get:
+      tags:
+      - RFP Requirements
+      summary: List RFP Internal Documents
+      description: Returns paginated list of [internal documents](#tag/RFP-Requirements) added on an RFP.
+      operationId: listRfpInternalDocuments
+      security:
+      - OAuth2.clientCredentials:
+        - rfp/rfp-internal-documents:read
+      - OAuth2.authorizationCode:
+        - rfp/rfp-internal-documents:read
+      parameters:
+      - $ref: '#/components/parameters/rfpId'
       - $ref: '#/components/parameters/limit'
       - $ref: '#/components/parameters/token'
       - name: filter
         in: query
-        required: false
-        description: 'Use filter query parameters to limit results
+        description: 'A filter query string narrows search results and supports the combination of logical and comparison operators.
 
-          to data that matches your criteria. See
-
-          [Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.
+          The filter adheres to the pattern filter=''field'' comparisonType ''value''.
 
 
-          Supported fields and operators are listed below:
+          The following fields are filterable:
 
-
-          | Field                  | Operators | Notes      |
-
-          |------------------------|-----------|------------|
-
-          | contact.id             | `eq`      |            |
-
-          | solution               | `eq`      |            |
-
-          | device.type            | `eq`      | deprecated |
-
-          | device.operatingSystem | `eq`      | deprecated |
-
-          | video.id               | `eq`      |            |
-
-          | type                   | `eq`      |            |
-
-
-          The filter query supports maximum three fields in a filter expression.
-
-
-          The following logical operators are supported for combining filters:
-
-          * and
+          * id (in)
 
           '
         schema:
           type: string
-          example: contact.id eq '123e4567-e89b-12d3-a456-426614174000' and solution eq 'EVENTS_PLUS'
+          example: id in ('209a11d-5bf6-47d2-b81f-89360d7229b6')
       responses:
         '200':
-          description: Successfully retrieved paginated list of videos watched.
-          headers: {}
+          description: Successfully retrieved a paginated list of RFP internal documents.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/video-views-paginated-response'
+                $ref: '#/components/schemas/PaginatedInternalDocuments'
         '400':
           $ref: '#/components/responses/BadRequest1'
         '401':
           $ref: '#/components/responses/Unauthorized1'
         '403':
           $ref: '#/components/responses/Forbidden1'
+        '404':
+          $ref: '#/components/responses/NotFound1'
         '429':
           $ref: '#/components/responses/TooManyRequests1'
-      deprecated: false
-      externalDocs:
-        description: More about OAuth2 authorization code support for administrators
-        url: '#oauth2-auth-code-planner-admin'
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
-  /videos/{videoId}/audio-tracks:
+  /rfps/{rfpId}/questions:
     parameters:
-    - $ref: '#/components/parameters/videoId1'
+    - $ref: '#/components/parameters/rfpId'
     get:
       tags:
-      - Video
+      - RFP Requirements
+      summary: List RFP Questions
+      description: Returns a paginated list of standard and custom questions associated with the given RFP. Does not include answer details.
+      operationId: listRfpQuestions
       security:
-      - OAuth2.authorizationCode:
-        - event/videos:read
       - OAuth2.clientCredentials:
-        - event/videos:read
-      summary: List Audio Tracks
-      description: Gets a list of audio tracks for a specific video ID.
-      operationId: listAudioTracks
+        - rfp/rfp-questions:read
+      - OAuth2.authorizationCode:
+        - rfp/rfp-questions:read
+      parameters:
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/token'
       responses:
         '200':
-          description: Successfully retrieved a list of audio tracks.
-          headers: {}
+          description: Successfully retrieved a paginated list of RFP questions.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/audio-tracks-response'
-        '401':
-          $ref: '#/components/responses/Unauthorized1'
-        '403':
-          $ref: '#/components/responses/Forbidden1'
-        '404':
-          $ref: '#/components/responses/NotFound1'
-        '429':
-          $ref: '#/components/responses/TooManyRequests1'
-      deprecated: false
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
-  /videos/{videoId}/renditions:
-    parameters:
-    - $ref: '#/components/parameters/videoId1'
-    get:
-      tags:
-      - Video
-      security:
-      - OAuth2.authorizationCode:
-        - event/videos:read
-      - OAuth2.clientCredentials:
-        - event/videos:read
-      summary: List Video Renditions
-      description: Gets a list of video renditions for a specific video ID.
-      operationId: listVideoRenditions
-      responses:
-        '200':
-          description: Successfully retrieved a list of renditions.
-          headers: {}
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/video-renditions-response'
+                $ref: '#/components/schemas/PaginatedRfpQuestions'
         '400':
           $ref: '#/components/responses/BadRequest1'
         '401':
@@ -253,432 +305,442 @@ paths:
           $ref: '#/components/responses/NotFound1'
         '429':
           $ref: '#/components/responses/TooManyRequests1'
-      deprecated: false
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
-  /videos/{videoId}/text-tracks:
-    parameters:
-    - $ref: '#/components/parameters/videoId1'
-    post:
-      tags:
-      - Video
-      security:
-      - OAuth2.authorizationCode:
-        - event/videos:write
-      - OAuth2.clientCredentials:
-        - event/videos:write
-      operationId: createTextTrack
-      summary: Create Text Track
-      description: Creates a new text track (VTT) object for a specific video. This endpoint does not directly handle the upload of VTT files but instead returns a location URL that you use to perform the upload.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/video-text-track'
-        required: true
-      responses:
-        '201':
-          description: Text track was successfully created for the video.
-          headers: {}
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/existing-video-text-track'
-        '400':
-          $ref: '#/components/responses/BadRequest1'
-        '401':
-          $ref: '#/components/responses/Unauthorized1'
-        '403':
-          $ref: '#/components/responses/Forbidden1'
-        '404':
-          $ref: '#/components/responses/NotFound1'
-        '429':
-          $ref: '#/components/responses/TooManyRequests1'
-      deprecated: false
-    get:
-      tags:
-      - Video
-      security:
-      - OAuth2.authorizationCode:
-        - event/videos:read
-      - OAuth2.clientCredentials:
-        - event/videos:read
-      summary: List Text Tracks
-      description: Gets a list of video text tracks for a specific video ID.
-      operationId: listVideoTextTracks
-      responses:
-        '200':
-          description: Successfully retrieved a list of text tracks.
-          headers: {}
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/video-text-tracks-response'
-        '401':
-          $ref: '#/components/responses/Unauthorized1'
-        '403':
-          $ref: '#/components/responses/Forbidden1'
-        '404':
-          $ref: '#/components/responses/NotFound1'
-        '429':
-          $ref: '#/components/responses/TooManyRequests1'
-      deprecated: false
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
-  /videos/{videoId}/text-tracks/{textTrackId}:
-    parameters:
-    - $ref: '#/components/parameters/videoId1'
-    - $ref: '#/components/parameters/textTrackId'
-    put:
-      tags:
-      - Video
-      security:
-      - OAuth2.authorizationCode:
-        - event/videos:write
-      - OAuth2.clientCredentials:
-        - event/videos:write
-      summary: Update Text Track
-      description: 'Updates a specific video text track by ID. This is done by setting the status to Updating within the body of this call,
-
-        which will prompt the service to return a signed upload link in the returned entity.
-
-        '
-      operationId: updateTextTrack
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/existing-video-text-track'
-        required: true
-      responses:
-        '200':
-          description: Successfully updated a video text track.
-          headers: {}
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/existing-video-text-track'
-        '400':
-          $ref: '#/components/responses/BadRequest1'
-        '401':
-          $ref: '#/components/responses/Unauthorized1'
-        '403':
-          $ref: '#/components/responses/Forbidden1'
-        '404':
-          $ref: '#/components/responses/NotFound1'
-        '429':
-          $ref: '#/components/responses/TooManyRequests1'
-      deprecated: false
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
 components:
   schemas:
-    VideoAssetID:
-      title: Video Asset ID
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          description: The identifier of a video.
-          type: string
-          format: uuid
-          example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
-      description: Video that this asset was created with.
-    VideoView:
-      title: VideoView
-      description: Details of a single video view
-      type: object
-      properties:
-        contact:
-          $ref: '#/components/schemas/Contact2'
-        solution:
-          $ref: '#/components/schemas/Solution'
-        device:
-          $ref: '#/components/schemas/Device1'
-        video:
-          $ref: '#/components/schemas/Video1'
-        type:
-          $ref: '#/components/schemas/ViewType1'
-        totalDuration:
-          type: integer
-          format: int64
-          description: The total duration of the video (in milliseconds).
-          example: 233000
-        watchDuration:
-          type: integer
-          format: int64
-          description: The total duration of the video watched by the viewer (in milliseconds).
-          example: 153600
-        watchPercentage:
-          type: number
-          description: The percentage of the video watched by the viewer.
-          example: 52
-    existing-video-text-track:
-      title: ExistingVideoTextTrack
-      description: An existing video text track.
-      type: object
-      required:
-      - id
-      - status
-      allOf:
-      - $ref: '#/components/schemas/video-text-track'
-      properties:
-        id:
-          title: Video text track ID
-          type: string
-          format: uuid
-          example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
-          description: The identifier of a video text track.
-          readOnly: true
-        url:
-          $ref: '#/components/schemas/AssetLocation'
-        errorMessage:
-          description: A message indicating the error processing the text track, if any.
-          type: string
-          example: Input file was empty
-    VideoWarningCode:
-      title: VideoWarningCode
-      description: This is used to denote the warning codes for a video entity.
-      enum:
-      - 700
-      type: integer
-      example: 700
-    video-text-tracks-response:
-      title: VideoTextTracksResponse
-      description: The response from a request to get the list of video text tracks.
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/existing-video-text-track'
-          description: Collection of video text tracks.
-    EncodingProfile:
-      title: EncodingProfile
-      enum:
-      - Planner
-      - Attendee
-      type: string
-      description: Denotes the profile to use when encoding the video. Planner profile is for encoding high-quality event content, like session videos. Attendee profile is for encoding lower-quality content intended to go on attendee profiles and social feeds in the event.
-      example: Planner
-      default: Planner
-    Video1:
-      title: Video
-      type: object
-      description: The details of a video
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: The unique ID of the video.
-          example: 456e4567-e89b-12d3-a456-426614174000
-    AudioTrackStatus:
-      title: AudioTrackStatus
-      enum:
-      - Started
-      - Uploaded
-      - Scanning
-      - Scanned
-      - Syncing
-      - Rejected
-      - Error
-      - Available
-      type: string
-      description: Denotes the status of an audio track. Started indicates the request to upload in the API was submitted, and the URL you'll upload an audio track to was returned. Uploaded indicates that the upload was completed. Scanning indicates a virus scan is happening in a quarantine location; Scanned indicates a successful virus scan. Syncing indicates a complete virus scan, and now transcoding has begun. Rejected indicates a failed virus scan. Error indicates there was a problem processing the audio track. Available indicates the audio track is available for use.
-      example: Started
-    VideoClip:
-      title: VideoClip
-      description: Video clip details.
-      type: object
-      properties:
-        start:
-          type: string
-          description: The timecode to start the clip in HH:MM:SS:FF format
-          example: 00:01:01:00
-          pattern: ^([01][0-9]|2[0-4]):[0-5][0-9]:[0-5][0-9][:;][0-9]{2}$
-        end:
-          type: string
-          description: The timecode to end the clip in HH:MM:SS:FF format.
-          example: 00:05:00:00
-          pattern: ^([01][0-9]|2[0-4]):[0-5][0-9]:[0-5][0-9][:;][0-9]{2}$
-    ThumbnailStatus:
-      title: ThumbnailStatus
-      enum:
-      - Started
-      - Uploaded
-      - Processing
-      - Available
-      - Rejected
-      type: string
-      description: Denotes the status of a thumbnail. Started indicates the request to upload in the API was submitted, and the URL you'll upload a thumbnail to was returned. Uploaded indicates that the upload was completed. Processing indicates that a virus scan is in progress. Available indicates the thumbnail passed the scan and is ready for use. Rejected indicates there was a problem processing the thumbnail.
-      example: Started
-    VideoRenditionType:
-      title: VideoRenditionType
-      enum:
-      - Hls
-      - HlsMaster
-      - Mp4
-      - Poster
-      - Mp4Preview
-      - Mp3
-      - Audio
-      type: string
-      description: Denotes the type of rendition.
-      example: Hls
-    videos-paginated-response:
-      title: VideoPaginatedResponse
-      description: The response from a request to get the list of videos.  This includes the paging object as well as the collection of videos.
-      required:
-      - paging
-      - data
+    PaginatedRfpAgendaItemsSchedule:
+      title: PaginatedRfpAgendaItemsSchedule
+      description: Paginated list of agenda items schedule attached to an RFP.
       type: object
       properties:
         paging:
           $ref: '#/components/schemas/Paging'
         data:
+          description: List of agenda items schedule attached to an RFP.
           type: array
           items:
-            $ref: '#/components/schemas/existing-video-response'
-          description: Collection of videos.
-    VideoWarnings:
-      title: VideoWarnings
-      description: This is used to denote the warnings for a video entity.
-      type: array
-      readOnly: true
-      minItems: 0
-      maxItems: 100
-      items:
-        $ref: '#/components/schemas/VideoWarning'
-    VideoWarning:
-      title: VideoWarning
-      description: This is used to denote the warnings for a video entity.
-      properties:
-        code:
-          $ref: '#/components/schemas/VideoWarningCode'
-        message:
-          type: string
-          description: Warning message for the video. Message is a developer convenience never to be used in any context that needs localisation, subject to change at any time.
-          example: 'Video with ID: 5779387f-3f50-4685-8641-b25a2909845f has a bitrate of 586 kbps, which is lower than the minimum allowed bitrate of 3500 kbps.'
-      required:
-      - code
-      - message
-    VideoErrors:
-      title: VideoErrors
-      description: This is used to denote the errors for a video entity.
-      type: array
-      readOnly: true
-      minItems: 0
-      maxItems: 100
-      items:
-        $ref: '#/components/schemas/VideoError'
-    video:
-      title: Video
-      description: Event video.
+            $ref: '#/components/schemas/RfpAgendaItemScheduleWithId'
+    QuestionClassificationType:
+      type: string
+      title: QuestionClassificationType
+      description: 'Indicates the types of RFP that can be assigned this custom question. `MEETING_ROOM`: Meeting room type RFPs can be assigned this custom question. `GUEST_ROOM`: Guest room type RFPs can be assigned this custom question. `ALL_RFPS`:  All RFPs can be assigned this custom question.'
+      enum:
+      - MEETING_ROOM
+      - GUEST_ROOM
+      - ALL_RFPS
+    Choice:
+      title: Choice
+      description: A question choice.
       type: object
       allOf:
-      - $ref: '#/components/schemas/VideoBase'
+      - $ref: '#/components/schemas/TextField'
       properties:
-        type:
-          $ref: '#/components/schemas/VideoType'
-        event:
-          title: UUID
-          required:
-          - id
-          type: object
-          properties:
-            id:
-              title: UUID Property
-              description: The ID of an event.
-              type: string
-              format: uuid
-              example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
-          description: Event video asset was created with. This field has been deprecated. Use events instead.
-          deprecated: true
-        hlsInputs:
-          type: array
-          description: List of locations for HLS recordings that will be combined to form a new video. This field has been deprecated. Use hlsInputsWithClips instead.
-          items:
-            type: string
-          default: []
-          deprecated: true
-        hlsInputsWithClips:
-          type: array
-          items:
-            $ref: '#/components/schemas/HlsInputWithClips'
-          description: A list of input object locations & clip information for HTTP Live Streaming (HLS) recordings. Used to trim & stitch all inputs together to form a new video.
-        recording:
-          title: Recording details
-          description: Recording details of video to be transcoded
-          required:
-          - id
-          type: object
-          properties:
-            id:
-              description: Entity ID of recording.
-              type: string
-              format: uuid
-              example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
-        encodingProfile:
-          $ref: '#/components/schemas/EncodingProfile'
-    video-renditions-response:
-      title: VideoRenditionsResponse
-      description: The response from a request to get the list of video renditions.
+        label:
+          type: string
+          description: Label of choice.
+          example: Choice A
+    FieldType:
+      title: FieldType
+      enum:
+      - DateTime
+      - MultiChoice
+      - Number
+      - SingleChoice
+      - Text
+      type: string
+      description: 'Determines the required format for a field. `DateTime`: Data is in date-time format. `MultiChoice`: Data is one or more options from a list. `Number`: Data is a number. `SingleChoice`: Data is a a single option from a list. `Text`: Data is free-text input.'
+    GuestRoomOccupancyPerRoomType:
+      title: GuestRoomOccupancyPerRoomType
+      description: Room occupancy for a room type.
       type: object
       properties:
+        occupancy:
+          $ref: '#/components/schemas/GuestRoomOccupancy'
+        type:
+          $ref: '#/components/schemas/GuestRoomType'
+    text-answer-format:
+      description: 'Text answer format. Used for `OpenEndedTextOneLine` question types.`CustomFormat`: Answers must follow a planner defined custom format. `EmailAddress`: Answers must follow the pattern of an email address. `General`: Answers can be any string. `USPhoneNumber`: Answers must be formatted as a phone number.'
+      type: string
+      enum:
+      - CustomFormat
+      - EmailAddress
+      - General
+      - USPhoneNumber
+    PaginatedRfpQuestions:
+      title: PaginatedRfpQuestions
+      description: Paginated response containing questions associated to an RFP.
+      type: object
+      properties:
+        paging:
+          $ref: '#/components/schemas/Paging'
         data:
+          description: List of questions associated to an RFP.
           type: array
           items:
-            $ref: '#/components/schemas/VideoRendition'
-          maxItems: 11
-          description: Collection of video renditions.
-    VideoErrorCode:
-      title: VideoErrorCode
-      description: This is used to denote the error codes for a video entity.
-      enum:
-      - 600
-      - 601
-      - 602
-      - 603
-      - 604
-      - 605
-      - 606
-      - 607
-      - 608
-      type: integer
-      example: 601
-    VideoError:
-      title: VideoError
-      description: This is used to denote the errors for a video entity.
-      properties:
-        code:
-          $ref: '#/components/schemas/VideoErrorCode'
-        message:
-          type: string
-          description: Error message for the video. Message is a developer convenience never to be used in any context that needs localisation, subject to change at any time.
-          example: Transcoding failed due to an unsupported video codec.
-      required:
-      - code
-      - message
-    AudioTrackType:
-      title: AudioTrackType
-      enum:
-      - asf
-      - wma
-      - wmv
-      - mp3
-      - ts
-      - mp4
-      - mka
-      - oga
-      - mov
-      - wav
+            $ref: '#/components/schemas/RfpQuestion'
+    numeric-answer-format:
       type: string
-      description: Denotes the file format of the audio track.
-      example: mp3
+      description: The answer format that a given number is stored in.
+      enum:
+      - Currency
+      - Decimal
+      - Number
+    TextField:
+      title: TextField
+      description: A survey text field.
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Text field ID.
+          readOnly: true
+        text:
+          type: string
+          description: Text value of the field. Displays to users in the UI.
+          example: Are you spending any significant time offsite and need transportation?
+        shortText:
+          type: string
+          description: Concise version or abbreviation of the question text. Set by the planner to simplify presentation of the question in reports.
+          example: Needs offsite transportation?
+    RfpQuestion:
+      title: RfpQuestion
+      description: Question associated with an RFP.
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/QuestionCommon'
+      properties:
+        supplierTypes:
+          type: array
+          description: List of supplier types that can view the question on the RFP.
+          items:
+            $ref: '#/components/schemas/SupplierType'
+          uniqueItems: true
+          example:
+          - CVB
+          - HOTEL
+        classificationType:
+          $ref: '#/components/schemas/QuestionClassificationType'
+        order:
+          type: integer
+          description: Determines the display order for questions on the RFP. Questions with smaller values appear first.
+          example: 1
+          minimum: 1
+        standardQuestion:
+          $ref: '#/components/schemas/StandardQuestion'
+        aiQuestionGenerationSource:
+          type: string
+          maxLength: 100
+          readOnly: true
+          description: Represents the AI generation source for the custom question on RFP. This field is set during question creation and cannot be modified afterwards.
+          example: MCP-Visual Studio Code/1.107.1
+    DocumentType-1:
+      type: string
+      title: DocumentType
+      readOnly: true
+      description: The document type.
+      enum:
+      - AI
+      - AVI
+      - BMP
+      - DOC
+      - DOCX
+      - EML
+      - EPS
+      - FLV
+      - GIF
+      - HTM
+      - HTML
+      - ICS
+      - JFIF
+      - JPEG
+      - JPG
+      - LINK
+      - MOV
+      - MP4
+      - MSG
+      - ONE
+      - OST
+      - PDF
+      - PNG
+      - PPT
+      - PPTX
+      - PST
+      - SVG
+      - TIF
+      - TIFF
+      - TXT
+      - WMV
+      - XLS
+      - XLSX
+    QuestionCommon:
+      title: QuestionCommon
+      description: Base model with common properties for a question.
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Audit'
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the question.
+          readOnly: true
+        text:
+          type: string
+          description: Text value of the question field. Displays to users in the UI.
+          example: Are you spending any significant time offsite and need transportation?
+        shortText:
+          type: string
+          description: Concise version or abbreviation of the question text. Set by the planner to simplify presentation of the question in reports.
+          example: Needs offsite transportation?
+        htmlText:
+          type: string
+          description: Html of the question.
+          example: Question Html
+          maxLength: 5000
+        code:
+          type: string
+          description: Question code is unique identifier for every questions within a survey (can be same across surveys). This code is used in reporting and in question and answer data tags for emails. With every new question a random question code is generated.
+          example: 4l6x
+          maxLength: 30
+        type:
+          $ref: '#/components/schemas/QuestionType'
+        choices:
+          type: array
+          description: List of choices for the question.
+          items:
+            $ref: '#/components/schemas/Choice'
+          maxItems: 100
+        categories:
+          type: array
+          description: List of categories for the question.
+          items:
+            $ref: '#/components/schemas/Category'
+          maxItems: 100
+        subCategories:
+          type: array
+          description: List of sub categories for matrix side-by-side questions.
+          items:
+            $ref: '#/components/schemas/TextField'
+          maxItems: 100
+        notApplicableAnswer:
+          $ref: '#/components/schemas/AdditionalChoice'
+        otherAnswer:
+          $ref: '#/components/schemas/AdditionalChoice'
+        comments:
+          type: string
+          description: Text Value of Comments Input box placeholder.
+          example: Comments Text
+          maxLength: 16000
+        required:
+          type: boolean
+          default: false
+          description: True indicates this is a mandatory question field.
+          example: true
+        fields:
+          type: array
+          description: List of fields for form/matrix questions.
+          items:
+            $ref: '#/components/schemas/Field'
+          maxItems: 100
+        maxScore:
+          type: number
+          description: Max possible score.
+          example: 20
+          minimum: 0
+        totalSum:
+          type: integer
+          description: Total configured sum of all choices for number allocation question.
+          example: 45
+        choiceSortOrder:
+          $ref: '#/components/schemas/choice-sort-order'
+        displayType:
+          $ref: '#/components/schemas/display-type'
+        minSelection:
+          type: integer
+          description: Minimum number of choices that must be selected.
+          example: 1
+          default: 0
+        maxSelection:
+          type: integer
+          description: Maximum number of choices that can be selected.
+          example: 3
+          default: 0
+        minDate:
+          type: string
+          format: date
+          description: The earliest date that can be selected, starting from or after this date.
+          example: '2020-01-01'
+        maxDate:
+          type: string
+          format: date
+          description: The latest date that can be selected, up to or before this date.
+          example: '2020-12-31'
+        showDateSelector:
+          type: boolean
+          description: Indicates if this is a date range question.
+          example: true
+        showCurrentDate:
+          type: boolean
+          description: Indicates if the current date should be shown.
+          example: true
+        dateAnswerFormat:
+          $ref: '#/components/schemas/date-answer-format'
+        numericAnswerFormat:
+          $ref: '#/components/schemas/numeric-answer-format'
+        unitLabel:
+          type: string
+          description: Label to add before or after textbox.
+          example: miles
+        unitPosition:
+          $ref: '#/components/schemas/unit-position'
+        minLength:
+          type: integer
+          description: Minimum number of characters that must be entered.
+          example: 5
+          default: 0
+        maxLength:
+          type: integer
+          description: Maximum number of characters that can be entered.
+          example: 100
+          default: 500
+        textAnswerFormat:
+          $ref: '#/components/schemas/text-answer-format'
+        customAnswerFormat:
+          type: object
+          description: An object that contains custom answer format data.
+          properties:
+            id:
+              type: integer
+              description: The unique identifier of the custom answer format for the account.
+              example: 104
+    RfpAttachment:
+      type: object
+      title: RfpAttachment
+      description: This object contains Rfp specific attachments attributes.
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for this attachment record.
+          example: f56a51a4-84b0-46c9-a612-716dc95a1c96
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          description: ISO 8601 date-time the attachment was uploaded.
+          example: '2021-01-13T14:06:20.080Z'
+          readOnly: true
+        size:
+          type: integer
+          format: int64
+          description: The size of attachment in bytes.
+          example: 777835
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/DocumentType-1'
+        secure:
+          type: boolean
+          description: True indicates the attachment is uploaded behind a secured URL.
+          example: true
+          readOnly: true
+        name:
+          type: string
+          description: Display name of the attachment.
+          example: BudgetCostSavings
+          readOnly: true
+        uniqueName:
+          type: string
+          description: Name of the attachment. Must be unique in the account.
+          example: 183f9efaa4c14070985782ee31abbf3c.jpg
+          readOnly: true
+        mimeType:
+          type: string
+          description: The content type of the attachment
+          example: image/jpeg
+          readOnly: true
+        source:
+          $ref: '#/components/schemas/AttachmentSource'
+        relativePath:
+          type: string
+          description: The file path pointing to where the attachment is stored in Cvent. This path is relative to the base URL of the storage system and omits the root address.
+          example: 0B7DEF22676A4434982BDAD2D6EC591F/files/supplier/0713cef78d4e4d818899d4522022d5ad/73ab2e3054fd4321a5e0f846a7adb0d7.jpg
+          readOnly: true
+        sendInEmail:
+          type: boolean
+          description: True indicates the attachment should be sent in emails that notify suppliers about RFPs.
+          example: false
+        deletionAllowed:
+          type: boolean
+          description: True indicates this attachment can be deleted.
+          example: true
+        url:
+          type: string
+          format: uri
+          description: URL of the attachment if `secure` is false. This field is null if `secure` is true.
+          example: https://custom.t2.cvent.com/0B7DEF22676A4434982BDAD2D6EC591F/files/supplier/0713cef78d4e4d818899d4522022d5ad/73ab2e3054fd4321a5e0f846a7adb0d7.jpg
+          readOnly: true
+        supplier:
+          type: object
+          description: Supplier associated with the attachment.
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: ID of the supplier.
+              example: C20A0114-2635-48C3-9F59-9386361B517B
+        supplierSpecific:
+          type: boolean
+          description: True indicates the attachment is only shown in the UI to the supplier whose ID is present in supplier.id field.
+          example: true
+        selectedForSupplier:
+          type: boolean
+          description: True indicates the attachment is selected for the supplier whose ID is present in supplier.id field.
+          example: true
+    AttachmentSource:
+      type: string
+      title: AttachmentSource
+      description: The source from where the attachment was uploaded.
+      enum:
+      - FILE_COPY_ADMIN_LIBRARY
+      - FILE_UPLOAD_LINK_URL
+      - FILE_UPLOAD_TO_CUSTOM_DRIVE
+      - FILE_UPLOAD_TO_TEMP_LOCATION
+      - USER_DOCUMENT_LINK_URL
+    CustomFieldAnswers:
+      title: RfpCustomField
+      description: This object contains RFP custom fields attributes only.
+      type: object
+      properties:
+        customField:
+          title: ExpandableCustomObject
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: Unique identifier for custom field.
+              example: 50dc08af-24a9-4d01-84be-3d43133dc945
+          type: object
+          readOnly: true
+          description: 'An object containing custom field data. By default, contains only the field ID.
+
+
+            This is an **expandable** object. When requested via the `expand` query parameter with value `customField`, this object expands to include all properties of a custom field definition.
+
+
+            See the `expand` parameter documentation and refer to the [Get Custom Field](#tag/Custom-Fields/operation/getCustomField) API for the complete expanded schema.'
+        answers:
+          type: array
+          description: List of answers for the RFP custom field.
+          maxItems: 100
+          items:
+            type: string
+            description: Answer String
+            example: Choice 1
+      required:
+      - customField
+      - answers
     ErrorResponse:
       title: ErrorResponse
       description: Represents an error response with additional details of cascading error messages.
@@ -694,278 +756,311 @@ components:
           items:
             $ref: '#/components/schemas/ErrorResponseBase'
           description: Additional details of cascading error messages.
-    AudioTrackVariant:
-      title: AudioTrackVariant
-      enum:
-      - Main
-      - Alternate
-      - Commentary
-      - Dub
-      - Descriptive
+    date-answer-format:
       type: string
-      default: Alternate
-      description: Denotes the variant of an audio track. Main is the primary audio track for this video. Alternate is a possible alternative to the main track. Commentary is a commentary on the primary audio or video track, e.g. a director's commentary. Dub is a translated version of the main audio track. Descriptive is an audio description of a video track.
-      example: Alternate
-    AssetLocation:
-      title: Asset Location
-      description: A URL associated with the asset.
-      required:
-      - href
-      type: object
-      properties:
-        href:
-          type: string
-          description: A pre-signed URL with an expiration of 2 hours to the asset's location.
-          example: https://ap-southeast-2.example.com/sign2-bucket-hchq3nwuo8ns/sign-demo.json?X-Exa-Date=20170125T044127Z&X-Exa-Expires=60&X-Exa-Signature=24db05
-          readOnly: true
-    VideoTextTrackStatus:
-      title: VideoTextTrackStatus
+      description: 'The answer format that a given date is stored in. `Date`: Answer format is stored in Date format. `DateTime`: Answer format is stored in DateTime format. `Time`: Answer format is stored in Time format.'
       enum:
-      - Started
-      - Uploaded
-      - Processing
-      - Available
-      - Rejected
-      - Updating
-      - Translating
-      - Transcribing
-      - Error
-      type: string
-      description: Denotes the status of a video text track (VTT). Started indicates a request to upload in the API, and the URL to upload to was returned. Uploaded indicates that the upload was completed. Available indicates the VTT is available for use. Rejected indicates a failed virus scan. Error indicates there was a problem processing the VTT.
-      example: Started
-    VideoRendition:
-      title: VideoRendition
-      description: Video rendition
+      - Date
+      - DateTime
+      - Time
+      default: DateTime
+    RfpInternalDocument:
       type: object
-      allOf:
-      - $ref: '#/components/schemas/Audit'
-      properties:
-        video:
-          $ref: '#/components/schemas/VideoAssetID'
-        type:
-          $ref: '#/components/schemas/VideoRenditionType'
-        location:
-          title: Link
-          required:
-          - href
-          type: object
-          properties:
-            href:
-              type: string
-              description: A pre-signed URL with an expiration of 2 hours that provides the location.
-              example: https://example.com/M8/7f378243-2c62-49fa-82e9-90e5498d30c3?Policy=eyJTdGF0ZW1lbnUysx5cE4-KWfUQ__&Key-Pair-Id=K6XDZ8UJY4Q0X
-          description: Location where the rendition is stored.
-        width:
-          type: integer
-          description: The video's frame width in pixels.
-          example: 300
-        height:
-          type: integer
-          description: The video's frame height in pixels.
-          example: 400
-    video-text-track:
-      title: VideoTextTrack
-      description: Video text track
-      type: object
-      required:
-      - language
-      - kind
-      allOf:
-      - $ref: '#/components/schemas/Audit'
-      properties:
-        video:
-          $ref: '#/components/schemas/VideoAssetID'
-        label:
-          type: string
-          description: Name of the text track.
-          maxLength: 300
-          example: English
-        language:
-          type: string
-          description: IETF language tag for the text track.
-          maxLength: 35
-          example: en-US
-        kind:
-          $ref: '#/components/schemas/VideoTextTrackKind'
-        published:
-          description: True means that this text track has been published for your client.
-          type: boolean
-          default: true
-        default:
-          description: True indicates this is the default text track. Each kind of text track can have a separate default assigned.
-          type: boolean
-          default: false
-        status:
-          $ref: '#/components/schemas/VideoTextTrackStatus'
-        autoGenerated:
-          description: True indicates this text track was generated via machine transcription of the audio.
-          type: boolean
-          default: false
-    existing-video-response:
-      title: ExistingVideoResponse
-      description: Response schema for GET/List endpoints, extending ExistingVideo and adding errors/warnings.
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/existing-video'
-      properties:
-        errors:
-          $ref: '#/components/schemas/VideoErrors'
-        warnings:
-          $ref: '#/components/schemas/VideoWarnings'
-    existing-video:
-      title: ExistingVideo
-      description: Existing event video.
-      type: object
+      title: RfpInternalDocument
+      description: This object contains RFP specific internal documents attributes only.
       required:
       - id
-      allOf:
-      - $ref: '#/components/schemas/video'
       properties:
         id:
-          title: Video ID
-          description: The identifier of a video.
           type: string
           format: uuid
-          example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
-        url:
-          $ref: '#/components/schemas/AssetLocation'
+          description: Unique ID of the file.
+          example: f56a51a4-84b0-46c9-a612-716dc95a1c96
+        created:
+          type: string
+          format: date-time
+          description: ISO 8601 date-time the document was uploaded.
+          example: '2021-01-13T14:06:20.080Z'
+        name:
+          type: string
+          description: Display name of the document.
+          example: BudgetCostSavings
+        uniqueName:
+          type: string
+          description: Name of the document. Must be unique in the account.
+          example: 183f9efaa4c14070985782ee31abbf3c.jpg
+          readOnly: true
         size:
           type: integer
           format: int64
-          maximum: 10737418240
-          description: File size in bytes for the video asset.
-          example: 32768
+          description: The size of document in bytes.
+          example: 777835
           readOnly: true
-        sessions:
-          description: Sessions associated with the video asset.
-          type: array
-          items:
-            $ref: '#/components/schemas/UUIDProperty'
-          maxItems: 50
-          readOnly: true
-        exhibitors:
-          description: Exhibitors associated with the video asset.
-          type: array
-          items:
-            $ref: '#/components/schemas/UUIDProperty'
-          maxItems: 50
-          readOnly: true
-        speakers:
-          description: Speakers associated with the video asset.
-          type: array
-          items:
-            $ref: '#/components/schemas/UUIDProperty'
-          maxItems: 50
-          readOnly: true
-        uploadStarted:
+        url:
           type: string
-          format: date-time
-          description: The ISO 8601 zoned date time when the upload started.
-          example: '2024-01-05T15:30:00Z'
-          readOnly: true
-        uploadCompleted:
+          format: uri
+          description: URL of the document if `secure` is false. This field is null if `secure` is true.
+          example: https://custom.cvent.com/0B7DEF22676A4434982BDAD2D6EC591F/files/supplier/0713cef78d4e4d818899d4522022d5ad/73ab2e3054fd4321a5e0f846a7adb0d7.jpg
+        type:
+          $ref: '#/components/schemas/DocumentType-1'
+        mimeType:
           type: string
-          format: date-time
-          description: The ISO 8601 zoned date time when the uploaded ended.
-          example: '2024-01-05T15:35:00Z'
-          readOnly: true
-        parent:
-          type: string
-          format: uuid
-          description: The ID of the video this was created from.
-          readOnly: true
-    ThumbnailType:
-      title: ThumbnailType
-      enum:
-      - bmp
-      - gif
-      - jpe
-      - jpeg
-      - jpg
-      - png
-      - svg
+          description: The content type of the document.
+          example: image/jpeg
+    GuestRoomType:
+      title: GuestRoomType
+      description: 'Guest room type. `ANY`: Room can be any type. `SINGLE`: Room with one bed. `DOUBLE`: Room with two beds. `SUITE`: Room is an entire suite. `STAFF`: Room is for staff.'
       type: string
-      description: This is used to denote the file type of a thumbnail
-      example: png
-    Contact2:
-      title: Contact
+      enum:
+      - ANY
+      - SINGLE
+      - DOUBLE
+      - SUITE
+      - STAFF
+      example: DOUBLE
+    Field:
+      title: Field
+      description: A question field.
       type: object
-      description: The contact details who watched a video
+      allOf:
+      - $ref: '#/components/schemas/TextField'
+      properties:
+        type:
+          $ref: '#/components/schemas/FieldType'
+        choices:
+          type: array
+          description: List of choices for this field.
+          items:
+            $ref: '#/components/schemas/Choice'
+          minItems: 1
+          maxItems: 100
+        notApplicableAnswer:
+          $ref: '#/components/schemas/AdditionalChoice'
+        otherAnswer:
+          $ref: '#/components/schemas/AdditionalChoice'
+        required:
+          type: boolean
+          default: false
+          description: True indicates this is a mandatory question field.
+          example: true
+    QuestionType:
+      title: QuestionType
+      enum:
+      - CommentBox
+      - DateTime
+      - FileUpload
+      - Form
+      - LargeChoices
+      - MatrixMultiChoice
+      - MatrixRating
+      - MatrixSideBySide
+      - MatrixSingleChoice
+      - MatrixSpreadSheet
+      - MultiChoice
+      - NetPromoter
+      - Number
+      - NumberAllocation
+      - OpenEndedDateTime
+      - OpenEndedNumeric
+      - OpenEndedTextCommentBox
+      - OpenEndedTextOneLine
+      - RankOrder
+      - Rating
+      - SingleChoice
+      - Text
+      type: string
+      description: The type of question. See [this article](https://support.cvent.com/s/communityarticle/Survey-Adding-Questions) for details on each enum.
+      example: SingleChoice
+    RfpAgendaItem:
+      type: object
+      title: RfpAgendaItem
+      description: Agenda item associated with an RFP.
+      required:
+      - id
+      allOf:
+      - $ref: '#/components/schemas/RfpAgendaItemRequest'
       properties:
         id:
           type: string
           format: uuid
-          description: The unique ID of the contact who watched a video.
-          example: 123e4567-e89b-12d3-a456-426614174000
-    video-thumbnail:
-      title: VideoThumbnail
-      description: Video thumbnail
-      type: object
-      properties:
-        url:
-          $ref: '#/components/schemas/Link'
-        size:
-          type: integer
-          description: File size in bytes for the thumbnail
-          example: 4098675830
-        height:
-          type: integer
-          description: frame height in pixels
-          example: 400
-        width:
-          type: integer
-          description: frame width in pixels
-          example: 300
-        type:
-          $ref: '#/components/schemas/ThumbnailType'
-        status:
-          $ref: '#/components/schemas/ThumbnailStatus'
-    VideoStatus:
-      title: VideoStatus
-      enum:
-      - Started
-      - Uploaded
-      - Scanning
-      - Scanned
-      - Syncing
-      - Rejected
-      - Error
-      - Available
-      - Upcoming
-      - ReSyncing
-      type: string
-      description: Denotes the status of a video. Started indicates the request to upload in the API was submitted, and the URL to upload to was returned. Uploaded indicates that the upload was completed. Scanning indicates a virus scan is happening in a quarantine location; Scanned indicates a successful virus scan. Syncing indicates a complete virus scan, and now transcoding has begun. Rejected indicates a failed virus scan. Error indicates there was a problem processing the video. Available indicates the video is available for use.
-      example: Started
-    Solution:
-      title: Solution
-      description: The solution where the video exists. Attendee Hub and Events+ represent two different solutions where the video can be found.
-      type: string
-      enum:
-      - ATTENDEE_HUB
-      - EVENTS_PLUS
-      example: EVENTS_PLUS
-    video-views-paginated-response:
-      title: VideoViewsPaginatedResponse
-      description: Paginated list of video views.
+          readOnly: true
+          description: Unique ID of the agenda item.
+          example: f56a51a4-84b0-46c9-a612-716dc95a1c96
+        agendaBuilderAttachment:
+          type: object
+          description: Attachment whose data was used to create the agenda item.
+          readOnly: true
+          required:
+          - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: Unique identifier for the attachment.
+              example: 50dc08af-24a9-4d01-84be-3d43133dc945
+    PaginatedInternalDocuments:
+      title: PaginatedInternalDocuments
+      description: Paginated list of internal documents attached to an RFP.
       type: object
       properties:
         paging:
           $ref: '#/components/schemas/Paging'
         data:
+          description: List of internal documents linked to an RFP.
           type: array
           items:
-            $ref: '#/components/schemas/VideoView'
-          description: List of unique video views.
-    audio-tracks-response:
-      title: AudioTracksResponse
-      description: The response from a request to get the list of audio tracks.
+            $ref: '#/components/schemas/RfpInternalDocument'
+    RfpAgendaItemScheduleWithId:
+      type: object
+      title: RfpAgendaItemScheduleWithId
+      description: Contains RFP specific agenda items schedule information with agenda item id.
+      allOf:
+      - $ref: '#/components/schemas/RfpAgendaItemSchedule'
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unique ID of the agenda item.
+          example: 50dc08af-24a9-4d01-84be-3d43133dc945
+    choice-sort-order:
+      type: string
+      description: 'The sort order for the choices. `AToZ`: sorted alphabetically in ascending order. `AsEntered`: Sorted in the order they were added, oldest choices first. `Random`: Random sort.'
+      enum:
+      - AToZ
+      - AsEntered
+      - Random
+    RfpMeal:
+      type: string
+      title: RfpMeal
+      description: Meal type offered during the agenda.
+      enum:
+      - BREAKFAST_BUFFET
+      - BREAKFAST_CONTINENTAL
+      - BREAKFAST_PLATED
+      - BREAK_DRINKS_ONLY
+      - BREAK_SNACKS_AND_DRINKS
+      - CONTACT_ME_ABOUT_F_B_REQUIREMENTS
+      - DINNER_BUFFET
+      - DINNER_PLATED
+      - LUNCH_BOXED
+      - LUNCH_BUFFET
+      - LUNCH_PLATED
+      - RECEPTION_HEAVY_HORS_D_OEUVRES
+      - RECEPTION_LIGHT_APPETIZERS
+    unit-position:
+      type: string
+      description: Unit position used for text box question type.
+      enum:
+      - Left
+      - Right
+    RfpAgendaItemRequest:
+      type: object
+      title: RfpAgendaItemRequest
+      description: Request body for creating or updating an RFP agenda item.
+      required:
+      - number
+      - schedules
+      allOf:
+      - $ref: '#/components/schemas/Audit'
+      properties:
+        name:
+          type: string
+          description: The name of the agenda item.
+          minLength: 0
+          maxLength: 50
+          example: Agenda Item 1
+        type:
+          $ref: '#/components/schemas/AgendaItemType'
+        setup:
+          $ref: '#/components/schemas/AgendaItemSetup'
+        note:
+          type: string
+          description: The note sent along with agenda item.
+          minLength: 0
+          maxLength: 2500
+          example: This is a sample comment for this agenda item.
+        startTime:
+          type: string
+          description: The start time of the agenda item in 24-hour format (HH:mm:ss). This represents the local time at event location. For RFPs spanning multiple time zones, this time applies uniformly in each location's respective timezone (e.g., 13:00:00 means 1 PM local time at every venue).
+          example: '10:00:00'
+        endTime:
+          type: string
+          description: The end time of the agenda item in 24-hour format (HH:mm:ss). This represents the local time at event location. For RFPs spanning multiple time zones, this time applies uniformly in each location's respective timezone (e.g., 14:00:00 means 2 PM local time at every venue).
+          example: '10:30:00'
+        roomSize:
+          type: integer
+          minimum: 0
+          description: The required room size. It is specified in the default measurement unit of the RFP. Use <a href="#tag/RFP/operation/getRFP">GET RFP</a> API to get the default measurement unit.
+          example: 1000
+        attendeeCount:
+          type: integer
+          minimum: 1
+          maximum: 49999
+          description: Expected number of people attending the agenda.
+          example: 10000
+        roomInfoRequired:
+          type: boolean
+          description: True indicates room information like type, description is required.
+          example: false
+        twentyFourHourHold:
+          type: boolean
+          description: True indicates that twenty four hour hold is required.
+          example: true
+        locatedAtPrimaryEventVenue:
+          type: boolean
+          description: True indicates that agenda location is at primary event venue.
+          example: false
+        rfpMeal:
+          $ref: '#/components/schemas/RfpMeal'
+        number:
+          type: integer
+          description: The sequence number of the agenda item.
+          minimum: 1
+          maximum: 49999
+          example: 5
+        schedules:
+          type: array
+          minItems: 1
+          maxItems: 150
+          description: List of dates when this agenda item is scheduled.
+          items:
+            $ref: '#/components/schemas/RfpAgendaItemSchedule'
+    PaginatedRfpAgendaItems:
+      title: PaginatedRfpAgendaItems
+      description: Paginated list of agenda items associated with an RFP.
       type: object
       properties:
+        paging:
+          $ref: '#/components/schemas/Paging'
         data:
+          description: List of agenda items associated with an RFP.
           type: array
           items:
-            $ref: '#/components/schemas/existing-audio-track'
-          description: Collection of audio tracks.
+            $ref: '#/components/schemas/RfpAgendaItem'
+    StandardQuestion:
+      title: StandardQuestion
+      description: Standard questions are selected from a predefined list of Cvent questions that can be used in an RFP.
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for standard question.
+          example: 50dc08af-24a9-4d01-84be-3d43133dc945
+    RoomBlockDetails:
+      title: RoomBlockDetails
+      description: Contains details related to room allotment for a room type.
+      type: object
+      properties:
+        quantity:
+          type: integer
+          description: Quantity of rooms required.
+          minimum: 0
+          maximum: 9999
+          example: 24
+        type:
+          $ref: '#/components/schemas/GuestRoomType'
     Paging:
       title: Paging
       required:
@@ -995,6 +1090,18 @@ components:
           example: 2
         _links:
           $ref: '#/components/schemas/PaginationLinks'
+    PaginatedRfpCustomField:
+      title: PaginatedRfpCustomField
+      description: Paginated list of RFP custom fields associated to a RFP.
+      type: object
+      properties:
+        paging:
+          $ref: '#/components/schemas/Paging'
+        data:
+          description: List of RFP custom fields linked to an RFP.
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldAnswers'
     Link:
       title: Link
       required:
@@ -1006,43 +1113,52 @@ components:
           type: string
           description: A url provided that can be followed for linking
           example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
-    VideoTextTrackKind:
-      title: VideoTextTrackKind
-      enum:
-      - subtitles
-      - captions
-      - descriptions
-      - chapters
-      - metadata
-      type: string
-      description: Denotes the kind of video text track. Only subtitles are supported.
-      example: subtitles
-    ViewType1:
-      title: ViewType
-      description: The view type of the video. Videos can be viewed live or as a recording.
-      type: string
-      enum:
-      - LIVE
-      - RECORDING
-    VideoSource:
-      title: VideoSource
-      description: Source of video.
+    PaginatedRfpAttachments:
+      title: PaginatedRFPAttachments
+      description: Paginated list of RFP attachments.
       type: object
+      required:
+      - paging
+      - data
       properties:
-        id:
-          type: string
-          description: The id of a video in the external system
-          maxLength: 50
-          example: VD134567
-        status:
-          type: string
-          enum:
-          - Active
-          - Inactive
-          - Pending
-          - Deleted
-          description: Denotes the status of the video in the third-party system.
-          example: Active
+        paging:
+          $ref: '#/components/schemas/Paging'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/RfpAttachment'
+          description: List of attachments added on an RFP.
+    AgendaItemSetup:
+      type: string
+      title: AgendaItemSetup
+      description: Setup type for the agenda.
+      enum:
+      - BUFFET
+      - CABARET
+      - CHEVRON
+      - CLASSROOM
+      - CONFERENCE
+      - CRESCENT_ROUNDS
+      - EIGHT_BY_TEN
+      - FLOW
+      - HERRINGBONE
+      - HOLLOW_SQUARE
+      - ISLAND
+      - OFFSITE
+      - OTHER
+      - PENINSULA
+      - PLATED
+      - RECEPTION
+      - ROUNDS
+      - ROUNDS_OF_10
+      - ROUNDS_OF_6
+      - ROUNDS_OF_8
+      - SCHOOL_ROOM
+      - TABLETOP
+      - TEN_BY_TEN
+      - THEATER
+      - T_SHAPED
+      - U_SHAPED
     Audit:
       title: Audit
       description: Audit information
@@ -1070,77 +1186,86 @@ components:
           description: The identifier of the user that last updated this record.
           readOnly: true
           example: hporter
-    UUIDProperty:
-      title: UUID Property
-      description: A string that has to be a format matching the industry standard uuid
-      type: string
-      format: uuid
-      example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
-    DeviceType:
-      title: DeviceType
-      description: The device used to watch the video. Videos can be viewed on desktop, mobile or tablet.
+    SupplierType:
+      title: SupplierType
+      description: 'Type of supplier. `CONVENTION_AND_CONFERENCE_CENTER`: Supplier of large event venues such as convention centers, conference centers, and exposition halls. `CVB`: CVBs (Convention and Visitors Bureau) are suppliers that assist in the promotion and facilitation of tourism, conventions, and events in their respective areas. `HOTEL`: Suppliers that are hotels or resorts. `OTHER`: Suppliers that do not fall under other categories.'
       type: string
       enum:
-      - DESKTOP
-      - MOBILE
-      - TABLET
-    audio-track:
-      title: AudioTrack
-      description: The audio track.
+      - CONVENTION_AND_CONFERENCE_CENTER
+      - CVB
+      - HOTEL
+      - OTHER
+    RfpAgendaItemSchedule:
       type: object
+      title: RfpAgendaItemSchedule
+      description: Schedule information for an RFP agenda item.
       required:
-      - video
-      - type
-      - language
-      allOf:
-      - $ref: '#/components/schemas/Audit'
+      - dayNumber
       properties:
-        video:
-          $ref: '#/components/schemas/VideoAssetID'
-        type:
-          $ref: '#/components/schemas/AudioTrackType'
-        language:
-          type: string
-          description: IETF language tag for the audio track.
-          maxLength: 35
-          example: en-US
-        variant:
-          $ref: '#/components/schemas/AudioTrackVariant'
-        default:
-          description: True indicates this is the default audio track.
-          type: boolean
-          default: false
-        duration:
+        dayNumber:
           type: integer
-          description: Audio track duration (in milliseconds).
-          example: 3600000
-        status:
-          $ref: '#/components/schemas/AudioTrackStatus'
-    HlsInputWithClips:
-      title: HlsInputWithClips
-      description: HTTP Live Streaming input and clips.
+          description: Day number relative to start of event on which the agenda item occurs.
+          example: 1
+        date:
+          type: string
+          format: date
+          readOnly: true
+          description: The ISO 8601 date of the agenda item.
+          example: '2021-07-03'
+    RfpGuestRooms:
+      title: RfpGuestRooms
+      description: Guest Room Requirements
       type: object
       properties:
-        hlsInput:
-          type: string
-          description: Location for HTTP Live Streaming (HLS) recording.
-          example: s3://bucket/path/to/recording/video.m3u8
-        clips:
-          description: Clips for the HLS recording.
+        totalRooms:
+          description: Sum of the number of rooms required each night across all the nights for the event.
+          type: integer
+          readOnly: true
+          example: 24
+          minimum: 0
+          maximum: 9999000
+        peakRooms:
+          description: The number of rooms required during peak nights.
+          type: integer
+          readOnly: true
+          example: 24
+          minimum: 0
+          maximum: 49995
+        occupancies:
+          description: Occupancies for every room type.
           type: array
           items:
-            $ref: '#/components/schemas/VideoClip'
-    PaginationLinks:
-      title: PaginationLinks
-      type: object
-      description: Represents pagination links for navigating between pages of data.
-      properties:
-        next:
-          $ref: '#/components/schemas/Link'
-        self:
-          $ref: '#/components/schemas/Link'
-        prev:
-          $ref: '#/components/schemas/Link'
+            $ref: '#/components/schemas/GuestRoomOccupancyPerRoomType'
+          minItems: 0
+          maxItems: 5
+        checkInDate:
+          type: string
+          format: date
+          description: The ISO 8601 check-in date.
+          example: '2025-10-13'
+        roomBlocks:
+          description: List of room blocks required.
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomBlock'
+          minItems: 0
+          maxItems: 200
+        additionalInformation:
+          type: string
+          description: Additional Info (if any).
+          example: 2 Executive suites are mandatory.
+          minLength: 0
+          maxLength: 2500
+    GuestRoomOccupancy:
+      title: GuestRoomOccupancy
+      description: 'Guest room occupancy. `SINGLE`: Single occupant. `DOUBLE`: Two occupants. `TRIPLE`: Three occupants. `QUAD`: Four occupants. '
+      type: string
+      enum:
+      - SINGLE
+      - DOUBLE
+      - TRIPLE
+      - QUAD
+      example: SINGLE
     ErrorResponseBase:
       title: ErrorResponseBase
       type: object
@@ -1161,117 +1286,112 @@ components:
           type: string
           description: The target resource of the error.
           example: example target
-    existing-audio-track:
-      title: ExistingAudioTrack
-      description: Existing audio track.
+    PaginationLinks:
+      title: PaginationLinks
       type: object
-      required:
-      - id
-      allOf:
-      - $ref: '#/components/schemas/audio-track'
+      description: Represents pagination links for navigating between pages of data.
+      properties:
+        next:
+          $ref: '#/components/schemas/Link'
+        self:
+          $ref: '#/components/schemas/Link'
+        prev:
+          $ref: '#/components/schemas/Link'
+    display-type:
+      type: string
+      description: 'The type of display for the field. `Bar`: It is associated with choice questions type. `DropDown`: It is associated with drop down type questions. `Horizontal`: It is associated with horizontal type questions. `List`: It is associated with list type questions. `MultiSelectBox`: It is associated with multi select box type questions. `Vertical`: It is associated with vertical type questions.'
+      enum:
+      - Bar
+      - DropDown
+      - Horizontal
+      - List
+      - MultiSelectBox
+      - Vertical
+    RoomBlock:
+      title: RoomBlock
+      description: Contains details related to room allotment for a day.
+      type: object
       properties:
         id:
-          title: Audio Track ID
           type: string
           format: uuid
-          example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
-          description: The identifier of an audio track.
+          description: Unique identifier for the room block.
           readOnly: true
-        url:
-          $ref: '#/components/schemas/AssetLocation'
-    VideoType:
-      title: VideoType
-      enum:
-      - mpg2
-      - mov
-      - mp2
-      - mp4
-      - mpe
-      - mpeg
-      - mpg
-      - mpv
-      - qt
-      - webm
-      - hls
-      type: string
-      description: This is used to denote type of a video
-      example: mp4
-    VideoBase:
-      title: VideoBase
-      description: Base model for a Video.
-      type: object
-      required:
-      - title
-      allOf:
-      - $ref: '#/components/schemas/Audit'
-      properties:
-        title:
+          example: 1f6193da-e12b-4638-b1e2-13dd60d0adeb
+        date:
           type: string
-          description: The title of the video
-          maxLength: 500
-          example: Cvent 2020 Keynote
-        description:
-          type: string
-          description: Description of the video
-          example: The video recording of the Cvent 2020 keynote by James Gordon
-        filename:
-          type: string
-          description: Filename associated with the video at time of upload. Cannot be modified.
-          maxLength: 300
-          example: Cvent Keynote Version 5.mp4
-        events:
-          type: array
-          description: A list of events associated with this video asset
-          items:
-            $ref: '#/components/schemas/UUIDProperty'
-          maxItems: 50
-          default: []
-        duration:
+          format: date
+          description: The ISO 8601 date when the rooms are required.
+          readOnly: true
+          example: '2025-10-13'
+        dayNumber:
           type: integer
-          description: Video duration (milliseconds)
-          example: 3600000
-        thumbnail:
-          $ref: '#/components/schemas/video-thumbnail'
-        generatedThumbnail:
-          $ref: '#/components/schemas/video-thumbnail'
-        status:
-          $ref: '#/components/schemas/VideoStatus'
-        source:
-          $ref: '#/components/schemas/VideoSource'
-        tags:
+          description: Counter for day number.
+          example: 3
+        totalRooms:
+          type: integer
+          description: Total number of rooms required for the day.
+          readOnly: true
+          example: 24
+          minimum: 0
+          maximum: 49995
+        details:
           type: array
-          description: A list of tags associated with this video.  This feature is a developer extensability framework to add data to videos.
+          description: Contains detail of quantity required for each room type.
           items:
-            type: string
-          default: []
-          example:
-          - edited
-          - exhibitor
-    Device1:
-      title: Device
+            $ref: '#/components/schemas/RoomBlockDetails'
+          minItems: 0
+          maxItems: 5
+    AdditionalChoice:
+      title: additionalChoice
+      description: Contains text of additional choice i.e notApplicableAnswer choice or otherAnswer choice.
       type: object
-      description: The device details used to watched a video. This field has been deprecated.
-      deprecated: true
       properties:
-        id:
+        text:
           type: string
-          description: The unique ID of the device the viewer used to watch the video.
-          maxLength: 100
-          example: CA1.b4c5061e36fa60ebc5aad0ccea95f900b34794ecad49e965eaa94f7c534dec83
-        type:
-          $ref: '#/components/schemas/DeviceType'
-        operatingSystem:
+          description: Display text of additional choice.
+          example: Dietary Restriction - Other
+        shortText:
           type: string
-          description: The device's operating system.
-          example: Mac OS
+          description: Name of additional choice text in reporting.
+          example: Dietary Preference - Other Allergies
+    Category:
+      title: Category
+      description: A question category.
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/TextField'
+      properties:
+        required:
+          type: boolean
+          default: false
+          description: True indicates the category is mandatory for answer.
+          example: true
+    AgendaItemType:
+      type: string
+      title: AgendaItemType
+      description: Type of the agenda.
+      enum:
+      - BREAK
+      - BREAKFAST
+      - BREAKOUT
+      - DINNER
+      - EXHIBIT
+      - GENERAL_SESSION
+      - HOSPITALITY_DESK
+      - HOSPITALITY_SUITE
+      - LUNCH
+      - MEETING
+      - OFFICE
+      - OTHER
+      - RECEPTION
+      - REGISTRATION
+      - SETUP
+      - SNACK
+      - SPEAKER_ROOM
+      - STORAGE_ROOM
+      - TEARDOWN
   parameters:
-    videoId1:
-      in: path
-      name: videoId
-      description: The identifier of a video.
-      required: true
-      schema:
-        $ref: '#/components/schemas/UUIDProperty'
     token:
       name: token
       in: query
@@ -1285,31 +1405,30 @@ components:
       schema:
         type: string
         example: 0e28af57-511f-47ab-ae46-46cd1ca51a1a
-    after:
-      name: after
-      required: false
-      description: Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store.
-      in: query
-      schema:
-        type: string
-        format: date-time
-        example: '2017-01-02T02:00:00Z'
-    textTrackId:
+    rfpId:
+      name: rfpId
+      description: The unique identifier of the RFP we are requesting
+      style: simple
       in: path
-      name: textTrackId
-      description: The identifier of a video text track.
       required: true
       schema:
-        $ref: '#/components/schemas/UUIDProperty'
-    before:
-      name: before
-      required: false
-      in: query
-      description: Used to query records that have been added or updated before this time point.
-      schema:
         type: string
-        format: date-time
-        example: '2017-01-02T02:00:00Z'
+        format: uuid
+      example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
+    customFieldExpand:
+      name: expand
+      in: query
+      explode: false
+      required: false
+      description: "This endpoint allows you to request additional information as an expanded response using the expand query parameter. The expanded entity is retrieved and displayed inline for each specified expand value.\n\nAn object contains the ID of a related object in its response properties. For example, the RFP custom field\nwill have the custom field ID associated with the RFP custom field. You can expand these objects in-line using the expand query parameter.\n\nYou can expand multiple objects at the same time by identifying multiple items in the expand array.\n\nThe respective scopes for each expansion are required.\n\nThe following fields are expandable:\n  * customField\n    * **Scope**: event/custom-fields:read\n    * **Reference**: <a href=\"#tag/Custom-Fields/operation/getCustomField\">Get Custom Field</a>\n"
+      example:
+      - customField
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+          - customField
     limit:
       name: limit
       in: query
@@ -1836,8 +1955,3 @@ components:
 externalDocs:
   description: Cvent Developer Documentation
   url: https://developers.cvent.com/docs
-x-refined-from:
-- cvent-event-cloud-rest-openapi.yml
-- cvent-rest-apis-openapi.yaml
-x-source: https://github.com/cvent/rest-sdks/blob/main/cvent-public-spec/openapi.yaml
-x-derived: tag-scoped subset (Event Cloud tags) of the published Cvent REST APIs OpenAPI

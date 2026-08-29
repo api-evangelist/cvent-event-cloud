@@ -981,6 +981,194 @@ apis:
     url: collections/cvent-event-cloud-webcasts-api.postman_collection.json
   - type: OpenCollection
     url: collections/cvent-event-cloud-webcasts-api.opencollection.json
+- aid: cvent-event-cloud:cvent-event-cloud-housing-api
+  name: Cvent Event Cloud Housing API
+  description: >-
+    RegLink APIs allow you to exchange data with Cvent Passkey events and hotel reservation-booking engines.
+
+    Generally, there are four primary categories of functionality that RegLink APIs support:
+      * **Sync Registrants.** Allow individual registrant information to be sent to Cvent Passkey, streamlining
+    the hotel reservation process for attendees. Attendees can then be directed to Passkey post-registration
+    and reserve a hotel room without re-entering their data again. This is done with the reservation request
+    endpoint.
+      * **Fetch Rooms.** The ability for an external system to fetch Passkey event details and hotel room
+    availability based on various criteria.
+      * **Fetch Reservations.** The ability for an external system to fetch detailed reservation information
+    for individual registrants. This is done with the Reservation endpoint and the Callback system.
+      * **Manage Reservations.** The ability for an external system to create, modify or cancel a registrant's
+    hotel reservation directly or indirectly.
+
+    If you need authentication credentials or have any questions regarding the RegLink APIs, contact the
+    [Cvent Passkey Integrations Team](https://web.cvent.com/survey/c6a60a30-d981-4ae8-af28-686af0eeb9b7/welcome).
+
+
+    * **Passkey.** A software solution allowing your invitees to book room reservations directly with
+    hotels.
+
+    * **Housing Event.** An Passkey event where invitees will be able to register and book rooms.
+
+    * **Reservation Request.** Represents a request to book rooms in the housing event.
+
+    * **RegLink.** A feature that links Passkey events to your registration events, enabling you to sync
+    data between the two events.
+
+    * **Callback.** [Passkey's callback system](https://developers.cvent.com/docs/passkey/REST/callbacks)
+    allows for a push notification to be sent to your system when a reservation is created, modified or
+    cancelled.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Housing
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-housing-api-openapi.yml
+- aid: cvent-event-cloud:cvent-event-cloud-housing-hotels-api
+  name: Cvent Event Cloud Housing Hotels API
+  description: APIs for managing hotel-related operations.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Housing Hotels
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-housing-hotels-api-openapi.yml
+- aid: cvent-event-cloud:cvent-event-cloud-meeting-request-api
+  name: Cvent Event Cloud Meeting Request API
+  description: >-
+    When planning an event, meeting request forms are customizable online questionnaires to capture information
+    about the event and facilitate the approval of events. When a meeting request form is submitted it
+    becomes a meeting request. Use this API to view forms, create meeting requests and track the status
+    of meeting requests. **Legacy meeting request forms are not supported by this API.**
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Meeting Request
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-meeting-request-api-openapi.yml
+- aid: cvent-event-cloud:cvent-event-cloud-proposal-draft-api
+  name: Cvent Event Cloud Proposal Draft API
+  description: >-
+    Beta - All APIs are in Beta. Proposal Drafts are editable copies of proposals. This API allows you
+    to edit proposal data privately before publishing.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Proposal Draft
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-proposal-draft-api-openapi.yml
+- aid: cvent-event-cloud:cvent-event-cloud-rfp-additional-details-api
+  name: Cvent Event Cloud RFP Additional Details API
+  description: >-
+    RFP additional details APIs for managing past event references and other miscellaneous RFP operations.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - RFP Additional Details
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-rfp-additional-details-api-openapi.yml
+- aid: cvent-event-cloud:cvent-event-cloud-rfp-management-api
+  name: Cvent Event Cloud RFP Management API
+  description: >-
+    RFP (Request for Proposal) management APIs for core RFP operations including CRUD operations for base
+    RFPs.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - RFP Management
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-rfp-management-api-openapi.yml
+- aid: cvent-event-cloud:cvent-event-cloud-rfp-requirements-api
+  name: Cvent Event Cloud RFP Requirements API
+  description: >-
+    RFP requirements APIs for managing RFP-specific requirements including guest rooms, meeting rooms,
+    custom questions, custom fields, and attachments (CRUD operations).
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - RFP Requirements
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-rfp-requirements-api-openapi.yml
+- aid: cvent-event-cloud:cvent-event-cloud-rfp-suppliers-api
+  name: Cvent Event Cloud RFP Suppliers API
+  description: >-
+    Suppliers are the venues and service providers that receive and respond to RFPs. Use these APIs to
+    manage supplier associations, view recipient history, and create award details.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - RFP Suppliers
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-rfp-suppliers-api-openapi.yml
+- aid: cvent-event-cloud:cvent-event-cloud-travel-accounts-api
+  name: Cvent Event Cloud Travel Accounts API
+  description: The travel account, or corporation that represents the demand-side of travel RFPs.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Travel Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-travel-accounts-api-openapi.yml
+- aid: cvent-event-cloud:cvent-event-cloud-travel-rfps-api
+  name: Cvent Event Cloud Travel RFPs API
+  description: >-
+    The Travel RFP APIs provide access to travel programs and proposals. A travel program
+
+    represents a request for proposal (RFP) that defines the specific travel needs and
+
+    requirements of a travel account. The travel account solicits hotels and other travel
+
+    suppliers to respond to the program with proposals, which provide detailed
+
+    information on rates and amenities.'
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Travel RFPs
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-travel-rfps-api-openapi.yml
+- aid: cvent-event-cloud:cvent-event-cloud-travel-suppliers-api
+  name: Cvent Event Cloud Travel Suppliers API
+  description: >-
+    The Travel Supplier APIs provide access to Cvent data related to hotels, apartments, and other travel
+    providers. This includes information related to properties, and sleeping rooms.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Travel Suppliers
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-travel-suppliers-api-openapi.yml
+- aid: cvent-event-cloud:cvent-event-cloud-venue-meeting-rooms-api
+  name: Cvent Event Cloud Venue Meeting Rooms API
+  description: >-
+    Manage meeting rooms for a venue, including creating and updating room details, configuring capacities
+    and amenities, and associating images.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Venue Meeting Rooms
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-venue-meeting-rooms-api-openapi.yml
+- aid: cvent-event-cloud:cvent-event-cloud-venue-profiles-api
+  name: Cvent Event Cloud Venue Profiles API
+  description: >-
+    Manage venue profile details including type, contact information, address, and other venue properties.
+  humanURL: https://developers.cvent.com/docs/rest-api/overview
+  baseURL: https://api-platform.cvent.com
+  tags:
+  - Venue Profiles
+  properties:
+  - type: OpenAPI
+    url: openapi/cvent-event-cloud-venue-profiles-api-openapi.yml
 common:
   - type: CapabilityMap
     url: capabilities/cvent-event-cloud-capability-edges.yml
