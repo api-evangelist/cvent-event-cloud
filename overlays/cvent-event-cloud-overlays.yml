@@ -1,19 +1,19 @@
-generated: '2026-08-13'
-method: searched
-source: https://github.com/cvent/rest-sdks/tree/main/overlays
-provider: Cvent Event Cloud
-providerId: cvent-event-cloud
-description: >-
+x-generated: '2026-08-13'
+x-method: searched
+x-source: https://github.com/cvent/rest-sdks/tree/main/overlays
+x-provider: Cvent Event Cloud
+x-providerId: cvent-event-cloud
+x-description: >-
   Cvent authors and publishes its own OpenAPI Overlay 1.0.0 documents. They are not our
   enhancements — these five files are saved verbatim from Cvent's rest-sdks repository, where its
   Speakeasy workflow applies them in order on top of cvent-public-spec/openapi.yaml before
   generating the TypeScript, .NET and Java SDKs. That makes Cvent one of the small number of
   providers using Overlay in production rather than as a demo.
-applied_to: openapi/_original/cvent-rest-apis-openapi.yaml
-workflow: https://github.com/cvent/rest-sdks/blob/main/.speakeasy/workflow.yaml
-speakeasy_version: 1.752.0
-registry: registry.speakeasyapi.dev/cvent/rest-sdks/public
-overlays:
+x-applied_to: openapi/_original/cvent-rest-apis-openapi.yaml
+x-workflow: https://github.com/cvent/rest-sdks/blob/main/.speakeasy/workflow.yaml
+x-speakeasy_version: 1.752.0
+x-registry: registry.speakeasyapi.dev/cvent/rest-sdks/public
+x-overlays:
   - file: overlays/cvent-event-cloud-public-overlay.yaml
     name: public_overlay
     order: 1
@@ -48,9 +48,9 @@ overlays:
     purpose: >-
       Declares the retry/back-off behaviour baked into the generated clients — the SDK-side
       counterpart to the 429 handling documented in rate-limits/.
-note: >-
+x-note: >-
   The overlays are the reason the SDK-facing spec and the raw published spec differ. Anyone diffing
   @cvent/sdk's surface against cvent-public-spec/openapi.yaml must apply these five in order first.
-maintainers:
+x-maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com

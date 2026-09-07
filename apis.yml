@@ -1291,3 +1291,5 @@ x-coverage:
     - url: https://mcp.cvent.com/.well-known/oauth-protected-resource/mcp
       status: 200
   checked: '2026-08-13'
+x-parent: cvent
+x-relationship: product
