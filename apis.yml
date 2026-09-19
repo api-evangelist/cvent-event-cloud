@@ -71,7 +71,7 @@ tags:
   - Authentication
   - OnSite
   - OpenAPI
-  - Overlay
+  - Overlays
   - Registration
   - REST
   - SCIM
@@ -410,6 +410,8 @@ apis:
   humanURL: https://developers.cvent.com/docs/rest-api/overview
   baseURL: https://api-platform.cvent.com
   tags:
+  - Budgets
+  tags_raw:
   - Budget
   properties:
   - type: OpenAPI
@@ -570,6 +572,8 @@ apis:
   humanURL: https://developers.cvent.com/docs/rest-api/overview
   baseURL: https://api-platform.cvent.com
   tags:
+  - Email
+  tags_raw:
   - Emails
   properties:
   - type: OpenAPI
