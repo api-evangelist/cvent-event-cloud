@@ -1,11 +1,13 @@
 openapi: 3.2.0
 info:
-  title: Cvent Event Cloud Badge Printer Pools API
-  version: ea
+  title: Cvent REST Badge Printer Pools API
+  description: '# Introduction
+
+    The Cvent API Platform is built around REST.'
   contact:
     name: Cvent Development Platform
     url: https://developers.cvent.com/
-  description: 'Operations tagged Badge Printer Pools across 2 of this provider''s published API definitions: cvent-event-cloud-rest-openapi.yml, cvent-rest-apis-openapi.yaml. Each path carries the servers of the definition it was published in.'
+  version: ea
 servers:
 - url: https://api-platform.cvent.com/ea
 - url: https://api-platform-eur.cvent.com/ea
@@ -74,9 +76,6 @@ paths:
       externalDocs:
         description: More about OAuth2 authorization code support for administrators
         url: '#oauth2-auth-code-planner-admin'
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
   /events/{eventId}/badge-printer-pools/{poolId}:
     parameters:
     - $ref: '#/components/parameters/eventId'
@@ -111,68 +110,15 @@ paths:
       externalDocs:
         description: More about OAuth2 authorization code support for administrators
         url: '#oauth2-auth-code-planner-admin'
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
 components:
   schemas:
-    badge-printer-pool.json:
-      title: BadgePrinterPool
-      description: Badge Printer Pool.
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
-          description: The name of the badge printer pool.
-          minLength: 1
-          maxLength: 50
-          example: Main Entrance
-    link.json:
-      title: Link
-      required:
-      - href
-      type: object
-      description: Represents a link to a related resource.
-      properties:
-        href:
-          type: string
-          description: A url provided that can be followed for linking
-          example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
-    uuid-property:
+    uuid-property-readonly.json:
       title: UUID Property
       description: A string that has to be a format matching the industry standard uuid
       type: string
       format: uuid
+      readOnly: true
       example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
-    ErrorResponse:
-      title: ErrorResponse
-      description: Represents an error response with additional details of cascading error messages.
-      allOf:
-      - $ref: '#/components/schemas/ErrorResponseBase'
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorResponseBase'
-          description: Additional details of cascading error messages.
-    badge-printer-pools-paginated-response:
-      title: BadgePrinterPoolsPaginatedResponse
-      description: Page of Badge Printer Pools.
-      type: object
-      properties:
-        paging:
-          $ref: '#/components/schemas/paging.json'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/existing-badge-printer-pool'
-          description: Collection of badge printer pools.
     paging.json:
       title: Paging
       required:
@@ -202,30 +148,48 @@ components:
           example: 2
         _links:
           $ref: '#/components/schemas/pagination-links.json'
-    existing-badge-printer-pool:
-      title: ExistingBadgePrinterPool
-      description: Badge Printer Pool.
+    badge-printer-pools-paginated-response:
+      title: BadgePrinterPoolsPaginatedResponse
+      description: Page of Badge Printer Pools.
       type: object
-      required:
-      - id
-      - disabled
-      - name
-      allOf:
-      - $ref: '#/components/schemas/badge-printer-pool.json'
       properties:
-        id:
-          $ref: '#/components/schemas/uuid-property-readonly.json'
-        disabled:
-          type: boolean
-          description: A flag to indicate if the pool is disabled.
-          example: false
-    uuid-property-readonly.json:
+        paging:
+          $ref: '#/components/schemas/paging.json'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/existing-badge-printer-pool'
+          description: Collection of badge printer pools.
+    uuid-property:
       title: UUID Property
       description: A string that has to be a format matching the industry standard uuid
       type: string
       format: uuid
-      readOnly: true
       example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
+    link.json:
+      title: Link
+      required:
+      - href
+      type: object
+      description: Represents a link to a related resource.
+      properties:
+        href:
+          type: string
+          description: A url provided that can be followed for linking
+          example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
+    badge-printer-pool.json:
+      title: BadgePrinterPool
+      description: Badge Printer Pool.
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: The name of the badge printer pool.
+          minLength: 1
+          maxLength: 50
+          example: Main Entrance
     ErrorResponseBase:
       title: ErrorResponseBase
       type: object
@@ -246,6 +210,38 @@ components:
           type: string
           description: The target resource of the error.
           example: example target
+    existing-badge-printer-pool:
+      title: ExistingBadgePrinterPool
+      description: Badge Printer Pool.
+      type: object
+      required:
+      - id
+      - disabled
+      - name
+      allOf:
+      - $ref: '#/components/schemas/badge-printer-pool.json'
+      properties:
+        id:
+          $ref: '#/components/schemas/uuid-property-readonly.json'
+        disabled:
+          type: boolean
+          description: A flag to indicate if the pool is disabled.
+          example: false
+    ErrorResponse:
+      title: ErrorResponse
+      description: Represents an error response with additional details of cascading error messages.
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponseBase'
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorResponseBase'
+          description: Additional details of cascading error messages.
     pagination-links.json:
       title: PaginationLinks
       type: object
@@ -257,6 +253,52 @@ components:
           $ref: '#/components/schemas/link.json'
         prev:
           $ref: '#/components/schemas/link.json'
+  responses:
+    TooManyRequests1:
+      description: Too many requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 429
+            message: Limit Exceeded
+    BadRequest1:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 400
+            message: Bad Request
+    Forbidden1:
+      description: You do not have access to the resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 403
+            message: Access Forbidden
+    Unauthorized1:
+      description: Bad or expired token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 401
+            message: Unauthorized
+    NotFound1:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 404
+            message: Not found
   parameters:
     token:
       name: token
@@ -278,13 +320,6 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/uuid-property'
-    eventId:
-      in: path
-      name: eventId
-      description: Id of an event
-      required: true
-      schema:
-        $ref: '#/components/schemas/uuid-property'
     limit:
       name: limit
       in: query
@@ -297,52 +332,13 @@ components:
         type: integer
         default: 100
         example: 100
-  responses:
-    NotFound1:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 404
-            message: Not found
-    Forbidden1:
-      description: You do not have access to the resource
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 403
-            message: Access Forbidden
-    TooManyRequests1:
-      description: Too many requests
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 429
-            message: Limit Exceeded
-    BadRequest1:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 400
-            message: Bad Request
-    Unauthorized1:
-      description: Bad or expired token
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 401
-            message: Unauthorized
+    eventId:
+      in: path
+      name: eventId
+      description: Id of an event
+      required: true
+      schema:
+        $ref: '#/components/schemas/uuid-property'
   securitySchemes:
     OAuth2.authorizationCode:
       type: oauth2
@@ -811,8 +807,3 @@ components:
 externalDocs:
   description: Cvent Developer Documentation
   url: https://developers.cvent.com/docs
-x-refined-from:
-- cvent-event-cloud-rest-openapi.yml
-- cvent-rest-apis-openapi.yaml
-x-source: https://github.com/cvent/rest-sdks/blob/main/cvent-public-spec/openapi.yaml
-x-derived: tag-scoped subset (Event Cloud tags) of the published Cvent REST APIs OpenAPI

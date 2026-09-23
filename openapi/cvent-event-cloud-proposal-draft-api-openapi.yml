@@ -1,7 +1,9 @@
 openapi: 3.2.0
 info:
   title: Cvent REST Proposal Draft API
-  description: "# Introduction\nThe Cvent API Platform is built around REST. We aim to provide intuitive endpoints that can be easily\ndiscovered to help leverage the Cvent platform for your event needs. The RESTful APIs outlined here\nuse JSON-encoded request and response format, along with HTTP codes, to convey processing status of\nrequests received. The Cvent resources are protected using OAuth2.\n\n# Getting Started\n\nIf you're new to the Cvent API Platform, start by reading our\n[Developer Quickstart](https://developers.cvent.com/docs/rest-api/tutorials/developer-quickstart) guide. This will\ngive you an overview of how to authenticate and make requests using our APIs.\n\n## Authentication\n\nThe Cvent REST API uses [OAuth2](https://oauth.net/2/) to authorize requests to the platform. The client\ncredentials authorization flow is supported.\n\n<a name=\"oauth2-auth-code-planner-admin\"></a>\n\nAuthorization code flow is only supported for planner users with the administrator role in Cvent. Developer users\ncannot use authorization code flow.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\nHere's an example of using client credential flow to authorize. You'll supply your application's id and secret to\nmake a [Token](#operation/oauth2Token) request.\n\n```bash\ncurl --location --request POST '{hostName}/{version}/oauth2/token' \\\n--header 'Content-Type: application/x-www-form-urlencoded' \\\n--header 'Authorization: Basic {api_credentials}' \\\n--data-urlencode 'grant_type=client_credentials' \\\n--data-urlencode 'client_id={client_id}'\n```\n\n| Key               | Description                                          | Value                                                                                                        |\n| :---------------- | :--------------------------------------------------- | :----------------------------------------------------------------------------------------------------------- |\n| {hostName}        | https://api-platform.cvent.com                       | Location if your account is in the North American datacenter.                                                |\n|                   | https://api-platform-eur.cvent.com                   | Location if your account is in the European data center.                                                     |\n| {version}         | ea                                                   | The version of the API you're using. Only `ea` is currently supported.                                       |\n| {api_credentials} | {client_id}:{client_secret} in base64 encoded format | Supply your client id & client credentials in a base 64 encoded format.                                      |\n| {client_id}       | Retrieved from your application                      | Your application's client id.                                                                                |\n| {client_secret}   | Retrieved from your application                      | Your application's client secret.                                                                            |\n\nOn a successful call, you'll receive the following response:\n\n```json\n{\n  \"access_token\": \"{accessToken}\",\n  \"expires_in\": 3600,\n  \"token_type\": \"Bearer\"\n}\n```\n\nThis bearer token is valid for 3600 seconds (60 minutes) and must be used in subsequent calls.\n\n## Endpoints\n\nEndpoints start with `hostName` and `version`.\n\nThe `hostname` will depend on the region that your Cvent account is hosted in. Please see the table\nbelow to identify which hostname you should be using.\n\n| Region        |\tHostname                           |\n|:--------------|:-----------------------------------|\n| North America\t| https://api-platform.cvent.com     |\n| Europe        | https://api-platform-eur.cvent.com |\n\nThe current `version` of the Cvent API is `ea`.\n\n## Rate Limits\n\nCvent APIs enforce rate limits to ensure platform stability. Your limits depend on your tier: Free,\nStandard, or Premium.\n\n<br />\n\n### Usage Tiers\n\n| Tier     | Daily Calls | Calls per Second | Max Burst |\n| -------- | ----------- | ---------------- | --------- |\n| Free     | 1,000       | 2                | 1         |\n| Standard | 15,000      | 10               | 10        |\n| Premium  | 500,000     | 25               | 25        |\n\n- **Daily calls** define how many requests you can make in a 24-hour period. Quota\n  resets at 12 midnight (+0 GMT).\n- **Calls per second** define how many requests you can make in a 1-second window.\n- **Max Burst** defines how many requests you can make at once.\n\nIf you are unsure what usage tier applies to your account, you can check via\n[Get Current Usage Tier](#operation/getUsageTier).\n\nPlease note that these limits may change as the Cvent API Platform evolves.\n\n<br />\n\n### Handling Rate Limits\n\nSometimes, you may exceed your rate limits. When this happens, the API will return a `429 Too Many Requests`. See\n[handling rate limits](https://developers.cvent.com/docs/rest-api/guides/handling-rate-limits) for best practices on how to handle this.\n\n## Pagination\n\nSome APIs use pagination to manage records. Each page of records has a token associated to identify it.\n\nIf an API uses pagination, you’ll find up to three tokens in the response:\n- **currentToken**: Describes the token of the current page.\n- **nextToken**: Provides a token for the next page of records, if one exists.\n- **previousToken**: Provides a token for the previous page of records, if one exists. Not all APIs will return\n  this token.\n\nYou specify which page of records to view via the `token` parameter in your API call. To navigate through pages,\ntake the `nextToken` or `previousToken` value and pass it to your next call’s `token` parameter to get the\nrespective page of records. For example, if you made this request:\n\n```bash\ncurl -X GET {hostname}/{version}/contacts?limit=100 \\\n-H 'Accept: application/json' \\\n-H 'Authorization: Bearer {accessToken}'\n```\n\nThe response contains a paging array where you'll find the token information.\n\n```json\n{\n  \"paging\": {\n    \"currentToken\": \"90c5f062-76ad-4ea4-aa53-00eb698d9262\",\n    \"nextToken\": \"3b2359a7-4583-40ed-8afd-67e5f15373d3\",\n    \"limit\": 100,\n    \"totalCount\": 102,\n    \"_links\": {...}\n  },\n  \"data\": [...]\n}\n```\n\nTake the `nextToken` and use it in the `token` parameter on your subsequent call.\n\n```bash\ncurl -X GET {hostname}/{version}/contacts?limit=100&token=3b2359a7-4583-40ed-8afd-67e5f15373d3 \\\n-H 'Accept: application/json' \\\n-H 'Authorization: Bearer {accessToken}'\n```\n\nWhen the response doesn’t contain a `nextToken` field, you’ve reached the last page. Occasionally, you might\nencounter an empty page at the end of results. This typically happens when the results were evenly divisible.\nEnsure your client code handles the possibility of receiving an empty data array when using the `nextToken`.\n\n## Filtering\n\nUse filters to narrow down results. The filter follows the pattern\n`filter='field' comparisonType 'value'`. The value can be enclosed with single\nquotes (') or double quotes (\").\n\n```bash\nGET {hostName}/{version}/contacts?filter=lastName eq 'Smith'\n````\n\nTo correctly pass a single quote in the filter's value, use double quotes around\nthe string.\n\n```bash\nGET {hostName}/{version}/contacts?filter=lastName eq \"O'Keenan\"\n```\n\nTo correctly pass a double quote in the filter's value, use double quotes around\nthe string and add an escape character `\\` to each quote that is part of the\nstring.\n\n```bash\nGET {hostName}/{version}/events?filter=eventName eq \"\\\"Yearly\\\" Conference\"\n```\n\n## Versioning\n\nChange is inevitable in API development. Planning for it is crucial. We track\nboth backward-compatible and backward-incompatible changes.\n\n<br />\n\n### Backward Compatible Changes\n\nBackward compatible changes will be made often and are intended to avoid\nany adverse impact on our customers. It is highly advisable that when reading\nJSON payloads from Cvent, you are able to handle \"unknown\" attributes that\ncan be added over time. We consider the following changes backward-compatible:\n\n- Adding new resources\n- Adding new optional request parameters to existing operations\n- Adding new attributes to requests or responses\n- Changing the length or format (not type) of resource identifiers. For example, an ID can change from\n  \"1234/1234\" to \"1234::1234\".\n- Increasing the length of string fields\n\n<br />\n\n### Backward Incompatible Changes\n\nBackward-incompatible changes are made infrequently, however, they can be\ndisruptive to consumers. Due to this, our APIs are versioned to avoid\ndisruptions to customers. We leverage a URI-based versioning scheme,\nwhich means that a version value is included in the Cvent API URL.\nWhen breaking changes occur, a new version of the API is made available\nwhile the existing version is deprecated but remains available for a\nlimited period of time. We consider the following backward-incompatible changes:\n\n- Adding a new required parameter (query string param or payload attribute)\n- Deleting API resources\n- Deleting any attribute from API responses\n- Changing the data type on any parameter or attribute\n\n## Standards\nAs you begin working with our APIs, it's essential to be aware of standards around\ncountry codes, time formats, and other important details that ensure smooth integration.\nLearn more about our [API Standards](https://developers.cvent.com/docs/rest-api/reference/api-standards)\n"
+  description: '# Introduction
+
+    The Cvent API Platform is built around REST.'
   contact:
     name: Cvent Development Platform
     url: https://developers.cvent.com/
@@ -48,7 +50,57 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests1'
 components:
+  responses:
+    TooManyRequests1:
+      description: Too many requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 429
+            message: Limit Exceeded
+    BadRequest1:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 400
+            message: Bad Request
+    Forbidden1:
+      description: You do not have access to the resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 403
+            message: Access Forbidden
+    Unauthorized1:
+      description: Bad or expired token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 401
+            message: Unauthorized
   schemas:
+    status-summary.json:
+      description: Represents a summary of status associated with this proposal.
+      type: object
+      title: StatusSummary
+      properties:
+        reason:
+          type: string
+          example: Other
+          description: Reason provided by the planner for status update
+        comment:
+          type: string
+          example: Not as per requirement
+          description: Comment provided by the planner while updating the status of the proposal.
     country.json:
       title: Country
       description: ISO 3166 two-letter (alpha-2) country codes with some additional non-standard cvent specific codes.
@@ -311,137 +363,218 @@ components:
       - ZA
       - ZM
       - ZW
-    supplier-type.json:
-      title: SupplierType
-      description: 'The supplier''s type. VENUE: A hotel, convention and visitors bureau (CVB), or other location for an event.'
-      type: string
-      enum:
-      - VENUE
-      default: VENUE
-    category-items-cost.json:
+    ProposalRequest:
+      description: Schema for proposal request.
       type: object
-      title: CategoryItemsCost
-      description: Category items cost. DEPRECATED - This field is deprecated. Only applied to proposals made by vendors, and the vendor marketplace is sunset.
-      deprecated: true
-      properties:
-        notes:
-          type: string
-          description: Notes on category items cost from the venue.
-          example: We are offering a discount on projectors.
-        totalCost:
-          type: number
-          description: Total cost across all categories.
-          example: 10000.99
-        categories:
-          type: array
-          description: List of categories.
-          items:
-            $ref: '#/components/schemas/category.json'
-    item.json:
+      title: ProposalRequest
+      allOf:
+      - description: Schema for proposal request.
+        type: object
+        title: BaseProposal
+        allOf:
+        - title: Audit
+          description: Audit information
+          type: object
+          properties:
+            created:
+              type: string
+              format: date-time
+              description: The ISO 8601 zoned date time when this record was created.
+              readOnly: true
+              example: '2017-01-02T02:00:00Z'
+            createdBy:
+              type: string
+              description: The identifier of the user that created this record.
+              readOnly: true
+              example: hporter
+            lastModified:
+              type: string
+              format: date-time
+              description: The ISO 8601 zoned date time when this record was updated.
+              readOnly: true
+              example: '2019-02-12T03:00:00Z'
+            lastModifiedBy:
+              type: string
+              description: The identifier of the user that last updated this record.
+              readOnly: true
+              example: hporter
+        properties:
+          scpTemplateId:
+            format: uuid
+            type: string
+            example: a633b01c-e461-4cc2-8c66-8ae036115658
+            description: The ID of the smart custom proposal template.
+          type:
+            $ref: '#/components/schemas/proposal-type.json'
+          supplierSummary:
+            $ref: '#/components/schemas/supplier-summary.json'
+          rfpSummary:
+            $ref: '#/components/schemas/rfp-summary.json'
+          eventSummary:
+            $ref: '#/components/schemas/event-summary.json'
+          statusSummary:
+            $ref: '#/components/schemas/status-summary.json'
+          introduction:
+            type: string
+            maxLength: 2500
+            description: Introduction text for the proposal.
+            example: Let us design the day of your dreams at our property.
+          billingContractualResponse:
+            type: string
+            maxLength: 2500
+            description: Details about concessions or contractual requirements from the supplier. DEPRECATED - This field is deprecated. Only applied to proposal made from vendor marketplace, a sunset product.
+            example: All invoices must be paid in 30 days.
+            deprecated: true
+          currencyCode:
+            $ref: '#/components/schemas/currency.json2'
+          commissionableBid:
+            type: boolean
+            description: True indicates this is a commissionable bid.
+            example: true
+          commissionRate:
+            type: number
+            description: The proposal's commission rate.
+            example: 10.12
+          name:
+            type: string
+            maxLength: 50
+            description: Name of the proposal.
+            example: Proposal for Royal Bank of Spain.
+          blockCode:
+            type: string
+            maxLength: 50
+            description: Block code for the proposal.
+            example: ABDCFD-234535-3535
+          proposalDates:
+            type: array
+            description: List of dates the venue is available.
+            items:
+              $ref: '#/components/schemas/proposal-date.json'
+          sleepingRooms:
+            type: array
+            description: List of all sleeping rooms offered in the proposal.
+            items:
+              $ref: '#/components/schemas/sleeping-room.json'
+          categoryItemsCost:
+            $ref: '#/components/schemas/category-items-cost.json'
+          aggregatedCost:
+            $ref: '#/components/schemas/aggregated-cost.json'
+          estimatedCost:
+            $ref: '#/components/schemas/estimated-cost.json'
+          contacts:
+            type: array
+            description: List of all contacts.
+            items:
+              $ref: '#/components/schemas/contact.json'
+          plannerContacts:
+            type: array
+            description: List of all planner contacts.
+            items:
+              $ref: '#/components/schemas/contact.json'
+          meetingRoom:
+            $ref: '#/components/schemas/meeting-room.json'
+          transaction:
+            $ref: '#/components/schemas/transaction.json'
+    supplier-summary.json:
+      description: Represents a summary of supplier information associated with current proposal.
       type: object
-      title: Item
-      description: An item that has cost information.
+      title: SupplierSummary
       properties:
-        itemId:
+        supplier:
+          description: The supplier associated with current proposal.
+          oneOf:
+          - description: Represents a summary of venue information associated with current proposal.
+            type: object
+            title: VenueSummary
+            allOf:
+            - description: Represents a supplier object.
+              type: object
+              title: Supplier
+              properties:
+                type:
+                  $ref: '#/components/schemas/supplier-type.json'
+            properties:
+              id:
+                type: string
+                description: The unique ID of the venue.
+                example: bedc1f8e-f68b-40cf-b901-487e407f637a
+              name:
+                type: string
+                description: The name of the venue.
+                example: Hotel Grand San Francisco.
+          discriminator:
+            propertyName: type
+            mapping:
+              VENUE: '#/components/schemas/supplier-summary.json/properties/supplier/oneOf/0'
+    sleeping-room.json:
+      type: object
+      title: SleepingRoom
+      description: The sleeping room.
+      properties:
+        proposalDateType:
+          $ref: '#/components/schemas/date-type.json'
+        checkInDate:
           type: string
-          description: Unique ID for the item.
-          example: AC-127-3B
-        name:
+          format: date
+          description: The check in date for attendees.
+          example: '2021-01-13'
+        checkOutDate:
           type: string
-          description: The name of the item.
-          example: Earphones
-        quantity:
+          format: date
+          description: The check out date for attendees.
+          example: '2021-01-13'
+        peakRoomNights:
           type: integer
-          description: The number of items.
-          example: 20
-        totalCost:
+          minimum: 0
+          description: The night during an event when the most sleeping rooms are occupied.
+          example: 2
+        totalRoomNights:
+          type: integer
+          description: The total number of room nights available over the entire event.
+          minimum: 0
+          example: 200
+        lowestRate:
           type: number
-          description: Total cost of the item(s).
-          example: 10000.99
+          description: The lowest room rate offered by the venue.
+          example: 140
+        maximumRate:
+          type: number
+          description: The highest room rate offered by the venue.
+          example: 200
+        lowestAverageDailyRate:
+          type: number
+          description: The lowest average daily rate.
+          example: 140
+        highestAverageDailyRate:
+          type: number
+          description: The highest average daily rate.
+          example: 200
+        totalRoomCost:
+          type: number
+          description: The total room cost to attendees.
+          example: 300
+        budgetedRoomRate:
+          type: number
+          description: The planner's budgeted room rate.
+          example: 135
+        lowestAvailableRoomCount:
+          type: integer
+          description: Minimum number of available rooms.
+          example: 10
+        highestAvailableRoomCount:
+          type: integer
+          description: Maximum number of available rooms.
+          example: 10
         notes:
           type: string
           maxLength: 2500
-          description: Notes associated with the item.
-          example: This item is very popular.
-    proposal-type.json:
-      type: string
-      title: ProposalType
-      description: The type of the proposal.
-      enum:
-      - VENUE
-      default: VENUE
-    declined-reason.json:
-      title: DeclinedReason
-      description: The set of decline reasons available for proposals
-      type: string
-      enum:
-      - DID_NOT_MEET_REQUIREMENTS
-      - EVENT_CANCELLED
-      - FOOD_AND_BEVERAGE_MINIMUM_TOO_HIGH
-      - INCOMPLETE_RFP
-      - LATE_RESPONSE
-      - MEETING_ROOM_RENTAL_TOO_HIGH
-      - MEETING_SPACE_CEILING_HEIGHT
-      - OTHER
-      - PREFERRED_OR_ALTERNATE_DATES_UNAVAILABLE
-      - PROPERTY_AMENITIES_OR_SERVICES
-      - PROPERTY_LOCATION
-      - RENOVATIONS
-      - SELECTED_OTHER_CITY
-      - SELECTED_OTHER_HOTEL_OR_VENUE
-      - SIZE_OF_MEETING_SPACE
-      - SLEEPING_ROOM_RATE_TOO_HIGH
-      - SUITE_AVAILABILITY
-    status-summary.json:
-      description: Represents a summary of status associated with this proposal.
-      type: object
-      title: StatusSummary
-      properties:
-        reason:
-          type: string
-          example: Other
-          description: Reason provided by the planner for status update
-        comment:
-          type: string
-          example: Not as per requirement
-          description: Comment provided by the planner while updating the status of the proposal.
-    transaction-type.json:
-      title: TransactionType
-      description: The proposal transaction type
-      type: string
-      enum:
-      - AWARD
-      - CANCEL
-      - COPY
-      - CREATE
-      - DECLINE
-      - DELETE
-      - EXPIRE
-      - MODIFY
-      - OBFUSCATE
-      - PUBLISH
-      - PUBLISH_CANCEL
-      - PUBLISH_REQUEST
-      - REOPEN
-      - RESEND_EMAIL
-      - SUBMIT
-      - VALIDATE
-      - WITHDRAW
-    ErrorResponse:
-      title: ErrorResponse
-      description: Represents an error response with additional details of cascading error messages.
-      allOf:
-      - $ref: '#/components/schemas/ErrorResponseBase'
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        details:
+          description: Additional notes of the sleeping room.
+          example: Premier Suite not available for the selected dates.
+        sleepingRoomBlocks:
           type: array
+          description: List of sleeping room blocks for this sleeping room type.
           items:
-            $ref: '#/components/schemas/ErrorResponseBase'
-          description: Additional details of cascading error messages.
+            $ref: '#/components/schemas/sleeping-room-block.json'
     currency.json2:
       title: Currency
       type: string
@@ -614,144 +747,80 @@ components:
       - SCR
       - ZMW
       - ZWL
-    ProposalResponse:
-      description: Schema for proposal.
+    estimated-cost.json:
       type: object
-      title: Proposal
-      allOf:
-      - $ref: '#/components/schemas/ProposalRequest/allOf/0'
+      title: EstimatedCost
+      description: The estimated cost
       properties:
-        id:
-          type: string
-          format: uuid
-          description: The unique ID of the proposal.
-          example: cf5fd2cc-3d09-11ee-be56-0242ac120002
-        proposalCode:
-          type: string
-          minLength: 14
-          maxLength: 14
-          description: A 14-character human readable proposal code.
-          example: P230810-G7T9DR
-        status:
-          $ref: '#/components/schemas/proposal-status.json'
-        version:
-          type: integer
-          description: The version number associated with the proposal.
-          example: 1
-        lastSubmittedTime:
-          type: string
-          format: date-time
-          description: The ISO 8601 zoned Coordinated Universal Time (UTC) when the proposal was last submitted.
-          example: '2023-02-12T03:00:00Z'
-        responseReason:
-          type: string
-          description: The reason for the response.
-          oneOf:
-          - $ref: '#/components/schemas/declined-reason.json'
-          - $ref: '#/components/schemas/cancelled-reason.json'
-          example: BOOKED_ANOTHER_VENUE_DESTINATION
-        responseDetails:
-          type: string
-          description: Additional details provided while responding to the proposal.
-          example: The location is far from the event venue.
-      required:
-      - id
-      - proposalCode
-      - status
-      - version
-    contact.json:
-      title: Contact
-      description: The contact details.
-      type: object
-      properties:
-        contactType:
-          $ref: '#/components/schemas/contact-type.json'
-        firstName:
-          type: string
-          maxLength: 50
-          description: The first name of the contact.
-          example: Saurabh
-        lastName:
-          type: string
-          maxLength: 50
-          description: The last name of the contact.
-          example: Sachdeva
-        organizationWebsite:
-          type: string
-          format: uri
-          description: The URL of the organization's website.
-          maxLength: 100
-          example: www.cvent.com
-        organization:
-          type: string
-          maxLength: 100
-          description: The name of the organization.
-          example: Cvent
-        title:
-          type: string
-          description: Designation of the contact.
-          maxLength: 50
-          example: Co-founder
-        email:
-          type: string
-          maxLength: 300
-          format: email
-          description: The email address of the contact.
-          example: saurabhsachdeva@xyz.com
-        countryCode:
-          type: string
-          maxLength: 25
-          description: The country code for the contact's phone number.
-          example: '1'
-        phone:
-          type: string
-          description: The phone number of the organization.
-          maxLength: 50
-          example: '198752236'
-        fax:
-          type: string
-          description: The organization's fax number.
-          maxLength: 50
-          example: '2487234567'
-        mobile:
-          type: string
-          description: The mobile number of the contact.
-          maxLength: 50
-          example: '2487649053'
-        streetAddress1:
-          type: string
-          description: Address line 1 of contact's street address.
-          maxLength: 255
-          example: 299 ABC Street
-        streetAddress2:
-          type: string
-          description: Address line 2 of contact's street address.
-          maxLength: 255
-          example: Unit 1A
-        streetAddress3:
-          type: string
-          description: Address line 3 of contact's street address.
-          maxLength: 255
-          example: Seattle, Washington
-        city:
-          type: string
-          maxLength: 100
-          description: The city of the contact.
-          example: Seattle
-        stateProvince:
-          $ref: '#/components/schemas/state-province.json'
-        postalCode:
-          type: string
-          maxLength: 30
-          description: The postal code of the contact.
-          example: '110079'
-        country:
-          $ref: '#/components/schemas/country.json'
+        guestRoom:
+          type: number
+          description: Guest room cost.
+          example: 100
+        meetingRoom:
+          type: number
+          description: Meeting room cost.
+          example: 10
+        foodAndBeverage:
+          type: number
+          description: Food and beverage cost.
+          example: 100
+        foodAndBeverageMinimum:
+          type: number
+          description: Minimum cost for food and beverage.
+          example: 10
         notes:
           type: string
-          maxLength: 255
-          description: Additional notes of the contact.
-          example: Available between 8am - 5pm.
+          maxLength: 2500
+          description: Extra notes on the cost.
+          example: Estimated cost includes taxes.
+    declined-reason.json:
+      title: DeclinedReason
+      description: The set of decline reasons available for proposals
+      type: string
+      enum:
+      - DID_NOT_MEET_REQUIREMENTS
+      - EVENT_CANCELLED
+      - FOOD_AND_BEVERAGE_MINIMUM_TOO_HIGH
+      - INCOMPLETE_RFP
+      - LATE_RESPONSE
+      - MEETING_ROOM_RENTAL_TOO_HIGH
+      - MEETING_SPACE_CEILING_HEIGHT
+      - OTHER
+      - PREFERRED_OR_ALTERNATE_DATES_UNAVAILABLE
+      - PROPERTY_AMENITIES_OR_SERVICES
+      - PROPERTY_LOCATION
+      - RENOVATIONS
+      - SELECTED_OTHER_CITY
+      - SELECTED_OTHER_HOTEL_OR_VENUE
+      - SIZE_OF_MEETING_SPACE
+      - SLEEPING_ROOM_RATE_TOO_HIGH
+      - SUITE_AVAILABILITY
+    item.json:
+      type: object
+      title: Item
+      description: An item that has cost information.
+      properties:
+        itemId:
+          type: string
+          description: Unique ID for the item.
+          example: AC-127-3B
+        name:
+          type: string
+          description: The name of the item.
+          example: Earphones
+        quantity:
+          type: integer
+          description: The number of items.
+          example: 20
+        totalCost:
+          type: number
+          description: Total cost of the item(s).
+          example: 10000.99
+        notes:
+          type: string
+          maxLength: 2500
+          description: Notes associated with the item.
+          example: This item is very popular.
     state-province.json:
       type: string
       title: StateProvince
@@ -1576,6 +1645,28 @@ components:
       - YOR
       - YT
       - ZET
+    category.json:
+      type: object
+      title: Category
+      description: A category of items.
+      properties:
+        type:
+          type: string
+          description: The category type.
+          example: AVProduction
+        name:
+          type: string
+          description: The name of the category.
+          example: Audio Video Production
+        totalCost:
+          type: number
+          description: Total cost for all items within this category.
+          example: 10000.99
+        items:
+          type: array
+          description: List of items in this category.
+          items:
+            $ref: '#/components/schemas/item.json'
     date-type.json:
       type: string
       title: DateType
@@ -1605,6 +1696,154 @@ components:
           format: uuid
           description: The unique ID of the RFP this proposal is associated with.
           example: 385b9a4c-3f00-4b67-99ca-8dddc82a95b5
+    transaction.json:
+      description: The latest transaction that took place on a given proposal
+      type: object
+      title: Transaction
+      readOnly: true
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The unique ID of a specific transaction.
+          example: cf5fd2cc-3d09-11ee-be56-0242ac120002
+        type:
+          $ref: '#/components/schemas/transaction-type.json'
+        time:
+          type: string
+          format: date-time
+          description: The ISO 8601 zoned date time when this record was updated.
+          example: '2023-02-12T03:00:00Z'
+    proposal-status.json:
+      type: string
+      title: ProposalStatus
+      description: The status of the proposal. See [definitions of proposal statuses](https://support.cvent.com/s/communityarticle/Understanding-RFP-and-Proposal-Statuses)
+      enum:
+      - NOT_SENT
+      - SUBMITTED
+      - AWARDED
+      - DECLINED
+      - DELETED
+      - NO_RESPONSE
+      - CANCELLED
+      - WITHDRAWN
+      default: NOT_SENT
+    aggregated-cost.json:
+      description: The aggregated cost
+      type: object
+      title: AggregatedCost
+      properties:
+        totalFoodAndBeverageCost:
+          type: number
+          description: The cost of the food and beverage.
+          example: 396.56
+        totalMiscCost:
+          type: number
+          description: The total misc cost.
+          example: 644.96
+    category-items-cost.json:
+      type: object
+      title: CategoryItemsCost
+      description: Category items cost. DEPRECATED - This field is deprecated. Only applied to proposals made by vendors, and the vendor marketplace is sunset.
+      deprecated: true
+      properties:
+        notes:
+          type: string
+          description: Notes on category items cost from the venue.
+          example: We are offering a discount on projectors.
+        totalCost:
+          type: number
+          description: Total cost across all categories.
+          example: 10000.99
+        categories:
+          type: array
+          description: List of categories.
+          items:
+            $ref: '#/components/schemas/category.json'
+    sleeping-room-type.json:
+      type: string
+      title: SleepingRoomType
+      description: Sleeping room type
+      enum:
+      - ANY
+      - SINGLE
+      - DOUBLE
+      - SUITE
+      - STAFF
+    transaction-type.json:
+      title: TransactionType
+      description: The proposal transaction type
+      type: string
+      enum:
+      - AWARD
+      - CANCEL
+      - COPY
+      - CREATE
+      - DECLINE
+      - DELETE
+      - EXPIRE
+      - MODIFY
+      - OBFUSCATE
+      - PUBLISH
+      - PUBLISH_CANCEL
+      - PUBLISH_REQUEST
+      - REOPEN
+      - RESEND_EMAIL
+      - SUBMIT
+      - VALIDATE
+      - WITHDRAW
+    ProposalResponse:
+      description: Schema for proposal.
+      type: object
+      title: Proposal
+      allOf:
+      - $ref: '#/components/schemas/ProposalRequest/allOf/0'
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The unique ID of the proposal.
+          example: cf5fd2cc-3d09-11ee-be56-0242ac120002
+        proposalCode:
+          type: string
+          minLength: 14
+          maxLength: 14
+          description: A 14-character human readable proposal code.
+          example: P230810-G7T9DR
+        status:
+          $ref: '#/components/schemas/proposal-status.json'
+        version:
+          type: integer
+          description: The version number associated with the proposal.
+          example: 1
+        lastSubmittedTime:
+          type: string
+          format: date-time
+          description: The ISO 8601 zoned Coordinated Universal Time (UTC) when the proposal was last submitted.
+          example: '2023-02-12T03:00:00Z'
+        responseReason:
+          type: string
+          description: The reason for the response.
+          oneOf:
+          - $ref: '#/components/schemas/declined-reason.json'
+          - $ref: '#/components/schemas/cancelled-reason.json'
+          example: BOOKED_ANOTHER_VENUE_DESTINATION
+        responseDetails:
+          type: string
+          description: Additional details provided while responding to the proposal.
+          example: The location is far from the event venue.
+      required:
+      - id
+      - proposalCode
+      - status
+      - version
+    proposal-type.json:
+      type: string
+      title: ProposalType
+      description: The type of the proposal.
+      enum:
+      - VENUE
+      default: VENUE
     sleeping-room-block.json:
       type: object
       title: SleepingRoomBlock
@@ -1644,6 +1883,14 @@ components:
       - EPIDEMIC_OR_PANDEMIC
       - NATURAL_DISASTER
       - POLITICAL_OR_CIVIL_UNREST
+    contact-type.json:
+      type: string
+      title: ContactType
+      description: The contact types used for the proposal.
+      enum:
+      - PRIMARY
+      - SECONDARY
+      default: PRIMARY
     event-summary.json:
       description: Schema for event summary associated with this proposal.
       type: object
@@ -1654,229 +1901,6 @@ components:
           format: uuid
           description: The unique ID of the event in the proposal.
           example: bedc1f8e-f68b-40cf-b901-487e407f637a
-    contact-type.json:
-      type: string
-      title: ContactType
-      description: The contact types used for the proposal.
-      enum:
-      - PRIMARY
-      - SECONDARY
-      default: PRIMARY
-    proposal-status.json:
-      type: string
-      title: ProposalStatus
-      description: The status of the proposal. See [definitions of proposal statuses](https://support.cvent.com/s/communityarticle/Understanding-RFP-and-Proposal-Statuses)
-      enum:
-      - NOT_SENT
-      - SUBMITTED
-      - AWARDED
-      - DECLINED
-      - DELETED
-      - NO_RESPONSE
-      - CANCELLED
-      - WITHDRAWN
-      default: NOT_SENT
-    sleeping-room-type.json:
-      type: string
-      title: SleepingRoomType
-      description: Sleeping room type
-      enum:
-      - ANY
-      - SINGLE
-      - DOUBLE
-      - SUITE
-      - STAFF
-    supplier-summary.json:
-      description: Represents a summary of supplier information associated with current proposal.
-      type: object
-      title: SupplierSummary
-      properties:
-        supplier:
-          description: The supplier associated with current proposal.
-          oneOf:
-          - description: Represents a summary of venue information associated with current proposal.
-            type: object
-            title: VenueSummary
-            allOf:
-            - description: Represents a supplier object.
-              type: object
-              title: Supplier
-              properties:
-                type:
-                  $ref: '#/components/schemas/supplier-type.json'
-            properties:
-              id:
-                type: string
-                description: The unique ID of the venue.
-                example: bedc1f8e-f68b-40cf-b901-487e407f637a
-              name:
-                type: string
-                description: The name of the venue.
-                example: Hotel Grand San Francisco.
-          discriminator:
-            propertyName: type
-            mapping:
-              VENUE: '#/components/schemas/supplier-summary.json/properties/supplier/oneOf/0'
-    proposal-date.json:
-      type: object
-      title: ProposalDate
-      description: The proposal date.
-      properties:
-        dateType:
-          $ref: '#/components/schemas/date-type.json'
-        startDate:
-          type: string
-          format: date
-          description: The start date of the event.
-          example: '2021-01-13'
-        endDate:
-          type: string
-          format: date
-          description: The end date of the event.
-          example: '2021-01-13'
-    ProposalRequest:
-      description: Schema for proposal request.
-      type: object
-      title: ProposalRequest
-      allOf:
-      - description: Schema for proposal request.
-        type: object
-        title: BaseProposal
-        allOf:
-        - title: Audit
-          description: Audit information
-          type: object
-          properties:
-            created:
-              type: string
-              format: date-time
-              description: The ISO 8601 zoned date time when this record was created.
-              readOnly: true
-              example: '2017-01-02T02:00:00Z'
-            createdBy:
-              type: string
-              description: The identifier of the user that created this record.
-              readOnly: true
-              example: hporter
-            lastModified:
-              type: string
-              format: date-time
-              description: The ISO 8601 zoned date time when this record was updated.
-              readOnly: true
-              example: '2019-02-12T03:00:00Z'
-            lastModifiedBy:
-              type: string
-              description: The identifier of the user that last updated this record.
-              readOnly: true
-              example: hporter
-        properties:
-          scpTemplateId:
-            format: uuid
-            type: string
-            example: a633b01c-e461-4cc2-8c66-8ae036115658
-            description: The ID of the smart custom proposal template.
-          type:
-            $ref: '#/components/schemas/proposal-type.json'
-          supplierSummary:
-            $ref: '#/components/schemas/supplier-summary.json'
-          rfpSummary:
-            $ref: '#/components/schemas/rfp-summary.json'
-          eventSummary:
-            $ref: '#/components/schemas/event-summary.json'
-          statusSummary:
-            $ref: '#/components/schemas/status-summary.json'
-          introduction:
-            type: string
-            maxLength: 2500
-            description: Introduction text for the proposal.
-            example: Let us design the day of your dreams at our property.
-          billingContractualResponse:
-            type: string
-            maxLength: 2500
-            description: Details about concessions or contractual requirements from the supplier. DEPRECATED - This field is deprecated. Only applied to proposal made from vendor marketplace, a sunset product.
-            example: All invoices must be paid in 30 days.
-            deprecated: true
-          currencyCode:
-            $ref: '#/components/schemas/currency.json2'
-          commissionableBid:
-            type: boolean
-            description: True indicates this is a commissionable bid.
-            example: true
-          commissionRate:
-            type: number
-            description: The proposal's commission rate.
-            example: 10.12
-          name:
-            type: string
-            maxLength: 50
-            description: Name of the proposal.
-            example: Proposal for Royal Bank of Spain.
-          blockCode:
-            type: string
-            maxLength: 50
-            description: Block code for the proposal.
-            example: ABDCFD-234535-3535
-          proposalDates:
-            type: array
-            description: List of dates the venue is available.
-            items:
-              $ref: '#/components/schemas/proposal-date.json'
-          sleepingRooms:
-            type: array
-            description: List of all sleeping rooms offered in the proposal.
-            items:
-              $ref: '#/components/schemas/sleeping-room.json'
-          categoryItemsCost:
-            $ref: '#/components/schemas/category-items-cost.json'
-          aggregatedCost:
-            $ref: '#/components/schemas/aggregated-cost.json'
-          estimatedCost:
-            $ref: '#/components/schemas/estimated-cost.json'
-          contacts:
-            type: array
-            description: List of all contacts.
-            items:
-              $ref: '#/components/schemas/contact.json'
-          plannerContacts:
-            type: array
-            description: List of all planner contacts.
-            items:
-              $ref: '#/components/schemas/contact.json'
-          meetingRoom:
-            $ref: '#/components/schemas/meeting-room.json'
-          transaction:
-            $ref: '#/components/schemas/transaction.json'
-    transaction.json:
-      description: The latest transaction that took place on a given proposal
-      type: object
-      title: Transaction
-      readOnly: true
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: The unique ID of a specific transaction.
-          example: cf5fd2cc-3d09-11ee-be56-0242ac120002
-        type:
-          $ref: '#/components/schemas/transaction-type.json'
-        time:
-          type: string
-          format: date-time
-          description: The ISO 8601 zoned date time when this record was updated.
-          example: '2023-02-12T03:00:00Z'
-    aggregated-cost.json:
-      description: The aggregated cost
-      type: object
-      title: AggregatedCost
-      properties:
-        totalFoodAndBeverageCost:
-          type: number
-          description: The cost of the food and beverage.
-          example: 396.56
-        totalMiscCost:
-          type: number
-          description: The total misc cost.
-          example: 644.96
     ErrorResponseBase:
       title: ErrorResponseBase
       type: object
@@ -1897,6 +1921,138 @@ components:
           type: string
           description: The target resource of the error.
           example: example target
+    proposal-date.json:
+      type: object
+      title: ProposalDate
+      description: The proposal date.
+      properties:
+        dateType:
+          $ref: '#/components/schemas/date-type.json'
+        startDate:
+          type: string
+          format: date
+          description: The start date of the event.
+          example: '2021-01-13'
+        endDate:
+          type: string
+          format: date
+          description: The end date of the event.
+          example: '2021-01-13'
+    supplier-type.json:
+      title: SupplierType
+      description: 'The supplier''s type. VENUE: A hotel, convention and visitors bureau (CVB), or other location for an event.'
+      type: string
+      enum:
+      - VENUE
+      default: VENUE
+    ErrorResponse:
+      title: ErrorResponse
+      description: Represents an error response with additional details of cascading error messages.
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponseBase'
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorResponseBase'
+          description: Additional details of cascading error messages.
+    contact.json:
+      title: Contact
+      description: The contact details.
+      type: object
+      properties:
+        contactType:
+          $ref: '#/components/schemas/contact-type.json'
+        firstName:
+          type: string
+          maxLength: 50
+          description: The first name of the contact.
+          example: Saurabh
+        lastName:
+          type: string
+          maxLength: 50
+          description: The last name of the contact.
+          example: Sachdeva
+        organizationWebsite:
+          type: string
+          format: uri
+          description: The URL of the organization's website.
+          maxLength: 100
+          example: www.cvent.com
+        organization:
+          type: string
+          maxLength: 100
+          description: The name of the organization.
+          example: Cvent
+        title:
+          type: string
+          description: Designation of the contact.
+          maxLength: 50
+          example: Co-founder
+        email:
+          type: string
+          maxLength: 300
+          format: email
+          description: The email address of the contact.
+          example: saurabhsachdeva@xyz.com
+        countryCode:
+          type: string
+          maxLength: 25
+          description: The country code for the contact's phone number.
+          example: '1'
+        phone:
+          type: string
+          description: The phone number of the organization.
+          maxLength: 50
+          example: '198752236'
+        fax:
+          type: string
+          description: The organization's fax number.
+          maxLength: 50
+          example: '2487234567'
+        mobile:
+          type: string
+          description: The mobile number of the contact.
+          maxLength: 50
+          example: '2487649053'
+        streetAddress1:
+          type: string
+          description: Address line 1 of contact's street address.
+          maxLength: 255
+          example: 299 ABC Street
+        streetAddress2:
+          type: string
+          description: Address line 2 of contact's street address.
+          maxLength: 255
+          example: Unit 1A
+        streetAddress3:
+          type: string
+          description: Address line 3 of contact's street address.
+          maxLength: 255
+          example: Seattle, Washington
+        city:
+          type: string
+          maxLength: 100
+          description: The city of the contact.
+          example: Seattle
+        stateProvince:
+          $ref: '#/components/schemas/state-province.json'
+        postalCode:
+          type: string
+          maxLength: 30
+          description: The postal code of the contact.
+          example: '110079'
+        country:
+          $ref: '#/components/schemas/country.json'
+        notes:
+          type: string
+          maxLength: 255
+          description: Additional notes of the contact.
+          example: Available between 8am - 5pm.
     meeting-room.json:
       type: object
       title: MeetingRoom
@@ -1907,160 +2063,6 @@ components:
           maxLength: 2500
           description: Planner note about the meeting room.
           example: This meeting room has the best audio quality.
-    estimated-cost.json:
-      type: object
-      title: EstimatedCost
-      description: The estimated cost
-      properties:
-        guestRoom:
-          type: number
-          description: Guest room cost.
-          example: 100
-        meetingRoom:
-          type: number
-          description: Meeting room cost.
-          example: 10
-        foodAndBeverage:
-          type: number
-          description: Food and beverage cost.
-          example: 100
-        foodAndBeverageMinimum:
-          type: number
-          description: Minimum cost for food and beverage.
-          example: 10
-        notes:
-          type: string
-          maxLength: 2500
-          description: Extra notes on the cost.
-          example: Estimated cost includes taxes.
-    sleeping-room.json:
-      type: object
-      title: SleepingRoom
-      description: The sleeping room.
-      properties:
-        proposalDateType:
-          $ref: '#/components/schemas/date-type.json'
-        checkInDate:
-          type: string
-          format: date
-          description: The check in date for attendees.
-          example: '2021-01-13'
-        checkOutDate:
-          type: string
-          format: date
-          description: The check out date for attendees.
-          example: '2021-01-13'
-        peakRoomNights:
-          type: integer
-          minimum: 0
-          description: The night during an event when the most sleeping rooms are occupied.
-          example: 2
-        totalRoomNights:
-          type: integer
-          description: The total number of room nights available over the entire event.
-          minimum: 0
-          example: 200
-        lowestRate:
-          type: number
-          description: The lowest room rate offered by the venue.
-          example: 140
-        maximumRate:
-          type: number
-          description: The highest room rate offered by the venue.
-          example: 200
-        lowestAverageDailyRate:
-          type: number
-          description: The lowest average daily rate.
-          example: 140
-        highestAverageDailyRate:
-          type: number
-          description: The highest average daily rate.
-          example: 200
-        totalRoomCost:
-          type: number
-          description: The total room cost to attendees.
-          example: 300
-        budgetedRoomRate:
-          type: number
-          description: The planner's budgeted room rate.
-          example: 135
-        lowestAvailableRoomCount:
-          type: integer
-          description: Minimum number of available rooms.
-          example: 10
-        highestAvailableRoomCount:
-          type: integer
-          description: Maximum number of available rooms.
-          example: 10
-        notes:
-          type: string
-          maxLength: 2500
-          description: Additional notes of the sleeping room.
-          example: Premier Suite not available for the selected dates.
-        sleepingRoomBlocks:
-          type: array
-          description: List of sleeping room blocks for this sleeping room type.
-          items:
-            $ref: '#/components/schemas/sleeping-room-block.json'
-    category.json:
-      type: object
-      title: Category
-      description: A category of items.
-      properties:
-        type:
-          type: string
-          description: The category type.
-          example: AVProduction
-        name:
-          type: string
-          description: The name of the category.
-          example: Audio Video Production
-        totalCost:
-          type: number
-          description: Total cost for all items within this category.
-          example: 10000.99
-        items:
-          type: array
-          description: List of items in this category.
-          items:
-            $ref: '#/components/schemas/item.json'
-  responses:
-    Forbidden1:
-      description: You do not have access to the resource
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 403
-            message: Access Forbidden
-    TooManyRequests1:
-      description: Too many requests
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 429
-            message: Limit Exceeded
-    BadRequest1:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 400
-            message: Bad Request
-    Unauthorized1:
-      description: Bad or expired token
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 401
-            message: Unauthorized
   requestBodies:
     ProposalRequest:
       description: A Proposal request object to create a proposal

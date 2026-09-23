@@ -1,11 +1,13 @@
 openapi: 3.2.0
 info:
-  title: Cvent Event Cloud Events+ Hub API
-  version: ea
+  title: Cvent REST Events+ Hub API
+  description: '# Introduction
+
+    The Cvent API Platform is built around REST.'
   contact:
     name: Cvent Development Platform
     url: https://developers.cvent.com/
-  description: 'Operations tagged Events+ Hub across 2 of this provider''s published API definitions: cvent-event-cloud-rest-openapi.yml, cvent-rest-apis-openapi.yaml. Each path carries the servers of the definition it was published in.'
+  version: ea
 servers:
 - url: https://api-platform.cvent.com/ea
 - url: https://api-platform-eur.cvent.com/ea
@@ -44,9 +46,6 @@ paths:
           $ref: '#/components/responses/Forbidden1'
         '429':
           $ref: '#/components/responses/TooManyRequests1'
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
   /hubs/{hubId}/members:
     get:
       tags:
@@ -82,176 +81,74 @@ paths:
           $ref: '#/components/responses/NotFound1'
         '429':
           $ref: '#/components/responses/TooManyRequests1'
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
 components:
+  responses:
+    TooManyRequests1:
+      description: Too many requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 429
+            message: Limit Exceeded
+    BadRequest1:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 400
+            message: Bad Request
+    Forbidden1:
+      description: You do not have access to the resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 403
+            message: Access Forbidden
+    Unauthorized1:
+      description: Bad or expired token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 401
+            message: Unauthorized
+    NotFound1:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 404
+            message: Not found
   schemas:
-    HubLogo:
-      title: HubLogo
+    WorkAddress:
+      title: WorkAddress
       type: object
-      description: The logo for the Events+ hub.
+      description: Member's work address details.
       properties:
-        url:
-          description: The optimized Events+ hub logo image URL.
+        city:
           type: string
-          format: uri
-          example: https://images.cvent.com/ab5d5f790f6b4a90b29a3711d4ec381f/video-center/4833fde2-eedf-4751-92a5-f788cfa70674/43c5b520abf9635f4168a2ce37a89d89!_!6fbef1a131b81d4bed2b16c175ef57cd.jpeg
-        originalUrl:
-          description: The original URL of the logo image that was uploaded to the Events+ hub. Supported file types are JPEG, JPG, PNG, GIF. Recommended logo size is 170 x 90 pixels and 72 PPI.
+          maxLength: 50
+          example: New York
+          description: Member's work address city.
+        state:
           type: string
-          format: uri
-          example: https://custom.cvent.com/ab5d5f790f6b4a90b29a3711d4ec381f/video-center/4833fde2-eedf-4751-92a5-f788cfa70674/43c5b520abf9635f4168a2ce37a89d89.jpeg
-        altText:
+          maxLength: 50
+          example: New York
+          description: Member's Work address state.
+        country:
           type: string
-          description: Alternate text for the logo image.
-          example: A mostly empty conference room.
-          minLength: 1
           maxLength: 100
-    paginated-existing-member:
-      title: Paginated Existing Member
-      description: A paginated list of Events+ members.
-      required:
-      - paging
-      - data
-      type: object
-      properties:
-        paging:
-          $ref: '#/components/schemas/Paging'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ExistingMember'
-          description: Collection of Events+ members.
-    HubCalendar:
-      title: HubCalendar
-      type: object
-      description: The event calendar associated with this Events+ hub. The event calendar allows you to share multiple events and sessions in a list or calendar format.
-      properties:
-        id:
-          description: The ID of the calendar associated to an Events+ hub.
-          type: string
-          format: uuid
-          example: 1e7e0f38-d73c-4326-9f93-422086b91304
-          maxLength: 255
-        layout:
-          description: The initial layout style used by front-ends to render the associated calendar.
-          type: string
-          enum:
-          - List
-          - Grid
-          example: List
-    HubBackground:
-      title: HubBackground
-      type: object
-      description: The background image of the Events+ hub.
-      properties:
-        url:
-          description: The optimized URL of the Events+ hub's background image. The background image appears on the Events+ hub registration page.
-          type: string
-          format: uri
-          example: https://images.cvent.com/ab5d5f790f6b4a90b29a3711d4ec381f/video-center/4833fde2-eedf-4751-92a5-f788cfa70674/43c5b520abf9635f4168a2ce37a89d89!_!6fbef1a131b81d4bed2b16c175ef57cd.jpeg
-        originalUrl:
-          description: The original URL of the Events+ hub background image. The background appears on the Events+ hub Registration page.
-          type: string
-          format: uri
-          example: https://custom.cvent.com/ab5d5f790f6b4a90b29a3711d4ec381f/video-center/4833fde2-eedf-4751-92a5-f788cfa70674/43c5b520abf9635f4168a2ce37a89d89.jpeg
-        altText:
-          type: string
-          description: Alternate text for the background image.
-          example: A mostly empty conference room.
-          minLength: 1
-          maxLength: 100
-    SocialMediaLinks:
-      title: SocialMediaLinks
-      type: object
-      description: Member's social media links.
-      properties:
-        facebookUrl:
-          $ref: '#/components/schemas/Link'
-        twitterUrl:
-          $ref: '#/components/schemas/Link'
-        linkedinUrl:
-          $ref: '#/components/schemas/Link'
-        websiteUrl:
-          $ref: '#/components/schemas/Link'
-    HubFonts:
-      title: HubFonts
-      type: object
-      description: The fonts of the Events+ hub.
-      properties:
-        headingId:
-          type: string
-          format: uuid
-          example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
-          description: The id of the font used in this Events+ hub's heading. Custom fonts are previously uploaded in the account.
-        bodyId:
-          type: string
-          format: uuid
-          example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
-          description: The id of the font used in this Events+ hub's body text. Custom fonts are previously uploaded in account.
-    Compliance:
-      title: Compliance
-      description: Privacy compliance fields for a contact.
-      type: object
-      properties:
-        creationTime:
-          type: string
-          format: date-time
-          description: Date-time (in GMT) when privacy compliance details were created for the contact.
-          example: '2021-03-08T17:30:01.727Z'
-        complianceScope:
-          type: string
-          description: Scope of privacy compliance.
-          example: CCPA
-          enum:
-          - CCPA
-        action:
-          type: string
-          description: Action to take for a compliance request.
-          example: DO_NOT_SELL
-          enum:
-          - DO_NOT_SELL
-          - OK_TO_SELL
-        createdBy:
-          type: string
-          description: Denotes how the compliance request was created.
-          example: PLANNER
-          enum:
-          - ATTENDEE
-          - PLANNER
-          - IMPORT
-          - SOAP_API
-          - REST_API
-          - MARKETO
-          - SALEFORCE
-          - VIDEO_CENTER_MEMBER
-          - RESPONDENT
-          - NOT_SET
-    UTMOverride:
-      title: UTMOverride
-      description: 'Specifies how UTM (urchin tracking module: a key and value that is attached to URLs for the purpose of identifying and tracking traffic) settings will override passed in items.'
-      type: string
-      enum:
-      - use-existing-parameter
-      - use-custom-parameter
-      default: use-existing-parameter
-      example: use-custom-parameter
-    ErrorResponse:
-      title: ErrorResponse
-      description: Represents an error response with additional details of cascading error messages.
-      allOf:
-      - $ref: '#/components/schemas/ErrorResponseBase'
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorResponseBase'
-          description: Additional details of cascading error messages.
+          example: USA
+          description: Member's work address country.
     HubOwner:
       title: HubOwner
       type: object
@@ -276,177 +173,34 @@ components:
           example: owner@example.com
           maxLength: 255
           minLength: 1
-    HubIdPropertyReadOnly:
-      title: HubIdPropertyReadOnly
-      description: The unique ID of an Events+ Hub.
-      type: string
-      format: uuid
-      example: 1e7e0f38-d73c-4326-9f93-422086b91304
-      readOnly: true
-    HubLogin:
-      title: HubLogin
-      type: object
-      properties:
-        type:
-          type: string
-          default: MAGIC_LINK
-          enum:
-          - MAGIC_LINK
-          - SSO
-          - BOTH
-          description: 'Login method for the members of the Events+ hub. MAGIC_LINK: The members can log in via a ''magic link'' provided via email. Magic links are unique for each member, allowing the member to log in without requiring credentials. SSO: The members log in via a single-sign-on (SSO) method previously configured in the Events+ hub. BOTH: Members can log in via the magic link method or the single-sign-on (SSO) method.'
-        organizationId:
-          type: string
-          description: Organization identifier of a Cvent identity provider when SSO login type is selected. This value is provided by Cvent when an account is first configured to support SSO. To read more about Cvent SSO support, see https://developers.cvent.com/docs/sso/overview.
-          example: OneloginforFlexGuestside
-          maxLength: 255
-        idpUrl:
-          type: string
-          format: uri
-          description: The service provider-initiated URL, used by Events+ hub members for single sign-on (SSO). Used when the `type` property is SSO or BOTH.
-          example: https://login.cvent.com/redirect?redirectUrl=https://cvent-login.com/oauth2/oauth-redirect&productId=0oaztigu7sVcS4PHM0h7&identityProviderName=OneloginforFlexGuestside
-      description: Fields relating to the login process for the Events+ hub.
-    HubColors:
-      title: HubColors
-      type: object
-      description: All the colors associated with the Events+ hub.
-      properties:
-        action:
-          title: Action Color
-          description: The secondary color of an Events+ hub.
-          type: string
-          example: '#0F0F0F'
-          pattern: ^#?([0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})$
-          maxLength: 7
-        background:
-          title: Background Color
-          description: The background color of an Events+ hub.
-          type: string
-          example: '#0F0F0F'
-          pattern: ^#?([0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})$
-          maxLength: 7
-        main:
-          title: Main Color
-          description: The primary color of an Events+ hub.
-          type: string
-          example: '#0F0F0F'
-          pattern: ^#?([0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})$
-          maxLength: 7
-        mood:
-          title: Mood Color
-          description: An Events+ hub color configuration that can be set to light, dark, or a similar shade to the main color.
-          type: string
-          example: '#0F0F0F'
-          pattern: ^#?([0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})$
-          default: '#FFFFFF'
-          maxLength: 7
-    ExistingMember:
-      title: Existing Member
-      description: An existing member.
-      type: object
+    ErrorResponse:
+      title: ErrorResponse
+      description: Represents an error response with additional details of cascading error messages.
       allOf:
-      - $ref: '#/components/schemas/member-profile'
-      properties:
-        id:
-          type: string
-          description: The unique ID of the member.
-          example: c764fb48-a62b-4c5f-b98f-01b5dae2c2ff
-          format: uuid
-    WorkAddress:
-      title: WorkAddress
+      - $ref: '#/components/schemas/ErrorResponseBase'
       type: object
-      description: Member's work address details.
-      properties:
-        city:
-          type: string
-          maxLength: 50
-          example: New York
-          description: Member's work address city.
-        state:
-          type: string
-          maxLength: 50
-          example: New York
-          description: Member's Work address state.
-        country:
-          type: string
-          maxLength: 100
-          example: USA
-          description: Member's work address country.
-    HubStatusProperty:
-      title: HubStatusProperty
-      type: string
-      enum:
-      - Inactive
-      - Active
-      - Deleted
-      description: 'The current Events+ Hub status. Inactive: The Events+ Hub is inactive and unavailable to members. Active: Members can access the Events+ Hub. Deleted: The Events+ Hub has been deleted and is unavailable to members or planners.'
-    hubs-paginated-response:
-      title: HubsPaginatedResponse
-      description: The response from a request to get the list of Events+ hubs. This includes the paging object as well as the collection of Events+ hubs.
       required:
-      - paging
-      - data
-      type: object
+      - code
+      - message
       properties:
-        paging:
-          $ref: '#/components/schemas/Paging'
-        data:
+        details:
           type: array
-          maxItems: 200
           items:
-            $ref: '#/components/schemas/existing-hub'
-          description: List of Events+ hubs.
-    Paging:
-      title: Paging
-      required:
-      - _links
+            $ref: '#/components/schemas/ErrorResponseBase'
+          description: Additional details of cascading error messages.
+    SocialMediaLinks:
+      title: SocialMediaLinks
       type: object
-      description: Represents pagination information for a collection of resources.
+      description: Member's social media links.
       properties:
-        previousToken:
-          type: string
-          description: The pagination token for the previous page, if one exists. You can use this token to navigate to the previous page of data.
-          example: 1a2b3c4d5e6f7g8h9i10j11k
-        nextToken:
-          type: string
-          description: The pagination token for the next page. If this value is present in the response, there is another page of data you can fetch.
-          example: 1a2b3c4d5e6f7g8h9i10j11k
-        currentToken:
-          type: string
-          description: The pagination token for the current page.
-          example: 1a2b3c4d5e6f7g8h9i10j11k
-        limit:
-          type: integer
-          description: The number of records to return on the page. Not to exceed 200.
-          example: 100
-        totalCount:
-          type: integer
-          description: The total number of records available. This field may return blank, even if there are more records. To confirm if there are more records, check the `nextToken` field.
-          example: 2
-        _links:
-          $ref: '#/components/schemas/PaginationLinks'
-    Link:
-      title: Link
-      required:
-      - href
-      type: object
-      description: Represents a link to a related resource.
-      properties:
-        href:
-          type: string
-          description: A url provided that can be followed for linking
-          example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
-    existing-hub:
-      title: ExistingHub
-      description: Represents an existing Events+ hub.
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Hub'
-      properties:
-        id:
-          $ref: '#/components/schemas/HubIdPropertyReadOnly'
-        status:
-          $ref: '#/components/schemas/HubStatusProperty'
+        facebookUrl:
+          $ref: '#/components/schemas/Link'
+        twitterUrl:
+          $ref: '#/components/schemas/Link'
+        linkedinUrl:
+          $ref: '#/components/schemas/Link'
+        websiteUrl:
+          $ref: '#/components/schemas/Link'
     Audit:
       title: Audit
       description: Audit information
@@ -474,32 +228,6 @@ components:
           description: The identifier of the user that last updated this record.
           readOnly: true
           example: hporter
-    UUIDProperty:
-      title: UUID Property
-      description: A string that has to be a format matching the industry standard uuid
-      type: string
-      format: uuid
-      example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
-    ErrorResponseBase:
-      title: ErrorResponseBase
-      type: object
-      description: Represents an error response with no additional details.
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          description: The HTTP status code representing the error.
-          example: 400
-        message:
-          type: string
-          description: A brief description of the error.
-          example: Bad Request
-        target:
-          type: string
-          description: The target resource of the error.
-          example: example target
     PaginationLinks:
       title: PaginationLinks
       type: object
@@ -511,6 +239,17 @@ components:
           $ref: '#/components/schemas/Link'
         prev:
           $ref: '#/components/schemas/Link'
+    Link:
+      title: Link
+      required:
+      - href
+      type: object
+      description: Represents a link to a related resource.
+      properties:
+        href:
+          type: string
+          description: A url provided that can be followed for linking
+          example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
     member-profile:
       title: MemberProfile
       type: object
@@ -606,6 +345,24 @@ components:
           type: boolean
           default: false
           description: True indicates member profile is visible to other members.
+    existing-hub:
+      title: ExistingHub
+      description: Represents an existing Events+ hub.
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Hub'
+      properties:
+        id:
+          $ref: '#/components/schemas/HubIdPropertyReadOnly'
+        status:
+          $ref: '#/components/schemas/HubStatusProperty'
+    HubIdPropertyReadOnly:
+      title: HubIdPropertyReadOnly
+      description: The unique ID of an Events+ Hub.
+      type: string
+      format: uuid
+      example: 1e7e0f38-d73c-4326-9f93-422086b91304
+      readOnly: true
     Hub:
       title: Hub
       type: object
@@ -682,20 +439,300 @@ components:
           description: True indicates the Events+ hub is opted into the new website theming experience. False indicates the hub uses the legacy theming experience.
           example: true
           default: false
+    Paging:
+      title: Paging
+      required:
+      - _links
+      type: object
+      description: Represents pagination information for a collection of resources.
+      properties:
+        previousToken:
+          type: string
+          description: The pagination token for the previous page, if one exists. You can use this token to navigate to the previous page of data.
+          example: 1a2b3c4d5e6f7g8h9i10j11k
+        nextToken:
+          type: string
+          description: The pagination token for the next page. If this value is present in the response, there is another page of data you can fetch.
+          example: 1a2b3c4d5e6f7g8h9i10j11k
+        currentToken:
+          type: string
+          description: The pagination token for the current page.
+          example: 1a2b3c4d5e6f7g8h9i10j11k
+        limit:
+          type: integer
+          description: The number of records to return on the page. Not to exceed 200.
+          example: 100
+        totalCount:
+          type: integer
+          description: The total number of records available. This field may return blank, even if there are more records. To confirm if there are more records, check the `nextToken` field.
+          example: 2
+        _links:
+          $ref: '#/components/schemas/PaginationLinks'
+    HubFonts:
+      title: HubFonts
+      type: object
+      description: The fonts of the Events+ hub.
+      properties:
+        headingId:
+          type: string
+          format: uuid
+          example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
+          description: The id of the font used in this Events+ hub's heading. Custom fonts are previously uploaded in the account.
+        bodyId:
+          type: string
+          format: uuid
+          example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
+          description: The id of the font used in this Events+ hub's body text. Custom fonts are previously uploaded in account.
+    ExistingMember:
+      title: Existing Member
+      description: An existing member.
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/member-profile'
+      properties:
+        id:
+          type: string
+          description: The unique ID of the member.
+          example: c764fb48-a62b-4c5f-b98f-01b5dae2c2ff
+          format: uuid
+    hubs-paginated-response:
+      title: HubsPaginatedResponse
+      description: The response from a request to get the list of Events+ hubs. This includes the paging object as well as the collection of Events+ hubs.
+      required:
+      - paging
+      - data
+      type: object
+      properties:
+        paging:
+          $ref: '#/components/schemas/Paging'
+        data:
+          type: array
+          maxItems: 200
+          items:
+            $ref: '#/components/schemas/existing-hub'
+          description: List of Events+ hubs.
+    HubStatusProperty:
+      title: HubStatusProperty
+      type: string
+      enum:
+      - Inactive
+      - Active
+      - Deleted
+      description: 'The current Events+ Hub status. Inactive: The Events+ Hub is inactive and unavailable to members. Active: Members can access the Events+ Hub. Deleted: The Events+ Hub has been deleted and is unavailable to members or planners.'
+    paginated-existing-member:
+      title: Paginated Existing Member
+      description: A paginated list of Events+ members.
+      required:
+      - paging
+      - data
+      type: object
+      properties:
+        paging:
+          $ref: '#/components/schemas/Paging'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExistingMember'
+          description: Collection of Events+ members.
+    UTMOverride:
+      title: UTMOverride
+      description: 'Specifies how UTM (urchin tracking module: a key and value that is attached to URLs for the purpose of identifying and tracking traffic) settings will override passed in items.'
+      type: string
+      enum:
+      - use-existing-parameter
+      - use-custom-parameter
+      default: use-existing-parameter
+      example: use-custom-parameter
+    UUIDProperty:
+      title: UUID Property
+      description: A string that has to be a format matching the industry standard uuid
+      type: string
+      format: uuid
+      example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
+    HubLogin:
+      title: HubLogin
+      type: object
+      properties:
+        type:
+          type: string
+          default: MAGIC_LINK
+          enum:
+          - MAGIC_LINK
+          - SSO
+          - BOTH
+          description: 'Login method for the members of the Events+ hub. MAGIC_LINK: The members can log in via a ''magic link'' provided via email. Magic links are unique for each member, allowing the member to log in without requiring credentials. SSO: The members log in via a single-sign-on (SSO) method previously configured in the Events+ hub. BOTH: Members can log in via the magic link method or the single-sign-on (SSO) method.'
+        organizationId:
+          type: string
+          description: Organization identifier of a Cvent identity provider when SSO login type is selected. This value is provided by Cvent when an account is first configured to support SSO. To read more about Cvent SSO support, see https://developers.cvent.com/docs/sso/overview.
+          example: OneloginforFlexGuestside
+          maxLength: 255
+        idpUrl:
+          type: string
+          format: uri
+          description: The service provider-initiated URL, used by Events+ hub members for single sign-on (SSO). Used when the `type` property is SSO or BOTH.
+          example: https://login.cvent.com/redirect?redirectUrl=https://cvent-login.com/oauth2/oauth-redirect&productId=0oaztigu7sVcS4PHM0h7&identityProviderName=OneloginforFlexGuestside
+      description: Fields relating to the login process for the Events+ hub.
+    ErrorResponseBase:
+      title: ErrorResponseBase
+      type: object
+      description: Represents an error response with no additional details.
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          description: The HTTP status code representing the error.
+          example: 400
+        message:
+          type: string
+          description: A brief description of the error.
+          example: Bad Request
+        target:
+          type: string
+          description: The target resource of the error.
+          example: example target
+    Compliance:
+      title: Compliance
+      description: Privacy compliance fields for a contact.
+      type: object
+      properties:
+        creationTime:
+          type: string
+          format: date-time
+          description: Date-time (in GMT) when privacy compliance details were created for the contact.
+          example: '2021-03-08T17:30:01.727Z'
+        complianceScope:
+          type: string
+          description: Scope of privacy compliance.
+          example: CCPA
+          enum:
+          - CCPA
+        action:
+          type: string
+          description: Action to take for a compliance request.
+          example: DO_NOT_SELL
+          enum:
+          - DO_NOT_SELL
+          - OK_TO_SELL
+        createdBy:
+          type: string
+          description: Denotes how the compliance request was created.
+          example: PLANNER
+          enum:
+          - ATTENDEE
+          - PLANNER
+          - IMPORT
+          - SOAP_API
+          - REST_API
+          - MARKETO
+          - SALEFORCE
+          - VIDEO_CENTER_MEMBER
+          - RESPONDENT
+          - NOT_SET
+    HubCalendar:
+      title: HubCalendar
+      type: object
+      description: The event calendar associated with this Events+ hub. The event calendar allows you to share multiple events and sessions in a list or calendar format.
+      properties:
+        id:
+          description: The ID of the calendar associated to an Events+ hub.
+          type: string
+          format: uuid
+          example: 1e7e0f38-d73c-4326-9f93-422086b91304
+          maxLength: 255
+        layout:
+          description: The initial layout style used by front-ends to render the associated calendar.
+          type: string
+          enum:
+          - List
+          - Grid
+          example: List
+    HubLogo:
+      title: HubLogo
+      type: object
+      description: The logo for the Events+ hub.
+      properties:
+        url:
+          description: The optimized Events+ hub logo image URL.
+          type: string
+          format: uri
+          example: https://images.cvent.com/ab5d5f790f6b4a90b29a3711d4ec381f/video-center/4833fde2-eedf-4751-92a5-f788cfa70674/43c5b520abf9635f4168a2ce37a89d89!_!6fbef1a131b81d4bed2b16c175ef57cd.jpeg
+        originalUrl:
+          description: The original URL of the logo image that was uploaded to the Events+ hub. Supported file types are JPEG, JPG, PNG, GIF. Recommended logo size is 170 x 90 pixels and 72 PPI.
+          type: string
+          format: uri
+          example: https://custom.cvent.com/ab5d5f790f6b4a90b29a3711d4ec381f/video-center/4833fde2-eedf-4751-92a5-f788cfa70674/43c5b520abf9635f4168a2ce37a89d89.jpeg
+        altText:
+          type: string
+          description: Alternate text for the logo image.
+          example: A mostly empty conference room.
+          minLength: 1
+          maxLength: 100
+    HubColors:
+      title: HubColors
+      type: object
+      description: All the colors associated with the Events+ hub.
+      properties:
+        action:
+          title: Action Color
+          description: The secondary color of an Events+ hub.
+          type: string
+          example: '#0F0F0F'
+          pattern: ^#?([0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})$
+          maxLength: 7
+        background:
+          title: Background Color
+          description: The background color of an Events+ hub.
+          type: string
+          example: '#0F0F0F'
+          pattern: ^#?([0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})$
+          maxLength: 7
+        main:
+          title: Main Color
+          description: The primary color of an Events+ hub.
+          type: string
+          example: '#0F0F0F'
+          pattern: ^#?([0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})$
+          maxLength: 7
+        mood:
+          title: Mood Color
+          description: An Events+ hub color configuration that can be set to light, dark, or a similar shade to the main color.
+          type: string
+          example: '#0F0F0F'
+          pattern: ^#?([0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})$
+          default: '#FFFFFF'
+          maxLength: 7
+    HubBackground:
+      title: HubBackground
+      type: object
+      description: The background image of the Events+ hub.
+      properties:
+        url:
+          description: The optimized URL of the Events+ hub's background image. The background image appears on the Events+ hub registration page.
+          type: string
+          format: uri
+          example: https://images.cvent.com/ab5d5f790f6b4a90b29a3711d4ec381f/video-center/4833fde2-eedf-4751-92a5-f788cfa70674/43c5b520abf9635f4168a2ce37a89d89!_!6fbef1a131b81d4bed2b16c175ef57cd.jpeg
+        originalUrl:
+          description: The original URL of the Events+ hub background image. The background appears on the Events+ hub Registration page.
+          type: string
+          format: uri
+          example: https://custom.cvent.com/ab5d5f790f6b4a90b29a3711d4ec381f/video-center/4833fde2-eedf-4751-92a5-f788cfa70674/43c5b520abf9635f4168a2ce37a89d89.jpeg
+        altText:
+          type: string
+          description: Alternate text for the background image.
+          example: A mostly empty conference room.
+          minLength: 1
+          maxLength: 100
   parameters:
-    token:
-      name: token
+    memberListSort:
+      name: sort
       in: query
-      description: 'The continuation token returned from a previous class. This must be a valid UUID v4 if provided.
-
-        This will override any other pageable parameters provided.
-
-        '
-      style: form
-      explode: true
+      required: false
+      description: "The sort order passed as a parameter, used to control the order of the\nsearch results as a priority ordered list of sorts\n\nThere are two orders:\n  * ascending: ASC\n  * descending: DESC\n\nThe following fields are sortable:\n  * firstName (member first name)\n  * lastName (member last name)\n  * emailAddress (member email address)\n  * jobTitle (member job title)\n  * designation (Designation of member)\n  * workAddress.city (Work City of member)\n  * workAddress.state (Work State of member)\n  * workAddress.country (Work Country of member)\n  * companyName (member company)\n  * registrationDate (member registration date)\n  * lastLoginDate (member last login date)\n"
       schema:
         type: string
-        example: 0e28af57-511f-47ab-ae46-46cd1ca51a1a
+        example: firstName:ASC,lastName:ASC
     memberFilter:
       name: filter
       in: query
@@ -746,21 +783,6 @@ components:
       schema:
         type: string
         example: (firstName contains 'tim') and (lastName contains 'wood')
-    hubId:
-      in: path
-      name: hubId
-      description: The identifier of an Events+ Hub
-      required: true
-      schema:
-        $ref: '#/components/schemas/UUIDProperty'
-    memberListSort:
-      name: sort
-      in: query
-      required: false
-      description: "The sort order passed as a parameter, used to control the order of the\nsearch results as a priority ordered list of sorts\n\nThere are two orders:\n  * ascending: ASC\n  * descending: DESC\n\nThe following fields are sortable:\n  * firstName (member first name)\n  * lastName (member last name)\n  * emailAddress (member email address)\n  * jobTitle (member job title)\n  * designation (Designation of member)\n  * workAddress.city (Work City of member)\n  * workAddress.state (Work State of member)\n  * workAddress.country (Work Country of member)\n  * companyName (member company)\n  * registrationDate (member registration date)\n  * lastLoginDate (member last login date)\n"
-      schema:
-        type: string
-        example: firstName:ASC,lastName:ASC
     limit:
       name: limit
       in: query
@@ -805,52 +827,26 @@ components:
       schema:
         type: string
         example: (id eq '76f2b9e2-fcce-4d93-be29-a008b76a050c') OR (id eq '16322408-bae8-4b29-a559-702d2023e13a')
-  responses:
-    Forbidden1:
-      description: You do not have access to the resource
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 403
-            message: Access Forbidden
-    NotFound1:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 404
-            message: Not found
-    TooManyRequests1:
-      description: Too many requests
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 429
-            message: Limit Exceeded
-    BadRequest1:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 400
-            message: Bad Request
-    Unauthorized1:
-      description: Bad or expired token
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 401
-            message: Unauthorized
+    hubId:
+      in: path
+      name: hubId
+      description: The identifier of an Events+ Hub
+      required: true
+      schema:
+        $ref: '#/components/schemas/UUIDProperty'
+    token:
+      name: token
+      in: query
+      description: 'The continuation token returned from a previous class. This must be a valid UUID v4 if provided.
+
+        This will override any other pageable parameters provided.
+
+        '
+      style: form
+      explode: true
+      schema:
+        type: string
+        example: 0e28af57-511f-47ab-ae46-46cd1ca51a1a
   securitySchemes:
     OAuth2.authorizationCode:
       type: oauth2
@@ -1319,8 +1315,3 @@ components:
 externalDocs:
   description: Cvent Developer Documentation
   url: https://developers.cvent.com/docs
-x-refined-from:
-- cvent-event-cloud-rest-openapi.yml
-- cvent-rest-apis-openapi.yaml
-x-source: https://github.com/cvent/rest-sdks/blob/main/cvent-public-spec/openapi.yaml
-x-derived: tag-scoped subset (Event Cloud tags) of the published Cvent REST APIs OpenAPI

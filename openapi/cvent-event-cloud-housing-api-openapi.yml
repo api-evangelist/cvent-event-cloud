@@ -1,7 +1,9 @@
 openapi: 3.2.0
 info:
   title: Cvent REST Housing API
-  description: "# Introduction\nThe Cvent API Platform is built around REST. We aim to provide intuitive endpoints that can be easily\ndiscovered to help leverage the Cvent platform for your event needs. The RESTful APIs outlined here\nuse JSON-encoded request and response format, along with HTTP codes, to convey processing status of\nrequests received. The Cvent resources are protected using OAuth2.\n\n# Getting Started\n\nIf you're new to the Cvent API Platform, start by reading our\n[Developer Quickstart](https://developers.cvent.com/docs/rest-api/tutorials/developer-quickstart) guide. This will\ngive you an overview of how to authenticate and make requests using our APIs.\n\n## Authentication\n\nThe Cvent REST API uses [OAuth2](https://oauth.net/2/) to authorize requests to the platform. The client\ncredentials authorization flow is supported.\n\n<a name=\"oauth2-auth-code-planner-admin\"></a>\n\nAuthorization code flow is only supported for planner users with the administrator role in Cvent. Developer users\ncannot use authorization code flow.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\nHere's an example of using client credential flow to authorize. You'll supply your application's id and secret to\nmake a [Token](#operation/oauth2Token) request.\n\n```bash\ncurl --location --request POST '{hostName}/{version}/oauth2/token' \\\n--header 'Content-Type: application/x-www-form-urlencoded' \\\n--header 'Authorization: Basic {api_credentials}' \\\n--data-urlencode 'grant_type=client_credentials' \\\n--data-urlencode 'client_id={client_id}'\n```\n\n| Key               | Description                                          | Value                                                                                                        |\n| :---------------- | :--------------------------------------------------- | :----------------------------------------------------------------------------------------------------------- |\n| {hostName}        | https://api-platform.cvent.com                       | Location if your account is in the North American datacenter.                                                |\n|                   | https://api-platform-eur.cvent.com                   | Location if your account is in the European data center.                                                     |\n| {version}         | ea                                                   | The version of the API you're using. Only `ea` is currently supported.                                       |\n| {api_credentials} | {client_id}:{client_secret} in base64 encoded format | Supply your client id & client credentials in a base 64 encoded format.                                      |\n| {client_id}       | Retrieved from your application                      | Your application's client id.                                                                                |\n| {client_secret}   | Retrieved from your application                      | Your application's client secret.                                                                            |\n\nOn a successful call, you'll receive the following response:\n\n```json\n{\n  \"access_token\": \"{accessToken}\",\n  \"expires_in\": 3600,\n  \"token_type\": \"Bearer\"\n}\n```\n\nThis bearer token is valid for 3600 seconds (60 minutes) and must be used in subsequent calls.\n\n## Endpoints\n\nEndpoints start with `hostName` and `version`.\n\nThe `hostname` will depend on the region that your Cvent account is hosted in. Please see the table\nbelow to identify which hostname you should be using.\n\n| Region        |\tHostname                           |\n|:--------------|:-----------------------------------|\n| North America\t| https://api-platform.cvent.com     |\n| Europe        | https://api-platform-eur.cvent.com |\n\nThe current `version` of the Cvent API is `ea`.\n\n## Rate Limits\n\nCvent APIs enforce rate limits to ensure platform stability. Your limits depend on your tier: Free,\nStandard, or Premium.\n\n<br />\n\n### Usage Tiers\n\n| Tier     | Daily Calls | Calls per Second | Max Burst |\n| -------- | ----------- | ---------------- | --------- |\n| Free     | 1,000       | 2                | 1         |\n| Standard | 15,000      | 10               | 10        |\n| Premium  | 500,000     | 25               | 25        |\n\n- **Daily calls** define how many requests you can make in a 24-hour period. Quota\n  resets at 12 midnight (+0 GMT).\n- **Calls per second** define how many requests you can make in a 1-second window.\n- **Max Burst** defines how many requests you can make at once.\n\nIf you are unsure what usage tier applies to your account, you can check via\n[Get Current Usage Tier](#operation/getUsageTier).\n\nPlease note that these limits may change as the Cvent API Platform evolves.\n\n<br />\n\n### Handling Rate Limits\n\nSometimes, you may exceed your rate limits. When this happens, the API will return a `429 Too Many Requests`. See\n[handling rate limits](https://developers.cvent.com/docs/rest-api/guides/handling-rate-limits) for best practices on how to handle this.\n\n## Pagination\n\nSome APIs use pagination to manage records. Each page of records has a token associated to identify it.\n\nIf an API uses pagination, you’ll find up to three tokens in the response:\n- **currentToken**: Describes the token of the current page.\n- **nextToken**: Provides a token for the next page of records, if one exists.\n- **previousToken**: Provides a token for the previous page of records, if one exists. Not all APIs will return\n  this token.\n\nYou specify which page of records to view via the `token` parameter in your API call. To navigate through pages,\ntake the `nextToken` or `previousToken` value and pass it to your next call’s `token` parameter to get the\nrespective page of records. For example, if you made this request:\n\n```bash\ncurl -X GET {hostname}/{version}/contacts?limit=100 \\\n-H 'Accept: application/json' \\\n-H 'Authorization: Bearer {accessToken}'\n```\n\nThe response contains a paging array where you'll find the token information.\n\n```json\n{\n  \"paging\": {\n    \"currentToken\": \"90c5f062-76ad-4ea4-aa53-00eb698d9262\",\n    \"nextToken\": \"3b2359a7-4583-40ed-8afd-67e5f15373d3\",\n    \"limit\": 100,\n    \"totalCount\": 102,\n    \"_links\": {...}\n  },\n  \"data\": [...]\n}\n```\n\nTake the `nextToken` and use it in the `token` parameter on your subsequent call.\n\n```bash\ncurl -X GET {hostname}/{version}/contacts?limit=100&token=3b2359a7-4583-40ed-8afd-67e5f15373d3 \\\n-H 'Accept: application/json' \\\n-H 'Authorization: Bearer {accessToken}'\n```\n\nWhen the response doesn’t contain a `nextToken` field, you’ve reached the last page. Occasionally, you might\nencounter an empty page at the end of results. This typically happens when the results were evenly divisible.\nEnsure your client code handles the possibility of receiving an empty data array when using the `nextToken`.\n\n## Filtering\n\nUse filters to narrow down results. The filter follows the pattern\n`filter='field' comparisonType 'value'`. The value can be enclosed with single\nquotes (') or double quotes (\").\n\n```bash\nGET {hostName}/{version}/contacts?filter=lastName eq 'Smith'\n````\n\nTo correctly pass a single quote in the filter's value, use double quotes around\nthe string.\n\n```bash\nGET {hostName}/{version}/contacts?filter=lastName eq \"O'Keenan\"\n```\n\nTo correctly pass a double quote in the filter's value, use double quotes around\nthe string and add an escape character `\\` to each quote that is part of the\nstring.\n\n```bash\nGET {hostName}/{version}/events?filter=eventName eq \"\\\"Yearly\\\" Conference\"\n```\n\n## Versioning\n\nChange is inevitable in API development. Planning for it is crucial. We track\nboth backward-compatible and backward-incompatible changes.\n\n<br />\n\n### Backward Compatible Changes\n\nBackward compatible changes will be made often and are intended to avoid\nany adverse impact on our customers. It is highly advisable that when reading\nJSON payloads from Cvent, you are able to handle \"unknown\" attributes that\ncan be added over time. We consider the following changes backward-compatible:\n\n- Adding new resources\n- Adding new optional request parameters to existing operations\n- Adding new attributes to requests or responses\n- Changing the length or format (not type) of resource identifiers. For example, an ID can change from\n  \"1234/1234\" to \"1234::1234\".\n- Increasing the length of string fields\n\n<br />\n\n### Backward Incompatible Changes\n\nBackward-incompatible changes are made infrequently, however, they can be\ndisruptive to consumers. Due to this, our APIs are versioned to avoid\ndisruptions to customers. We leverage a URI-based versioning scheme,\nwhich means that a version value is included in the Cvent API URL.\nWhen breaking changes occur, a new version of the API is made available\nwhile the existing version is deprecated but remains available for a\nlimited period of time. We consider the following backward-incompatible changes:\n\n- Adding a new required parameter (query string param or payload attribute)\n- Deleting API resources\n- Deleting any attribute from API responses\n- Changing the data type on any parameter or attribute\n\n## Standards\nAs you begin working with our APIs, it's essential to be aware of standards around\ncountry codes, time formats, and other important details that ensure smooth integration.\nLearn more about our [API Standards](https://developers.cvent.com/docs/rest-api/reference/api-standards)\n"
+  description: '# Introduction
+
+    The Cvent API Platform is built around REST.'
   contact:
     name: Cvent Development Platform
     url: https://developers.cvent.com/
@@ -11,7 +13,7 @@ servers:
 - url: https://api-platform-eur.cvent.com/ea
 tags:
 - name: Housing
-  description: "RegLink APIs allow you to exchange data with Cvent Passkey events and hotel reservation-booking engines.\nGenerally, there are four primary categories of functionality that RegLink APIs support:\n  * **Sync Registrants.** Allow individual registrant information to be sent to Cvent Passkey, streamlining the hotel reservation process for attendees. Attendees can then be directed to Passkey post-registration and reserve a hotel room without re-entering their data again. This is done with the reservation request endpoint.\n  * **Fetch Rooms.** The ability for an external system to fetch Passkey event details and hotel room availability based on various criteria.\n  * **Fetch Reservations.** The ability for an external system to fetch detailed reservation information for individual registrants. This is done with the Reservation endpoint and the Callback system.\n  * **Manage Reservations.** The ability for an external system to create, modify or cancel a registrant's hotel reservation directly or indirectly.\n\nIf you need authentication credentials or have any questions regarding the RegLink APIs, contact the [Cvent Passkey Integrations Team](https://web.cvent.com/survey/c6a60a30-d981-4ae8-af28-686af0eeb9b7/welcome).\n\n* **Passkey.** A software solution allowing your invitees to book room reservations directly with hotels.\n* **Housing Event.** An Passkey event where invitees will be able to register and book rooms.\n* **Reservation Request.** Represents a request to book rooms in the housing event.\n* **RegLink.** A feature that links Passkey events to your registration events, enabling you to sync data between the two events.\n* **Callback.** [Passkey's callback system](https://developers.cvent.com/docs/passkey/REST/callbacks) allows for a push notification to be sent to your system when a reservation is created, modified or cancelled.\n"
+  description: RegLink APIs allow you to exchange data with Cvent Passkey events and hotel reservation-booking engines.
 paths:
   /connections:
     post:
@@ -594,7 +596,7 @@ paths:
       tags:
       - Housing
       summary: Get Reservation
-      description: 'Get reservation details for the given reservation ID. Commonly used in response to [passkey callbacks](https://developers.cvent.com/docs/passkey/REST/callbacks). '
+      description: Get reservation details for the given reservation ID. Commonly used in response to passkey callbacks.
       operationId: getReservation
       security:
       - OAuth2.clientCredentials:
@@ -676,860 +678,180 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests1'
 components:
+  responses:
+    TooManyRequests1:
+      description: Too many requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 429
+            message: Limit Exceeded
+    BadRequest1:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 400
+            message: Bad Request
+    Forbidden1:
+      description: You do not have access to the resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 403
+            message: Access Forbidden
+    Unauthorized1:
+      description: Bad or expired token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 401
+            message: Unauthorized
+    NotFound1:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 404
+            message: Not found
   schemas:
-    new-reservation:
+    existing-reservation-request:
       type: object
-      title: NewReservation
-      description: Details about reservation.
-      allOf:
-      - $ref: '#/components/schemas/existing-reservation/allOf/0'
+      title: ExistingReservationRequest
+      description: Contains information about existing reservation request record.
       required:
-      - numberOfAdults
-      - guests
-      - attendeeType
-      - roomType
-      - housingEvent
-      - hotel
-      properties:
-        housingEvent:
-          description: Information about Passkey event for this reservation.
-          type: object
-          allOf:
-          - $ref: '#/components/schemas/housing-event-id.json'
-        hotel:
-          type: object
-          description: Hotel information.
-          allOf:
-          - $ref: '#/components/schemas/hotel-id.json'
-        modifiers:
-          type: object
-          description: Specifies reservation options for customizing reservation behavior.
-          properties:
-            allowWaitList:
-              type: boolean
-              description: Indicates if waitlisted nights are allowed.
-              example: true
-              default: false
-    hotel-rating.json:
-      description: The hotel's rating, used to classify the hotel's quality.
-      title: HotelRating
-      type: string
-      enum:
-      - N/A
-      - Budget
-      - 1 Star
-      - 2 Star
-      - 3 Star
-      - 4 Star
-      - 5 Star
-      example: 3 Star
-    reservation-night-rate.json:
-      description: Rate details for a single reservation night.
-      title: ReservationNightRate
-      type: object
-      required:
-      - base
-      - currency
+      - id
+      - status
       allOf:
-      - $ref: '#/components/schemas/night-rate.json'
-      properties:
-        additionalGuestFees:
-          description: List of additional guest fees.
-          type: array
-          items:
-            $ref: '#/components/schemas/additional-guest-fees.json'
-          maxItems: 4
-        displayRate:
-          $ref: '#/components/schemas/display-rate.json'
-    room-inventory.json:
-      description: Room inventory details for single night.
-      type: object
-      required:
-      - housingEvent
-      - hotel
-      - roomType
-      - date
-      allOf:
-      - description: Inventory details for single night.
-        type: object
+      - type: object
+        title: ReservationRequest
+        description: Contains information about reservation request record.
         required:
-        - rate
-        - currentBlock
-        - pickup
-        - available
+        - housingEvent
+        - guests
         properties:
-          hideRates:
-            description: Indicates if rates are hidden on booking site for this night.
+          sourceId:
+            description: Optional ID field you can use to attach ID's from your system to a reservation.
+            type: string
+            example: Ext ack number
+          attendeeTypeCode:
+            description: Attendee Type Code. If attendeeType is also included, the ID is used and this code is ignored.
+            type: string
+            example: MVFBES0320484
+          confirmationNumber:
+            description: Reservation request confirmation number in the Passkey housing event.
+            type: string
+            example: 327PP24H
+            readOnly: true
+          locale:
+            $ref: '#/components/schemas/locale.json-0'
+          housingEvent:
+            $ref: '#/components/schemas/housing-event-id.json'
+          block:
+            deprecated: true
+            description: Information about room block. DEPRECATED - use combination of attendeeType and roomType instead.
+            type: object
+            properties:
+              id:
+                description: Property ID.
+                type: integer
+                example: 11549984
+                deprecated: true
+          attendeeType:
+            $ref: '#/components/schemas/attendee-type-id.json'
+          roomType:
+            $ref: '#/components/schemas/room-type-id.json'
+          hotel:
+            $ref: '#/components/schemas/hotel-id.json'
+          sendAcknowledgement:
+            description: True indicates the system will send email acknowledgement after reservation creation.
+            type: boolean
+            example: true
+          splitFolio:
+            description: True indicates if each guest should have own payment.
             type: boolean
             example: false
-          rate:
-            $ref: '#/components/schemas/night-rate.json'
-          originalBlock:
-            description: Number of inventory blocked on event creation.
-            type: integer
-            example: 100
-            minimum: 0
-          currentBlock:
-            description: Current inventory number.
-            type: integer
-            example: 150
-            minimum: 0
-          pickup:
-            description: Number of rooms sold.
-            type: integer
-            example: 50
-            minimum: 0
-          finalPickup:
-            description: Reported number of sold rooms.
-            type: integer
-            example: 45
-            minimum: 0
-          maxGuests:
-            $ref: '#/components/schemas/max-guests.json'
-          minLengthOfStay:
-            description: Minimum number nights of stay when starting from this night.
-            type: integer
-            example: 1
-            minimum: 1
-            maximum: 10
-          waitListRequests:
-            description: Number of reservations in wait list.
-            type: integer
-            example: 1
-            minimum: 0
-          available:
-            description: Number of unsold rooms.
-            type: integer
-            example: 30
-      properties:
-        housingEvent:
-          $ref: '#/components/schemas/housing-event-id.json'
-        hotel:
-          $ref: '#/components/schemas/hotel-id.json'
-        roomType:
-          $ref: '#/components/schemas/room-id.json'
-        date:
-          description: Inventory date.
-          type: string
-          format: date
-          example: '2024-12-01'
-        freeSell:
-          description: Number of inventory that can be sold to any attendee type.
-          type: integer
-          example: 80
-        unassigned:
-          description: Number of unassigned inventory. Inventory left in unassigned will not be sold until allocated to an attendee type or marked for free-sell to any attendee type.
-          type: integer
-          example: 20
-        allocation:
-          description: Inventory allocation by attendee type.
-          type: array
-          items:
-            $ref: '#/components/schemas/attendee-inventory.json'
-          minItems: 1
-    credit-card-types.json:
-      description: Credit card type.
-      type: string
-      enum:
-      - VISA
-      - MasterCard
-      - AmericanExpr
-      - Discover
-      - DinersClub
-      - JCB
-      - UnionPay
-      - AliPay
-      - NotSupported
-    booking-website-link.json:
-      type: object
-      title: BookingWebsiteLink
-      description: Unique URL for a guest to access a reservation in Passkey's booking tool.
-      readOnly: true
-      allOf:
-      - title: Link
-        required:
-        - href
-        type: object
-        description: Represents a link to a related resource.
-        properties:
-          href:
+          redirectURL:
+            description: URL used to redirect a guest to another site after they create or update their reservation (commonly, back to the registration event).
             type: string
-            description: A url provided that can be followed for linking
-            example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
-      example:
-        href: https://book.passkey.com/entry?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwYXlsb2FkIjp7ImVudHJ5IjoiUkVHSVNUUkFUSU9OIiwicGFyYW1zIjpbeyJuYW1lIjoiYnJpZGdlSWQiLCJ2YWx1ZSI6IlQ3VFdNTEhQLUdFNEQifV19fQ.7sH1gO_1Aambk-SRRlO2c7ac2DOpqLmCB-zsxB71q_A
-    custom-fields.json:
-      description: Custom fields.
-      title: CustomFields
-      type: object
-      example:
-        customField1: CustomField1
-        customField2: CustomField2
-        customField3: CustomField3
-        customField4: CustomField4
-        customField5: CustomField5
-        customField6: CustomField6
-      properties:
-        customField1:
-          description: Custom field 1.
-          type: string
-          example: CustomField1
-        customField2:
-          description: Custom field 2.
-          type: string
-          example: CustomField2
-        customField3:
-          description: Custom field 3.
-          type: string
-          example: CustomField3
-        customField4:
-          description: Custom field 4.
-          type: string
-          example: CustomField4
-        customField5:
-          description: Custom field 5.
-          type: string
-          example: CustomField5
-        customField6:
-          description: Custom field 6.
-          type: string
-          example: CustomField6
-    ErrorResponse:
-      title: ErrorResponse
-      description: Represents an error response with additional details of cascading error messages.
-      allOf:
-      - $ref: '#/components/schemas/ErrorResponseBase'
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorResponseBase'
-          description: Additional details of cascading error messages.
-    housing-event-hotels-list:
-      type: object
-      title: HotelsList
-      description: List of hotels associated with a particular housing event.
-      required:
-      - paging
-      - data
-      properties:
-        paging:
-          $ref: '#/components/schemas/paging.json'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/housing-event-hotel'
-          description: List of hotels associated with a particular housing event.
-    locale.json:
-      title: Locale
-      description: Locale code
-      type: string
-      example: en-US
-      minLength: 1
-      maxLength: 200
-    call-center-link.json:
-      type: object
-      title: CallCenterLink
-      description: Unique URL for Passkey users (rather than guests) to access a reservation in Passkey's call center tool.
-      readOnly: true
-      allOf:
-      - $ref: '#/components/schemas/booking-website-link.json/allOf/0'
-      example:
-        href: https://manage.passkey.com/Login?src=api&redirect=ccbridge&regacknumber=WODS7LK4-GA8C
-    image-link.json:
-      type: object
-      title: ImageLink
-      description: Image URL.
-      allOf:
-      - $ref: '#/components/schemas/booking-website-link.json/allOf/0'
-      example:
-        href: https://example.com/content/example.jpg
-    housing-event-room-types-list:
-      type: object
-      title: RoomTypesList
-      description: List of room types.
-      properties:
-        paging:
-          $ref: '#/components/schemas/paging.json'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/room-type-details'
-          description: List of room types and their associated details.
-    proximity.json:
-      description: Proximity of the event venue to the hotel.
-      title: Proximity
-      type: object
-      properties:
-        distance:
-          $ref: '#/components/schemas/distance.json'
-        mapMessage:
-          description: Message shown on map.
-          type: string
-          example: Your hotel is located here.
-    housing-event-hotel:
-      type: object
-      title: HotelDetails
-      description: Hotel details including name, description, policies and IDs.
-      required:
-      - id
-      - housingEvent
-      - name
-      - description
+            format: uri
+            maxLength: 2048
+            example: https://cvent.com
+          guests:
+            description: Guests information.
+            type: array
+            minItems: 1
+            maxItems: 10
+            items:
+              $ref: '#/components/schemas/guest.json'
+          customFields:
+            $ref: '#/components/schemas/custom-fields.json'
+          accessible:
+            description: True indicates this reservation request is for an accessible room.
+            type: boolean
+            example: false
+          specialRequest:
+            description: Special requests for room.
+            type: string
+            example: Double bed
+          rewardProgram:
+            $ref: '#/components/schemas/reward-program.json'
+          membershipId:
+            description: Reward program membership number.
+            type: string
+            example: 1154example
+          travelDetails:
+            $ref: '#/components/schemas/travel-details.json'
       properties:
         id:
-          description: The hotel's unique ID.
-          type: integer
-          example: 125664
-        housingEvent:
-          $ref: '#/components/schemas/housing-event-id.json'
-        name:
-          description: The hotel's name.
+          description: Reservation request ID.
           type: string
-          example: Hotel New York
-        description:
-          description: The hotel's description.
-          type: string
-          example: Since first opening its doors in 1936, the Hotel New York has welcomed countless guests.
-        childPolicy:
-          description: The hotel's child policy.
-          type: string
-          example: Children 17 years or younger will stay free of charge in adult’s room with existing bedding.
-        images:
-          type: array
-          description: List of hotel images.
-          items:
-            $ref: '#/components/schemas/image-link.json'
-        proximity:
-          $ref: '#/components/schemas/proximity.json'
-        amenities:
-          type: array
-          description: List of available amenities at the hotel.
-          items:
-            description: Amenity name.
-            type: string
-            example: Room Service
-          maxItems: 70
-        rating:
-          $ref: '#/components/schemas/hotel-rating.json'
-        address:
-          $ref: '#/components/schemas/address.json'
-    room-attendee-type.json:
-      title: RoomAttendeeType
-      description: Attendee type details specific to room.
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/attendee-type.json'
-      properties:
-        cancelPolicy:
-          description: Room cancellation policy for the attendee types.
-          type: string
-          example: If you wish to cancel your reservation, please do so 72 hours prior to your arrival date.
-        taxPolicy:
-          description: Room tax policy for the attendee types.
-          type: string
-          example: New York State Sales Tax is currently 8.875% per night.
-    housing-event-id.json:
-      type: object
-      title: HousingEventId
-      description: Contains unique ID of the housing event.
-      required:
-      - id
-      properties:
-        id:
-          description: The unique ID of the housing event.
-          type: integer
-          example: 69121314
-    guest.json:
-      description: Guest details.
-      title: Guest
-      type: object
-      required:
-      - lastName
-      properties:
-        arrival:
-          description: Arrival date in ISO 8601 format.
-          type: string
-          example: '2020-03-05'
-          format: date
-        departure:
-          description: Departure date in ISO 8601 format.
-          type: string
-          example: '2020-03-07'
-          format: date
-        firstName:
-          description: First name of the guest.
-          type: string
-          example: Gustav
-          maxLength: 40
-        lastName:
-          description: Last name of the guest.
-          type: string
-          example: Schultz
-          maxLength: 40
-        middleName:
-          description: Middle name of the guest.
-          type: string
-          example: Al
-          maxLength: 20
-        title:
-          description: Title of the guest.
-          type: string
-          example: Dr.
-        position:
-          description: Position of the guest.
-          type: string
-          example: manager
-        company:
-          description: Organization or company name of the guest.
-          type: string
-          example: Test Inc
-        homeFax:
-          description: Home fax number of the guest.
-          type: string
-          example: '9785674321'
-        email:
-          description: Email address of the guest.
-          type: string
-          example: guest@cvent.com
-        homePhone:
-          description: Home phone number of the guest. Required if the hotel/event requires address in reservations.
-          type: string
-          example: (231)-213-1222
-        workPhone:
-          description: Work phone number of the guest.
-          type: string
-          example: (231)-213-1222
-        homeAddress:
-          $ref: '#/components/schemas/address.json'
-        paymentInfo:
-          $ref: '#/components/schemas/payment-info.json'
-    connection-response:
-      title: ConnectionResponse
-      description: Connection response.
-      type: object
-      required:
-      - eventId
-      - status
-      - defaultCallbacks
-      properties:
-        eventId:
-          description: ID for a housing event in Passkey.
-          type: integer
-          example: 123456
+          example: D6A63423-G796
         status:
-          description: Status of the connection. `REQUESTED` indicates the connection request is being processed. `NOT_CONNECTED` indicates there is no current connection. `CONNECTED` indicates this housing event is connected to a registration event.
-          type: string
-          enum:
-          - NOT_CONNECTED
-          - CONNECTED
-          - REQUESTED
-          example: CONNECTED
-        defaultCallbacks:
-          description: True indicates the integrated partner has callbacks enabled by default.
-          type: boolean
-          example: true
-    payment-types.json:
-      description: Payment type.
-      type: string
-      enum:
-      - CreditCard
-      - Other
-    locale.json-0:
-      description: Locale code in IETF language tag format.
-      title: Locale
-      type: string
-      example: es-DO
-      maxLength: 8
-    error-response:
-      title: ErrorResponse
-      description: Represents an error response with additional details of cascading error messages.
-      allOf:
-      - title: ErrorResponseBase
-        type: object
-        description: Represents an error response with no additional details.
-        required:
-        - code
-        - message
-        properties:
-          code:
-            type: integer
-            description: The HTTP status code representing the error.
-            example: 400
-          message:
-            type: string
-            description: A brief description of the error.
-            example: Bad Request
-          target:
-            type: string
-            description: The target resource of the error.
-            example: example target
-      type: object
+          $ref: '#/components/schemas/reservation-request-statuses.json'
+        bookingSite:
+          $ref: '#/components/schemas/booking-website-link.json'
+        callCenter:
+          $ref: '#/components/schemas/call-center-link.json'
+    paging.json:
+      title: Paging
       required:
-      - code
-      - message
-      properties:
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/error-response/allOf/0'
-          description: Additional details of cascading error messages.
-    travel-details.json:
-      title: TravelDetails
+      - _links
       type: object
-      description: Common object that holds travel details information.
+      description: Represents pagination information for a collection of resources.
       properties:
-        arrival:
-          $ref: '#/components/schemas/travel-departure-arrival.json'
-        departure:
-          $ref: '#/components/schemas/travel-departure-arrival.json'
-        additionalInformation:
-          description: Additional information about travel.
+        previousToken:
           type: string
-          example: Additional Information
-          maxLength: 1000
-    hotel-info.json:
-      title: HotelInfo
-      type: object
-      description: Hotel information.
-      readOnly: true
-      allOf:
-      - $ref: '#/components/schemas/hotel-id.json'
-      properties:
-        name:
-          description: Hotel name.
+          description: The pagination token for the previous page, if one exists. You can use this token to navigate to the previous page of data.
+          example: 1a2b3c4d5e6f7g8h9i10j11k
+        nextToken:
           type: string
-          example: Northern Hotel
-    max-guests.json:
-      title: MaxGuests
-      description: Maximum number of guests the room can accommodate.
-      type: integer
-      example: 2
-      minimum: 1
-      maximum: 10
-    housing-event-summary-list:
-      type: object
-      title: HousingEventSummaryList
-      description: List of housing events with key information, providing a summarized view of each event.
-      required:
-      - paging
-      - data
-      properties:
-        paging:
-          $ref: '#/components/schemas/paging.json'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/housing-event/allOf/0'
-          description: List of housing events with key information, providing a summarized view of each event.
-    link.json:
-      title: Link
-      required:
-      - href
-      type: object
-      description: Represents a link to a related resource.
-      properties:
-        href:
+          description: The pagination token for the next page. If this value is present in the response, there is another page of data you can fetch.
+          example: 1a2b3c4d5e6f7g8h9i10j11k
+        currentToken:
           type: string
-          description: A url provided that can be followed for linking
-          example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
-    attendee-inventory.json:
-      description: Inventory allocation for specific attendee type.
-      title: InventoryAllocation
-      type: object
-      required:
-      - attendeeType
-      - openForReservation
-      allOf:
-      - $ref: '#/components/schemas/room-inventory.json/allOf/0'
-      properties:
-        attendeeType:
-          $ref: '#/components/schemas/attendee-type-id.json'
-        openForReservation:
-          description: Indicates if this night is available for sale.
-          type: boolean
-          example: true
-        freeSellEnabled:
-          description: Indicates if free-sell is enabled for this night, which allows any attendee type to purchase the room.
-          type: boolean
-          example: true
-        sellHighestRate:
-          description: Indicates if this night inventory should be sold by highest possible rate.
-          type: boolean
-          example: false
-        waitListEnabled:
-          description: Indicates if wait list is enabled for this night.
-          type: boolean
-          example: false
-        guaranteed:
-          description: Indicates if attendee has guaranteed their blocks. Enabling this option will ensure that any unsold guaranteed rooms will be included in the total pickup.
-          type: boolean
-          example: true
-        arrivals:
-          description: Number of reservations starting from this night.
+          description: The pagination token for the current page.
+          example: 1a2b3c4d5e6f7g8h9i10j11k
+        limit:
           type: integer
-          example: 10
-          minimum: 0
-    room-id.json:
-      type: object
-      title: RoomId
-      description: Contains unique ID of the room.
-      required:
-      - id
-      properties:
-        id:
-          description: The unique ID of the room.
+          description: The number of records to return on the page. Not to exceed 200.
+          example: 100
+        totalCount:
           type: integer
-          example: 11549984
-    room-type-id.json:
-      type: object
-      title: roomTypeId
-      description: Contains unique ID of the room type.
-      required:
-      - id
-      properties:
-        id:
-          description: The unique ID of the room type.
-          type: integer
-          example: 11549984
-    reservation-request:
-      type: object
-      title: ReservationRequest
-      description: Contains information about reservation request record.
-      required:
-      - housingEvent
-      - guests
-      properties:
-        sourceId:
-          description: Optional ID field you can use to attach ID's from your system to a reservation.
-          type: string
-          example: Ext ack number
-        attendeeTypeCode:
-          description: Attendee Type Code. If attendeeType is also included, the ID is used and this code is ignored.
-          type: string
-          example: MVFBES0320484
-        confirmationNumber:
-          description: Reservation request confirmation number in the Passkey housing event.
-          type: string
-          example: 327PP24H
-          readOnly: true
-        locale:
-          $ref: '#/components/schemas/locale.json-0'
-        housingEvent:
-          $ref: '#/components/schemas/housing-event-id.json'
-        block:
-          deprecated: true
-          description: Information about room block. DEPRECATED - use combination of attendeeType and roomType instead.
-          type: object
-          properties:
-            id:
-              description: Property ID.
-              type: integer
-              example: 11549984
-              deprecated: true
-        attendeeType:
-          $ref: '#/components/schemas/attendee-type-id.json'
-        roomType:
-          $ref: '#/components/schemas/room-type-id.json'
-        hotel:
-          $ref: '#/components/schemas/hotel-id.json'
-        sendAcknowledgement:
-          description: True indicates the system will send email acknowledgement after reservation creation.
-          type: boolean
-          example: true
-        splitFolio:
-          description: True indicates if each guest should have own payment.
-          type: boolean
-          example: false
-        redirectURL:
-          description: URL used to redirect a guest to another site after they create or update their reservation (commonly, back to the registration event).
-          type: string
-          format: uri
-          maxLength: 2048
-          example: https://cvent.com
-        guests:
-          description: Guests information.
-          type: array
-          minItems: 1
-          maxItems: 10
-          items:
-            $ref: '#/components/schemas/guest.json'
-        customFields:
-          $ref: '#/components/schemas/custom-fields.json'
-        accessible:
-          description: True indicates this reservation request is for an accessible room.
-          type: boolean
-          example: false
-        specialRequest:
-          description: Special requests for room.
-          type: string
-          example: Double bed
-        rewardProgram:
-          $ref: '#/components/schemas/reward-program.json'
-        membershipId:
-          description: Reward program membership number.
-          type: string
-          example: 1154example
-        travelDetails:
-          $ref: '#/components/schemas/travel-details.json'
-    available-night.json:
-      description: Night availability details.
-      title: AvailableNight
-      type: object
-      required:
-      - hotel
-      - roomType
-      - attendeeType
-      - date
-      - quantity
-      - roomRate
-      - currency
-      - minLengthOfStay
-      - hideRate
-      - waitListEnabled
-      properties:
-        hotel:
-          $ref: '#/components/schemas/hotel-id.json'
-        roomType:
-          $ref: '#/components/schemas/room-type-id.json'
-        attendeeType:
-          $ref: '#/components/schemas/attendee-type.json'
-        date:
-          description: Date the rooms are available.
-          type: string
-          example: '2025-03-25'
-          format: date
-        quantity:
-          description: Number of rooms available.
-          type: integer
-          example: 130
-        roomRate:
-          description: Cost of room per night booked.
-          type: number
-          example: 150
-        displayRate:
-          $ref: '#/components/schemas/display-rate.json'
-        additionalGuestFees:
-          description: List of additional guest fees.
-          type: array
-          items:
-            $ref: '#/components/schemas/additional-guest-fees.json'
-          maxItems: 4
-        taxStructure:
-          $ref: '#/components/schemas/tax-structure.json'
-        currency:
-          $ref: '#/components/schemas/currency.json1'
-        maxGuests:
-          $ref: '#/components/schemas/max-guests.json'
-        minLengthOfStay:
-          description: Minimum number of nights required for a stay.
-          type: integer
-          example: 1
-          minimum: 1
-          maximum: 10
-        hideRate:
-          description: True indicates the cost of the room is hidden from attendees on the booking site.
-          type: boolean
-          example: false
-        waitListEnabled:
-          description: True indicates a waitlist is enabled for this night.
-          type: boolean
-          example: false
-    reservation-guest.json:
-      type: object
-      title: ReservationGuest
-      description: Guest details for confirmed reservation.
-      required:
-      - firstName
-      - lastName
-      - arrival
-      - departure
-      - email
-      allOf:
-      - $ref: '#/components/schemas/guest.json'
-      properties:
-        ageQualifyingCode:
-          description: Code that specifies if the guest is an adult or child. (10 - adult, 8 - child)
-          type: integer
-          enum:
-          - 10
-          - 8
-          default: 10
-        primary:
-          description: True indicates this guest is the primary guest for the reservation.
-          type: boolean
-          example: true
-          default: false
-        paymentInfo:
-          $ref: '#/components/schemas/reservation-payment-info.json'
-        locale:
-          $ref: '#/components/schemas/locale.json-0'
-    tax-and-fee.json:
-      title: TaxAndFee
-      description: A single tax or fee applicable to a room.
-      type: object
-      required:
-      - name
-      - amount
-      - amountType
-      - frequency
-      - partOfBaseRate
-      - partOfDisplayRate
-      properties:
-        name:
-          description: Name of the tax or fee.
-          type: string
-          example: State Tax
-        amount:
-          description: Amount or percentage value of the tax or fee.
-          type: number
-          example: 6
-        amountType:
-          description: Specifies if the amount is a fixed value or a percentage.
-          type: string
-          enum:
-          - amount
-          - percentage
-          example: percentage
-        frequency:
-          description: 'Defines how often the tax or fee is applied.
-
-            - per_guest: Applied per guest.
-
-            - per_room: Applied per room.
-
-            - per_night: Applied per night.
-
-            - per_stay: Applied per stay.'
-          type: string
-          enum:
-          - per_guest
-          - per_room
-          - per_night
-          - per_stay
-          example: per_room
-        partOfBaseRate:
-          description: 'Indicates if the tax or fee is included in the base room rate set by the hotel (before any taxes or fees are applied).
-
-
-            - true: The tax or fee is already part of the nightly rate set by the hotel.
-
-            - false: The tax or fee will be added to the hotel nightly rate as a separate charge.'
-          type: boolean
-          example: false
-        partOfDisplayRate:
-          description: 'Indicates if the tax or fee is included in the displayed rate shown to the guest.
-
-
-            - true: The tax or fee is included in the displayed rate as part of the room rate. (Displayed rate = base room rate + tax/fee.)
-
-            - false: The tax or fee is listed separately at the end of the booking process. (Displayed rate is the room rate only.)'
-          type: boolean
-          example: false
+          description: The total number of records available. This field may return blank, even if there are more records. To confirm if there are more records, check the `nextToken` field.
+          example: 2
+        _links:
+          $ref: '#/components/schemas/pagination-links.json'
     existing-reservation:
       type: object
       title: ExistingReservation
@@ -1779,6 +1101,891 @@ components:
           type: string
           example: '85439769333'
           deprecated: true
+    tokenized-credit-card.json:
+      description: Credit card info.
+      title: Tokenized Credit Card
+      type: object
+      required:
+      - paymentToken
+      allOf:
+      - description: Credit card info.
+        title: CreditCard
+        type: object
+        properties:
+          number:
+            description: Card number.
+            type: string
+            example: '4444333322221111'
+          expiration:
+            description: Card expiration date in ISO 8601 format.
+            type: string
+            example: '2021-12-31'
+            format: date
+          type:
+            $ref: '#/components/schemas/credit-card-types.json'
+      properties:
+        number:
+          description: Credit card number. DEPRECATED - use 'lastFour' instead.
+          type: string
+          example: '************1111'
+          readOnly: true
+          deprecated: true
+        lastFour:
+          description: Last four digits of the credit card number.
+          type: string
+          example: '1111'
+          readOnly: true
+        expiration:
+          description: Card expiration date.
+          type: string
+          example: '2021-12-31'
+          format: date
+          readOnly: true
+        paymentToken:
+          description: Credit card token. Use Tokenization API to generate.
+          type: string
+          writeOnly: true
+          example: '1234567890'
+    reservations-paginated-response:
+      type: object
+      title: ExistingReservations
+      description: Details list about existing reservations.
+      properties:
+        paging:
+          $ref: '#/components/schemas/paging.json'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/existing-reservation'
+          description: List of reservation details.
+    error-response:
+      title: ErrorResponse
+      description: Represents an error response with additional details of cascading error messages.
+      allOf:
+      - title: ErrorResponseBase
+        type: object
+        description: Represents an error response with no additional details.
+        required:
+        - code
+        - message
+        properties:
+          code:
+            type: integer
+            description: The HTTP status code representing the error.
+            example: 400
+          message:
+            type: string
+            description: A brief description of the error.
+            example: Bad Request
+          target:
+            type: string
+            description: The target resource of the error.
+            example: example target
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/error-response/allOf/0'
+          description: Additional details of cascading error messages.
+    reservation-night-rate.json:
+      description: Rate details for a single reservation night.
+      title: ReservationNightRate
+      type: object
+      required:
+      - base
+      - currency
+      allOf:
+      - $ref: '#/components/schemas/night-rate.json'
+      properties:
+        additionalGuestFees:
+          description: List of additional guest fees.
+          type: array
+          items:
+            $ref: '#/components/schemas/additional-guest-fees.json'
+          maxItems: 4
+        displayRate:
+          $ref: '#/components/schemas/display-rate.json'
+    display-rate.json:
+      description: The room rate displayed to guests, which includes any fees configured to display in the hotel tax settings.
+      title: DisplayRate
+      type: number
+      example: 150
+    reward-program.json:
+      title: RewardProgram
+      type: object
+      description: Represents reward program information.
+      required:
+      - id
+      properties:
+        id:
+          description: Reward ID.
+          type: integer
+          example: 10000
+        name:
+          description: Reward name.
+          type: string
+          example: Test name
+    booking-website-link.json:
+      type: object
+      title: BookingWebsiteLink
+      description: Unique URL for a guest to access a reservation in Passkey's booking tool.
+      readOnly: true
+      allOf:
+      - title: Link
+        required:
+        - href
+        type: object
+        description: Represents a link to a related resource.
+        properties:
+          href:
+            type: string
+            description: A url provided that can be followed for linking
+            example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
+      example:
+        href: https://book.passkey.com/entry?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwYXlsb2FkIjp7ImVudHJ5IjoiUkVHSVNUUkFUSU9OIiwicGFyYW1zIjpbeyJuYW1lIjoiYnJpZGdlSWQiLCJ2YWx1ZSI6IlQ3VFdNTEhQLUdFNEQifV19fQ.7sH1gO_1Aambk-SRRlO2c7ac2DOpqLmCB-zsxB71q_A
+    proximity.json:
+      description: Proximity of the event venue to the hotel.
+      title: Proximity
+      type: object
+      properties:
+        distance:
+          $ref: '#/components/schemas/distance.json'
+        mapMessage:
+          description: Message shown on map.
+          type: string
+          example: Your hotel is located here.
+    room-type-details:
+      type: object
+      title: RoomTypeDetails
+      description: Room type details.
+      required:
+      - id
+      - housingEvent
+      - hotel
+      - housingAttendees
+      - name
+      - description
+      properties:
+        id:
+          description: The Room type's unique ID.
+          type: integer
+          example: 2345
+        housingEvent:
+          $ref: '#/components/schemas/housing-event-id.json'
+        hotel:
+          $ref: '#/components/schemas/hotel-id.json'
+        attendeeTypes:
+          description: List of supported attendee types for this room type, and their individual room policies.
+          type: array
+          items:
+            $ref: '#/components/schemas/room-attendee-type.json'
+        name:
+          description: Name of the room type.
+          type: string
+          example: Double King
+        description:
+          description: Room description.
+          type: string
+          example: This room is equipped with king bed, a polished marble bedroom and generous wardrobes.
+        images:
+          type: array
+          description: List of room images.
+          items:
+            $ref: '#/components/schemas/image-link.json'
+        customOrder:
+          description: Specifies a custom sort order defined by the user. This property is applicable only when the default price-based sorting is not active.
+          type: integer
+          minimum: 1
+          example: 1
+    housing-event-hotels-list:
+      type: object
+      title: HotelsList
+      description: List of hotels associated with a particular housing event.
+      required:
+      - paging
+      - data
+      properties:
+        paging:
+          $ref: '#/components/schemas/paging.json'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/housing-event-hotel'
+          description: List of hotels associated with a particular housing event.
+    housing-event-statuses.json:
+      description: Housing event status.
+      title: HousingEventStatus
+      type: string
+      enum:
+      - Open
+      - PreOpen
+      - Closed
+      - Cancelled
+      - New
+    link.json:
+      title: Link
+      required:
+      - href
+      type: object
+      description: Represents a link to a related resource.
+      properties:
+        href:
+          type: string
+          description: A url provided that can be followed for linking
+          example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
+    image-link.json:
+      type: object
+      title: ImageLink
+      description: Image URL.
+      allOf:
+      - $ref: '#/components/schemas/booking-website-link.json/allOf/0'
+      example:
+        href: https://example.com/content/example.jpg
+    tax-structure.json:
+      title: TaxStructure
+      description: Details about taxes and fees applicable to a room.
+      type: object
+      required:
+      - disclosureStatement
+      - items
+      properties:
+        disclosureStatement:
+          description: Statement disclosing tax and fee information.
+          type: string
+          example: Total room charges will include all room fees and taxes (Subject to change).
+        items:
+          description: List of tax or fee items.
+          type: array
+          items:
+            $ref: '#/components/schemas/tax-and-fee.json'
+          minItems: 0
+          maxItems: 15
+    ErrorResponse:
+      title: ErrorResponse
+      description: Represents an error response with additional details of cascading error messages.
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponseBase'
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorResponseBase'
+          description: Additional details of cascading error messages.
+    new-reservation:
+      type: object
+      title: NewReservation
+      description: Details about reservation.
+      allOf:
+      - $ref: '#/components/schemas/existing-reservation/allOf/0'
+      required:
+      - numberOfAdults
+      - guests
+      - attendeeType
+      - roomType
+      - housingEvent
+      - hotel
+      properties:
+        housingEvent:
+          description: Information about Passkey event for this reservation.
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/housing-event-id.json'
+        hotel:
+          type: object
+          description: Hotel information.
+          allOf:
+          - $ref: '#/components/schemas/hotel-id.json'
+        modifiers:
+          type: object
+          description: Specifies reservation options for customizing reservation behavior.
+          properties:
+            allowWaitList:
+              type: boolean
+              description: Indicates if waitlisted nights are allowed.
+              example: true
+              default: false
+    attendee-type.json:
+      title: AttendeeType
+      description: Attendee type details.
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/attendee-type-id.json'
+      required:
+      - id
+      - name
+      - codes
+      properties:
+        name:
+          description: The name of the attendee type.
+          type: string
+          example: Staff
+        codes:
+          description: A list of attendee type codes.
+          type: array
+          minItems: 1
+          maxItems: 6
+          items:
+            description: An attendee type code.
+            type: string
+            example: PEWATT0524317
+    venue.json1:
+      title: Venue
+      description: Event venue details.
+      type: object
+      properties:
+        name:
+          description: Venue name.
+          type: string
+          example: Holiday Inn
+        address:
+          $ref: '#/components/schemas/venue-address.json1'
+    travel-departure-arrival.json:
+      title: TravelDepartureArrival
+      type: object
+      description: Common object that holds travel departure/arrival information.
+      properties:
+        time:
+          description: The ISO 8601 formatted date.
+          type: string
+          format: date-time
+          example: '2024-12-01T00:00:00Z'
+        carrier:
+          description: ICAO code.
+          type: string
+          example: JBU
+          maxLength: 3
+        carrierNumber:
+          description: Carrier number.
+          type: string
+          example: '12345'
+          maxLength: 32
+    venue-address.json1:
+      type: object
+      title: VenueAddress
+      description: Address details for venue.
+      allOf:
+      - $ref: '#/components/schemas/address.json'
+      properties:
+        latitude:
+          description: Location latitude.
+          type: number
+          example: 2342.23423
+        longitude:
+          description: Location longitude.
+          type: number
+          example: 231234.23423
+    housing-event-id.json:
+      type: object
+      title: HousingEventId
+      description: Contains unique ID of the housing event.
+      required:
+      - id
+      properties:
+        id:
+          description: The unique ID of the housing event.
+          type: integer
+          example: 69121314
+    hotel-id.json:
+      type: object
+      title: HotelId
+      description: Contains unique ID of the hotel.
+      required:
+      - id
+      properties:
+        id:
+          description: The unique ID of the hotel.
+          type: integer
+          example: 49543342
+    connection-response:
+      title: ConnectionResponse
+      description: Connection response.
+      type: object
+      required:
+      - eventId
+      - status
+      - defaultCallbacks
+      properties:
+        eventId:
+          description: ID for a housing event in Passkey.
+          type: integer
+          example: 123456
+        status:
+          description: Status of the connection. `REQUESTED` indicates the connection request is being processed. `NOT_CONNECTED` indicates there is no current connection. `CONNECTED` indicates this housing event is connected to a registration event.
+          type: string
+          enum:
+          - NOT_CONNECTED
+          - CONNECTED
+          - REQUESTED
+          example: CONNECTED
+        defaultCallbacks:
+          description: True indicates the integrated partner has callbacks enabled by default.
+          type: boolean
+          example: true
+    attendee-inventory.json:
+      description: Inventory allocation for specific attendee type.
+      title: InventoryAllocation
+      type: object
+      required:
+      - attendeeType
+      - openForReservation
+      allOf:
+      - $ref: '#/components/schemas/room-inventory.json/allOf/0'
+      properties:
+        attendeeType:
+          $ref: '#/components/schemas/attendee-type-id.json'
+        openForReservation:
+          description: Indicates if this night is available for sale.
+          type: boolean
+          example: true
+        freeSellEnabled:
+          description: Indicates if free-sell is enabled for this night, which allows any attendee type to purchase the room.
+          type: boolean
+          example: true
+        sellHighestRate:
+          description: Indicates if this night inventory should be sold by highest possible rate.
+          type: boolean
+          example: false
+        waitListEnabled:
+          description: Indicates if wait list is enabled for this night.
+          type: boolean
+          example: false
+        guaranteed:
+          description: Indicates if attendee has guaranteed their blocks. Enabling this option will ensure that any unsold guaranteed rooms will be included in the total pickup.
+          type: boolean
+          example: true
+        arrivals:
+          description: Number of reservations starting from this night.
+          type: integer
+          example: 10
+          minimum: 0
+    available-night.json:
+      description: Night availability details.
+      title: AvailableNight
+      type: object
+      required:
+      - hotel
+      - roomType
+      - attendeeType
+      - date
+      - quantity
+      - roomRate
+      - currency
+      - minLengthOfStay
+      - hideRate
+      - waitListEnabled
+      properties:
+        hotel:
+          $ref: '#/components/schemas/hotel-id.json'
+        roomType:
+          $ref: '#/components/schemas/room-type-id.json'
+        attendeeType:
+          $ref: '#/components/schemas/attendee-type.json'
+        date:
+          description: Date the rooms are available.
+          type: string
+          example: '2025-03-25'
+          format: date
+        quantity:
+          description: Number of rooms available.
+          type: integer
+          example: 130
+        roomRate:
+          description: Cost of room per night booked.
+          type: number
+          example: 150
+        displayRate:
+          $ref: '#/components/schemas/display-rate.json'
+        additionalGuestFees:
+          description: List of additional guest fees.
+          type: array
+          items:
+            $ref: '#/components/schemas/additional-guest-fees.json'
+          maxItems: 4
+        taxStructure:
+          $ref: '#/components/schemas/tax-structure.json'
+        currency:
+          $ref: '#/components/schemas/currency.json1'
+        maxGuests:
+          $ref: '#/components/schemas/max-guests.json'
+        minLengthOfStay:
+          description: Minimum number of nights required for a stay.
+          type: integer
+          example: 1
+          minimum: 1
+          maximum: 10
+        hideRate:
+          description: True indicates the cost of the room is hidden from attendees on the booking site.
+          type: boolean
+          example: false
+        waitListEnabled:
+          description: True indicates a waitlist is enabled for this night.
+          type: boolean
+          example: false
+    room-inventory.json:
+      description: Room inventory details for single night.
+      type: object
+      required:
+      - housingEvent
+      - hotel
+      - roomType
+      - date
+      allOf:
+      - description: Inventory details for single night.
+        type: object
+        required:
+        - rate
+        - currentBlock
+        - pickup
+        - available
+        properties:
+          hideRates:
+            description: Indicates if rates are hidden on booking site for this night.
+            type: boolean
+            example: false
+          rate:
+            $ref: '#/components/schemas/night-rate.json'
+          originalBlock:
+            description: Number of inventory blocked on event creation.
+            type: integer
+            example: 100
+            minimum: 0
+          currentBlock:
+            description: Current inventory number.
+            type: integer
+            example: 150
+            minimum: 0
+          pickup:
+            description: Number of rooms sold.
+            type: integer
+            example: 50
+            minimum: 0
+          finalPickup:
+            description: Reported number of sold rooms.
+            type: integer
+            example: 45
+            minimum: 0
+          maxGuests:
+            $ref: '#/components/schemas/max-guests.json'
+          minLengthOfStay:
+            description: Minimum number nights of stay when starting from this night.
+            type: integer
+            example: 1
+            minimum: 1
+            maximum: 10
+          waitListRequests:
+            description: Number of reservations in wait list.
+            type: integer
+            example: 1
+            minimum: 0
+          available:
+            description: Number of unsold rooms.
+            type: integer
+            example: 30
+      properties:
+        housingEvent:
+          $ref: '#/components/schemas/housing-event-id.json'
+        hotel:
+          $ref: '#/components/schemas/hotel-id.json'
+        roomType:
+          $ref: '#/components/schemas/room-id.json'
+        date:
+          description: Inventory date.
+          type: string
+          format: date
+          example: '2024-12-01'
+        freeSell:
+          description: Number of inventory that can be sold to any attendee type.
+          type: integer
+          example: 80
+        unassigned:
+          description: Number of unassigned inventory. Inventory left in unassigned will not be sold until allocated to an attendee type or marked for free-sell to any attendee type.
+          type: integer
+          example: 20
+        allocation:
+          description: Inventory allocation by attendee type.
+          type: array
+          items:
+            $ref: '#/components/schemas/attendee-inventory.json'
+          minItems: 1
+    address.json:
+      title: Address
+      description: Address details. Required to create/update a guest's reservation if the hotel/event requires an address in reservations.
+      type: object
+      properties:
+        address1:
+          description: Address line 1.
+          type: string
+          example: West St. 1
+        address2:
+          description: Address line 2.
+          type: string
+          example: Apt. 16
+        city:
+          description: City name.
+          type: string
+          example: Austin
+        region:
+          description: Region name.
+          type: string
+          example: Texas
+        regionCode:
+          description: Region code.
+          type: string
+          example: TX
+        postalCode:
+          description: Postal code.
+          type: string
+          example: 23452AB
+        country:
+          description: Country name.
+          type: string
+          example: United States of America
+        countryCode:
+          description: ISO 3166 alpha-2 country code.
+          type: string
+          example: US
+    housing-event-hotel:
+      type: object
+      title: HotelDetails
+      description: Hotel details including name, description, policies and IDs.
+      required:
+      - id
+      - housingEvent
+      - name
+      - description
+      properties:
+        id:
+          description: The hotel's unique ID.
+          type: integer
+          example: 125664
+        housingEvent:
+          $ref: '#/components/schemas/housing-event-id.json'
+        name:
+          description: The hotel's name.
+          type: string
+          example: Hotel New York
+        description:
+          description: The hotel's description.
+          type: string
+          example: Since first opening its doors in 1936, the Hotel New York has welcomed countless guests.
+        childPolicy:
+          description: The hotel's child policy.
+          type: string
+          example: Children 17 years or younger will stay free of charge in adult’s room with existing bedding.
+        images:
+          type: array
+          description: List of hotel images.
+          items:
+            $ref: '#/components/schemas/image-link.json'
+        proximity:
+          $ref: '#/components/schemas/proximity.json'
+        amenities:
+          type: array
+          description: List of available amenities at the hotel.
+          items:
+            description: Amenity name.
+            type: string
+            example: Room Service
+          maxItems: 70
+        rating:
+          $ref: '#/components/schemas/hotel-rating.json'
+        address:
+          $ref: '#/components/schemas/address.json'
+    attendee-type-id.json:
+      type: object
+      title: AttendeeTypeId
+      description: Contains the unique ID of the attendee type.
+      required:
+      - id
+      properties:
+        id:
+          description: The unique ID of the attendee type.
+          type: integer
+          example: 34549966
+    housing-event-room-types-list:
+      type: object
+      title: RoomTypesList
+      description: List of room types.
+      properties:
+        paging:
+          $ref: '#/components/schemas/paging.json'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/room-type-details'
+          description: List of room types and their associated details.
+    housing-event-summary-list:
+      type: object
+      title: HousingEventSummaryList
+      description: List of housing events with key information, providing a summarized view of each event.
+      required:
+      - paging
+      - data
+      properties:
+        paging:
+          $ref: '#/components/schemas/paging.json'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/housing-event/allOf/0'
+          description: List of housing events with key information, providing a summarized view of each event.
+    reservation-request:
+      type: object
+      title: ReservationRequest
+      description: Contains information about reservation request record.
+      required:
+      - housingEvent
+      - guests
+      properties:
+        sourceId:
+          description: Optional ID field you can use to attach ID's from your system to a reservation.
+          type: string
+          example: Ext ack number
+        attendeeTypeCode:
+          description: Attendee Type Code. If attendeeType is also included, the ID is used and this code is ignored.
+          type: string
+          example: MVFBES0320484
+        confirmationNumber:
+          description: Reservation request confirmation number in the Passkey housing event.
+          type: string
+          example: 327PP24H
+          readOnly: true
+        locale:
+          $ref: '#/components/schemas/locale.json-0'
+        housingEvent:
+          $ref: '#/components/schemas/housing-event-id.json'
+        block:
+          deprecated: true
+          description: Information about room block. DEPRECATED - use combination of attendeeType and roomType instead.
+          type: object
+          properties:
+            id:
+              description: Property ID.
+              type: integer
+              example: 11549984
+              deprecated: true
+        attendeeType:
+          $ref: '#/components/schemas/attendee-type-id.json'
+        roomType:
+          $ref: '#/components/schemas/room-type-id.json'
+        hotel:
+          $ref: '#/components/schemas/hotel-id.json'
+        sendAcknowledgement:
+          description: True indicates the system will send email acknowledgement after reservation creation.
+          type: boolean
+          example: true
+        splitFolio:
+          description: True indicates if each guest should have own payment.
+          type: boolean
+          example: false
+        redirectURL:
+          description: URL used to redirect a guest to another site after they create or update their reservation (commonly, back to the registration event).
+          type: string
+          format: uri
+          maxLength: 2048
+          example: https://cvent.com
+        guests:
+          description: Guests information.
+          type: array
+          minItems: 1
+          maxItems: 10
+          items:
+            $ref: '#/components/schemas/guest.json'
+        customFields:
+          $ref: '#/components/schemas/custom-fields.json'
+        accessible:
+          description: True indicates this reservation request is for an accessible room.
+          type: boolean
+          example: false
+        specialRequest:
+          description: Special requests for room.
+          type: string
+          example: Double bed
+        rewardProgram:
+          $ref: '#/components/schemas/reward-program.json'
+        membershipId:
+          description: Reward program membership number.
+          type: string
+          example: 1154example
+        travelDetails:
+          $ref: '#/components/schemas/travel-details.json'
+    other-payment.json:
+      description: Other payment details.
+      title: OtherPay
+      type: object
+      properties:
+        amount:
+          description: Amount paid.
+          type: integer
+          example: 0
+        paymentDate:
+          description: Payment due date or date of payment.
+          type: string
+          example: '2021-12-31'
+          format: date
+        referenceItem:
+          description: Payment reference item.
+          type: string
+          example: Reference Item
+        checkNumber:
+          description: Pay check number.
+          type: string
+          example: Check Num
+        received:
+          description: True indicates a payment was received.
+          type: boolean
+          example: false
+        note:
+          description: Payment note.
+          type: string
+          example: No Comment
+          maxLength: 250
+    ErrorResponseBase:
+      title: ErrorResponseBase
+      type: object
+      description: Represents an error response with no additional details.
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          description: The HTTP status code representing the error.
+          example: 400
+        message:
+          type: string
+          description: A brief description of the error.
+          example: Bad Request
+        target:
+          type: string
+          description: The target resource of the error.
+          example: example target
+    inventory-details-list:
+      type: object
+      title: InventoryDetailsList
+      description: List of inventory details for room type by night.
+      properties:
+        paging:
+          $ref: '#/components/schemas/paging.json'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/room-inventory.json'
+          description: List of inventory details by night.
+    payment-types.json:
+      description: Payment type.
+      type: string
+      enum:
+      - CreditCard
+      - Other
     housing-event:
       type: object
       title: HousingEvent
@@ -1898,73 +2105,35 @@ components:
           $ref: '#/components/schemas/currency.json1'
         roomsSortType:
           $ref: '#/components/schemas/rooms-sort-type.json'
-    reward-program.json:
-      title: RewardProgram
+    reservation-guest.json:
       type: object
-      description: Represents reward program information.
+      title: ReservationGuest
+      description: Guest details for confirmed reservation.
       required:
-      - id
-      properties:
-        id:
-          description: Reward ID.
-          type: integer
-          example: 10000
-        name:
-          description: Reward name.
-          type: string
-          example: Test name
-    venue-address.json1:
-      type: object
-      title: VenueAddress
-      description: Address details for venue.
+      - firstName
+      - lastName
+      - arrival
+      - departure
+      - email
       allOf:
-      - $ref: '#/components/schemas/address.json'
+      - $ref: '#/components/schemas/guest.json'
       properties:
-        latitude:
-          description: Location latitude.
-          type: number
-          example: 2342.23423
-        longitude:
-          description: Location longitude.
-          type: number
-          example: 231234.23423
-    address.json:
-      title: Address
-      description: Address details. Required to create/update a guest's reservation if the hotel/event requires an address in reservations.
-      type: object
-      properties:
-        address1:
-          description: Address line 1.
-          type: string
-          example: West St. 1
-        address2:
-          description: Address line 2.
-          type: string
-          example: Apt. 16
-        city:
-          description: City name.
-          type: string
-          example: Austin
-        region:
-          description: Region name.
-          type: string
-          example: Texas
-        regionCode:
-          description: Region code.
-          type: string
-          example: TX
-        postalCode:
-          description: Postal code.
-          type: string
-          example: 23452AB
-        country:
-          description: Country name.
-          type: string
-          example: United States of America
-        countryCode:
-          description: ISO 3166 alpha-2 country code.
-          type: string
-          example: US
+        ageQualifyingCode:
+          description: Code that specifies if the guest is an adult or child. (10 - adult, 8 - child)
+          type: integer
+          enum:
+          - 10
+          - 8
+          default: 10
+        primary:
+          description: True indicates this guest is the primary guest for the reservation.
+          type: boolean
+          example: true
+          default: false
+        paymentInfo:
+          $ref: '#/components/schemas/reservation-payment-info.json'
+        locale:
+          $ref: '#/components/schemas/locale.json-0'
     distance.json:
       description: Distance information.
       title: Distance
@@ -1987,6 +2156,192 @@ components:
           - Yards
           - Blocks
           example: Kilometers
+    guest.json:
+      description: Guest details.
+      title: Guest
+      type: object
+      required:
+      - lastName
+      properties:
+        arrival:
+          description: Arrival date in ISO 8601 format.
+          type: string
+          example: '2020-03-05'
+          format: date
+        departure:
+          description: Departure date in ISO 8601 format.
+          type: string
+          example: '2020-03-07'
+          format: date
+        firstName:
+          description: First name of the guest.
+          type: string
+          example: Gustav
+          maxLength: 40
+        lastName:
+          description: Last name of the guest.
+          type: string
+          example: Schultz
+          maxLength: 40
+        middleName:
+          description: Middle name of the guest.
+          type: string
+          example: Al
+          maxLength: 20
+        title:
+          description: Title of the guest.
+          type: string
+          example: Dr.
+        position:
+          description: Position of the guest.
+          type: string
+          example: manager
+        company:
+          description: Organization or company name of the guest.
+          type: string
+          example: Test Inc
+        homeFax:
+          description: Home fax number of the guest.
+          type: string
+          example: '9785674321'
+        email:
+          description: Email address of the guest.
+          type: string
+          example: guest@cvent.com
+        homePhone:
+          description: Home phone number of the guest. Required if the hotel/event requires address in reservations.
+          type: string
+          example: (231)-213-1222
+        workPhone:
+          description: Work phone number of the guest.
+          type: string
+          example: (231)-213-1222
+        homeAddress:
+          $ref: '#/components/schemas/address.json'
+        paymentInfo:
+          $ref: '#/components/schemas/payment-info.json'
+    currency.json1:
+      description: ISO 4217 currency code.
+      title: Currency
+      type: string
+      example: USD
+    call-center-link.json:
+      type: object
+      title: CallCenterLink
+      description: Unique URL for Passkey users (rather than guests) to access a reservation in Passkey's call center tool.
+      readOnly: true
+      allOf:
+      - $ref: '#/components/schemas/booking-website-link.json/allOf/0'
+      example:
+        href: https://manage.passkey.com/Login?src=api&redirect=ccbridge&regacknumber=WODS7LK4-GA8C
+    locale.json-0:
+      description: Locale code in IETF language tag format.
+      title: Locale
+      type: string
+      example: es-DO
+      maxLength: 8
+    custom-fields.json:
+      description: Custom fields.
+      title: CustomFields
+      type: object
+      example:
+        customField1: CustomField1
+        customField2: CustomField2
+        customField3: CustomField3
+        customField4: CustomField4
+        customField5: CustomField5
+        customField6: CustomField6
+      properties:
+        customField1:
+          description: Custom field 1.
+          type: string
+          example: CustomField1
+        customField2:
+          description: Custom field 2.
+          type: string
+          example: CustomField2
+        customField3:
+          description: Custom field 3.
+          type: string
+          example: CustomField3
+        customField4:
+          description: Custom field 4.
+          type: string
+          example: CustomField4
+        customField5:
+          description: Custom field 5.
+          type: string
+          example: CustomField5
+        customField6:
+          description: Custom field 6.
+          type: string
+          example: CustomField6
+    reservation-payment-info.json:
+      description: Payment information.
+      title: Reservation Payment Info
+      allOf:
+      - $ref: '#/components/schemas/payment-info.json'
+      properties:
+        creditCard:
+          $ref: '#/components/schemas/tokenized-credit-card.json'
+    room-id.json:
+      type: object
+      title: RoomId
+      description: Contains unique ID of the room.
+      required:
+      - id
+      properties:
+        id:
+          description: The unique ID of the room.
+          type: integer
+          example: 11549984
+    locale.json:
+      title: Locale
+      description: Locale code
+      type: string
+      example: en-US
+      minLength: 1
+      maxLength: 200
+    hotel-info.json:
+      title: HotelInfo
+      type: object
+      description: Hotel information.
+      readOnly: true
+      allOf:
+      - $ref: '#/components/schemas/hotel-id.json'
+      properties:
+        name:
+          description: Hotel name.
+          type: string
+          example: Northern Hotel
+    planner.json1:
+      title: Planner
+      description: Planner details.
+      type: object
+      properties:
+        firstName:
+          description: Planner first name.
+          type: string
+          example: Alan
+        lastName:
+          description: Planner last name.
+          type: string
+          example: Wood
+        email:
+          description: Planner email.
+          type: string
+          example: aw@example.com
+    pagination-links.json:
+      title: PaginationLinks
+      type: object
+      description: Represents pagination links for navigating between pages of data.
+      properties:
+        next:
+          $ref: '#/components/schemas/link.json'
+        self:
+          $ref: '#/components/schemas/link.json'
+        prev:
+          $ref: '#/components/schemas/link.json'
     reservation-night.json:
       description: Reservation night details.
       title: ReservationNight
@@ -2013,139 +2368,35 @@ components:
           example: false
         rate:
           $ref: '#/components/schemas/reservation-night-rate.json'
-    reservations-paginated-response:
+    travel-details.json:
+      title: TravelDetails
       type: object
-      title: ExistingReservations
-      description: Details list about existing reservations.
+      description: Common object that holds travel details information.
       properties:
-        paging:
-          $ref: '#/components/schemas/paging.json'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/existing-reservation'
-          description: List of reservation details.
-    tax-structure.json:
-      title: TaxStructure
-      description: Details about taxes and fees applicable to a room.
-      type: object
-      required:
-      - disclosureStatement
-      - items
-      properties:
-        disclosureStatement:
-          description: Statement disclosing tax and fee information.
+        arrival:
+          $ref: '#/components/schemas/travel-departure-arrival.json'
+        departure:
+          $ref: '#/components/schemas/travel-departure-arrival.json'
+        additionalInformation:
+          description: Additional information about travel.
           type: string
-          example: Total room charges will include all room fees and taxes (Subject to change).
-        items:
-          description: List of tax or fee items.
-          type: array
-          items:
-            $ref: '#/components/schemas/tax-and-fee.json'
-          minItems: 0
-          maxItems: 15
-    inventory-details-list:
+          example: Additional Information
+          maxLength: 1000
+    room-attendee-type.json:
+      title: RoomAttendeeType
+      description: Attendee type details specific to room.
       type: object
-      title: InventoryDetailsList
-      description: List of inventory details for room type by night.
-      properties:
-        paging:
-          $ref: '#/components/schemas/paging.json'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/room-inventory.json'
-          description: List of inventory details by night.
-    paging.json:
-      title: Paging
-      required:
-      - _links
-      type: object
-      description: Represents pagination information for a collection of resources.
-      properties:
-        previousToken:
-          type: string
-          description: The pagination token for the previous page, if one exists. You can use this token to navigate to the previous page of data.
-          example: 1a2b3c4d5e6f7g8h9i10j11k
-        nextToken:
-          type: string
-          description: The pagination token for the next page. If this value is present in the response, there is another page of data you can fetch.
-          example: 1a2b3c4d5e6f7g8h9i10j11k
-        currentToken:
-          type: string
-          description: The pagination token for the current page.
-          example: 1a2b3c4d5e6f7g8h9i10j11k
-        limit:
-          type: integer
-          description: The number of records to return on the page. Not to exceed 200.
-          example: 100
-        totalCount:
-          type: integer
-          description: The total number of records available. This field may return blank, even if there are more records. To confirm if there are more records, check the `nextToken` field.
-          example: 2
-        _links:
-          $ref: '#/components/schemas/pagination-links.json'
-    available-nights:
-      type: object
-      title: AvailableNightsList
-      description: List of available room nights and the availabilities associated details.
-      properties:
-        paging:
-          $ref: '#/components/schemas/paging.json'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/available-night.json'
-          description: List of available room nights and their associated details.
-    room-info.json:
-      title: RoomInfo
-      type: object
-      description: Room information.
       allOf:
-      - $ref: '#/components/schemas/room-id.json'
+      - $ref: '#/components/schemas/attendee-type.json'
       properties:
-        name:
-          description: Room name.
+        cancelPolicy:
+          description: Room cancellation policy for the attendee types.
           type: string
-          example: King
-          readOnly: true
-    reservation-payment-info.json:
-      description: Payment information.
-      title: Reservation Payment Info
-      allOf:
-      - $ref: '#/components/schemas/payment-info.json'
-      properties:
-        creditCard:
-          $ref: '#/components/schemas/tokenized-credit-card.json'
-    housing-event-statuses.json:
-      description: Housing event status.
-      title: HousingEventStatus
-      type: string
-      enum:
-      - Open
-      - PreOpen
-      - Closed
-      - Cancelled
-      - New
-    payment-info.json:
-      description: Payment information.
-      title: PaymentInfo
-      type: object
-      properties:
-        paymentType:
-          $ref: '#/components/schemas/payment-types.json'
-        fullName:
-          description: Full name.
+          example: If you wish to cancel your reservation, please do so 72 hours prior to your arrival date.
+        taxPolicy:
+          description: Room tax policy for the attendee types.
           type: string
-          example: Gustav Schultz
-        address:
-          $ref: '#/components/schemas/address.json'
-        phone:
-          description: Phone number.
-          type: string
-          example: (231)213-1222
-        other:
-          $ref: '#/components/schemas/other-payment.json'
+          example: New York State Sales Tax is currently 8.875% per night.
     rooms-sort-type.json:
       description: 'Rooms sort type. CustomOrder: A user-defined sort order. PriceAscending: Data sorted with lowest price first. PriceDescending: Data sorted by highest price first.'
       type: string
@@ -2153,150 +2404,27 @@ components:
       - CustomOrder
       - PriceAscending
       - PriceDescending
-    planner.json1:
-      title: Planner
-      description: Planner details.
+    reservation-contact.json:
+      title: ReservationContact
+      description: Reservation contact details for this event.
       type: object
       properties:
-        firstName:
-          description: Planner first name.
+        phone:
+          description: Phone number.
           type: string
-          example: Alan
-        lastName:
-          description: Planner last name.
+          example: 2345239540-123
+        fax:
+          description: Fax number.
           type: string
-          example: Wood
+          example: 25123-234-12
+        tollFree:
+          description: Toll-free number.
+          type: string
+          example: 323-324
         email:
-          description: Planner email.
+          description: Email address.
           type: string
-          example: aw@example.com
-    additional-guest-fees.json:
-      title: AdditionalGuestFees
-      description: Details about additional fees for extra guests.
-      type: object
-      required:
-      - guestCount
-      - fee
-      properties:
-        guestCount:
-          description: The number of guests for which the additional fee applies.
-          type: integer
-          example: 2
-          minimum: 2
-          maximum: 5
-        fee:
-          description: The value of the additional fee for extra guests.
-          type: number
-          example: 20
-    venue.json1:
-      title: Venue
-      description: Event venue details.
-      type: object
-      properties:
-        name:
-          description: Venue name.
-          type: string
-          example: Holiday Inn
-        address:
-          $ref: '#/components/schemas/venue-address.json1'
-    ErrorResponseBase:
-      title: ErrorResponseBase
-      type: object
-      description: Represents an error response with no additional details.
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          description: The HTTP status code representing the error.
-          example: 400
-        message:
-          type: string
-          description: A brief description of the error.
-          example: Bad Request
-        target:
-          type: string
-          description: The target resource of the error.
-          example: example target
-    room-type-details:
-      type: object
-      title: RoomTypeDetails
-      description: Room type details.
-      required:
-      - id
-      - housingEvent
-      - hotel
-      - housingAttendees
-      - name
-      - description
-      properties:
-        id:
-          description: The Room type's unique ID.
-          type: integer
-          example: 2345
-        housingEvent:
-          $ref: '#/components/schemas/housing-event-id.json'
-        hotel:
-          $ref: '#/components/schemas/hotel-id.json'
-        attendeeTypes:
-          description: List of supported attendee types for this room type, and their individual room policies.
-          type: array
-          items:
-            $ref: '#/components/schemas/room-attendee-type.json'
-        name:
-          description: Name of the room type.
-          type: string
-          example: Double King
-        description:
-          description: Room description.
-          type: string
-          example: This room is equipped with king bed, a polished marble bedroom and generous wardrobes.
-        images:
-          type: array
-          description: List of room images.
-          items:
-            $ref: '#/components/schemas/image-link.json'
-        customOrder:
-          description: Specifies a custom sort order defined by the user. This property is applicable only when the default price-based sorting is not active.
-          type: integer
-          minimum: 1
-          example: 1
-    attendee-type.json:
-      title: AttendeeType
-      description: Attendee type details.
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/attendee-type-id.json'
-      required:
-      - id
-      - name
-      - codes
-      properties:
-        name:
-          description: The name of the attendee type.
-          type: string
-          example: Staff
-        codes:
-          description: A list of attendee type codes.
-          type: array
-          minItems: 1
-          maxItems: 6
-          items:
-            description: An attendee type code.
-            type: string
-            example: PEWATT0524317
-    hotel-id.json:
-      type: object
-      title: HotelId
-      description: Contains unique ID of the hotel.
-      required:
-      - id
-      properties:
-        id:
-          description: The unique ID of the hotel.
-          type: integer
-          example: 49543342
+          example: venue@example.com
     night-rate.json:
       description: Rate details for single night.
       type: object
@@ -2310,51 +2438,6 @@ components:
           example: 150
         currency:
           $ref: '#/components/schemas/currency.json1'
-    tokenized-credit-card.json:
-      description: Credit card info.
-      title: Tokenized Credit Card
-      type: object
-      required:
-      - paymentToken
-      allOf:
-      - description: Credit card info.
-        title: CreditCard
-        type: object
-        properties:
-          number:
-            description: Card number.
-            type: string
-            example: '4444333322221111'
-          expiration:
-            description: Card expiration date in ISO 8601 format.
-            type: string
-            example: '2021-12-31'
-            format: date
-          type:
-            $ref: '#/components/schemas/credit-card-types.json'
-      properties:
-        number:
-          description: Credit card number. DEPRECATED - use 'lastFour' instead.
-          type: string
-          example: '************1111'
-          readOnly: true
-          deprecated: true
-        lastFour:
-          description: Last four digits of the credit card number.
-          type: string
-          example: '1111'
-          readOnly: true
-        expiration:
-          description: Card expiration date.
-          type: string
-          example: '2021-12-31'
-          format: date
-          readOnly: true
-        paymentToken:
-          description: Credit card token. Use Tokenization API to generate.
-          type: string
-          writeOnly: true
-          example: '1234567890'
     add-on.json:
       title: Add-on
       type: object
@@ -2383,83 +2466,30 @@ components:
               example: 15
             currency:
               $ref: '#/components/schemas/currency.json1'
-    currency.json1:
-      description: ISO 4217 currency code.
-      title: Currency
-      type: string
-      example: USD
-    other-payment.json:
-      description: Other payment details.
-      title: OtherPay
+    room-info.json:
+      title: RoomInfo
       type: object
+      description: Room information.
+      allOf:
+      - $ref: '#/components/schemas/room-id.json'
       properties:
-        amount:
-          description: Amount paid.
-          type: integer
-          example: 0
-        paymentDate:
-          description: Payment due date or date of payment.
+        name:
+          description: Room name.
           type: string
-          example: '2021-12-31'
-          format: date
-        referenceItem:
-          description: Payment reference item.
-          type: string
-          example: Reference Item
-        checkNumber:
-          description: Pay check number.
-          type: string
-          example: Check Num
-        received:
-          description: True indicates a payment was received.
-          type: boolean
-          example: false
-        note:
-          description: Payment note.
-          type: string
-          example: No Comment
-          maxLength: 250
-    travel-departure-arrival.json:
-      title: TravelDepartureArrival
+          example: King
+          readOnly: true
+    available-nights:
       type: object
-      description: Common object that holds travel departure/arrival information.
+      title: AvailableNightsList
+      description: List of available room nights and the availabilities associated details.
       properties:
-        time:
-          description: The ISO 8601 formatted date.
-          type: string
-          format: date-time
-          example: '2024-12-01T00:00:00Z'
-        carrier:
-          description: ICAO code.
-          type: string
-          example: JBU
-          maxLength: 3
-        carrierNumber:
-          description: Carrier number.
-          type: string
-          example: '12345'
-          maxLength: 32
-    reservation-contact.json:
-      title: ReservationContact
-      description: Reservation contact details for this event.
-      type: object
-      properties:
-        phone:
-          description: Phone number.
-          type: string
-          example: 2345239540-123
-        fax:
-          description: Fax number.
-          type: string
-          example: 25123-234-12
-        tollFree:
-          description: Toll-free number.
-          type: string
-          example: 323-324
-        email:
-          description: Email address.
-          type: string
-          example: venue@example.com
+        paging:
+          $ref: '#/components/schemas/paging.json'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/available-night.json'
+          description: List of available room nights and their associated details.
     reservation-request-statuses.json:
       title: ReservationRequestStatus
       description: Reservation request status.
@@ -2468,186 +2498,163 @@ components:
       enum:
       - Active
       - Cancel
-    existing-reservation-request:
+    room-type-id.json:
       type: object
-      title: ExistingReservationRequest
-      description: Contains information about existing reservation request record.
-      required:
-      - id
-      - status
-      allOf:
-      - type: object
-        title: ReservationRequest
-        description: Contains information about reservation request record.
-        required:
-        - housingEvent
-        - guests
-        properties:
-          sourceId:
-            description: Optional ID field you can use to attach ID's from your system to a reservation.
-            type: string
-            example: Ext ack number
-          attendeeTypeCode:
-            description: Attendee Type Code. If attendeeType is also included, the ID is used and this code is ignored.
-            type: string
-            example: MVFBES0320484
-          confirmationNumber:
-            description: Reservation request confirmation number in the Passkey housing event.
-            type: string
-            example: 327PP24H
-            readOnly: true
-          locale:
-            $ref: '#/components/schemas/locale.json-0'
-          housingEvent:
-            $ref: '#/components/schemas/housing-event-id.json'
-          block:
-            deprecated: true
-            description: Information about room block. DEPRECATED - use combination of attendeeType and roomType instead.
-            type: object
-            properties:
-              id:
-                description: Property ID.
-                type: integer
-                example: 11549984
-                deprecated: true
-          attendeeType:
-            $ref: '#/components/schemas/attendee-type-id.json'
-          roomType:
-            $ref: '#/components/schemas/room-type-id.json'
-          hotel:
-            $ref: '#/components/schemas/hotel-id.json'
-          sendAcknowledgement:
-            description: True indicates the system will send email acknowledgement after reservation creation.
-            type: boolean
-            example: true
-          splitFolio:
-            description: True indicates if each guest should have own payment.
-            type: boolean
-            example: false
-          redirectURL:
-            description: URL used to redirect a guest to another site after they create or update their reservation (commonly, back to the registration event).
-            type: string
-            format: uri
-            maxLength: 2048
-            example: https://cvent.com
-          guests:
-            description: Guests information.
-            type: array
-            minItems: 1
-            maxItems: 10
-            items:
-              $ref: '#/components/schemas/guest.json'
-          customFields:
-            $ref: '#/components/schemas/custom-fields.json'
-          accessible:
-            description: True indicates this reservation request is for an accessible room.
-            type: boolean
-            example: false
-          specialRequest:
-            description: Special requests for room.
-            type: string
-            example: Double bed
-          rewardProgram:
-            $ref: '#/components/schemas/reward-program.json'
-          membershipId:
-            description: Reward program membership number.
-            type: string
-            example: 1154example
-          travelDetails:
-            $ref: '#/components/schemas/travel-details.json'
-      properties:
-        id:
-          description: Reservation request ID.
-          type: string
-          example: D6A63423-G796
-        status:
-          $ref: '#/components/schemas/reservation-request-statuses.json'
-        bookingSite:
-          $ref: '#/components/schemas/booking-website-link.json'
-        callCenter:
-          $ref: '#/components/schemas/call-center-link.json'
-    attendee-type-id.json:
-      type: object
-      title: AttendeeTypeId
-      description: Contains the unique ID of the attendee type.
+      title: roomTypeId
+      description: Contains unique ID of the room type.
       required:
       - id
       properties:
         id:
-          description: The unique ID of the attendee type.
+          description: The unique ID of the room type.
           type: integer
-          example: 34549966
-    pagination-links.json:
-      title: PaginationLinks
+          example: 11549984
+    credit-card-types.json:
+      description: Credit card type.
+      type: string
+      enum:
+      - VISA
+      - MasterCard
+      - AmericanExpr
+      - Discover
+      - DinersClub
+      - JCB
+      - UnionPay
+      - AliPay
+      - NotSupported
+    hotel-rating.json:
+      description: The hotel's rating, used to classify the hotel's quality.
+      title: HotelRating
+      type: string
+      enum:
+      - N/A
+      - Budget
+      - 1 Star
+      - 2 Star
+      - 3 Star
+      - 4 Star
+      - 5 Star
+      example: 3 Star
+    tax-and-fee.json:
+      title: TaxAndFee
+      description: A single tax or fee applicable to a room.
       type: object
-      description: Represents pagination links for navigating between pages of data.
+      required:
+      - name
+      - amount
+      - amountType
+      - frequency
+      - partOfBaseRate
+      - partOfDisplayRate
       properties:
-        next:
-          $ref: '#/components/schemas/link.json'
-        self:
-          $ref: '#/components/schemas/link.json'
-        prev:
-          $ref: '#/components/schemas/link.json'
-    display-rate.json:
-      description: The room rate displayed to guests, which includes any fees configured to display in the hotel tax settings.
-      title: DisplayRate
-      type: number
-      example: 150
-  responses:
-    NotFound1:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 404
-            message: Not found
-    Unauthorized1:
-      description: Bad or expired token
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 401
-            message: Unauthorized
-    Forbidden1:
-      description: You do not have access to the resource
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 403
-            message: Access Forbidden
-    TooManyRequests1:
-      description: Too many requests
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 429
-            message: Limit Exceeded
-    BadRequest1:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 400
-            message: Bad Request
+        name:
+          description: Name of the tax or fee.
+          type: string
+          example: State Tax
+        amount:
+          description: Amount or percentage value of the tax or fee.
+          type: number
+          example: 6
+        amountType:
+          description: Specifies if the amount is a fixed value or a percentage.
+          type: string
+          enum:
+          - amount
+          - percentage
+          example: percentage
+        frequency:
+          description: 'Defines how often the tax or fee is applied.
+
+            - per_guest: Applied per guest.
+
+            - per_room: Applied per room.
+
+            - per_night: Applied per night.
+
+            - per_stay: Applied per stay.'
+          type: string
+          enum:
+          - per_guest
+          - per_room
+          - per_night
+          - per_stay
+          example: per_room
+        partOfBaseRate:
+          description: 'Indicates if the tax or fee is included in the base room rate set by the hotel (before any taxes or fees are applied).
+
+
+            - true: The tax or fee is already part of the nightly rate set by the hotel.
+
+            - false: The tax or fee will be added to the hotel nightly rate as a separate charge.'
+          type: boolean
+          example: false
+        partOfDisplayRate:
+          description: 'Indicates if the tax or fee is included in the displayed rate shown to the guest.
+
+
+            - true: The tax or fee is included in the displayed rate as part of the room rate. (Displayed rate = base room rate + tax/fee.)
+
+            - false: The tax or fee is listed separately at the end of the booking process. (Displayed rate is the room rate only.)'
+          type: boolean
+          example: false
+    max-guests.json:
+      title: MaxGuests
+      description: Maximum number of guests the room can accommodate.
+      type: integer
+      example: 2
+      minimum: 1
+      maximum: 10
+    payment-info.json:
+      description: Payment information.
+      title: PaymentInfo
+      type: object
+      properties:
+        paymentType:
+          $ref: '#/components/schemas/payment-types.json'
+        fullName:
+          description: Full name.
+          type: string
+          example: Gustav Schultz
+        address:
+          $ref: '#/components/schemas/address.json'
+        phone:
+          description: Phone number.
+          type: string
+          example: (231)213-1222
+        other:
+          $ref: '#/components/schemas/other-payment.json'
+    additional-guest-fees.json:
+      title: AdditionalGuestFees
+      description: Details about additional fees for extra guests.
+      type: object
+      required:
+      - guestCount
+      - fee
+      properties:
+        guestCount:
+          description: The number of guests for which the additional fee applies.
+          type: integer
+          example: 2
+          minimum: 2
+          maximum: 5
+        fee:
+          description: The value of the additional fee for extra guests.
+          type: number
+          example: 20
   parameters:
-    roomTypeId:
-      in: path
-      name: roomTypeId
-      description: Room Type ID.
-      required: true
+    paginationParam:
+      name: token
+      in: query
+      description: 'The continuation token returned from a previous class. This must be a valid UUID v4 if provided.
+
+        This will override any other pageable parameters provided.
+
+        '
+      style: form
+      explode: true
       schema:
-        type: integer
-      example: 4
+        type: string
+        example: 0e28af57-511f-47ab-ae46-46cd1ca51a1a
     housingReservationsFilter:
       name: filter
       in: query
@@ -2677,46 +2684,27 @@ components:
       schema:
         type: string
         example: attendeeType.id eq 10345 and hotel.id eq 11355
-    reservationRequestsId:
+    hotelId1:
       in: path
-      name: reservationRequestsId
-      description: Unique room reservation request ID.
+      name: hotelId
+      description: The hotel's unique ID.
+      required: true
+      schema:
+        type: integer
+      example: 454345
+    reservationId:
+      in: path
+      name: reservationId
+      description: Cvent Passkey confirmation number.
       required: true
       schema:
         type: string
-      example: D6A63423-G796
-    paginationParam:
-      name: token
-      in: query
-      description: 'The continuation token returned from a previous class. This must be a valid UUID v4 if provided.
-
-        This will override any other pageable parameters provided.
-
-        '
-      style: form
-      explode: true
-      schema:
-        type: string
-        example: 0e28af57-511f-47ab-ae46-46cd1ca51a1a
-    limitParam:
-      in: query
-      name: limit
-      description: Limit to this number of search results. Maximum of 200, default of 100.
-      required: false
-      example: '10'
-      schema:
-        type: integer
-        maximum: 200
-        minimum: 1
-        default: 100
-    housingEventsSummariesFilter:
+      example: 327S856H
+    inventoryFilter:
       name: filter
       in: query
       required: false
-      description: 'A filter query string narrows search results. If the parameter is not specified, future housing events will be returned.
-
-
-        The filter supports the combination of logical and comparison operators, adheres to the pattern filter=''field'' comparisonType ''value''.
+      description: '"A filter query string narrows search results and supports the combination of logical and comparison operators. The filter adheres to the pattern filter=''field'' comparisonType ''value''. If the parameter is not specified, all inventory dates will be returned."
 
 
         These are the comparison types that can be used in filter expressions:
@@ -2734,9 +2722,11 @@ components:
 
         The following fields are filterable:
 
-        * start (eq|le|ge|lt|gt)
 
-        * end (eq|le|ge|lt|gt)
+        * date (eq|le|ge|lt|gt)
+
+
+        Limits for the number of fields that can be passed in a filter: 18
 
 
         The following operators are available:
@@ -2748,7 +2738,15 @@ components:
         '
       schema:
         type: string
-        example: (start ge '2027-01-11T05:00:00.000Z' and end le '2027-01-15T05:00:00.000Z') or (end eq '2027-02-01T05:00:00.000Z')
+        example: (date ge '2023-01-12' and date le '2023-01-15') or (date eq '2023-02-01')
+    roomTypeId:
+      in: path
+      name: roomTypeId
+      description: Room Type ID.
+      required: true
+      schema:
+        type: integer
+      example: 4
     after:
       name: after
       required: false
@@ -2758,6 +2756,46 @@ components:
         type: string
         format: date-time
         example: '2017-01-02T02:00:00Z'
+    roomTypesFilter:
+      name: filter
+      in: query
+      required: false
+      description: '"A filter query string narrows search results and supports the combination of logical and comparison operators. The filter adheres to the pattern filter=''field'' comparisonType ''value''."
+
+
+        These are the comparison types that can be used in filter expressions:
+
+        * equal: eq
+
+
+        The following fields are filterable:
+
+        * attendeeTypes.id (eq)
+
+        * attendeeTypes.codes (eq)
+
+
+        The following operators are available:
+
+        * and
+
+        * or
+
+        '
+      schema:
+        type: string
+        example: attendeeTypes.id eq 10345 or attendeeTypes.codes eq 'PEWATT0524317'
+    availabilityLimit:
+      in: query
+      name: limit
+      description: Limit to this number of search results. Maximum of 50, default of 10.
+      required: false
+      example: 10
+      schema:
+        type: integer
+        maximum: 50
+        minimum: 1
+        default: 10
     availableNightsFilter:
       name: filter
       in: query
@@ -2802,38 +2840,21 @@ components:
       schema:
         type: string
         example: attendeeType.codes eq 'PEWATT0524317' and (date ge '2023-01-12' and date le '2023-01-15')
-    availabilityLimit:
-      in: query
-      name: limit
-      description: Limit to this number of search results. Maximum of 50, default of 10.
+    locale1:
+      name: locale
       required: false
-      example: 10
+      description: Locale code in IETF Language tag format. Indicates desired locale of return values.
+      in: query
       schema:
-        type: integer
-        maximum: 50
-        minimum: 1
-        default: 10
-    reservationId:
-      in: path
-      name: reservationId
-      description: Cvent Passkey confirmation number.
-      required: true
-      schema:
-        type: string
-      example: 327S856H
-    hotelId1:
-      in: path
-      name: hotelId
-      description: The hotel's unique ID.
-      required: true
-      schema:
-        type: integer
-      example: 454345
-    inventoryFilter:
+        $ref: '#/components/schemas/locale.json'
+    housingEventsSummariesFilter:
       name: filter
       in: query
       required: false
-      description: '"A filter query string narrows search results and supports the combination of logical and comparison operators. The filter adheres to the pattern filter=''field'' comparisonType ''value''. If the parameter is not specified, all inventory dates will be returned."
+      description: 'A filter query string narrows search results. If the parameter is not specified, future housing events will be returned.
+
+
+        The filter supports the combination of logical and comparison operators, adheres to the pattern filter=''field'' comparisonType ''value''.
 
 
         These are the comparison types that can be used in filter expressions:
@@ -2851,11 +2872,9 @@ components:
 
         The following fields are filterable:
 
+        * start (eq|le|ge|lt|gt)
 
-        * date (eq|le|ge|lt|gt)
-
-
-        Limits for the number of fields that can be passed in a filter: 18
+        * end (eq|le|ge|lt|gt)
 
 
         The following operators are available:
@@ -2867,60 +2886,7 @@ components:
         '
       schema:
         type: string
-        example: (date ge '2023-01-12' and date le '2023-01-15') or (date eq '2023-02-01')
-    housingEventId:
-      in: path
-      name: housingEventId
-      description: ID for a Passkey housing event.
-      required: true
-      schema:
-        type: integer
-      example: 35325345
-    locale1:
-      name: locale
-      required: false
-      description: Locale code in IETF Language tag format. Indicates desired locale of return values.
-      in: query
-      schema:
-        $ref: '#/components/schemas/locale.json'
-    before:
-      name: before
-      required: false
-      in: query
-      description: Used to query records that have been added or updated before this time point.
-      schema:
-        type: string
-        format: date-time
-        example: '2017-01-02T02:00:00Z'
-    roomTypesFilter:
-      name: filter
-      in: query
-      required: false
-      description: '"A filter query string narrows search results and supports the combination of logical and comparison operators. The filter adheres to the pattern filter=''field'' comparisonType ''value''."
-
-
-        These are the comparison types that can be used in filter expressions:
-
-        * equal: eq
-
-
-        The following fields are filterable:
-
-        * attendeeTypes.id (eq)
-
-        * attendeeTypes.codes (eq)
-
-
-        The following operators are available:
-
-        * and
-
-        * or
-
-        '
-      schema:
-        type: string
-        example: attendeeTypes.id eq 10345 or attendeeTypes.codes eq 'PEWATT0524317'
+        example: (start ge '2027-01-11T05:00:00.000Z' and end le '2027-01-15T05:00:00.000Z') or (end eq '2027-02-01T05:00:00.000Z')
     accessCode:
       in: header
       name: Cvent-Access-Code
@@ -2937,6 +2903,42 @@ components:
       required: true
       schema:
         type: string
+    reservationRequestsId:
+      in: path
+      name: reservationRequestsId
+      description: Unique room reservation request ID.
+      required: true
+      schema:
+        type: string
+      example: D6A63423-G796
+    limitParam:
+      in: query
+      name: limit
+      description: Limit to this number of search results. Maximum of 200, default of 100.
+      required: false
+      example: '10'
+      schema:
+        type: integer
+        maximum: 200
+        minimum: 1
+        default: 100
+    before:
+      name: before
+      required: false
+      in: query
+      description: Used to query records that have been added or updated before this time point.
+      schema:
+        type: string
+        format: date-time
+        example: '2017-01-02T02:00:00Z'
+    housingEventId:
+      in: path
+      name: housingEventId
+      description: ID for a Passkey housing event.
+      required: true
+      schema:
+        type: integer
+      example: 35325345
   securitySchemes:
     OAuth2.authorizationCode:
       type: oauth2

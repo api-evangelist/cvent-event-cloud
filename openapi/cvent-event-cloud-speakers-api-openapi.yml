@@ -1,11 +1,13 @@
 openapi: 3.2.0
 info:
-  title: Cvent Event Cloud Speakers API
-  version: ea
+  title: Cvent REST Speakers API
+  description: '# Introduction
+
+    The Cvent API Platform is built around REST.'
   contact:
     name: Cvent Development Platform
     url: https://developers.cvent.com/
-  description: 'Operations tagged Speakers across 2 of this provider''s published API definitions: cvent-event-cloud-rest-openapi.yml, cvent-rest-apis-openapi.yaml. Each path carries the servers of the definition it was published in.'
+  version: ea
 servers:
 - url: https://api-platform.cvent.com/ea
 - url: https://api-platform-eur.cvent.com/ea
@@ -51,9 +53,6 @@ paths:
           $ref: '#/components/responses/Forbidden1'
         '429':
           $ref: '#/components/responses/TooManyRequests1'
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
   /program-items/speakers/filter:
     post:
       security:
@@ -62,7 +61,7 @@ paths:
       - OAuth2.authorizationCode:
         - event/program-items:read
       summary: List Session Program Speakers
-      description: Gets a paginated list of session program speaker by providing filters in the body of the request. This method returns the same data as <a href="#operation/getSessionProgramSpeakers">GET Session Program Speakers</a> but allows for longer filters.
+      description: Gets a paginated list of session program speaker by providing filters in the body of the request. This method returns the same data as GET Session Program Speakers but allows for longer filters.
       operationId: listSessionProgramSpeakersPostFilters
       tags:
       - Speakers
@@ -95,9 +94,6 @@ paths:
           $ref: '#/components/responses/Forbidden1'
         '429':
           $ref: '#/components/responses/TooManyRequests1'
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
   /program-items/{programItemId}/speakers/{id}:
     parameters:
     - $ref: '#/components/parameters/programItemId'
@@ -188,9 +184,6 @@ paths:
           $ref: '#/components/responses/NotFound1'
         '429':
           $ref: '#/components/responses/TooManyRequests1'
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
   /speaker-categories:
     get:
       security:
@@ -277,9 +270,6 @@ paths:
       externalDocs:
         description: More about OAuth2 authorization code support for administrators
         url: '#oauth2-auth-code-planner-admin'
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
   /speakers:
     get:
       security:
@@ -361,9 +351,6 @@ paths:
       externalDocs:
         description: More about OAuth2 authorization code support for administrators
         url: '#oauth2-auth-code-planner-admin'
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
   /speakers/filter:
     post:
       security:
@@ -372,9 +359,7 @@ paths:
       - OAuth2.authorizationCode:
         - event/speakers:read
       summary: List Speakers
-      description: 'Get a paginated list of speakers by sending a filter in the body of the request. This method will return the same data as GET List Speakers but allows for longer filters.
-
-        '
+      description: Get a paginated list of speakers by sending a filter in the body of the request. This method will return the same data as GET List Speakers but allows for longer filters.
       operationId: listSpeakersPostFilter
       requestBody:
         description: 'See the filter parameter of <a href="#operation/listSpeakers">List Speakers</a> for full filtering information
@@ -414,9 +399,6 @@ paths:
       externalDocs:
         description: More about OAuth2 authorization code support for administrators
         url: '#oauth2-auth-code-planner-admin'
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
   /speakers/{id}:
     parameters:
     - $ref: '#/components/parameters/speakerId'
@@ -485,9 +467,6 @@ paths:
       externalDocs:
         description: More about OAuth2 authorization code support for administrators
         url: '#oauth2-auth-code-planner-admin'
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
   /speakers/{id}/docs:
     parameters:
     - $ref: '#/components/parameters/speakerId'
@@ -534,9 +513,6 @@ paths:
       externalDocs:
         description: More about OAuth2 authorization code support for administrators
         url: '#oauth2-auth-code-planner-admin'
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
   /speakers/{id}/docs/{fileId}:
     parameters:
     - $ref: '#/components/parameters/speakerId'
@@ -578,7 +554,7 @@ paths:
       - OAuth2.authorizationCode:
         - event/speakers:write
       summary: Add Document To Speaker
-      description: Add a single document to a speaker with a UUID provided by <a href="#operation/uploadFile">file upload</a>.
+      description: Add a single document to a speaker with a UUID provided by file upload.
       operationId: addSpeakerDoc
       tags:
       - Speakers
@@ -608,7 +584,7 @@ paths:
       - OAuth2.authorizationCode:
         - event/speakers:write
       summary: Delete Document From Speaker
-      description: Use to delete a document from a speaker with a UUID provided by <a href="#operation/uploadFile">file upload</a>.
+      description: Use to delete a document from a speaker with a UUID provided by file upload.
       operationId: deleteSpeakerDocument
       tags:
       - Speakers
@@ -627,9 +603,6 @@ paths:
       externalDocs:
         description: More about OAuth2 authorization code support for administrators
         url: '#oauth2-auth-code-planner-admin'
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
   /speakers/{id}/profile-images:
     parameters:
     - $ref: '#/components/parameters/speakerId'
@@ -666,7 +639,7 @@ paths:
       - OAuth2.authorizationCode:
         - event/speakers:write
       summary: Assign Speaker Profile Picture
-      description: Assign a profile picture to a speaker with a file UUID from <a href="#operation/uploadFile">file upload</a> endpoint. This will replace the current profile picture if one is assigned.
+      description: Assign a profile picture to a speaker with a file UUID from file upload endpoint. This will replace the current profile picture if one is assigned.
       operationId: assignSpeakerProfileImage
       requestBody:
         description: 'The file id provided by the <a href="#operation/uploadFile">file upload</a> endpoint.
@@ -700,9 +673,6 @@ paths:
       externalDocs:
         description: More about OAuth2 authorization code support for administrators
         url: '#oauth2-auth-code-planner-admin'
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
   /speakers/{id}/sessions:
     parameters:
     - $ref: '#/components/parameters/speakerIdById'
@@ -742,96 +712,34 @@ paths:
       externalDocs:
         description: More about OAuth2 authorization code support for administrators
         url: '#oauth2-auth-code-planner-admin'
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
 components:
   schemas:
-    Relevance:
-      title: Relevance
-      description: Returned when the `match` filter is applied. Indicates how relevant the `match` filter term is to the search result. Larger numbers represent higher relevance with respect to other search results in the request. Null if no `match` filter is provided.
-      type: number
-      example: 2.3
-      exclusiveMinimum: 0
-    SpeakerSession:
-      title: SpeakerSession
+    speaker-program-item:
+      title: SpeakerProgramItem
       type: object
-      description: A speaker to session relationship.
+      description: Represents a program item object that will be added to a speaker.
+      required:
+      - event
+      - session
+      - speaker
+      - programItem
+      allOf:
+      - $ref: '#/components/schemas/Audit'
       properties:
         id:
-          $ref: '#/components/schemas/uuid-property'
+          description: ID of the speaker to program item relationship.
+          type: string
+          format: uuid
+          example: 38db6ae2-0dc3-487b-953e-86d6abbdf7d3
+          readOnly: true
+        event:
+          $ref: '#/components/schemas/EventLite'
+        session:
+          $ref: '#/components/schemas/SessionLite'
         speaker:
-          $ref: '#/components/schemas/SpeakerLite1'
-        category:
-          $ref: '#/components/schemas/NamedObject'
-    program-item-speaker-paginated-response:
-      title: ProgramItemSpeakerPaginatedResponse
-      description: The response from a request to get the list of program item speakers.
-      required:
-      - paging
-      - data
-      type: object
-      properties:
-        paging:
-          $ref: '#/components/schemas/Paging'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/speaker-program-item'
-          description: Collection of program item speakers.
-          maxItems: 200
-    speaker-document-paginated-response:
-      title: SpeakerDocumentPaginatedResponse
-      description: The response from a request to get the list of documents for a single speaker.  This includes the paging object as well as the collection of documents.
-      required:
-      - paging
-      - data
-      type: object
-      properties:
-        paging:
-          $ref: '#/components/schemas/Paging'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/speaker-file'
-          description: Collection of a speaker's documents.
-    speaker-file:
-      title: SpeakerFile
-      description: A file reference related to a speaker.
-      required:
-      - file
-      - href
-      properties:
-        file:
-          properties:
-            id:
-              $ref: '#/components/schemas/uuid-property'
-        href:
-          format: uri
-          type: string
-          description: URL of the speaker's image.
-          readOnly: true
-          example: https://custom.cvent.com/a5154f85f71a4cf2464e037feb75b308/00000000000000000000000000000000/files/universal-file/tmp/e209d73d845746b7a6deda4da9d91b2c.png
-        friendlyName:
-          type: string
-          description: Friendly name of the file
-          example: Important Document
-          readOnly: true
-        type:
-          type: string
-          description: Mime type of the file
-          example: image/png
-          readOnly: true
-        size:
-          type: integer
-          description: Size of the file in bytes
-          example: 150
-          readOnly: true
-        displayEnabled:
-          type: boolean
-          description: Display this file to the public
-          example: true
-          readOnly: true
+          $ref: '#/components/schemas/SpeakerLite'
+        programItem:
+          $ref: '#/components/schemas/ProgramItemLite'
     speaker-paginated-response:
       title: SpeakerPaginatedResponse
       description: The response from a request to get the list of speakers.  This includes the paging object as well as the collection of speakers.
@@ -847,138 +755,6 @@ components:
           items:
             $ref: '#/components/schemas/existing-speaker'
           description: Collection of speakers.
-    uuid-property:
-      title: UUID Property
-      description: A string that has to be a format matching the industry standard uuid
-      type: string
-      format: uuid
-      example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
-    SessionLite:
-      required:
-      - id
-      type: object
-      title: SessionLite
-      description: The unique identifier of a session.
-      properties:
-        id:
-          $ref: '#/components/schemas/SessionId'
-    speaker-category:
-      title: SpeakerCategory
-      description: A speaker category.
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the speaker category
-          maxLength: 50
-          example: Presenters
-    speaker-category-paginated-response:
-      title: SpeakerCategoryPaginatedResponse
-      description: The response from a request to get the list of speaker categories.  This includes the paging object as well as the collection of speaker categories.
-      required:
-      - paging
-      - data
-      type: object
-      properties:
-        paging:
-          $ref: '#/components/schemas/Paging'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/existing-speaker-category'
-          description: Collection of speaker categories.
-    ErrorResponse:
-      title: ErrorResponse
-      description: Represents an error response with additional details of cascading error messages.
-      allOf:
-      - $ref: '#/components/schemas/ErrorResponseBase'
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorResponseBase'
-          description: Additional details of cascading error messages.
-    SpeakerLite1:
-      required:
-      - id
-      type: object
-      title: SpeakerLite
-      description: The unique identifier of a speaker.
-      properties:
-        id:
-          $ref: '#/components/schemas/SpeakerId1'
-    locale.json:
-      title: Locale
-      description: Locale code
-      type: string
-      example: en-US
-      minLength: 1
-      maxLength: 200
-    existing-speaker:
-      title: Speaker
-      description: An existing, event speaker.
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/speaker'
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: The ID of the speaker
-        order:
-          type: integer
-          description: The order of speaker
-          example: 1
-          minimum: 0
-          maximum: 32767
-          readOnly: true
-        contact:
-          type: object
-          title: Speaker Contact
-          description: The reference to speaker contact. Contains only the Id of contact.
-          readOnly: true
-          properties:
-            id:
-              type: string
-              format: uuid
-              title: Contact Id
-              example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
-              description: A string that has to be a format matching the industry standard uuid
-    SpeakerCategory:
-      title: SpeakerCategory
-      description: A defined speaker category.
-      type: object
-      required:
-      - id
-      properties:
-        id:
-          $ref: '#/components/schemas/uuid-property'
-        name:
-          type: string
-          description: The name of the speaker category
-          maxLength: 50
-          example: Presenters
-    NamedObject:
-      title: NamedObject
-      description: A Named object
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/uuid-property'
-        name:
-          type: string
-          description: Name of the object
-          example: Sample Object name
-    ProgramItemId:
-      title: ProgramItemId
-      description: The unique identifier for a program item.
-      type: string
-      format: uuid
-      example: 221984b2-9e3e-4c1c-8ef4-306b1b75fa3e
     speaker:
       title: Speaker
       description: An event speaker.
@@ -1066,21 +842,168 @@ components:
           example: false
         relevance:
           $ref: '#/components/schemas/Relevance'
-    SessionId:
-      title: SessionId
-      description: The unique identifier for a session.
+    EventId:
+      title: EventId
+      description: The unique identifier for an event.
       type: string
       format: uuid
-      example: 832cb481-74c5-4859-ba21-bbb5be8b86e0
-    SpeakerId:
-      title: SpeakerId
-      description: The unique identifier for a speaker.
+      example: 2ef03846-fced-4ce3-a077-d64ca891a4b1
+    SpeakerLite:
+      required:
+      - id
+      type: object
+      title: SpeakerLite
+      description: The unique identifier of a speaker.
+      properties:
+        id:
+          $ref: '#/components/schemas/SpeakerId'
+    SpeakerLite1:
+      required:
+      - id
+      type: object
+      title: SpeakerLite
+      description: The unique identifier of a speaker.
+      properties:
+        id:
+          $ref: '#/components/schemas/SpeakerId1'
+    Audit:
+      title: Audit
+      description: Audit information
+      type: object
+      properties:
+        created:
+          type: string
+          format: date-time
+          description: The ISO 8601 zoned date time when this record was created.
+          readOnly: true
+          example: '2017-01-02T02:00:00Z'
+        createdBy:
+          type: string
+          description: The identifier of the user that created this record.
+          readOnly: true
+          example: hporter
+        lastModified:
+          type: string
+          format: date-time
+          description: The ISO 8601 zoned date time when this record was updated.
+          readOnly: true
+          example: '2019-02-12T03:00:00Z'
+        lastModifiedBy:
+          type: string
+          description: The identifier of the user that last updated this record.
+          readOnly: true
+          example: hporter
+    baseErrorResponse:
+      title: ErrorResponse
+      description: Represents an error response with additional details of cascading error messages.
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponseBase'
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorResponseBase'
+          description: Additional details of cascading error messages.
+    PaginationLinks:
+      title: PaginationLinks
+      type: object
+      description: Represents pagination links for navigating between pages of data.
+      properties:
+        next:
+          $ref: '#/components/schemas/Link'
+        self:
+          $ref: '#/components/schemas/Link'
+        prev:
+          $ref: '#/components/schemas/Link'
+    ProgramItemLite:
+      required:
+      - id
+      type: object
+      title: ProgramItemLite
+      description: The unique identifier of a program item.
+      properties:
+        id:
+          $ref: '#/components/schemas/ProgramItemId'
+    Link:
+      title: Link
+      required:
+      - href
+      type: object
+      description: Represents a link to a related resource.
+      properties:
+        href:
+          type: string
+          description: A url provided that can be followed for linking
+          example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
+    SpeakerSession:
+      title: SpeakerSession
+      type: object
+      description: A speaker to session relationship.
+      properties:
+        id:
+          $ref: '#/components/schemas/uuid-property'
+        speaker:
+          $ref: '#/components/schemas/SpeakerLite1'
+        category:
+          $ref: '#/components/schemas/NamedObject'
+    ProgramItemId:
+      title: ProgramItemId
+      description: The unique identifier for a program item.
       type: string
       format: uuid
-      example: 6077a9f1-a230-40cd-9e32-b493a84aaa80
-    speaker-session-paginated-response:
-      title: SpeakerSessionPaginatedResponse
-      description: The response from a request to get the list of speaker sessions.  This includes the paging object as well as the collection of speaker sessions.
+      example: 221984b2-9e3e-4c1c-8ef4-306b1b75fa3e
+    SessionLite:
+      required:
+      - id
+      type: object
+      title: SessionLite
+      description: The unique identifier of a session.
+      properties:
+        id:
+          $ref: '#/components/schemas/SessionId'
+    speaker-category:
+      title: SpeakerCategory
+      description: A speaker category.
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the speaker category
+          maxLength: 50
+          example: Presenters
+    existing-speaker-category:
+      title: SpeakerCategory
+      description: An existing speaker category.
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/speaker-category'
+      required:
+      - id
+      properties:
+        id:
+          $ref: '#/components/schemas/uuid-property'
+        active:
+          type: boolean
+          description: The speaker category is active or not active
+          readOnly: true
+    NamedObject:
+      title: NamedObject
+      description: A Named object
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/uuid-property'
+        name:
+          type: string
+          description: Name of the object
+          example: Sample Object name
+    speaker-category-paginated-response:
+      title: SpeakerCategoryPaginatedResponse
+      description: The response from a request to get the list of speaker categories.  This includes the paging object as well as the collection of speaker categories.
       required:
       - paging
       - data
@@ -1091,36 +1014,8 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/SpeakerSession'
-          description: Collection of speaker sessions.
-    SpeakerId1:
-      title: SpeakerId
-      description: The unique identifier for a speaker.
-      type: string
-      format: uuid
-    ContactLinks:
-      title: ContactLinks
-      type: object
-      description: Collection of social media links for the contact.
-      properties:
-        twitterUrl:
-          $ref: '#/components/schemas/Link'
-        facebookUrl:
-          $ref: '#/components/schemas/Link'
-        linkedInUrl:
-          $ref: '#/components/schemas/Link'
-        profilePicture:
-          type: object
-          description: Reference to a profile picture.
-          title: Link
-          required:
-          - href
-          readOnly: true
-          properties:
-            href:
-              type: string
-              description: The url of the contact's profile picture
-              example: https://cvent.com/picture123
+            $ref: '#/components/schemas/existing-speaker-category'
+          description: Collection of speaker categories.
     Paging:
       title: Paging
       required:
@@ -1150,85 +1045,129 @@ components:
           example: 2
         _links:
           $ref: '#/components/schemas/PaginationLinks'
-    Link:
-      title: Link
-      required:
-      - href
+    ContactLinks:
+      title: ContactLinks
       type: object
-      description: Represents a link to a related resource.
+      description: Collection of social media links for the contact.
       properties:
-        href:
-          type: string
-          description: A url provided that can be followed for linking
-          example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
-    existing-speaker-category:
-      title: SpeakerCategory
-      description: An existing speaker category.
+        twitterUrl:
+          $ref: '#/components/schemas/Link'
+        facebookUrl:
+          $ref: '#/components/schemas/Link'
+        linkedInUrl:
+          $ref: '#/components/schemas/Link'
+        profilePicture:
+          type: object
+          description: Reference to a profile picture.
+          title: Link
+          required:
+          - href
+          readOnly: true
+          properties:
+            href:
+              type: string
+              description: The url of the contact's profile picture
+              example: https://cvent.com/picture123
+    existing-speaker:
+      title: Speaker
+      description: An existing, event speaker.
       type: object
       allOf:
-      - $ref: '#/components/schemas/speaker-category'
-      required:
-      - id
+      - $ref: '#/components/schemas/speaker'
       properties:
         id:
-          $ref: '#/components/schemas/uuid-property'
-        active:
-          type: boolean
-          description: The speaker category is active or not active
-          readOnly: true
-    Audit:
-      title: Audit
-      description: Audit information
-      type: object
-      properties:
-        created:
-          type: string
-          format: date-time
-          description: The ISO 8601 zoned date time when this record was created.
-          readOnly: true
-          example: '2017-01-02T02:00:00Z'
-        createdBy:
-          type: string
-          description: The identifier of the user that created this record.
-          readOnly: true
-          example: hporter
-        lastModified:
-          type: string
-          format: date-time
-          description: The ISO 8601 zoned date time when this record was updated.
-          readOnly: true
-          example: '2019-02-12T03:00:00Z'
-        lastModifiedBy:
-          type: string
-          description: The identifier of the user that last updated this record.
-          readOnly: true
-          example: hporter
-    speaker-program-item:
-      title: SpeakerProgramItem
-      type: object
-      description: Represents a program item object that will be added to a speaker.
-      required:
-      - event
-      - session
-      - speaker
-      - programItem
-      allOf:
-      - $ref: '#/components/schemas/Audit'
-      properties:
-        id:
-          description: ID of the speaker to program item relationship.
           type: string
           format: uuid
-          example: 38db6ae2-0dc3-487b-953e-86d6abbdf7d3
+          description: The ID of the speaker
+        order:
+          type: integer
+          description: The order of speaker
+          example: 1
+          minimum: 0
+          maximum: 32767
           readOnly: true
-        event:
-          $ref: '#/components/schemas/EventLite'
-        session:
-          $ref: '#/components/schemas/SessionLite'
-        speaker:
-          $ref: '#/components/schemas/SpeakerLite'
-        programItem:
-          $ref: '#/components/schemas/ProgramItemLite'
+        contact:
+          type: object
+          title: Speaker Contact
+          description: The reference to speaker contact. Contains only the Id of contact.
+          readOnly: true
+          properties:
+            id:
+              type: string
+              format: uuid
+              title: Contact Id
+              example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
+              description: A string that has to be a format matching the industry standard uuid
+    SpeakerId:
+      title: SpeakerId
+      description: The unique identifier for a speaker.
+      type: string
+      format: uuid
+      example: 6077a9f1-a230-40cd-9e32-b493a84aaa80
+    program-item-speaker-paginated-response:
+      title: ProgramItemSpeakerPaginatedResponse
+      description: The response from a request to get the list of program item speakers.
+      required:
+      - paging
+      - data
+      type: object
+      properties:
+        paging:
+          $ref: '#/components/schemas/Paging'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/speaker-program-item'
+          description: Collection of program item speakers.
+          maxItems: 200
+    filter:
+      title: A filter sent in the body of a request
+      description: A filter which is sent through the body of the request.
+      type: object
+      properties:
+        filter:
+          type: string
+          example: property eq 'value'
+          description: Filter included in the request.
+    SpeakerId1:
+      title: SpeakerId
+      description: The unique identifier for a speaker.
+      type: string
+      format: uuid
+    speaker-session-paginated-response:
+      title: SpeakerSessionPaginatedResponse
+      description: The response from a request to get the list of speaker sessions.  This includes the paging object as well as the collection of speaker sessions.
+      required:
+      - paging
+      - data
+      type: object
+      properties:
+        paging:
+          $ref: '#/components/schemas/Paging'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SpeakerSession'
+          description: Collection of speaker sessions.
+    uuid-property:
+      title: UUID Property
+      description: A string that has to be a format matching the industry standard uuid
+      type: string
+      format: uuid
+      example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
+    SessionId:
+      title: SessionId
+      description: The unique identifier for a session.
+      type: string
+      format: uuid
+      example: 832cb481-74c5-4859-ba21-bbb5be8b86e0
+    locale.json:
+      title: Locale
+      description: Locale code
+      type: string
+      example: en-US
+      minLength: 1
+      maxLength: 200
     ErrorResponseBase:
       title: ErrorResponseBase
       type: object
@@ -1249,42 +1188,64 @@ components:
           type: string
           description: The target resource of the error.
           example: example target
-    PaginationLinks:
-      title: PaginationLinks
-      type: object
-      description: Represents pagination links for navigating between pages of data.
+    speaker-file:
+      title: SpeakerFile
+      description: A file reference related to a speaker.
+      required:
+      - file
+      - href
       properties:
-        next:
-          $ref: '#/components/schemas/Link'
-        self:
-          $ref: '#/components/schemas/Link'
-        prev:
-          $ref: '#/components/schemas/Link'
-    EventLite:
+        file:
+          properties:
+            id:
+              $ref: '#/components/schemas/uuid-property'
+        href:
+          format: uri
+          type: string
+          description: URL of the speaker's image.
+          readOnly: true
+          example: https://custom.cvent.com/a5154f85f71a4cf2464e037feb75b308/00000000000000000000000000000000/files/universal-file/tmp/e209d73d845746b7a6deda4da9d91b2c.png
+        friendlyName:
+          type: string
+          description: Friendly name of the file
+          example: Important Document
+          readOnly: true
+        type:
+          type: string
+          description: Mime type of the file
+          example: image/png
+          readOnly: true
+        size:
+          type: integer
+          description: Size of the file in bytes
+          example: 150
+          readOnly: true
+        displayEnabled:
+          type: boolean
+          description: Display this file to the public
+          example: true
+          readOnly: true
+    SpeakerCategory:
+      title: SpeakerCategory
+      description: A defined speaker category.
+      type: object
       required:
       - id
-      type: object
-      title: EventLite
-      description: The unique identifier of an event.
       properties:
         id:
-          $ref: '#/components/schemas/EventId'
-    EventId:
-      title: EventId
-      description: The unique identifier for an event.
-      type: string
-      format: uuid
-      example: 2ef03846-fced-4ce3-a077-d64ca891a4b1
-    ProgramItemLite:
-      required:
-      - id
-      type: object
-      title: ProgramItemLite
-      description: The unique identifier of a program item.
-      properties:
-        id:
-          $ref: '#/components/schemas/ProgramItemId'
-    baseErrorResponse:
+          $ref: '#/components/schemas/uuid-property'
+        name:
+          type: string
+          description: The name of the speaker category
+          maxLength: 50
+          example: Presenters
+    Relevance:
+      title: Relevance
+      description: Returned when the `match` filter is applied. Indicates how relevant the `match` filter term is to the search result. Larger numbers represent higher relevance with respect to other search results in the request. Null if no `match` filter is provided.
+      type: number
+      example: 2.3
+      exclusiveMinimum: 0
+    ErrorResponse:
       title: ErrorResponse
       description: Represents an error response with additional details of cascading error messages.
       allOf:
@@ -1299,38 +1260,31 @@ components:
           items:
             $ref: '#/components/schemas/ErrorResponseBase'
           description: Additional details of cascading error messages.
-    filter:
-      title: A filter sent in the body of a request
-      description: A filter which is sent through the body of the request.
-      type: object
-      properties:
-        filter:
-          type: string
-          example: property eq 'value'
-          description: Filter included in the request.
-    SpeakerLite:
+    EventLite:
       required:
       - id
       type: object
-      title: SpeakerLite
-      description: The unique identifier of a speaker.
+      title: EventLite
+      description: The unique identifier of an event.
       properties:
         id:
-          $ref: '#/components/schemas/SpeakerId'
+          $ref: '#/components/schemas/EventId'
+    speaker-document-paginated-response:
+      title: SpeakerDocumentPaginatedResponse
+      description: The response from a request to get the list of documents for a single speaker.  This includes the paging object as well as the collection of documents.
+      required:
+      - paging
+      - data
+      type: object
+      properties:
+        paging:
+          $ref: '#/components/schemas/Paging'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/speaker-file'
+          description: Collection of a speaker's documents.
   parameters:
-    token:
-      name: token
-      in: query
-      description: 'The continuation token returned from a previous class. This must be a valid UUID v4 if provided.
-
-        This will override any other pageable parameters provided.
-
-        '
-      style: form
-      explode: true
-      schema:
-        type: string
-        example: 0e28af57-511f-47ab-ae46-46cd1ca51a1a
     after:
       name: after
       required: false
@@ -1347,6 +1301,15 @@ components:
       in: query
       schema:
         $ref: '#/components/schemas/locale.json'
+    before:
+      name: before
+      required: false
+      in: query
+      description: Used to query records that have been added or updated before this time point.
+      schema:
+        type: string
+        format: date-time
+        example: '2017-01-02T02:00:00Z'
     programItemId:
       in: path
       name: programItemId
@@ -1364,15 +1327,6 @@ components:
       schema:
         type: string
         example: lastName:DESC,company:ASC
-    before:
-      name: before
-      required: false
-      in: query
-      description: Used to query records that have been added or updated before this time point.
-      schema:
-        type: string
-        format: date-time
-        example: '2017-01-02T02:00:00Z'
     limit:
       name: limit
       in: query
@@ -1392,13 +1346,6 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/uuid-property'
-    speakerId:
-      in: path
-      name: id
-      description: The unique identifier of a speaker.
-      required: true
-      schema:
-        $ref: '#/components/schemas/uuid-property'
     fileId:
       in: path
       name: fileId
@@ -1406,25 +1353,27 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/uuid-property'
+    speakerId:
+      in: path
+      name: id
+      description: The unique identifier of a speaker.
+      required: true
+      schema:
+        $ref: '#/components/schemas/uuid-property'
+    token:
+      name: token
+      in: query
+      description: 'The continuation token returned from a previous class. This must be a valid UUID v4 if provided.
+
+        This will override any other pageable parameters provided.
+
+        '
+      style: form
+      explode: true
+      schema:
+        type: string
+        example: 0e28af57-511f-47ab-ae46-46cd1ca51a1a
   responses:
-    NotFound1:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 404
-            message: Not found
-    Forbidden1:
-      description: You do not have access to the resource
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 403
-            message: Access Forbidden
     TooManyRequests1:
       description: Too many requests
       content:
@@ -1443,6 +1392,15 @@ components:
           example:
             code: 400
             message: Bad Request
+    Forbidden1:
+      description: You do not have access to the resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 403
+            message: Access Forbidden
     Unauthorized1:
       description: Bad or expired token
       content:
@@ -1452,6 +1410,15 @@ components:
           example:
             code: 401
             message: Unauthorized
+    NotFound1:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 404
+            message: Not found
   securitySchemes:
     OAuth2.authorizationCode:
       type: oauth2
@@ -1920,8 +1887,3 @@ components:
 externalDocs:
   description: Cvent Developer Documentation
   url: https://developers.cvent.com/docs
-x-refined-from:
-- cvent-event-cloud-rest-openapi.yml
-- cvent-rest-apis-openapi.yaml
-x-source: https://github.com/cvent/rest-sdks/blob/main/cvent-public-spec/openapi.yaml
-x-derived: tag-scoped subset (Event Cloud tags) of the published Cvent REST APIs OpenAPI

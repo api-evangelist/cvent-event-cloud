@@ -1,11 +1,13 @@
 openapi: 3.2.0
 info:
-  title: Cvent Event Cloud Authentication API
-  version: ea
+  title: Cvent REST Authentication API
+  description: '# Introduction
+
+    The Cvent API Platform is built around REST.'
   contact:
     name: Cvent Development Platform
     url: https://developers.cvent.com/
-  description: 'Operations tagged Authentication across 2 of this provider''s published API definitions: cvent-event-cloud-rest-openapi.yml, cvent-rest-apis-openapi.yaml. Each path carries the servers of the definition it was published in.'
+  version: ea
 servers:
 - url: https://api-platform.cvent.com/ea
 - url: https://api-platform-eur.cvent.com/ea
@@ -18,9 +20,7 @@ paths:
       tags:
       - Authentication
       summary: Get Authorization Code
-      description: 'Initiates the OAuth2 authorization code flow by directing the user-agent to the Cvent authorization server. The client typically triggers this request via a browser. For the `redirect_uri` HTTPS is required; `http://localhost` is permitted for local testing only. On success, the authorization server redirects the user-agent back to the client''s `redirect_uri` with an authorization code. The client can then exchange that code via [Get Token](#operation/oauth2Token) to obtain an access token.
-
-        '
+      description: Initiates the OAuth2 authorization code flow by directing the user-agent to the Cvent authorization server. The client typically triggers this request via a browser. For the `redirect_uri` HTTPS is required; `http://localhost` is permitted for local testing only. On success, the authorization server redirects the user-agent back to the client's `redirect_uri` with an authorization code. The client can then exchange that code via Get Token to obtain an access token.
       operationId: oauth2Authorize
       parameters:
       - in: query
@@ -120,20 +120,15 @@ paths:
               example: https://client_redirect_uri?code=AUTHORIZATION_CODE&state=STATE
         '400':
           description: The request is missing a required parameter.
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
   /oauth2/token:
     post:
       tags:
       - Authentication
       summary: Get Token
-      description: 'Obtains an access token and, optionally, a refresh token. Read the [Developer Quickstart](https://developers.cvent.com/docs/rest-api/tutorials/developer-quickstart) for an example request.
+      description: 'Obtains an access token and, optionally, a refresh token. Read the Developer Quickstart for an example request.
 
 
-        **Note:** The token endpoint returns refresh_token only when the grant_type is authorization_code.
-
-        '
+        **Note:** The token endpoint returns refresh_token only when the grant_type is authorization_code.'
       operationId: oauth2Token
       parameters:
       - in: header
@@ -294,9 +289,6 @@ paths:
                     example: invalid_request
         '401':
           description: Client authentication failed. The credentials provided in the Authorization header are invalid or missing.
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
   /token-validation:
     get:
       tags:
@@ -323,38 +315,15 @@ paths:
       externalDocs:
         description: More about OAuth2 authorization code support for administrators
         url: '#oauth2-auth-code-planner-admin'
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
 components:
   responses:
-    Unauthorized1:
-      description: Bad or expired token
+    ValidToken:
+      description: A confirmation message that the token is valid
+      headers: {}
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 401
-            message: Unauthorized
-    TooManyRequests1:
-      description: Too many requests
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 429
-            message: Limit Exceeded
-    BadRequest1:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 400
-            message: Bad Request
+            $ref: '#/components/schemas/ValidToken'
     Forbidden1:
       description: You do not have access to the resource
       content:
@@ -364,13 +333,33 @@ components:
           example:
             code: 403
             message: Access Forbidden
-    ValidToken:
-      description: A confirmation message that the token is valid
-      headers: {}
+    TooManyRequests1:
+      description: Too many requests
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ValidToken'
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 429
+            message: Limit Exceeded
+    Unauthorized1:
+      description: Bad or expired token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 401
+            message: Unauthorized
+    BadRequest1:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 400
+            message: Bad Request
   schemas:
     ErrorResponseBase:
       title: ErrorResponseBase
@@ -888,8 +877,3 @@ components:
 externalDocs:
   description: Cvent Developer Documentation
   url: https://developers.cvent.com/docs
-x-refined-from:
-- cvent-event-cloud-rest-openapi.yml
-- cvent-rest-apis-openapi.yaml
-x-source: https://github.com/cvent/rest-sdks/blob/main/cvent-public-spec/openapi.yaml
-x-derived: tag-scoped subset (Event Cloud tags) of the published Cvent REST APIs OpenAPI

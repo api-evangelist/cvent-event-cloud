@@ -1,11 +1,13 @@
 openapi: 3.2.0
 info:
-  title: Cvent Event Cloud Campaigns API
-  version: ea
+  title: Cvent REST Campaigns API
+  description: '# Introduction
+
+    The Cvent API Platform is built around REST.'
   contact:
     name: Cvent Development Platform
     url: https://developers.cvent.com/
-  description: 'Operations tagged Campaigns across 2 of this provider''s published API definitions: cvent-event-cloud-rest-openapi.yml, cvent-rest-apis-openapi.yaml. Each path carries the servers of the definition it was published in.'
+  version: ea
 servers:
 - url: https://api-platform.cvent.com/ea
 - url: https://api-platform-eur.cvent.com/ea
@@ -56,9 +58,6 @@ paths:
       externalDocs:
         description: More about OAuth2 authorization code support for administrators
         url: '#oauth2-auth-code-planner-admin'
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
   /emarketing/campaigns/{campaignId}/email-templates:
     get:
       summary: List Email Templates
@@ -104,9 +103,6 @@ paths:
       externalDocs:
         description: More about OAuth2 authorization code support for administrators
         url: '#oauth2-auth-code-planner-admin'
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
   /emarketing/emails:
     post:
       summary: Send Email To Recipients
@@ -142,14 +138,11 @@ paths:
       externalDocs:
         description: More about OAuth2 authorization code support for administrators
         url: '#oauth2-auth-code-planner-admin'
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
   /emarketing/emails/{emailRequestId}/status:
     get:
       summary: List Emarketing Email Status
       operationId: getEmarketingEmailStatus
-      description: Gets the status of email using unique email request ID that was generated as a response of [Send Email To Recipients](#tag/Campaigns/operation/sendEMarketingEmails) request.
+      description: Gets the status of email using unique email request ID that was generated as a response of Send Email To Recipients request.
       tags:
       - Campaigns
       security:
@@ -180,10 +173,67 @@ paths:
       externalDocs:
         description: More about OAuth2 authorization code support for administrators
         url: '#oauth2-auth-code-planner-admin'
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
 components:
+  parameters:
+    after1:
+      in: query
+      name: after
+      description: Used to query records that have been created after this time point. Defaults to 6 months back from current time.
+      required: false
+      schema:
+        type: string
+        example: '2021-03-26T02:30:00Z'
+    emailRequestId:
+      in: path
+      name: emailRequestId
+      description: Used to get status of emails which were sent with this email request ID.
+      required: true
+      schema:
+        type: string
+        format: uuid,
+        example: 2A941E55-3367-4C50-B21B-B6A7613DFB23
+    token:
+      name: token
+      in: query
+      description: 'The continuation token returned from a previous class. This must be a valid UUID v4 if provided.
+
+        This will override any other pageable parameters provided.
+
+        '
+      style: form
+      explode: true
+      schema:
+        type: string
+        example: 0e28af57-511f-47ab-ae46-46cd1ca51a1a
+    campaignId:
+      in: path
+      name: campaignId
+      description: The unique ID of a campaign. Used to retrieve the email templates used in this campaign.
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: 9A641E55-3367-4C50-B21B-B6A7613DFB23
+    limit:
+      name: limit
+      in: query
+      description: The maximum number of records to return per page.
+      style: form
+      explode: true
+      schema:
+        maximum: 200
+        minimum: 1
+        type: integer
+        default: 100
+        example: 100
+    before1:
+      in: query
+      name: before
+      description: Used to query records that have been created before this time point. Defaults to current time.
+      required: false
+      schema:
+        type: string
+        example: '2021-03-25T02:30:00Z'
   schemas:
     send-email-event-response:
       title: Send Event Email Response
@@ -255,105 +305,6 @@ components:
           items:
             $ref: '#/components/schemas/attendee-response.json'
           description: List of responses specifying the status of email request for each attendee.
-    recipients-request.json:
-      title: Email Recipient Request
-      description: Recipient contains the recipient ID of a recipient.
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: The ID of a recipient whom you'd like to send an email.
-          example: 9A641E55-3367-4C50-B21B-B6A7613DFB23
-    email-template-paginated-response:
-      title: Email template List Paginated Response
-      description: The response from a request to get the list of email templates. This includes the paging object as well as the collection of email template.
-      required:
-      - paging
-      - data
-      type: object
-      properties:
-        paging:
-          $ref: '#/components/schemas/paging.json'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/email-template-data.json'
-          description: A list of all email templates data for an unique campaign that will help the planner to select specific email and send.
-    campaign-list-paginated-response:
-      title: Campaign List Paginated Response
-      description: The response from a request to get the list of campaign. This includes the paging object as well as the collection of campaign data.
-      required:
-      - paging
-      - data
-      type: object
-      properties:
-        paging:
-          $ref: '#/components/schemas/paging.json'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/campaign-data.json'
-          description: A list of all campaigns.
-    link.json:
-      title: Link
-      required:
-      - href
-      type: object
-      description: Represents a link to a related resource.
-      properties:
-        href:
-          type: string
-          description: A url provided that can be followed for linking
-          example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
-    ErrorResponse:
-      title: ErrorResponse
-      description: Represents an error response with additional details of cascading error messages.
-      allOf:
-      - $ref: '#/components/schemas/ErrorResponseBase'
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorResponseBase'
-          description: Additional details of cascading error messages.
-    send-email-status.json:
-      title: Send Email Status
-      enum:
-      - Sent
-      - In-Progress
-      - Error
-      - Opted-Out
-      type: string
-      description: It is used to denote the status of the sent email.
-      example: Accepted
-    send-email-emarketing-response:
-      title: Send Emarketing Email Response
-      description: Response object containing a request ID and a list of all email responses sent to recipients.
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/send-email-event-response/allOf/0'
-      required:
-      - templateId
-      - recipientResponse
-      properties:
-        templateId:
-          type: string
-          description: The template ID of the eMarketing email.
-          example: 12345::2023-09-22T08:34:21.593Z
-        recipientResponse:
-          type: array
-          minItems: 1
-          maxItems: 200
-          items:
-            $ref: '#/components/schemas/recipients-response.json'
-          description: List of responses specifying the status of email request for each recipient.
     paging.json:
       title: Paging
       required:
@@ -461,6 +412,76 @@ components:
           type: boolean
           description: True indicates the email will be active and can be sent.
           example: true
+    email-template-paginated-response:
+      title: Email template List Paginated Response
+      description: The response from a request to get the list of email templates. This includes the paging object as well as the collection of email template.
+      required:
+      - paging
+      - data
+      type: object
+      properties:
+        paging:
+          $ref: '#/components/schemas/paging.json'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/email-template-data.json'
+          description: A list of all email templates data for an unique campaign that will help the planner to select specific email and send.
+    ErrorResponse:
+      title: ErrorResponse
+      description: Represents an error response with additional details of cascading error messages.
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponseBase'
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorResponseBase'
+          description: Additional details of cascading error messages.
+    send-email-request-status.json:
+      title: Send Email Request Status
+      enum:
+      - ERROR
+      - IN-PROGRESS
+      - SUCCESSFUL
+      type: string
+      description: Denotes the status of the send email request.
+      example: ERROR
+    send-email-response:
+      title: Send EMarketing Email Response
+      description: Response object containing a request ID and a list of all email responses sent to recipients.
+      type: object
+      required:
+      - requestId
+      - templateId
+      - recipientResponse
+      properties:
+        requestId:
+          type: string
+          format: uuid
+          description: The request ID for the eMarketing email send request.
+          example: 3A541E55-3367-4C50-B21B-B6A7613DFB23
+        templateId:
+          type: string
+          description: The template ID of the eMarketing email.
+          example: '12345'
+        recipientResponse:
+          type: array
+          minItems: 1
+          maxItems: 200
+          items:
+            $ref: '#/components/schemas/recipients-response.json'
+          description: List of responses specifying the status of email request for each recipient.
+        status:
+          $ref: '#/components/schemas/send-email-request-status.json'
+        description:
+          type: string
+          description: The description of the request status. If the `status` is `ERROR`, this field contains the reason for the failure.
+          example: Cannot send an email to inactive campaign(s).
     campaign-data.json:
       title: Campaign Data
       type: object
@@ -493,37 +514,6 @@ components:
           type: string
           description: The name of the person on whose behalf the email will be sent.
           example: Demo name
-    send-email-response:
-      title: Send EMarketing Email Response
-      description: Response object containing a request ID and a list of all email responses sent to recipients.
-      type: object
-      required:
-      - requestId
-      - templateId
-      - recipientResponse
-      properties:
-        requestId:
-          type: string
-          format: uuid
-          description: The request ID for the eMarketing email send request.
-          example: 3A541E55-3367-4C50-B21B-B6A7613DFB23
-        templateId:
-          type: string
-          description: The template ID of the eMarketing email.
-          example: '12345'
-        recipientResponse:
-          type: array
-          minItems: 1
-          maxItems: 200
-          items:
-            $ref: '#/components/schemas/recipients-response.json'
-          description: List of responses specifying the status of email request for each recipient.
-        status:
-          $ref: '#/components/schemas/send-email-request-status.json'
-        description:
-          type: string
-          description: The description of the request status. If the `status` is `ERROR`, this field contains the reason for the failure.
-          example: Cannot send an email to inactive campaign(s).
     send-email-request:
       title: Send EMarketing Email Request
       description: Request object to send an email to one or more eMarketing campaign recipients.
@@ -543,6 +533,75 @@ components:
           items:
             $ref: '#/components/schemas/recipients-request.json'
           description: Array of one or more recipients whom emails need to be sent.
+    send-email-status.json:
+      title: Send Email Status
+      enum:
+      - Sent
+      - In-Progress
+      - Error
+      - Opted-Out
+      type: string
+      description: It is used to denote the status of the sent email.
+      example: Accepted
+    campaign-list-paginated-response:
+      title: Campaign List Paginated Response
+      description: The response from a request to get the list of campaign. This includes the paging object as well as the collection of campaign data.
+      required:
+      - paging
+      - data
+      type: object
+      properties:
+        paging:
+          $ref: '#/components/schemas/paging.json'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/campaign-data.json'
+          description: A list of all campaigns.
+    link.json:
+      title: Link
+      required:
+      - href
+      type: object
+      description: Represents a link to a related resource.
+      properties:
+        href:
+          type: string
+          description: A url provided that can be followed for linking
+          example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
+    send-email-emarketing-response:
+      title: Send Emarketing Email Response
+      description: Response object containing a request ID and a list of all email responses sent to recipients.
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/send-email-event-response/allOf/0'
+      required:
+      - templateId
+      - recipientResponse
+      properties:
+        templateId:
+          type: string
+          description: The template ID of the eMarketing email.
+          example: 12345::2023-09-22T08:34:21.593Z
+        recipientResponse:
+          type: array
+          minItems: 1
+          maxItems: 200
+          items:
+            $ref: '#/components/schemas/recipients-response.json'
+          description: List of responses specifying the status of email request for each recipient.
+    recipients-request.json:
+      title: Email Recipient Request
+      description: Recipient contains the recipient ID of a recipient.
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The ID of a recipient whom you'd like to send an email.
+          example: 9A641E55-3367-4C50-B21B-B6A7613DFB23
     ErrorResponseBase:
       title: ErrorResponseBase
       type: object
@@ -574,94 +633,7 @@ components:
           $ref: '#/components/schemas/link.json'
         prev:
           $ref: '#/components/schemas/link.json'
-    send-email-request-status.json:
-      title: Send Email Request Status
-      enum:
-      - ERROR
-      - IN-PROGRESS
-      - SUCCESSFUL
-      type: string
-      description: Denotes the status of the send email request.
-      example: ERROR
-  parameters:
-    after1:
-      in: query
-      name: after
-      description: Used to query records that have been created after this time point. Defaults to 6 months back from current time.
-      required: false
-      schema:
-        type: string
-        example: '2021-03-26T02:30:00Z'
-    campaignId:
-      in: path
-      name: campaignId
-      description: The unique ID of a campaign. Used to retrieve the email templates used in this campaign.
-      required: true
-      schema:
-        type: string
-        format: uuid
-        example: 9A641E55-3367-4C50-B21B-B6A7613DFB23
-    token:
-      name: token
-      in: query
-      description: 'The continuation token returned from a previous class. This must be a valid UUID v4 if provided.
-
-        This will override any other pageable parameters provided.
-
-        '
-      style: form
-      explode: true
-      schema:
-        type: string
-        example: 0e28af57-511f-47ab-ae46-46cd1ca51a1a
-    before1:
-      in: query
-      name: before
-      description: Used to query records that have been created before this time point. Defaults to current time.
-      required: false
-      schema:
-        type: string
-        example: '2021-03-25T02:30:00Z'
-    limit:
-      name: limit
-      in: query
-      description: The maximum number of records to return per page.
-      style: form
-      explode: true
-      schema:
-        maximum: 200
-        minimum: 1
-        type: integer
-        default: 100
-        example: 100
-    emailRequestId:
-      in: path
-      name: emailRequestId
-      description: Used to get status of emails which were sent with this email request ID.
-      required: true
-      schema:
-        type: string
-        format: uuid,
-        example: 2A941E55-3367-4C50-B21B-B6A7613DFB23
   responses:
-    NotFound1:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 404
-            message: Not found
-    Forbidden1:
-      description: You do not have access to the resource
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 403
-            message: Access Forbidden
     TooManyRequests1:
       description: Too many requests
       content:
@@ -680,6 +652,15 @@ components:
           example:
             code: 400
             message: Bad Request
+    Forbidden1:
+      description: You do not have access to the resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 403
+            message: Access Forbidden
     Unauthorized1:
       description: Bad or expired token
       content:
@@ -689,6 +670,15 @@ components:
           example:
             code: 401
             message: Unauthorized
+    NotFound1:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 404
+            message: Not found
   securitySchemes:
     OAuth2.authorizationCode:
       type: oauth2
@@ -1157,8 +1147,3 @@ components:
 externalDocs:
   description: Cvent Developer Documentation
   url: https://developers.cvent.com/docs
-x-refined-from:
-- cvent-event-cloud-rest-openapi.yml
-- cvent-rest-apis-openapi.yaml
-x-source: https://github.com/cvent/rest-sdks/blob/main/cvent-public-spec/openapi.yaml
-x-derived: tag-scoped subset (Event Cloud tags) of the published Cvent REST APIs OpenAPI

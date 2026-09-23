@@ -1,11 +1,13 @@
 openapi: 3.2.0
 info:
-  title: Cvent Event Cloud Signatures API
-  version: ea
+  title: Cvent REST Signatures API
+  description: '# Introduction
+
+    The Cvent API Platform is built around REST.'
   contact:
     name: Cvent Development Platform
     url: https://developers.cvent.com/
-  description: 'Operations tagged Signatures across 2 of this provider''s published API definitions: cvent-event-cloud-rest-openapi.yml, cvent-rest-apis-openapi.yaml. Each path carries the servers of the definition it was published in.'
+  version: ea
 servers:
 - url: https://api-platform.cvent.com/ea
 - url: https://api-platform-eur.cvent.com/ea
@@ -59,83 +61,8 @@ paths:
       externalDocs:
         description: More about OAuth2 authorization code support for administrators
         url: '#oauth2-auth-code-planner-admin'
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
 components:
-  parameters:
-    sort3:
-      name: sort
-      required: false
-      in: query
-      style: form
-      explode: false
-      description: "The sort order passed as a parameter, used to control the order of the\nsearch results as a priority ordered list of sorts\n\nThere are two orders:\n  * ascending: ASC\n  * descending: DESC\n\nThe following fields are sortable:\n  * event.id\n  * session.id\n  * attendee.id\n  * type\n  * created\n  * lastModified (default)\n"
-      schema:
-        type: string
-        example: event.id:ASC,lastModified:DESC
-    before:
-      name: before
-      required: false
-      in: query
-      description: Used to query records that have been added or updated before this time point.
-      schema:
-        type: string
-        format: date-time
-        example: '2017-01-02T02:00:00Z'
-    limit:
-      name: limit
-      in: query
-      description: The maximum number of records to return per page.
-      style: form
-      explode: true
-      schema:
-        maximum: 200
-        minimum: 1
-        type: integer
-        default: 100
-        example: 100
-    token:
-      name: token
-      in: query
-      description: 'The continuation token returned from a previous class. This must be a valid UUID v4 if provided.
-
-        This will override any other pageable parameters provided.
-
-        '
-      style: form
-      explode: true
-      schema:
-        type: string
-        example: 0e28af57-511f-47ab-ae46-46cd1ca51a1a
-    after:
-      name: after
-      required: false
-      description: Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store.
-      in: query
-      schema:
-        type: string
-        format: date-time
-        example: '2017-01-02T02:00:00Z'
   responses:
-    Unauthorized1:
-      description: Bad or expired token
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 401
-            message: Unauthorized
-    TooManyRequests1:
-      description: Too many requests
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 429
-            message: Limit Exceeded
     BadRequest1:
       description: Bad request
       content:
@@ -145,15 +72,6 @@ components:
           example:
             code: 400
             message: Bad Request
-    NotFound1:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 404
-            message: Not found
     Forbidden1:
       description: You do not have access to the resource
       content:
@@ -163,7 +81,166 @@ components:
           example:
             code: 403
             message: Access Forbidden
+    TooManyRequests1:
+      description: Too many requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 429
+            message: Limit Exceeded
+    Unauthorized1:
+      description: Bad or expired token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 401
+            message: Unauthorized
+    NotFound1:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 404
+            message: Not found
   schemas:
+    attendee-signature-response.json:
+      title: AttendeeSignatureResponse
+      description: Attendee's Signature Response.
+      type: object
+      required:
+      - id
+      - event
+      - attendee
+      - type
+      - checkinSignatureUrl
+      allOf:
+      - $ref: '#/components/schemas/check-in-message-request/allOf/0'
+      properties:
+        id:
+          description: Internal ID generated by the system.
+          type: string
+          format: uuid
+          example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
+        event:
+          description: Event information associated with the signature.
+          type: object
+          properties:
+            id:
+              description: ID of the event.
+              type: string
+              format: uuid
+              example: b62809dd-7556-49d2-884a-591bbf96cf1a
+        session:
+          description: Session information associated with the signature.
+          type: object
+          properties:
+            id:
+              description: ID of the session.
+              type: string
+              format: uuid
+              example: 4d44b9e4-8c1a-403d-a20a-0b981f539935
+        attendee:
+          description: Attendee information associated with the signature.
+          type: object
+          properties:
+            id:
+              description: ID of the attendee.
+              type: string
+              format: uuid
+              example: ce359543-61f5-492d-b8de-875c3473e8ae
+        type:
+          description: 'Type of entity this signature is associated with. Possible values are: `EVENT`, `SESSION`.'
+          type: string
+          enum:
+          - EVENT
+          - SESSION
+        checkinSignatureUrl:
+          description: Check-in signature image S3 url
+          type: string
+          example: https://custom.t2.cvent.com/files/contact/signatures/checkinSignature.jpg
+        checkoutSignatureUrl:
+          description: Check-out signature image S3 url
+          type: string
+          example: https://custom.t2.cvent.com/files/contact/signatures/checkoutSignature.jpg
+    signatures-response:
+      title: SignaturesResponse
+      description: Paginated Response of Attendee Signatures.
+      type: object
+      properties:
+        paging:
+          $ref: '#/components/schemas/paging.json'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/attendee-signature-response.json'
+          maxItems: 200
+          description: Collection of signatures.
+    pagination-links.json:
+      title: PaginationLinks
+      type: object
+      description: Represents pagination links for navigating between pages of data.
+      properties:
+        next:
+          $ref: '#/components/schemas/link.json'
+        self:
+          $ref: '#/components/schemas/link.json'
+        prev:
+          $ref: '#/components/schemas/link.json'
+    ErrorResponseBase:
+      title: ErrorResponseBase
+      type: object
+      description: Represents an error response with no additional details.
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          description: The HTTP status code representing the error.
+          example: 400
+        message:
+          type: string
+          description: A brief description of the error.
+          example: Bad Request
+        target:
+          type: string
+          description: The target resource of the error.
+          example: example target
+    paging.json:
+      title: Paging
+      required:
+      - _links
+      type: object
+      description: Represents pagination information for a collection of resources.
+      properties:
+        previousToken:
+          type: string
+          description: The pagination token for the previous page, if one exists. You can use this token to navigate to the previous page of data.
+          example: 1a2b3c4d5e6f7g8h9i10j11k
+        nextToken:
+          type: string
+          description: The pagination token for the next page. If this value is present in the response, there is another page of data you can fetch.
+          example: 1a2b3c4d5e6f7g8h9i10j11k
+        currentToken:
+          type: string
+          description: The pagination token for the current page.
+          example: 1a2b3c4d5e6f7g8h9i10j11k
+        limit:
+          type: integer
+          description: The number of records to return on the page. Not to exceed 200.
+          example: 100
+        totalCount:
+          type: integer
+          description: The total number of records available. This field may return blank, even if there are more records. To confirm if there are more records, check the `nextToken` field.
+          example: 2
+        _links:
+          $ref: '#/components/schemas/pagination-links.json'
     check-in-message-request:
       title: CheckInMessageRequest
       description: A request to create a new check-in message.
@@ -246,39 +323,17 @@ components:
           description: Rules for when to display this message in OnArrival.
           items:
             $ref: '#/components/schemas/check-in-message-rule.json'
-    signatures-response:
-      title: SignaturesResponse
-      description: Paginated Response of Attendee Signatures.
-      type: object
-      properties:
-        paging:
-          $ref: '#/components/schemas/paging.json'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/attendee-signature-response.json'
-          maxItems: 200
-          description: Collection of signatures.
-    ErrorResponseBase:
-      title: ErrorResponseBase
-      type: object
-      description: Represents an error response with no additional details.
+    link.json:
+      title: Link
       required:
-      - code
-      - message
+      - href
+      type: object
+      description: Represents a link to a related resource.
       properties:
-        code:
-          type: integer
-          description: The HTTP status code representing the error.
-          example: 400
-        message:
+        href:
           type: string
-          description: A brief description of the error.
-          example: Bad Request
-        target:
-          type: string
-          description: The target resource of the error.
-          example: example target
+          description: A url provided that can be followed for linking
+          example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
     ErrorResponse:
       title: ErrorResponse
       description: Represents an error response with additional details of cascading error messages.
@@ -294,116 +349,60 @@ components:
           items:
             $ref: '#/components/schemas/ErrorResponseBase'
           description: Additional details of cascading error messages.
-    pagination-links.json:
-      title: PaginationLinks
-      type: object
-      description: Represents pagination links for navigating between pages of data.
-      properties:
-        next:
-          $ref: '#/components/schemas/link.json'
-        self:
-          $ref: '#/components/schemas/link.json'
-        prev:
-          $ref: '#/components/schemas/link.json'
-    link.json:
-      title: Link
-      required:
-      - href
-      type: object
-      description: Represents a link to a related resource.
-      properties:
-        href:
-          type: string
-          description: A url provided that can be followed for linking
-          example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
-    paging.json:
-      title: Paging
-      required:
-      - _links
-      type: object
-      description: Represents pagination information for a collection of resources.
-      properties:
-        previousToken:
-          type: string
-          description: The pagination token for the previous page, if one exists. You can use this token to navigate to the previous page of data.
-          example: 1a2b3c4d5e6f7g8h9i10j11k
-        nextToken:
-          type: string
-          description: The pagination token for the next page. If this value is present in the response, there is another page of data you can fetch.
-          example: 1a2b3c4d5e6f7g8h9i10j11k
-        currentToken:
-          type: string
-          description: The pagination token for the current page.
-          example: 1a2b3c4d5e6f7g8h9i10j11k
-        limit:
-          type: integer
-          description: The number of records to return on the page. Not to exceed 200.
-          example: 100
-        totalCount:
-          type: integer
-          description: The total number of records available. This field may return blank, even if there are more records. To confirm if there are more records, check the `nextToken` field.
-          example: 2
-        _links:
-          $ref: '#/components/schemas/pagination-links.json'
-    attendee-signature-response.json:
-      title: AttendeeSignatureResponse
-      description: Attendee's Signature Response.
-      type: object
-      required:
-      - id
-      - event
-      - attendee
-      - type
-      - checkinSignatureUrl
-      allOf:
-      - $ref: '#/components/schemas/check-in-message-request/allOf/0'
-      properties:
-        id:
-          description: Internal ID generated by the system.
-          type: string
-          format: uuid
-          example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
-        event:
-          description: Event information associated with the signature.
-          type: object
-          properties:
-            id:
-              description: ID of the event.
-              type: string
-              format: uuid
-              example: b62809dd-7556-49d2-884a-591bbf96cf1a
-        session:
-          description: Session information associated with the signature.
-          type: object
-          properties:
-            id:
-              description: ID of the session.
-              type: string
-              format: uuid
-              example: 4d44b9e4-8c1a-403d-a20a-0b981f539935
-        attendee:
-          description: Attendee information associated with the signature.
-          type: object
-          properties:
-            id:
-              description: ID of the attendee.
-              type: string
-              format: uuid
-              example: ce359543-61f5-492d-b8de-875c3473e8ae
-        type:
-          description: 'Type of entity this signature is associated with. Possible values are: `EVENT`, `SESSION`.'
-          type: string
-          enum:
-          - EVENT
-          - SESSION
-        checkinSignatureUrl:
-          description: Check-in signature image S3 url
-          type: string
-          example: https://custom.t2.cvent.com/files/contact/signatures/checkinSignature.jpg
-        checkoutSignatureUrl:
-          description: Check-out signature image S3 url
-          type: string
-          example: https://custom.t2.cvent.com/files/contact/signatures/checkoutSignature.jpg
+  parameters:
+    sort3:
+      name: sort
+      required: false
+      in: query
+      style: form
+      explode: false
+      description: "The sort order passed as a parameter, used to control the order of the\nsearch results as a priority ordered list of sorts\n\nThere are two orders:\n  * ascending: ASC\n  * descending: DESC\n\nThe following fields are sortable:\n  * event.id\n  * session.id\n  * attendee.id\n  * type\n  * created\n  * lastModified (default)\n"
+      schema:
+        type: string
+        example: event.id:ASC,lastModified:DESC
+    limit:
+      name: limit
+      in: query
+      description: The maximum number of records to return per page.
+      style: form
+      explode: true
+      schema:
+        maximum: 200
+        minimum: 1
+        type: integer
+        default: 100
+        example: 100
+    after:
+      name: after
+      required: false
+      description: Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store.
+      in: query
+      schema:
+        type: string
+        format: date-time
+        example: '2017-01-02T02:00:00Z'
+    before:
+      name: before
+      required: false
+      in: query
+      description: Used to query records that have been added or updated before this time point.
+      schema:
+        type: string
+        format: date-time
+        example: '2017-01-02T02:00:00Z'
+    token:
+      name: token
+      in: query
+      description: 'The continuation token returned from a previous class. This must be a valid UUID v4 if provided.
+
+        This will override any other pageable parameters provided.
+
+        '
+      style: form
+      explode: true
+      schema:
+        type: string
+        example: 0e28af57-511f-47ab-ae46-46cd1ca51a1a
   securitySchemes:
     OAuth2.authorizationCode:
       type: oauth2
@@ -872,8 +871,3 @@ components:
 externalDocs:
   description: Cvent Developer Documentation
   url: https://developers.cvent.com/docs
-x-refined-from:
-- cvent-event-cloud-rest-openapi.yml
-- cvent-rest-apis-openapi.yaml
-x-source: https://github.com/cvent/rest-sdks/blob/main/cvent-public-spec/openapi.yaml
-x-derived: tag-scoped subset (Event Cloud tags) of the published Cvent REST APIs OpenAPI

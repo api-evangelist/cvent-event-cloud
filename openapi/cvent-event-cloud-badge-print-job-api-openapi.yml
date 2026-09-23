@@ -1,11 +1,13 @@
 openapi: 3.2.0
 info:
-  title: Cvent Event Cloud Badge Print Job API
-  version: ea
+  title: Cvent REST Badge Print Job API
+  description: '# Introduction
+
+    The Cvent API Platform is built around REST.'
   contact:
     name: Cvent Development Platform
     url: https://developers.cvent.com/
-  description: 'Operations tagged Badge Print Job across 2 of this provider''s published API definitions: cvent-event-cloud-rest-openapi.yml, cvent-rest-apis-openapi.yaml. Each path carries the servers of the definition it was published in.'
+  version: ea
 servers:
 - url: https://api-platform.cvent.com/ea
 - url: https://api-platform-eur.cvent.com/ea
@@ -117,9 +119,6 @@ paths:
       externalDocs:
         description: More about OAuth2 authorization code support for administrators
         url: '#oauth2-auth-code-planner-admin'
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
   /events/{eventId}/badge-print-jobs/{jobId}:
     parameters:
     - $ref: '#/components/parameters/eventId'
@@ -154,95 +153,15 @@ paths:
       externalDocs:
         description: More about OAuth2 authorization code support for administrators
         url: '#oauth2-auth-code-planner-admin'
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
 components:
-  parameters:
-    jobId1:
-      name: jobId
-      in: path
-      description: Id of a badge print job
-      required: true
-      schema:
-        $ref: '#/components/schemas/uuid-property'
-    token:
-      name: token
-      in: query
-      description: 'The continuation token returned from a previous class. This must be a valid UUID v4 if provided.
-
-        This will override any other pageable parameters provided.
-
-        '
-      style: form
-      explode: true
-      schema:
-        type: string
-        example: 0e28af57-511f-47ab-ae46-46cd1ca51a1a
-    eventId:
-      in: path
-      name: eventId
-      description: Id of an event
-      required: true
-      schema:
-        $ref: '#/components/schemas/uuid-property'
-    limit:
-      name: limit
-      in: query
-      description: The maximum number of records to return per page.
-      style: form
-      explode: true
-      schema:
-        maximum: 200
-        minimum: 1
-        type: integer
-        default: 100
-        example: 100
   schemas:
-    link.json:
-      title: Link
-      required:
-      - href
-      type: object
-      description: Represents a link to a related resource.
-      properties:
-        href:
-          type: string
-          description: A url provided that can be followed for linking
-          example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
-    badge-print-job-error-code.json:
-      title: BadgePrintJobErrorCode
-      enum:
-      - BadgeNotFound
-      - BadgeRenderIssue
-      - Connection
-      - PrinterError
-      - AttendeeDataMissing
-      - Unknown
-      type: string
-      description: This is used to indicate the error code returned from a badge printer.
-      example: Connection
-    uuid-property:
+    uuid-property-readonly.json:
       title: UUID Property
       description: A string that has to be a format matching the industry standard uuid
       type: string
       format: uuid
+      readOnly: true
       example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
-    ErrorResponse:
-      title: ErrorResponse
-      description: Represents an error response with additional details of cascading error messages.
-      allOf:
-      - $ref: '#/components/schemas/ErrorResponseBase'
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorResponseBase'
-          description: Additional details of cascading error messages.
     paging.json:
       title: Paging
       required:
@@ -272,101 +191,6 @@ components:
           example: 2
         _links:
           $ref: '#/components/schemas/pagination-links.json'
-    badge-printer-pool-reference.json:
-      title: BadgePrinterPoolRef
-      description: Reference to a Badge Print Pool.
-      type: object
-      required:
-      - id
-      properties:
-        id:
-          $ref: '#/components/schemas/uuid-property'
-    badge-print-job-status.json:
-      title: BadgePrintJobStatus
-      enum:
-      - Scheduled
-      - Rescheduled
-      - Assigned
-      - Failed
-      - Done
-      - Canceled
-      description: This is used to indicate the status of the badge print job.
-      example: Scheduled
-    badge-print-job-created:
-      title: BadgePrintJobCreated
-      description: The Badge Print Job that was created.
-      type: object
-      required:
-      - pool
-      - badgeId
-      properties:
-        id:
-          $ref: '#/components/schemas/uuid-property-readonly.json'
-        status:
-          $ref: '#/components/schemas/badge-print-job-status.json'
-        pool:
-          $ref: '#/components/schemas/badge-printer-pool-reference.json'
-        badgeId:
-          type: string
-          description: A unique id of the attendee for badge printing, which could be confirmation number or secured badge id depending on whether secured badge id is enabled
-          maxLength: 36
-          example: VNNDLJ6DKVK
-        created:
-          type: string
-          format: date-time
-          description: The ISO 8601 zoned date time when this record was created.
-          readOnly: true
-          example: '2017-01-02T02:00:00Z'
-    uuid-property-readonly.json:
-      title: UUID Property
-      description: A string that has to be a format matching the industry standard uuid
-      type: string
-      format: uuid
-      readOnly: true
-      example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
-    badge-print-jobs-paginated-response:
-      title: BadgePrintJobsPaginatedResponse
-      description: Page of Badge Print Jobs.
-      type: object
-      properties:
-        paging:
-          $ref: '#/components/schemas/paging.json'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/existing-badge-print-job'
-          description: Collection of badge print jobs.
-    ErrorResponseBase:
-      title: ErrorResponseBase
-      type: object
-      description: Represents an error response with no additional details.
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          description: The HTTP status code representing the error.
-          example: 400
-        message:
-          type: string
-          description: A brief description of the error.
-          example: Bad Request
-        target:
-          type: string
-          description: The target resource of the error.
-          example: example target
-    pagination-links.json:
-      title: PaginationLinks
-      type: object
-      description: Represents pagination links for navigating between pages of data.
-      properties:
-        next:
-          $ref: '#/components/schemas/link.json'
-        self:
-          $ref: '#/components/schemas/link.json'
-        prev:
-          $ref: '#/components/schemas/link.json'
     existing-badge-print-job:
       title: ExistingBadgePrintJob
       description: Badge Print Job.
@@ -429,25 +253,179 @@ components:
           description: The ISO 8601 zoned date time when this record was updated.
           readOnly: true
           example: '2017-01-02T03:00:00Z'
+    badge-print-job-error-code.json:
+      title: BadgePrintJobErrorCode
+      enum:
+      - BadgeNotFound
+      - BadgeRenderIssue
+      - Connection
+      - PrinterError
+      - AttendeeDataMissing
+      - Unknown
+      type: string
+      description: This is used to indicate the error code returned from a badge printer.
+      example: Connection
+    badge-print-job-status.json:
+      title: BadgePrintJobStatus
+      enum:
+      - Scheduled
+      - Rescheduled
+      - Assigned
+      - Failed
+      - Done
+      - Canceled
+      description: This is used to indicate the status of the badge print job.
+      example: Scheduled
+    badge-print-jobs-paginated-response:
+      title: BadgePrintJobsPaginatedResponse
+      description: Page of Badge Print Jobs.
+      type: object
+      properties:
+        paging:
+          $ref: '#/components/schemas/paging.json'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/existing-badge-print-job'
+          description: Collection of badge print jobs.
+    badge-printer-pool-reference.json:
+      title: BadgePrinterPoolRef
+      description: Reference to a Badge Print Pool.
+      type: object
+      required:
+      - id
+      properties:
+        id:
+          $ref: '#/components/schemas/uuid-property'
+    uuid-property:
+      title: UUID Property
+      description: A string that has to be a format matching the industry standard uuid
+      type: string
+      format: uuid
+      example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
+    link.json:
+      title: Link
+      required:
+      - href
+      type: object
+      description: Represents a link to a related resource.
+      properties:
+        href:
+          type: string
+          description: A url provided that can be followed for linking
+          example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
+    ErrorResponseBase:
+      title: ErrorResponseBase
+      type: object
+      description: Represents an error response with no additional details.
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          description: The HTTP status code representing the error.
+          example: 400
+        message:
+          type: string
+          description: A brief description of the error.
+          example: Bad Request
+        target:
+          type: string
+          description: The target resource of the error.
+          example: example target
+    badge-print-job-created:
+      title: BadgePrintJobCreated
+      description: The Badge Print Job that was created.
+      type: object
+      required:
+      - pool
+      - badgeId
+      properties:
+        id:
+          $ref: '#/components/schemas/uuid-property-readonly.json'
+        status:
+          $ref: '#/components/schemas/badge-print-job-status.json'
+        pool:
+          $ref: '#/components/schemas/badge-printer-pool-reference.json'
+        badgeId:
+          type: string
+          description: A unique id of the attendee for badge printing, which could be confirmation number or secured badge id depending on whether secured badge id is enabled
+          maxLength: 36
+          example: VNNDLJ6DKVK
+        created:
+          type: string
+          format: date-time
+          description: The ISO 8601 zoned date time when this record was created.
+          readOnly: true
+          example: '2017-01-02T02:00:00Z'
+    ErrorResponse:
+      title: ErrorResponse
+      description: Represents an error response with additional details of cascading error messages.
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponseBase'
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorResponseBase'
+          description: Additional details of cascading error messages.
+    pagination-links.json:
+      title: PaginationLinks
+      type: object
+      description: Represents pagination links for navigating between pages of data.
+      properties:
+        next:
+          $ref: '#/components/schemas/link.json'
+        self:
+          $ref: '#/components/schemas/link.json'
+        prev:
+          $ref: '#/components/schemas/link.json'
+  parameters:
+    jobId1:
+      name: jobId
+      in: path
+      description: Id of a badge print job
+      required: true
+      schema:
+        $ref: '#/components/schemas/uuid-property'
+    token:
+      name: token
+      in: query
+      description: 'The continuation token returned from a previous class. This must be a valid UUID v4 if provided.
+
+        This will override any other pageable parameters provided.
+
+        '
+      style: form
+      explode: true
+      schema:
+        type: string
+        example: 0e28af57-511f-47ab-ae46-46cd1ca51a1a
+    limit:
+      name: limit
+      in: query
+      description: The maximum number of records to return per page.
+      style: form
+      explode: true
+      schema:
+        maximum: 200
+        minimum: 1
+        type: integer
+        default: 100
+        example: 100
+    eventId:
+      in: path
+      name: eventId
+      description: Id of an event
+      required: true
+      schema:
+        $ref: '#/components/schemas/uuid-property'
   responses:
-    NotFound1:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 404
-            message: Not found
-    Forbidden1:
-      description: You do not have access to the resource
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 403
-            message: Access Forbidden
     TooManyRequests1:
       description: Too many requests
       content:
@@ -466,6 +444,15 @@ components:
           example:
             code: 400
             message: Bad Request
+    Forbidden1:
+      description: You do not have access to the resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 403
+            message: Access Forbidden
     Unauthorized1:
       description: Bad or expired token
       content:
@@ -475,6 +462,15 @@ components:
           example:
             code: 401
             message: Unauthorized
+    NotFound1:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 404
+            message: Not found
   securitySchemes:
     OAuth2.authorizationCode:
       type: oauth2
@@ -943,8 +939,3 @@ components:
 externalDocs:
   description: Cvent Developer Documentation
   url: https://developers.cvent.com/docs
-x-refined-from:
-- cvent-event-cloud-rest-openapi.yml
-- cvent-rest-apis-openapi.yaml
-x-source: https://github.com/cvent/rest-sdks/blob/main/cvent-public-spec/openapi.yaml
-x-derived: tag-scoped subset (Event Cloud tags) of the published Cvent REST APIs OpenAPI

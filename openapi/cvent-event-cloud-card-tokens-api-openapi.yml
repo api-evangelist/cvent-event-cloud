@@ -1,11 +1,13 @@
 openapi: 3.2.0
 info:
-  title: Cvent Event Cloud Card Tokens API
-  version: ea
+  title: Cvent REST Card Tokens API
+  description: '# Introduction
+
+    The Cvent API Platform is built around REST.'
   contact:
     name: Cvent Development Platform
     url: https://developers.cvent.com/
-  description: 'Operations tagged Card Tokens across 2 of this provider''s published API definitions: cvent-event-cloud-rest-openapi.yml, cvent-rest-apis-openapi.yaml. Each path carries the servers of the definition it was published in.'
+  version: ea
 servers:
 - url: https://api-platform.cvent.com/ea
 - url: https://api-platform-eur.cvent.com/ea
@@ -13,17 +15,7 @@ tags:
 - name: Card Tokens
   description: '**Card Tokenization**: Tokenization is the process Cvent uses to collect sensitive card details and
 
-    personally identifiable information (PII), directly from your customers in a secure manner.
-
-    This guarantees that no sensitive card data touches your server, and allows your integration to
-
-    operate in compliance with PCI standards. A card token is a unique identifier that represents sensitive credit card information.
-
-    It is used as a secure alternative to directly handling credit card details during transactions.
-
-    The token can be used in place of the actual credit card data when making API calls, providing an extra layer of security.
-
-    '
+    personally identifiable information (PII), directly from your customers in a secure manner.'
 paths:
   /card-tokens:
     post:
@@ -54,79 +46,31 @@ paths:
           $ref: '#/components/responses/Forbidden1'
         '429':
           $ref: '#/components/responses/TooManyRequests1'
-    servers:
-    - url: https://api-platform.cvent.com/ea
-    - url: https://api-platform-eur.cvent.com/ea
 components:
-  responses:
-    Unauthorized1:
-      description: Bad or expired token
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 401
-            message: Unauthorized
-    CardTokenResponse:
-      description: Successfully created a card token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/cardTokenResponse'
-    TooManyRequests1:
-      description: Too many requests
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 429
-            message: Limit Exceeded
-    BadRequest1:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 400
-            message: Bad Request
-    Forbidden1:
-      description: You do not have access to the resource
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 403
-            message: Access Forbidden
   schemas:
-    credit-card-response.json:
-      title: Credit Card Response Object
-      type: object
-      description: Credit Card Response Object
-      allOf:
-      - $ref: '#/components/schemas/credit-card.json'
-      properties:
-        number:
-          type: string
-          description: Masked credit card number.
-          minLength: 10
-          maxLength: 100
-          example: '************1111'
-    cardTokenResponse:
-      title: Existing Card Token Resource
-      description: Card token resource created in response to generating a card token for a credit card.
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: A token that can be used to reference the credit card for a transaction.
-          example: 00000000-0000-0000-0000-000000000000
-        creditCard:
-          $ref: '#/components/schemas/credit-card-response.json'
+    credit-card-type.json:
+      title: Credit Card Type
+      type:
+      - string
+      - 'null'
+      description: Credit Card Type
+      enum:
+      - AMERICAN_EXPRESS
+      - CHINA_UNIONPAY
+      - DANKORT
+      - DINERS_CLUB_CARTEBLANCHE
+      - DINERS_CLUB_ENROUTE
+      - DINERS_CLUB_INTERNATIONAL
+      - DISCOVER
+      - INSTA_PAYMENT
+      - JCB
+      - MAESTRO
+      - MASTERCARD
+      - UATP
+      - VISA
+      - UNKNOWN
+      readOnly: true
+      example: VISA
     ErrorResponseBase:
       title: ErrorResponseBase
       type: object
@@ -147,6 +91,19 @@ components:
           type: string
           description: The target resource of the error.
           example: example target
+    credit-card-response.json:
+      title: Credit Card Response Object
+      type: object
+      description: Credit Card Response Object
+      allOf:
+      - $ref: '#/components/schemas/credit-card.json'
+      properties:
+        number:
+          type: string
+          description: Masked credit card number.
+          minLength: 10
+          maxLength: 100
+          example: '************1111'
     credit-card-request.json:
       title: Credit Card Request Object
       type: object
@@ -165,21 +122,6 @@ components:
           minLength: 10
           maxLength: 100
           example: '4111111111111111'
-    ErrorResponse:
-      title: ErrorResponse
-      description: Represents an error response with additional details of cascading error messages.
-      allOf:
-      - $ref: '#/components/schemas/ErrorResponseBase'
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorResponseBase'
-          description: Additional details of cascading error messages.
     cardTokenRequest:
       title: Card Token Resource
       description: Generate a card token for a credit card.
@@ -189,6 +131,18 @@ components:
       properties:
         creditCard:
           $ref: '#/components/schemas/credit-card-request.json'
+    cardTokenResponse:
+      title: Existing Card Token Resource
+      description: Card token resource created in response to generating a card token for a credit card.
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: A token that can be used to reference the credit card for a transaction.
+          example: 00000000-0000-0000-0000-000000000000
+        creditCard:
+          $ref: '#/components/schemas/credit-card-response.json'
     credit-card.json:
       title: Credit Card
       type: object
@@ -322,29 +276,64 @@ components:
           maxLength: 320
           writeOnly: true
           example: jdoe@example.com
-    credit-card-type.json:
-      title: Credit Card Type
-      type:
-      - string
-      - 'null'
-      description: Credit Card Type
-      enum:
-      - AMERICAN_EXPRESS
-      - CHINA_UNIONPAY
-      - DANKORT
-      - DINERS_CLUB_CARTEBLANCHE
-      - DINERS_CLUB_ENROUTE
-      - DINERS_CLUB_INTERNATIONAL
-      - DISCOVER
-      - INSTA_PAYMENT
-      - JCB
-      - MAESTRO
-      - MASTERCARD
-      - UATP
-      - VISA
-      - UNKNOWN
-      readOnly: true
-      example: VISA
+    ErrorResponse:
+      title: ErrorResponse
+      description: Represents an error response with additional details of cascading error messages.
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponseBase'
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorResponseBase'
+          description: Additional details of cascading error messages.
+  responses:
+    Forbidden1:
+      description: You do not have access to the resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 403
+            message: Access Forbidden
+    TooManyRequests1:
+      description: Too many requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 429
+            message: Limit Exceeded
+    CardTokenResponse:
+      description: Successfully created a card token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/cardTokenResponse'
+    Unauthorized1:
+      description: Bad or expired token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 401
+            message: Unauthorized
+    BadRequest1:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 400
+            message: Bad Request
   securitySchemes:
     OAuth2.authorizationCode:
       type: oauth2
@@ -813,8 +802,3 @@ components:
 externalDocs:
   description: Cvent Developer Documentation
   url: https://developers.cvent.com/docs
-x-refined-from:
-- cvent-event-cloud-rest-openapi.yml
-- cvent-rest-apis-openapi.yaml
-x-source: https://github.com/cvent/rest-sdks/blob/main/cvent-public-spec/openapi.yaml
-x-derived: tag-scoped subset (Event Cloud tags) of the published Cvent REST APIs OpenAPI
