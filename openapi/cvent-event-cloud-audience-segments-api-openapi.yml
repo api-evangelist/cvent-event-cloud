@@ -524,63 +524,6 @@ paths:
         url: '#oauth2-auth-code-planner-admin'
 components:
   schemas:
-    existing-audience-segment-creation-type.json:
-      title: ExistingAudienceSegmentCreationType
-      type: string
-      description: Creation type of the audience segment.
-      example: MANUAL
-      enum:
-      - MANUAL
-      - RULE_BASED
-      default: MANUAL
-    segment-attendee-response.json:
-      title: SegmentAttendee
-      description: Represents the attendees that are associated/disassociated to/from a segment
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/attendee-segment/allOf/0'
-      properties:
-        segment:
-          $ref: '#/components/schemas/segment.json'
-        id:
-          type: string
-          format: uuid
-          description: ID of the attendee.
-          example: 103097a4-143d-11e5-9f99-d0a637ee0032
-        disassociated:
-          type: boolean
-          description: Represents whether the attendee is dissociated from the segment. True if the attendee is disassociated from the segment, false if the attendee is associated with the segment.
-          readOnly: true
-          example: false
-    audience-segment-create:
-      title: AudienceSegmentCreate
-      description: Represents a request to create an audience segment.
-      allOf:
-      - title: AudienceSegment
-        required:
-        - event
-        - name
-        description: Represents an audience segment. Audience segments are assigned to events and provide the ability for planners to segment their attendees into groups and better manage the attendee experience based on their defined segments.
-        allOf:
-        - $ref: '#/components/schemas/attendee-segment/allOf/0'
-        type: object
-        properties:
-          event:
-            $ref: '#/components/schemas/event.json'
-          name:
-            type: string
-            description: Name of the audience segment. Must be unique in the event where the segment exists.
-            maxLength: 100
-            example: VIP Attendees
-          description:
-            type: string
-            description: Description of the audience segment.
-            maxLength: 2500
-            example: A group of VIP attendees.
-      type: object
-      properties:
-        creationType:
-          $ref: '#/components/schemas/audience-segment-creation-type.json'
     audience-segment:
       title: AudienceSegment
       required:
@@ -603,94 +546,6 @@ components:
           description: Description of the audience segment.
           maxLength: 2500
           example: A group of VIP attendees.
-    paging.json:
-      title: Paging
-      required:
-      - _links
-      type: object
-      description: Represents pagination information for a collection of resources.
-      properties:
-        previousToken:
-          type: string
-          description: The pagination token for the previous page, if one exists. You can use this token to navigate to the previous page of data.
-          example: 1a2b3c4d5e6f7g8h9i10j11k
-        nextToken:
-          type: string
-          description: The pagination token for the next page. If this value is present in the response, there is another page of data you can fetch.
-          example: 1a2b3c4d5e6f7g8h9i10j11k
-        currentToken:
-          type: string
-          description: The pagination token for the current page.
-          example: 1a2b3c4d5e6f7g8h9i10j11k
-        limit:
-          type: integer
-          description: The number of records to return on the page. Not to exceed 200.
-          example: 100
-        totalCount:
-          type: integer
-          description: The total number of records available. This field may return blank, even if there are more records. To confirm if there are more records, check the `nextToken` field.
-          example: 2
-        _links:
-          $ref: '#/components/schemas/pagination-links.json'
-    audience-segment-creation-type.json:
-      title: AudienceSegmentCreationType
-      type: string
-      description: Creation type of the audience segment.
-      example: MANUAL
-      enum:
-      - MANUAL
-      default: MANUAL
-    ErrorResponse:
-      title: ErrorResponse
-      description: Represents an error response with additional details of cascading error messages.
-      allOf:
-      - $ref: '#/components/schemas/ErrorResponseBase'
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorResponseBase'
-          description: Additional details of cascading error messages.
-    attendee-audience-segment-associations-paginated-response:
-      title: AttendeeAudienceSegmentAssociationsPaginatedResponse
-      description: The paginated response from a request to get the list of audience segments associated with an attendee.
-      required:
-      - paging
-      - data
-      type: object
-      properties:
-        paging:
-          $ref: '#/components/schemas/paging.json'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/attendee-audience-segment-association.json'
-          description: Collection of audience segment associations for the attendee.
-    attendee-audience-segment-association.json:
-      title: AttendeeAudienceSegmentAssociation
-      description: Represents an audience segment associated with an attendee.
-      required:
-      - segment
-      type: object
-      properties:
-        segment:
-          $ref: '#/components/schemas/segment.json'
-    segment.json:
-      title: Segment
-      required:
-      - id
-      description: 'Segment details '
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Segment Id
-          example: b13497ea-c117-4d62-a17b-e6c14d7e49d4
     segments-error-response:
       title: SegmentsErrorResponse
       description: Segments error response details.
@@ -740,18 +595,25 @@ components:
           - SEGMENT_CONNECTED_TO_LINKEDIN
           - SEGMENTS_PER_ATTENDEE_LIMIT_REACHED
           - SEGMENTS_PER_EVENT_LIMIT_REACHED
-    event.json:
-      title: Event
-      required:
-      - id
-      description: ID of the event.
+    segment-attendee-response.json:
+      title: SegmentAttendee
+      description: Represents the attendees that are associated/disassociated to/from a segment
       type: object
+      allOf:
+      - $ref: '#/components/schemas/attendee-segment/allOf/0'
       properties:
+        segment:
+          $ref: '#/components/schemas/segment.json'
         id:
           type: string
           format: uuid
-          description: UUID of the event.
+          description: ID of the attendee.
           example: 103097a4-143d-11e5-9f99-d0a637ee0032
+        disassociated:
+          type: boolean
+          description: Represents whether the attendee is dissociated from the segment. True if the attendee is disassociated from the segment, false if the attendee is associated with the segment.
+          readOnly: true
+          example: false
     attendee-segment:
       title: AttendeeSegment
       required:
@@ -810,36 +672,44 @@ components:
           - ACTIVE
           - INACTIVE
           default: ACTIVE
-    filter:
-      title: A filter sent in the body of a request
-      description: A filter which is sent through the body of the request.
+    audience-segment-create:
+      title: AudienceSegmentCreate
+      description: Represents a request to create an audience segment.
+      allOf:
+      - title: AudienceSegment
+        required:
+        - event
+        - name
+        description: Represents an audience segment. Audience segments are assigned to events and provide the ability for planners to segment their attendees into groups and better manage the attendee experience based on their defined segments.
+        allOf:
+        - $ref: '#/components/schemas/attendee-segment/allOf/0'
+        type: object
+        properties:
+          event:
+            $ref: '#/components/schemas/event.json'
+          name:
+            type: string
+            description: Name of the audience segment. Must be unique in the event where the segment exists.
+            maxLength: 100
+            example: VIP Attendees
+          description:
+            type: string
+            description: Description of the audience segment.
+            maxLength: 2500
+            example: A group of VIP attendees.
       type: object
       properties:
-        filter:
-          type: string
-          example: property eq 'value'
-          description: Filter included in the request.
-    uuid-property:
-      title: UUID Property
-      description: A string that has to be a format matching the industry standard uuid
+        creationType:
+          $ref: '#/components/schemas/audience-segment-creation-type.json'
+    existing-audience-segment-creation-type.json:
+      title: ExistingAudienceSegmentCreationType
       type: string
-      format: uuid
-      example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
-    segment-attendees-associated-paginated-response:
-      title: SegmentAttendeesPaginatedResponse
-      description: The response from a request to get the paginated list of attendees associated/disassociated to/from an audience segment.
-      required:
-      - paging
-      - data
-      type: object
-      properties:
-        paging:
-          $ref: '#/components/schemas/paging.json'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/segment-attendee-response.json'
-          description: Collection of list of attendees associated/disassociated to/from an audience segment.
+      description: Creation type of the audience segment.
+      example: MANUAL
+      enum:
+      - MANUAL
+      - RULE_BASED
+      default: MANUAL
     link.json:
       title: Link
       required:
@@ -851,38 +721,36 @@ components:
           type: string
           description: A url provided that can be followed for linking
           example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
-    pagination-links.json:
-      title: PaginationLinks
-      type: object
-      description: Represents pagination links for navigating between pages of data.
-      properties:
-        next:
-          $ref: '#/components/schemas/link.json'
-        self:
-          $ref: '#/components/schemas/link.json'
-        prev:
-          $ref: '#/components/schemas/link.json'
-    existing-audience-segment:
-      title: ExistingAudienceSegment
-      description: Details of an audience segment.
-      allOf:
-      - $ref: '#/components/schemas/audience-segment-create/allOf/0'
+    uuid-property:
+      title: UUID Property
+      description: A string that has to be a format matching the industry standard uuid
+      type: string
+      format: uuid
+      example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
+    filter:
+      title: A filter sent in the body of a request
+      description: A filter which is sent through the body of the request.
       type: object
       properties:
-        id:
+        filter:
           type: string
-          format: uuid
-          description: ID of the audience segment.
-          readOnly: true
-          example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
-        creationType:
-          $ref: '#/components/schemas/audience-segment-creation-type.json'
-        deleted:
-          type: boolean
-          description: Boolean representing whether segment is deleted or not.
-          readOnly: true
-          example: true
-          default: false
+          example: property eq 'value'
+          description: Filter included in the request.
+    audience-segments-paginated-response:
+      title: AudienceSegmentsPaginatedResponse
+      description: The response from a request to get the paginated list of audience segments for the event.
+      required:
+      - paging
+      - data
+      type: object
+      properties:
+        paging:
+          $ref: '#/components/schemas/paging.json'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/audience-segment-response'
+          description: Collection of audience segments.
     audience-segment-response:
       title: AudienceSegmentResponse
       description: Details of an audience segment.
@@ -904,6 +772,94 @@ components:
           readOnly: true
           example: true
           default: false
+    attendee-audience-segment-associations-paginated-response:
+      title: AttendeeAudienceSegmentAssociationsPaginatedResponse
+      description: The paginated response from a request to get the list of audience segments associated with an attendee.
+      required:
+      - paging
+      - data
+      type: object
+      properties:
+        paging:
+          $ref: '#/components/schemas/paging.json'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/attendee-audience-segment-association.json'
+          description: Collection of audience segment associations for the attendee.
+    pagination-links.json:
+      title: PaginationLinks
+      type: object
+      description: Represents pagination links for navigating between pages of data.
+      properties:
+        next:
+          $ref: '#/components/schemas/link.json'
+        self:
+          $ref: '#/components/schemas/link.json'
+        prev:
+          $ref: '#/components/schemas/link.json'
+    event.json:
+      title: Event
+      required:
+      - id
+      description: ID of the event.
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: UUID of the event.
+          example: 103097a4-143d-11e5-9f99-d0a637ee0032
+    paging.json:
+      title: Paging
+      required:
+      - _links
+      type: object
+      description: Represents pagination information for a collection of resources.
+      properties:
+        previousToken:
+          type: string
+          description: The pagination token for the previous page, if one exists. You can use this token to navigate to the previous page of data.
+          example: 1a2b3c4d5e6f7g8h9i10j11k
+        nextToken:
+          type: string
+          description: The pagination token for the next page. If this value is present in the response, there is another page of data you can fetch.
+          example: 1a2b3c4d5e6f7g8h9i10j11k
+        currentToken:
+          type: string
+          description: The pagination token for the current page.
+          example: 1a2b3c4d5e6f7g8h9i10j11k
+        limit:
+          type: integer
+          description: The number of records to return on the page. Not to exceed 200.
+          example: 100
+        totalCount:
+          type: integer
+          description: The total number of records available. This field may return blank, even if there are more records. To confirm if there are more records, check the `nextToken` field.
+          example: 2
+        _links:
+          $ref: '#/components/schemas/pagination-links.json'
+    segment.json:
+      title: Segment
+      required:
+      - id
+      description: 'Segment details '
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Segment Id
+          example: b13497ea-c117-4d62-a17b-e6c14d7e49d4
+    attendee-audience-segment-association.json:
+      title: AttendeeAudienceSegmentAssociation
+      description: Represents an audience segment associated with an attendee.
+      required:
+      - segment
+      type: object
+      properties:
+        segment:
+          $ref: '#/components/schemas/segment.json'
     ErrorResponseBase:
       title: ErrorResponseBase
       type: object
@@ -924,9 +880,9 @@ components:
           type: string
           description: The target resource of the error.
           example: example target
-    audience-segments-paginated-response:
-      title: AudienceSegmentsPaginatedResponse
-      description: The response from a request to get the paginated list of audience segments for the event.
+    segment-attendees-associated-paginated-response:
+      title: SegmentAttendeesPaginatedResponse
+      description: The response from a request to get the paginated list of attendees associated/disassociated to/from an audience segment.
       required:
       - paging
       - data
@@ -937,9 +893,148 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/audience-segment-response'
-          description: Collection of audience segments.
+            $ref: '#/components/schemas/segment-attendee-response.json'
+          description: Collection of list of attendees associated/disassociated to/from an audience segment.
+    ErrorResponse:
+      title: ErrorResponse
+      description: Represents an error response with additional details of cascading error messages.
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponseBase'
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorResponseBase'
+          description: Additional details of cascading error messages.
+    existing-audience-segment:
+      title: ExistingAudienceSegment
+      description: Details of an audience segment.
+      allOf:
+      - $ref: '#/components/schemas/audience-segment-create/allOf/0'
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of the audience segment.
+          readOnly: true
+          example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
+        creationType:
+          $ref: '#/components/schemas/audience-segment-creation-type.json'
+        deleted:
+          type: boolean
+          description: Boolean representing whether segment is deleted or not.
+          readOnly: true
+          example: true
+          default: false
+    audience-segment-creation-type.json:
+      title: AudienceSegmentCreationType
+      type: string
+      description: Creation type of the audience segment.
+      example: MANUAL
+      enum:
+      - MANUAL
+      default: MANUAL
+  responses:
+    BadRequest1:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 400
+            message: Bad Request
+    NotFound1:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 404
+            message: Not found
+    Forbidden1:
+      description: You do not have access to the resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 403
+            message: Access Forbidden
+    SegmentsErrorResponse:
+      description: Segments error response details.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/segments-error-response'
+    UnprocessableEntity1:
+      description: Was not able to process the request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 422
+            message: Unprocessable Entity
+    TooManyRequests1:
+      description: Too many requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 429
+            message: Limit Exceeded
+    Unauthorized1:
+      description: Bad or expired token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 401
+            message: Unauthorized
   parameters:
+    filter-attendee-audience-segments:
+      name: filter
+      in: query
+      required: false
+      description: 'Use filter query parameters to limit results
+
+        to data that matches your criteria. See
+
+        [Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.
+
+
+        Supported fields and operators are listed below:
+
+
+        | Field            | Operators                           |
+
+        |------------------|-------------------------------------|
+
+        | segment.id       | `eq`, `in`                          |
+
+
+        No logical operators are supported.
+
+        '
+      schema:
+        type: string
+        example: segment.id eq '313097a4-143d-11e5-9f99-d0a637ee0897'
+    attendeeId1:
+      in: path
+      name: attendeeId
+      description: ID of an attendee.
+      required: true
+      schema:
+        $ref: '#/components/schemas/uuid-property'
     after:
       name: after
       required: false
@@ -949,15 +1044,37 @@ components:
         type: string
         format: date-time
         example: '2017-01-02T02:00:00Z'
-    before:
-      name: before
-      required: false
+    audienceSegmentId:
+      in: path
+      name: audienceSegmentId
+      description: ID of an audience segment.
+      required: true
+      schema:
+        $ref: '#/components/schemas/uuid-property'
+    includeDisassociated:
       in: query
-      description: Used to query records that have been added or updated before this time point.
+      name: includeDisassociated
+      description: 'Use the `includeDisassociated` query parameter to include disassociated attendees in the result. Note: Disassociated attendees older than 30 days will not be returned in result.
+
+        '
+      required: false
+      schema:
+        type: boolean
+        default: false
+        example: true
+    token:
+      name: token
+      in: query
+      description: 'The continuation token returned from a previous class. This must be a valid UUID v4 if provided.
+
+        This will override any other pageable parameters provided.
+
+        '
+      style: form
+      explode: true
       schema:
         type: string
-        format: date-time
-        example: '2017-01-02T02:00:00Z'
+        example: 0e28af57-511f-47ab-ae46-46cd1ca51a1a
     filter-associated-attendees:
       name: filter
       in: query
@@ -982,24 +1099,6 @@ components:
       schema:
         type: string
         example: disassociated eq 'false'
-    includeDisassociated:
-      in: query
-      name: includeDisassociated
-      description: 'Use the `includeDisassociated` query parameter to include disassociated attendees in the result. Note: Disassociated attendees older than 30 days will not be returned in result.
-
-        '
-      required: false
-      schema:
-        type: boolean
-        default: false
-        example: true
-    attendeeId1:
-      in: path
-      name: attendeeId
-      description: ID of an attendee.
-      required: true
-      schema:
-        $ref: '#/components/schemas/uuid-property'
     sort-audience-segments:
       name: sort
       required: false
@@ -1010,6 +1109,27 @@ components:
       schema:
         type: string
         example: lastModifiedBy:DESC
+    before:
+      name: before
+      required: false
+      in: query
+      description: Used to query records that have been added or updated before this time point.
+      schema:
+        type: string
+        format: date-time
+        example: '2017-01-02T02:00:00Z'
+    limit:
+      name: limit
+      in: query
+      description: The maximum number of records to return per page.
+      style: form
+      explode: true
+      schema:
+        maximum: 200
+        minimum: 1
+        type: integer
+        default: 100
+        example: 100
     filter-cross-audience-segments:
       name: filter
       in: query
@@ -1045,126 +1165,6 @@ components:
       schema:
         type: string
         example: event.id eq '103097a4-143d-11e5-9f99-d0a637ee0032' and id in ('313097a4-143d-11e5-9f99-d0a637ee0897','423097a4-143d-11e5-9f99-d0a637ee0897') and deleted eq 'false' and creationType eq 'MANUAL'
-    limit:
-      name: limit
-      in: query
-      description: The maximum number of records to return per page.
-      style: form
-      explode: true
-      schema:
-        maximum: 200
-        minimum: 1
-        type: integer
-        default: 100
-        example: 100
-    filter-attendee-audience-segments:
-      name: filter
-      in: query
-      required: false
-      description: 'Use filter query parameters to limit results
-
-        to data that matches your criteria. See
-
-        [Filters](https://developers.cvent.com/docs/rest-api/reference/filters) for details.
-
-
-        Supported fields and operators are listed below:
-
-
-        | Field            | Operators                           |
-
-        |------------------|-------------------------------------|
-
-        | segment.id       | `eq`, `in`                          |
-
-
-        No logical operators are supported.
-
-        '
-      schema:
-        type: string
-        example: segment.id eq '313097a4-143d-11e5-9f99-d0a637ee0897'
-    audienceSegmentId:
-      in: path
-      name: audienceSegmentId
-      description: ID of an audience segment.
-      required: true
-      schema:
-        $ref: '#/components/schemas/uuid-property'
-    token:
-      name: token
-      in: query
-      description: 'The continuation token returned from a previous class. This must be a valid UUID v4 if provided.
-
-        This will override any other pageable parameters provided.
-
-        '
-      style: form
-      explode: true
-      schema:
-        type: string
-        example: 0e28af57-511f-47ab-ae46-46cd1ca51a1a
-  responses:
-    TooManyRequests1:
-      description: Too many requests
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 429
-            message: Limit Exceeded
-    UnprocessableEntity1:
-      description: Was not able to process the request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 422
-            message: Unprocessable Entity
-    BadRequest1:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 400
-            message: Bad Request
-    Forbidden1:
-      description: You do not have access to the resource
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 403
-            message: Access Forbidden
-    Unauthorized1:
-      description: Bad or expired token
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 401
-            message: Unauthorized
-    NotFound1:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 404
-            message: Not found
-    SegmentsErrorResponse:
-      description: Segments error response details.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/segments-error-response'
   securitySchemes:
     OAuth2.authorizationCode:
       type: oauth2

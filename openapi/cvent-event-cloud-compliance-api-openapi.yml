@@ -221,190 +221,7 @@ paths:
         description: More about OAuth2 authorization code support for administrators
         url: '#oauth2-auth-code-planner-admin'
 components:
-  parameters:
-    after:
-      name: after
-      required: false
-      description: Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store.
-      in: query
-      schema:
-        type: string
-        format: date-time
-        example: '2017-01-02T02:00:00Z'
-    token:
-      name: token
-      in: query
-      description: 'The continuation token returned from a previous class. This must be a valid UUID v4 if provided.
-
-        This will override any other pageable parameters provided.
-
-        '
-      style: form
-      explode: true
-      schema:
-        type: string
-        example: 0e28af57-511f-47ab-ae46-46cd1ca51a1a
-    before:
-      name: before
-      required: false
-      in: query
-      description: Used to query records that have been added or updated before this time point.
-      schema:
-        type: string
-        format: date-time
-        example: '2017-01-02T02:00:00Z'
-    limit2:
-      in: query
-      name: limit
-      description: The maximum number of records to return per page.
-      schema:
-        type: integer
-        default: 100
-        minimum: 1
-        maximum: 100
-        example: 100
-  responses:
-    TooManyRequests1:
-      description: Too many requests
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 429
-            message: Limit Exceeded
-    BadRequest1:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 400
-            message: Bad Request
-    Forbidden1:
-      description: You do not have access to the resource
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 403
-            message: Access Forbidden
-    Unauthorized1:
-      description: Bad or expired token
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 401
-            message: Unauthorized
   schemas:
-    attendee.json:
-      title: Attendee
-      description: Attendee details
-      required:
-      - id
-      properties:
-        id:
-          type: string
-          description: A Cvent attendee.
-          format: uuid
-          example: 6dc0fe3d-4d1c-4bc6-af22-7d9126388388
-    paging.json:
-      title: Paging
-      required:
-      - _links
-      type: object
-      description: Represents pagination information for a collection of resources.
-      properties:
-        previousToken:
-          type: string
-          description: The pagination token for the previous page, if one exists. You can use this token to navigate to the previous page of data.
-          example: 1a2b3c4d5e6f7g8h9i10j11k
-        nextToken:
-          type: string
-          description: The pagination token for the next page. If this value is present in the response, there is another page of data you can fetch.
-          example: 1a2b3c4d5e6f7g8h9i10j11k
-        currentToken:
-          type: string
-          description: The pagination token for the current page.
-          example: 1a2b3c4d5e6f7g8h9i10j11k
-        limit:
-          type: integer
-          description: The number of records to return on the page. Not to exceed 200.
-          example: 100
-        totalCount:
-          type: integer
-          description: The total number of records available. This field may return blank, even if there are more records. To confirm if there are more records, check the `nextToken` field.
-          example: 2
-        _links:
-          $ref: '#/components/schemas/pagination-links.json'
-    CommunicationLogMessagePaginatedResponse:
-      title: CommunicationLogMessagePaginatedResponse
-      description: A single page of communication log messages
-      required:
-      - data
-      - paging
-      type: object
-      properties:
-        paging:
-          $ref: '#/components/schemas/paging.json'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/communication-log-message.json'
-          description: Collection of communication log messages.
-    chat-message-details.json:
-      title: ChatMessageDetails
-      description: Chat message details such as the ID of this message
-      required:
-      - id
-      properties:
-        id:
-          type: string
-          description: The message ID within the messaging system.
-          example: 6dc0fe3d-4d1c-4bc6-af22-7d9126388388
-        textHtml:
-          type: string
-          description: The HTML content of the chat message.
-          example: Great presentation today!
-    question.json:
-      title: Question
-      description: Question details
-      required:
-      - id
-      properties:
-        id:
-          type: string
-          description: The question ID.
-          format: uuid
-          example: 2385098a-ab4e-4e06-b3b7-487cad288587
-        text:
-          type: string
-          description: The question text.
-          example: Sample question?
-        status:
-          type: string
-          description: The status of the question.
-          example: approved
-        anonymous:
-          type: boolean
-          description: Whether question is asked anonymously.
-          example: true
-        answer:
-          type: string
-          description: The answer text.
-          example: Sample answer.
-    communication-log-message-type.json:
-      title: Communication log messsage type
-      description: The type of communication log message.
-      type: string
-      enum:
-      - email
-      - chat
-      - session_qa
     chat-reaction.json:
       title: ChatReaction
       description: A reaction to a message
@@ -428,57 +245,6 @@ components:
             $ref: '#/components/schemas/communication-log-message-type.json'
           uniqueItems: true
           description: The list of message types that communication compliance is enabled for.
-    attachment.json1:
-      title: Attachment
-      description: A message attachment.
-      type: object
-      required:
-      - link
-      properties:
-        link:
-          description: A link to the attachment allowing it to be downloaded
-          type: string
-          format: uri
-          example: https://foo.com/a/picture/of/a/cat.jpg
-    channel.json:
-      title: Channel
-      description: The channel details associated with the chat.
-      required:
-      - id
-      properties:
-        id:
-          type: string
-          description: The channel ID associated with the chat.
-          example: '!members-l_YMstmzbS4lmlS0rQ3XexWJSdQwyEfsCHP1zrSd4uM'
-    chat-action-type.json:
-      type: string
-      description: The user action that just occurred
-      enum:
-      - message.created
-      - message.updated
-      - message.deleted
-      - reaction.created
-      - reaction.deleted
-      example: message.created
-    filter:
-      title: A filter sent in the body of a request
-      description: A filter which is sent through the body of the request.
-      type: object
-      properties:
-        filter:
-          type: string
-          example: property eq 'value'
-          description: Filter included in the request.
-    chat-type.json:
-      type: string
-      description: The chat type
-      enum:
-      - session
-      - exhibitor
-      - discussion
-      - attendee
-      - group
-      example: session
     link.json:
       title: Link
       required:
@@ -490,36 +256,15 @@ components:
           type: string
           description: A url provided that can be followed for linking
           example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
-    session-qa-action-type.json:
-      type: string
-      description: "The user action that just occurred.\n `question.asked` - A question was asked.\n `question.upvoted` - A question was upvoted.\n `question.statusUpdated` - The status of a question was updated.\n `question.answered` - Either question was answered or the earlier provided answer was updated.\n `answer.deleted` - An answer was deleted."
-      enum:
-      - question.asked
-      - question.upvoted
-      - question.statusUpdated
-      - question.answered
-      - answer.deleted
-      example: question.asked
-    ErrorResponseBase:
-      title: ErrorResponseBase
+    filter:
+      title: A filter sent in the body of a request
+      description: A filter which is sent through the body of the request.
       type: object
-      description: Represents an error response with no additional details.
-      required:
-      - code
-      - message
       properties:
-        code:
-          type: integer
-          description: The HTTP status code representing the error.
-          example: 400
-        message:
+        filter:
           type: string
-          description: A brief description of the error.
-          example: Bad Request
-        target:
-          type: string
-          description: The target resource of the error.
-          example: example target
+          example: property eq 'value'
+          description: Filter included in the request.
     communication-log-message.json:
       title: CommunicationLogMessage
       description: A communication log message.
@@ -614,6 +359,178 @@ components:
           description: A collection of attachments that are associated with this message.
           items:
             $ref: '#/components/schemas/attachment.json1'
+    communication-log-message-type.json:
+      title: Communication log messsage type
+      description: The type of communication log message.
+      type: string
+      enum:
+      - email
+      - chat
+      - session_qa
+    pagination-links.json:
+      title: PaginationLinks
+      type: object
+      description: Represents pagination links for navigating between pages of data.
+      properties:
+        next:
+          $ref: '#/components/schemas/link.json'
+        self:
+          $ref: '#/components/schemas/link.json'
+        prev:
+          $ref: '#/components/schemas/link.json'
+    chat-action-type.json:
+      type: string
+      description: The user action that just occurred
+      enum:
+      - message.created
+      - message.updated
+      - message.deleted
+      - reaction.created
+      - reaction.deleted
+      example: message.created
+    attachment.json1:
+      title: Attachment
+      description: A message attachment.
+      type: object
+      required:
+      - link
+      properties:
+        link:
+          description: A link to the attachment allowing it to be downloaded
+          type: string
+          format: uri
+          example: https://foo.com/a/picture/of/a/cat.jpg
+    attendee.json:
+      title: Attendee
+      description: Attendee details
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          description: A Cvent attendee.
+          format: uuid
+          example: 6dc0fe3d-4d1c-4bc6-af22-7d9126388388
+    chat-type.json:
+      type: string
+      description: The chat type
+      enum:
+      - session
+      - exhibitor
+      - discussion
+      - attendee
+      - group
+      example: session
+    paging.json:
+      title: Paging
+      required:
+      - _links
+      type: object
+      description: Represents pagination information for a collection of resources.
+      properties:
+        previousToken:
+          type: string
+          description: The pagination token for the previous page, if one exists. You can use this token to navigate to the previous page of data.
+          example: 1a2b3c4d5e6f7g8h9i10j11k
+        nextToken:
+          type: string
+          description: The pagination token for the next page. If this value is present in the response, there is another page of data you can fetch.
+          example: 1a2b3c4d5e6f7g8h9i10j11k
+        currentToken:
+          type: string
+          description: The pagination token for the current page.
+          example: 1a2b3c4d5e6f7g8h9i10j11k
+        limit:
+          type: integer
+          description: The number of records to return on the page. Not to exceed 200.
+          example: 100
+        totalCount:
+          type: integer
+          description: The total number of records available. This field may return blank, even if there are more records. To confirm if there are more records, check the `nextToken` field.
+          example: 2
+        _links:
+          $ref: '#/components/schemas/pagination-links.json'
+    chat-message-details.json:
+      title: ChatMessageDetails
+      description: Chat message details such as the ID of this message
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          description: The message ID within the messaging system.
+          example: 6dc0fe3d-4d1c-4bc6-af22-7d9126388388
+        textHtml:
+          type: string
+          description: The HTML content of the chat message.
+          example: Great presentation today!
+    ErrorResponseBase:
+      title: ErrorResponseBase
+      type: object
+      description: Represents an error response with no additional details.
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          description: The HTTP status code representing the error.
+          example: 400
+        message:
+          type: string
+          description: A brief description of the error.
+          example: Bad Request
+        target:
+          type: string
+          description: The target resource of the error.
+          example: example target
+    question.json:
+      title: Question
+      description: Question details
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          description: The question ID.
+          format: uuid
+          example: 2385098a-ab4e-4e06-b3b7-487cad288587
+        text:
+          type: string
+          description: The question text.
+          example: Sample question?
+        status:
+          type: string
+          description: The status of the question.
+          example: approved
+        anonymous:
+          type: boolean
+          description: Whether question is asked anonymously.
+          example: true
+        answer:
+          type: string
+          description: The answer text.
+          example: Sample answer.
+    channel.json:
+      title: Channel
+      description: The channel details associated with the chat.
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          description: The channel ID associated with the chat.
+          example: '!members-l_YMstmzbS4lmlS0rQ3XexWJSdQwyEfsCHP1zrSd4uM'
+    session-qa-action-type.json:
+      type: string
+      description: "The user action that just occurred.\n `question.asked` - A question was asked.\n `question.upvoted` - A question was upvoted.\n `question.statusUpdated` - The status of a question was updated.\n `question.answered` - Either question was answered or the earlier provided answer was updated.\n `answer.deleted` - An answer was deleted."
+      enum:
+      - question.asked
+      - question.upvoted
+      - question.statusUpdated
+      - question.answered
+      - answer.deleted
+      example: question.asked
     ErrorResponse:
       title: ErrorResponse
       description: Represents an error response with additional details of cascading error messages.
@@ -629,17 +546,100 @@ components:
           items:
             $ref: '#/components/schemas/ErrorResponseBase'
           description: Additional details of cascading error messages.
-    pagination-links.json:
-      title: PaginationLinks
+    CommunicationLogMessagePaginatedResponse:
+      title: CommunicationLogMessagePaginatedResponse
+      description: A single page of communication log messages
+      required:
+      - data
+      - paging
       type: object
-      description: Represents pagination links for navigating between pages of data.
       properties:
-        next:
-          $ref: '#/components/schemas/link.json'
-        self:
-          $ref: '#/components/schemas/link.json'
-        prev:
-          $ref: '#/components/schemas/link.json'
+        paging:
+          $ref: '#/components/schemas/paging.json'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/communication-log-message.json'
+          description: Collection of communication log messages.
+  responses:
+    BadRequest1:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 400
+            message: Bad Request
+    Forbidden1:
+      description: You do not have access to the resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 403
+            message: Access Forbidden
+    TooManyRequests1:
+      description: Too many requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 429
+            message: Limit Exceeded
+    Unauthorized1:
+      description: Bad or expired token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 401
+            message: Unauthorized
+  parameters:
+    after:
+      name: after
+      required: false
+      description: Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store.
+      in: query
+      schema:
+        type: string
+        format: date-time
+        example: '2017-01-02T02:00:00Z'
+    limit2:
+      in: query
+      name: limit
+      description: The maximum number of records to return per page.
+      schema:
+        type: integer
+        default: 100
+        minimum: 1
+        maximum: 100
+        example: 100
+    before:
+      name: before
+      required: false
+      in: query
+      description: Used to query records that have been added or updated before this time point.
+      schema:
+        type: string
+        format: date-time
+        example: '2017-01-02T02:00:00Z'
+    token:
+      name: token
+      in: query
+      description: 'The continuation token returned from a previous class. This must be a valid UUID v4 if provided.
+
+        This will override any other pageable parameters provided.
+
+        '
+      style: form
+      explode: true
+      schema:
+        type: string
+        example: 0e28af57-511f-47ab-ae46-46cd1ca51a1a
   securitySchemes:
     OAuth2.authorizationCode:
       type: oauth2
