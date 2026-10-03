@@ -236,79 +236,7 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests1'
 components:
-  responses:
-    UserGroup:
-      description: A User Group
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/user-group.json'
-    BadRequest1:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 400
-            message: Bad Request
-    NotFound1:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 404
-            message: Not found
-    Forbidden1:
-      description: You do not have access to the resource
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 403
-            message: Access Forbidden
-    UserGroups:
-      description: List of User Groups
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/user-groups.json'
-    TooManyRequests1:
-      description: Too many requests
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 429
-            message: Limit Exceeded
-    Unauthorized1:
-      description: Bad or expired token
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 401
-            message: Unauthorized
   parameters:
-    token1:
-      in: query
-      name: token
-      description: 'The pagination token returned from a previous call.
-
-        This will override any other pageable parameters provided.
-
-        '
-      required: false
-      style: form
-      explode: true
-      schema:
-        type: string
-        example: 1a2b3c4d5e6f7g8h9i10j11k
     userId:
       in: path
       name: userId
@@ -331,6 +259,20 @@ components:
         type: string
         format: uuid
         example: B089AC31-1212-63FB-AAEA-382037E1BCDF
+    token1:
+      in: query
+      name: token
+      description: 'The pagination token returned from a previous call.
+
+        This will override any other pageable parameters provided.
+
+        '
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        example: 1a2b3c4d5e6f7g8h9i10j11k
     limit:
       name: limit
       in: query
@@ -344,48 +286,41 @@ components:
         default: 100
         example: 100
   schemas:
-    link.json:
-      title: Link
-      required:
-      - href
-      type: object
-      description: Represents a link to a related resource.
-      properties:
-        href:
-          type: string
-          description: A url provided that can be followed for linking
-          example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
-    user-group.json:
-      title: Account User Group
-      description: A collection of account users which is used to help manage access and visibility to various other Cvent domain entities like events, surveys, account emails, and more. For example, a user group can be associated to specific events to allow the users within that group to view the events within Cvent's platform.
-      required:
-      - id
-      - name
-      - created
-      - createdBy
-      - lastModified
-      - lastModifiedBy
-      type: object
+    ErrorResponse:
+      title: ErrorResponse
+      description: Represents an error response with additional details of cascading error messages.
       allOf:
-      - $ref: '#/components/schemas/Account/properties/audit/allOf/0'
+      - $ref: '#/components/schemas/ErrorResponseBase'
+      type: object
+      required:
+      - code
+      - message
       properties:
-        id:
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorResponseBase'
+          description: Additional details of cascading error messages.
+    ErrorResponseBase:
+      title: ErrorResponseBase
+      type: object
+      description: Represents an error response with no additional details.
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          description: The HTTP status code representing the error.
+          example: 400
+        message:
           type: string
-          format: uuid
-          description: The unique identifier of the user group.
-          example: EBF2273A-35A5-BD67-A292-397539D13270
-          readOnly: true
-        name:
+          description: A brief description of the error.
+          example: Bad Request
+        target:
           type: string
-          description: The name of the user group.
-          example: MyUserGroup
-          minLength: 1
-          maxLength: 50
-        description:
-          type: string
-          description: The description of the user group.
-          example: MyUserGroupDescription
-          maxLength: 300
+          description: The target resource of the error.
+          example: example target
     Account:
       title: Account
       description: The definition of a Cvent Core Account. This is the primary entity a Cvent User interacts. Once logged into the Cvent platform, the User can interact with the different product lines the account is allotted to.
@@ -522,17 +457,17 @@ components:
                 readOnly: true
                 example: hporter
           - readOnly: true
-    pagination-links.json:
-      title: PaginationLinks
+    link.json:
+      title: Link
+      required:
+      - href
       type: object
-      description: Represents pagination links for navigating between pages of data.
+      description: Represents a link to a related resource.
       properties:
-        next:
-          $ref: '#/components/schemas/link.json'
-        self:
-          $ref: '#/components/schemas/link.json'
-        prev:
-          $ref: '#/components/schemas/link.json'
+        href:
+          type: string
+          description: A url provided that can be followed for linking
+          example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
     paging.json:
       title: Paging
       required:
@@ -562,41 +497,48 @@ components:
           example: 2
         _links:
           $ref: '#/components/schemas/pagination-links.json'
-    ErrorResponseBase:
-      title: ErrorResponseBase
-      type: object
-      description: Represents an error response with no additional details.
+    user-group.json:
+      title: Account User Group
+      description: A collection of account users which is used to help manage access and visibility to various other Cvent domain entities like events, surveys, account emails, and more. For example, a user group can be associated to specific events to allow the users within that group to view the events within Cvent's platform.
       required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          description: The HTTP status code representing the error.
-          example: 400
-        message:
-          type: string
-          description: A brief description of the error.
-          example: Bad Request
-        target:
-          type: string
-          description: The target resource of the error.
-          example: example target
-    ErrorResponse:
-      title: ErrorResponse
-      description: Represents an error response with additional details of cascading error messages.
+      - id
+      - name
+      - created
+      - createdBy
+      - lastModified
+      - lastModifiedBy
+      type: object
       allOf:
-      - $ref: '#/components/schemas/ErrorResponseBase'
-      type: object
-      required:
-      - code
-      - message
+      - $ref: '#/components/schemas/Account/properties/audit/allOf/0'
       properties:
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorResponseBase'
-          description: Additional details of cascading error messages.
+        id:
+          type: string
+          format: uuid
+          description: The unique identifier of the user group.
+          example: EBF2273A-35A5-BD67-A292-397539D13270
+          readOnly: true
+        name:
+          type: string
+          description: The name of the user group.
+          example: MyUserGroup
+          minLength: 1
+          maxLength: 50
+        description:
+          type: string
+          description: The description of the user group.
+          example: MyUserGroupDescription
+          maxLength: 300
+    pagination-links.json:
+      title: PaginationLinks
+      type: object
+      description: Represents pagination links for navigating between pages of data.
+      properties:
+        next:
+          $ref: '#/components/schemas/link.json'
+        self:
+          $ref: '#/components/schemas/link.json'
+        prev:
+          $ref: '#/components/schemas/link.json'
     user-groups.json:
       title: User Groups
       description: A paginated result for a list of user groups.
@@ -620,6 +562,64 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/user-group.json'
+  responses:
+    UserGroups:
+      description: List of User Groups
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/user-groups.json'
+    UserGroup:
+      description: A User Group
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/user-group.json'
+    Unauthorized1:
+      description: Bad or expired token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 401
+            message: Unauthorized
+    NotFound1:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 404
+            message: Not found
+    TooManyRequests1:
+      description: Too many requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 429
+            message: Limit Exceeded
+    Forbidden1:
+      description: You do not have access to the resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 403
+            message: Access Forbidden
+    BadRequest1:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 400
+            message: Bad Request
   securitySchemes:
     OAuth2.authorizationCode:
       type: oauth2

@@ -99,86 +99,83 @@ paths:
         description: More about OAuth2 authorization code support for administrators
         url: '#oauth2-auth-code-planner-admin'
 components:
-  parameters:
-    limit:
-      name: limit
-      in: query
-      description: The maximum number of records to return per page.
-      style: form
-      explode: true
-      schema:
-        maximum: 200
-        minimum: 1
-        type: integer
-        default: 100
-        example: 100
-    token:
-      name: token
-      in: query
-      description: 'The continuation token returned from a previous class. This must be a valid UUID v4 if provided.
-
-        This will override any other pageable parameters provided.
-
-        '
-      style: form
-      explode: true
-      schema:
-        type: string
-        example: 0e28af57-511f-47ab-ae46-46cd1ca51a1a
-    eventId5:
-      in: path
-      name: eventId
-      description: Unique ID of an event
-      required: true
-      schema:
-        $ref: '#/components/schemas/event-id1'
-  responses:
-    Forbidden1:
-      description: You do not have access to the resource
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 403
-            message: Access Forbidden
-    Unauthorized1:
-      description: Bad or expired token
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 401
-            message: Unauthorized
-    BadRequest1:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 400
-            message: Bad Request
-    NotFound1:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 404
-            message: Not found
-    TooManyRequests1:
-      description: Too many requests
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 429
-            message: Limit Exceeded
   schemas:
+    MessageRecipientResponse:
+      title: Message Recipient Response
+      description: Members of the channel who received a message.
+      type: object
+      required:
+      - attendee
+      - channel
+      properties:
+        attendee:
+          type: object
+          description: The attendee object
+          required:
+          - id
+          - active
+          properties:
+            id:
+              type: string
+              description: Unique identifier for the attendee.
+              example: 0a459133-1f5e-43b2-8694-7da9541b3f58
+            active:
+              type: boolean
+              description: True indicates the recipient is active in the channel.
+              example: false
+            leftChannelAt:
+              type:
+              - string
+              - 'null'
+              format: date-time
+              description: ISO 8601 formatted timestamp when the attendee left the channel, if applicable.
+              example: '2025-03-13T18:00:00.000Z'
+        channel:
+          type: object
+          description: The channel object
+          required:
+          - id
+          properties:
+            id:
+              type: string
+              description: Identifier for the channel.
+              example: production_group_0cb93bab-32d2-4f82-b430-e1911f2348ac
+    ErrorResponse:
+      title: ErrorResponse
+      description: Represents an error response with additional details of cascading error messages.
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponseBase'
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorResponseBase'
+          description: Additional details of cascading error messages.
+    event-id1:
+      title: Event ID
+      description: The UUID identifier for an Event.
+      type: string
+      format: uuid
+      example: eeeeb4b4-d132-4db4-aaa7-5ec58efd65c8
+    message-recipients-paginated-response:
+      title: Paginated Channel Members Response
+      description: The response matching the filter criteria for the list of channel members.
+      required:
+      - paging
+      - data
+      type: object
+      properties:
+        paging:
+          $ref: '#/components/schemas/Paging'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MessageRecipientResponse'
+          description: Collection of channel members.
     ErrorResponseBase:
       title: ErrorResponseBase
       type: object
@@ -228,78 +225,6 @@ components:
           example: 2
         _links:
           $ref: '#/components/schemas/PaginationLinks'
-    Link:
-      title: Link
-      required:
-      - href
-      type: object
-      description: Represents a link to a related resource.
-      properties:
-        href:
-          type: string
-          description: A url provided that can be followed for linking
-          example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
-    MessageRecipientResponse:
-      title: Message Recipient Response
-      description: Members of the channel who received a message.
-      type: object
-      required:
-      - attendee
-      - channel
-      properties:
-        attendee:
-          type: object
-          description: The attendee object
-          required:
-          - id
-          - active
-          properties:
-            id:
-              type: string
-              description: Unique identifier for the attendee.
-              example: 0a459133-1f5e-43b2-8694-7da9541b3f58
-            active:
-              type: boolean
-              description: True indicates the recipient is active in the channel.
-              example: false
-            leftChannelAt:
-              type:
-              - string
-              - 'null'
-              format: date-time
-              description: ISO 8601 formatted timestamp when the attendee left the channel, if applicable.
-              example: '2025-03-13T18:00:00.000Z'
-        channel:
-          type: object
-          description: The channel object
-          required:
-          - id
-          properties:
-            id:
-              type: string
-              description: Identifier for the channel.
-              example: production_group_0cb93bab-32d2-4f82-b430-e1911f2348ac
-    message-recipients-paginated-response:
-      title: Paginated Channel Members Response
-      description: The response matching the filter criteria for the list of channel members.
-      required:
-      - paging
-      - data
-      type: object
-      properties:
-        paging:
-          $ref: '#/components/schemas/Paging'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/MessageRecipientResponse'
-          description: Collection of channel members.
-    event-id1:
-      title: Event ID
-      description: The UUID identifier for an Event.
-      type: string
-      format: uuid
-      example: eeeeb4b4-d132-4db4-aaa7-5ec58efd65c8
     PaginationLinks:
       title: PaginationLinks
       type: object
@@ -311,21 +236,96 @@ components:
           $ref: '#/components/schemas/Link'
         prev:
           $ref: '#/components/schemas/Link'
-    ErrorResponse:
-      title: ErrorResponse
-      description: Represents an error response with additional details of cascading error messages.
-      allOf:
-      - $ref: '#/components/schemas/ErrorResponseBase'
-      type: object
+    Link:
+      title: Link
       required:
-      - code
-      - message
+      - href
+      type: object
+      description: Represents a link to a related resource.
       properties:
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorResponseBase'
-          description: Additional details of cascading error messages.
+        href:
+          type: string
+          description: A url provided that can be followed for linking
+          example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
+  parameters:
+    eventId5:
+      in: path
+      name: eventId
+      description: Unique ID of an event
+      required: true
+      schema:
+        $ref: '#/components/schemas/event-id1'
+    limit:
+      name: limit
+      in: query
+      description: The maximum number of records to return per page.
+      style: form
+      explode: true
+      schema:
+        maximum: 200
+        minimum: 1
+        type: integer
+        default: 100
+        example: 100
+    token:
+      name: token
+      in: query
+      description: 'The continuation token returned from a previous class. This must be a valid UUID v4 if provided.
+
+        This will override any other pageable parameters provided.
+
+        '
+      style: form
+      explode: true
+      schema:
+        type: string
+        example: 0e28af57-511f-47ab-ae46-46cd1ca51a1a
+  responses:
+    NotFound1:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 404
+            message: Not found
+    Forbidden1:
+      description: You do not have access to the resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 403
+            message: Access Forbidden
+    TooManyRequests1:
+      description: Too many requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 429
+            message: Limit Exceeded
+    BadRequest1:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 400
+            message: Bad Request
+    Unauthorized1:
+      description: Bad or expired token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 401
+            message: Unauthorized
   securitySchemes:
     OAuth2.authorizationCode:
       type: oauth2
