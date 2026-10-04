@@ -47,22 +47,100 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests1'
 components:
+  responses:
+    TooManyRequests1:
+      description: Too many requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 429
+            message: Limit Exceeded
+    CardTokenResponse:
+      description: Successfully created a card token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/cardTokenResponse'
+    Unauthorized1:
+      description: Bad or expired token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 401
+            message: Unauthorized
+    BadRequest1:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 400
+            message: Bad Request
+    Forbidden1:
+      description: You do not have access to the resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 403
+            message: Access Forbidden
   schemas:
-    ErrorResponse:
-      title: ErrorResponse
-      description: Represents an error response with additional details of cascading error messages.
-      allOf:
-      - $ref: '#/components/schemas/ErrorResponseBase'
+    credit-card-request.json:
+      title: Credit Card Request Object
       type: object
+      description: Credit Card Request Object
+      required:
+      - number
+      - expMonth
+      - expYear
+      - accountHolderName
+      allOf:
+      - $ref: '#/components/schemas/credit-card.json'
+      properties:
+        number:
+          type: string
+          description: Credit card number.
+          minLength: 10
+          maxLength: 100
+          example: '4111111111111111'
+    ErrorResponseBase:
+      title: ErrorResponseBase
+      type: object
+      description: Represents an error response with no additional details.
       required:
       - code
       - message
       properties:
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorResponseBase'
-          description: Additional details of cascading error messages.
+        code:
+          type: integer
+          description: The HTTP status code representing the error.
+          example: 400
+        message:
+          type: string
+          description: A brief description of the error.
+          example: Bad Request
+        target:
+          type: string
+          description: The target resource of the error.
+          example: example target
+    cardTokenResponse:
+      title: Existing Card Token Resource
+      description: Card token resource created in response to generating a card token for a credit card.
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: A token that can be used to reference the credit card for a transaction.
+          example: 00000000-0000-0000-0000-000000000000
+        creditCard:
+          $ref: '#/components/schemas/credit-card-response.json'
     credit-card-type.json:
       title: Credit Card Type
       type:
@@ -86,35 +164,6 @@ components:
       - UNKNOWN
       readOnly: true
       example: VISA
-    cardTokenRequest:
-      title: Card Token Resource
-      description: Generate a card token for a credit card.
-      type: object
-      required:
-      - creditCard
-      properties:
-        creditCard:
-          $ref: '#/components/schemas/credit-card-request.json'
-    ErrorResponseBase:
-      title: ErrorResponseBase
-      type: object
-      description: Represents an error response with no additional details.
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          description: The HTTP status code representing the error.
-          example: 400
-        message:
-          type: string
-          description: A brief description of the error.
-          example: Bad Request
-        target:
-          type: string
-          description: The target resource of the error.
-          example: example target
     credit-card.json:
       title: Credit Card
       type: object
@@ -248,6 +297,21 @@ components:
           maxLength: 320
           writeOnly: true
           example: jdoe@example.com
+    ErrorResponse:
+      title: ErrorResponse
+      description: Represents an error response with additional details of cascading error messages.
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponseBase'
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorResponseBase'
+          description: Additional details of cascading error messages.
     credit-card-response.json:
       title: Credit Card Response Object
       type: object
@@ -261,79 +325,15 @@ components:
           minLength: 10
           maxLength: 100
           example: '************1111'
-    cardTokenResponse:
-      title: Existing Card Token Resource
-      description: Card token resource created in response to generating a card token for a credit card.
+    cardTokenRequest:
+      title: Card Token Resource
+      description: Generate a card token for a credit card.
       type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: A token that can be used to reference the credit card for a transaction.
-          example: 00000000-0000-0000-0000-000000000000
-        creditCard:
-          $ref: '#/components/schemas/credit-card-response.json'
-    credit-card-request.json:
-      title: Credit Card Request Object
-      type: object
-      description: Credit Card Request Object
       required:
-      - number
-      - expMonth
-      - expYear
-      - accountHolderName
-      allOf:
-      - $ref: '#/components/schemas/credit-card.json'
+      - creditCard
       properties:
-        number:
-          type: string
-          description: Credit card number.
-          minLength: 10
-          maxLength: 100
-          example: '4111111111111111'
-  responses:
-    CardTokenResponse:
-      description: Successfully created a card token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/cardTokenResponse'
-    Forbidden1:
-      description: You do not have access to the resource
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 403
-            message: Access Forbidden
-    TooManyRequests1:
-      description: Too many requests
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 429
-            message: Limit Exceeded
-    BadRequest1:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 400
-            message: Bad Request
-    Unauthorized1:
-      description: Bad or expired token
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 401
-            message: Unauthorized
+        creditCard:
+          $ref: '#/components/schemas/credit-card-request.json'
   securitySchemes:
     OAuth2.authorizationCode:
       type: oauth2

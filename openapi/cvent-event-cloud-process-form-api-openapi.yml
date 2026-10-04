@@ -61,35 +61,42 @@ paths:
         url: '#oauth2-auth-code-planner-admin'
 components:
   schemas:
-    ErrorResponse:
-      title: ErrorResponse
-      description: Represents an error response with additional details of cascading error messages.
-      allOf:
-      - $ref: '#/components/schemas/ErrorResponseBase'
-      type: object
+    process-form-submission:
+      title: ProcessFormSubmission
+      description: Represents a process form submission in the context of a specific event.
       required:
-      - code
-      - message
-      properties:
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorResponseBase'
-          description: Additional details of cascading error messages.
-    ProcessForm:
-      title: ProcessForm
-      description: 'An object that contains the process form ID.
-
-
-        This is an **expandable** object and if requested will contain the name of a process form object.'
+      - id
+      - event
       type: object
+      allOf:
+      - $ref: '#/components/schemas/Audit'
       properties:
         id:
           type: string
           format: uuid
-          description: The ID of the process form.
           readOnly: true
-          example: 9c97eb50-9f88-4972-a603-f617fc3258dd
+          description: The unique ID representing the process form submission.
+          example: f66a6cb0-4531-0f3a-cb1a-64f3017f1149
+        event:
+          description: The event which the process form submission is associated with.
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: The unique ID of the event.
+              example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
+        process-form:
+          $ref: '#/components/schemas/ProcessForm'
+        status:
+          type: string
+          description: The status of the process form submission. The status is planner defined and can be any string.
+          example: initialized
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProcessFormSubmissionQuestion'
+          description: The list of possible answers to a question.
     ErrorResponseBase:
       title: ErrorResponseBase
       type: object
@@ -139,24 +146,6 @@ components:
           example: 2
         _links:
           $ref: '#/components/schemas/PaginationLinks'
-    QuestionType-11:
-      title: QuestionType
-      enum:
-      - CommentBox
-      - Currency
-      - Decimal
-      - DateTime
-      - Email
-      - General
-      - Number
-      - MultiSelect
-      - SingleSelect
-      - USPhoneNumber
-      - Unknown
-      type: string
-      description: Denotes the type of data collected by a question.
-      example: FreeText
-      readOnly: true
     PaginationLinks:
       title: PaginationLinks
       type: object
@@ -168,32 +157,35 @@ components:
           $ref: '#/components/schemas/Link'
         prev:
           $ref: '#/components/schemas/Link'
-    ProcessFormSubmissionQuestion:
-      title: ProcessFormSubmissionQuestion
-      description: A question for a process form submission.
-      required:
-      - id
-      - value
+    ProcessForm:
+      title: ProcessForm
+      description: 'An object that contains the process form ID.
+
+
+        This is an **expandable** object and if requested will contain the name of a process form object.'
+      type: object
       properties:
         id:
           type: string
-          description: The unique ID representing this question.
           format: uuid
-          example: f1ea56cd-6860-4f1a-baf7-973118384384
-        name:
-          type: string
-          description: The actual text of the custom field.
-          example: What is your favorite color?
+          description: The ID of the process form.
           readOnly: true
-        type:
-          $ref: '#/components/schemas/QuestionType-11'
-        value:
+          example: 9c97eb50-9f88-4972-a603-f617fc3258dd
+    process-form-submissions-paginated-response:
+      title: ProcessFormSubmissionPaginatedResponse
+      description: The response from a request to get the list of process form submissions. This includes the paging object as well as the collection of process form submissions.
+      required:
+      - paging
+      - data
+      type: object
+      properties:
+        paging:
+          $ref: '#/components/schemas/Paging'
+        data:
           type: array
-          uniqueItems: true
           items:
-            type: string
-            example: Green
-          description: The set of answers to the question.
+            $ref: '#/components/schemas/process-form-submission'
+          description: Collection of process form submission objects.
     Link:
       title: Link
       required:
@@ -232,57 +224,102 @@ components:
           description: The identifier of the user that last updated this record.
           readOnly: true
           example: hporter
-    process-form-submissions-paginated-response:
-      title: ProcessFormSubmissionPaginatedResponse
-      description: The response from a request to get the list of process form submissions. This includes the paging object as well as the collection of process form submissions.
-      required:
-      - paging
-      - data
-      type: object
-      properties:
-        paging:
-          $ref: '#/components/schemas/Paging'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/process-form-submission'
-          description: Collection of process form submission objects.
-    process-form-submission:
-      title: ProcessFormSubmission
-      description: Represents a process form submission in the context of a specific event.
+    QuestionType-11:
+      title: QuestionType
+      enum:
+      - CommentBox
+      - Currency
+      - Decimal
+      - DateTime
+      - Email
+      - General
+      - Number
+      - MultiSelect
+      - SingleSelect
+      - USPhoneNumber
+      - Unknown
+      type: string
+      description: Denotes the type of data collected by a question.
+      example: FreeText
+      readOnly: true
+    ProcessFormSubmissionQuestion:
+      title: ProcessFormSubmissionQuestion
+      description: A question for a process form submission.
       required:
       - id
-      - event
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Audit'
+      - value
       properties:
         id:
           type: string
+          description: The unique ID representing this question.
           format: uuid
-          readOnly: true
-          description: The unique ID representing the process form submission.
-          example: f66a6cb0-4531-0f3a-cb1a-64f3017f1149
-        event:
-          description: The event which the process form submission is associated with.
-          type: object
-          properties:
-            id:
-              type: string
-              format: uuid
-              description: The unique ID of the event.
-              example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
-        process-form:
-          $ref: '#/components/schemas/ProcessForm'
-        status:
+          example: f1ea56cd-6860-4f1a-baf7-973118384384
+        name:
           type: string
-          description: The status of the process form submission. The status is planner defined and can be any string.
-          example: initialized
-        questions:
+          description: The actual text of the custom field.
+          example: What is your favorite color?
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/QuestionType-11'
+        value:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            example: Green
+          description: The set of answers to the question.
+    ErrorResponse:
+      title: ErrorResponse
+      description: Represents an error response with additional details of cascading error messages.
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponseBase'
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        details:
           type: array
           items:
-            $ref: '#/components/schemas/ProcessFormSubmissionQuestion'
-          description: The list of possible answers to a question.
+            $ref: '#/components/schemas/ErrorResponseBase'
+          description: Additional details of cascading error messages.
+  responses:
+    Forbidden1:
+      description: You do not have access to the resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 403
+            message: Access Forbidden
+    Unauthorized1:
+      description: Bad or expired token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 401
+            message: Unauthorized
+    TooManyRequests1:
+      description: Too many requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 429
+            message: Limit Exceeded
+    BadRequest1:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 400
+            message: Bad Request
   parameters:
     processFormExpand:
       name: expand
@@ -307,19 +344,6 @@ components:
         type: string
         format: date-time
         example: '2017-01-02T02:00:00Z'
-    token:
-      name: token
-      in: query
-      description: 'The continuation token returned from a previous class. This must be a valid UUID v4 if provided.
-
-        This will override any other pageable parameters provided.
-
-        '
-      style: form
-      explode: true
-      schema:
-        type: string
-        example: 0e28af57-511f-47ab-ae46-46cd1ca51a1a
     limit3:
       name: limit
       in: query
@@ -340,43 +364,19 @@ components:
         type: string
         format: date-time
         example: '2017-01-02T02:00:00Z'
-  responses:
-    Unauthorized1:
-      description: Bad or expired token
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 401
-            message: Unauthorized
-    TooManyRequests1:
-      description: Too many requests
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 429
-            message: Limit Exceeded
-    Forbidden1:
-      description: You do not have access to the resource
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 403
-            message: Access Forbidden
-    BadRequest1:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 400
-            message: Bad Request
+    token:
+      name: token
+      in: query
+      description: 'The continuation token returned from a previous class. This must be a valid UUID v4 if provided.
+
+        This will override any other pageable parameters provided.
+
+        '
+      style: form
+      explode: true
+      schema:
+        type: string
+        example: 0e28af57-511f-47ab-ae46-46cd1ca51a1a
   securitySchemes:
     OAuth2.authorizationCode:
       type: oauth2

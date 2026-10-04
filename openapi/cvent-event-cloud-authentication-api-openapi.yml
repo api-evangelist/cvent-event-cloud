@@ -317,22 +317,6 @@ paths:
         url: '#oauth2-auth-code-planner-admin'
 components:
   responses:
-    ValidToken:
-      description: A confirmation message that the token is valid
-      headers: {}
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ValidToken'
-    Forbidden1:
-      description: You do not have access to the resource
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 403
-            message: Access Forbidden
     TooManyRequests1:
       description: Too many requests
       content:
@@ -342,15 +326,13 @@ components:
           example:
             code: 429
             message: Limit Exceeded
-    BadRequest1:
-      description: Bad request
+    ValidToken:
+      description: A confirmation message that the token is valid
+      headers: {}
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 400
-            message: Bad Request
+            $ref: '#/components/schemas/ValidToken'
     Unauthorized1:
       description: Bad or expired token
       content:
@@ -360,22 +342,25 @@ components:
           example:
             code: 401
             message: Unauthorized
+    BadRequest1:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 400
+            message: Bad Request
+    Forbidden1:
+      description: You do not have access to the resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 403
+            message: Access Forbidden
   schemas:
-    ErrorResponse:
-      title: ErrorResponse
-      description: Represents an error response with additional details of cascading error messages.
-      allOf:
-      - $ref: '#/components/schemas/ErrorResponseBase'
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorResponseBase'
-          description: Additional details of cascading error messages.
     ErrorResponseBase:
       title: ErrorResponseBase
       type: object
@@ -409,6 +394,21 @@ components:
           type: integer
           description: Supplementary status code. Typically will be 200 for a success case.
           example: 200
+    ErrorResponse:
+      title: ErrorResponse
+      description: Represents an error response with additional details of cascading error messages.
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponseBase'
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorResponseBase'
+          description: Additional details of cascading error messages.
   securitySchemes:
     OAuth2.authorizationCode:
       type: oauth2

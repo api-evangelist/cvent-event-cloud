@@ -1217,91 +1217,29 @@ paths:
         url: '#oauth2-auth-code-planner-admin'
 components:
   schemas:
-    ErrorResponse:
-      title: ErrorResponse
-      description: Represents an error response with additional details of cascading error messages.
-      allOf:
-      - $ref: '#/components/schemas/ErrorResponseBase'
+    CategoryId:
+      title: CategoryId
       type: object
-      required:
-      - code
-      - message
+      description: An object that holds the id for a category
       properties:
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorResponseBase'
-          description: Additional details of cascading error messages.
-    Session-1:
+        id:
+          $ref: '#/components/schemas/uuid-property'
+    event-id:
+      type: object
+      title: Event
+      description: The related event object.
+      properties:
+        id:
+          $ref: '#/components/schemas/EventId1'
+    ProgramItem:
       required:
       - id
       type: object
-      title: Session
-      description: The related session object.
+      title: ProgramItem
+      description: The program item associated with the session.
       properties:
         id:
-          $ref: '#/components/schemas/SessionId1'
-    Relevance:
-      title: Relevance
-      description: Returned when the `match` filter is applied. Indicates how relevant the `match` filter term is to the search result. Larger numbers represent higher relevance with respect to other search results in the request. Null if no `match` filter is provided.
-      type: number
-      example: 2.3
-      exclusiveMinimum: 0
-    session-speaker-assignment:
-      title: SessionSpeakerAssignment
-      type: object
-      description: Holds fields that can be applied to a session speaker assignment.
-      properties:
-        speakerCategory:
-          $ref: '#/components/schemas/CategoryId'
-        order:
-          description: Preferred position where the speaker will appear in an ordered list for a session. Smaller values indicate a higher position in the list with the value 1 being the first item in the list.
-          example: 1
-          minimum: 1
-          type: integer
-    session-locations-paginated-response:
-      title: SessionLocationPaginatedResponse
-      required:
-      - data
-      - paging
-      type: object
-      description: A paginated response of session locations.
-      properties:
-        paging:
-          $ref: '#/components/schemas/Paging'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/session-location'
-          description: Collection of session locations.
-    session-segment:
-      title: SessionSegment
-      type: object
-      description: Represents a mapping between a session and an audience segment, which is used to enforce session visibility to only those in certain audience segments.
-      required:
-      - event
-      - session
-      - segment
-      allOf:
-      - $ref: '#/components/schemas/Audit'
-      properties:
-        id:
-          description: ID of the session segment.
-          type: string
-          format: uuid
-          example: 38db6ae2-0dc3-487b-953e-86d6abbdf7d3
-          readOnly: true
-        event:
-          $ref: '#/components/schemas/event-id'
-        session:
-          $ref: '#/components/schemas/Session-1'
-        segment:
-          $ref: '#/components/schemas/Segment'
-        active:
-          description: True indicates the session segment is active.
-          type: boolean
-          example: true
-          default: true
+          $ref: '#/components/schemas/ProgramItemId1'
     ErrorResponseBase:
       title: ErrorResponseBase
       type: object
@@ -1322,60 +1260,54 @@ components:
           type: string
           description: The target resource of the error.
           example: example target
-    DocumentId:
-      title: DocumentId
-      description: The unique identifier for a document.
-      type: string
-      format: uuid
-    CustomFieldType:
-      title: CustomFieldType
-      enum:
-      - AutoIncrement
-      - ConsentQuestion
-      - Currency
-      - Decimal
-      - Date
-      - DateTime
-      - Email
-      - FileUpload
-      - FreeText
-      - General
-      - MultiChoice
-      - MultiSelect
-      - Number
-      - OpenEndedDateTime
-      - OpenEndedText
-      - SingleChoice
-      - SingleSelect
-      - USPhoneNumber
-      - Unknown
-      type: string
-      description: The type of data collected by a custom field.
-      example: General
-    session-category:
-      title: SessionCategory
-      description: This is used to denote the category of a session.
-      required:
-      - name
+    session:
+      title: Session
       type: object
+      description: Used to denote a session and its attributes.
+      required:
+      - title
+      - start
+      - end
+      - event
+      - status
+      allOf:
+      - $ref: '#/components/schemas/SessionBase'
+      properties:
+        includedSession:
+          type: boolean
+          description: Indicator to specify if this session was automatically included with the event.
+          example: true
+          default: false
+        relevance:
+          $ref: '#/components/schemas/Relevance'
+    locale.json:
+      title: Locale
+      description: Locale code
+      type: string
+      example: en-US
+      minLength: 1
+      maxLength: 200
+    Segment:
+      required:
+      - id
+      type: object
+      title: Segment
+      description: The audience segment associated with the session.
       properties:
         id:
-          title: Session Category Id
-          description: A string that represents a specified session category.
-          type: string
-          format: uuid
-          example: 38db6ae2-0dc3-487b-953e-86d6abbdf7d3
-          readOnly: true
-        name:
-          type: string
-          description: The name of the session category.
-          maxLength: 100
-          example: Networking
-        description:
-          type: string
-          description: A description for the session category.
-          maxLength: 2500
-          example: During networking sessions, come meet fellow workers in your field.
+          $ref: '#/components/schemas/segment-id'
+    SessionId:
+      title: SessionId
+      description: The unique identifier for a session.
+      type: string
+      format: uuid
+      example: 832cb481-74c5-4859-ba21-bbb5be8b86e0
+    segment-id:
+      title: SegmentId
+      description: The unique identifier for an audience segment
+      type: string
+      format: uuid
+      example: 788426ac-5d83-11ee-8c99-0242ac120002
     Paging:
       title: Paging
       required:
@@ -1405,6 +1337,145 @@ components:
           example: 2
         _links:
           $ref: '#/components/schemas/PaginationLinks'
+    Relevance:
+      title: Relevance
+      description: Returned when the `match` filter is applied. Indicates how relevant the `match` filter term is to the search result. Larger numbers represent higher relevance with respect to other search results in the request. Null if no `match` filter is provided.
+      type: number
+      example: 2.3
+      exclusiveMinimum: 0
+    baseErrorResponse:
+      title: ErrorResponse
+      description: Represents an error response with additional details of cascading error messages.
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponseBase'
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorResponseBase'
+          description: Additional details of cascading error messages.
+    session-location:
+      title: SessionLocation
+      type: object
+      required:
+      - code
+      - name
+      description: Used to denote a sessions location.
+      properties:
+        id:
+          title: UUID Property
+          description: A string that represents a specified location.
+          type: string
+          format: uuid
+          example: 38db6ae2-0dc3-487b-953e-86d6abbdf7d3
+          readOnly: true
+        code:
+          type: string
+          description: Code / Abbreviation of the location.
+          maxLength: 30
+          example: ConfA
+        name:
+          type: string
+          description: Name of the location.
+          maxLength: 100
+          example: Conference Room A
+    PaginationLinks:
+      title: PaginationLinks
+      type: object
+      description: Represents pagination links for navigating between pages of data.
+      properties:
+        next:
+          $ref: '#/components/schemas/Link'
+        self:
+          $ref: '#/components/schemas/Link'
+        prev:
+          $ref: '#/components/schemas/Link'
+    custom-field:
+      title: CustomField
+      description: A Custom Field
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/CustomFieldBase'
+      properties:
+        type:
+          description: The type of data collected by a custom field.
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/CustomFieldType'
+          - readOnly: true
+            example: MultiSelect
+    program-item-session-documents:
+      title: ProgramItemSessionDocuments
+      description: Represents an array of session document IDs associated with the given program item ID.
+      type: object
+      properties:
+        data:
+          type: array
+          description: List of program item session documents.
+          items:
+            $ref: '#/components/schemas/program-item-session-document'
+          maxItems: 10
+    session-document-paginated-response:
+      title: SessionDocumentPaginatedResponse
+      description: The response from a request to get the list of documents for a single session.  This includes the paging object as well as the collection of documents.
+      required:
+      - paging
+      - data
+      type: object
+      properties:
+        paging:
+          $ref: '#/components/schemas/Paging'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/session-file'
+          description: Collection of a session's documents.
+    ProgramItemId1:
+      title: ProgramItemId
+      description: The unique identifier for a program item
+      type: string
+      format: uuid
+      example: 788426ac-5d83-11ee-8c99-0242ac120002
+    UUIDProperty:
+      title: UUID Property
+      description: A string that has to be a format matching the industry standard uuid
+      type: string
+      format: uuid
+      example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
+    EventId1:
+      title: EventId
+      description: The unique identifier for an event
+      type: string
+      format: uuid
+      example: 78842378-5d83-11ee-8c99-0242ac120002
+    SessionSpeaker:
+      title: SessionSpeaker
+      description: A session speaker
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/uuid-property'
+        session:
+          $ref: '#/components/schemas/SessionLite'
+        category:
+          $ref: '#/components/schemas/SpeakerCategory'
+        order:
+          type: integer
+          description: The order of the speaker in a session.
+          example: 1
+    SessionLite:
+      required:
+      - id
+      type: object
+      title: SessionLite
+      description: The unique identifier of a session.
+      properties:
+        id:
+          $ref: '#/components/schemas/SessionId'
     session-speaker-paginated-response:
       title: SessionSpeakerPaginatedResponse
       description: The response from a request to get the list of session speakers.  This includes the paging object as well as the collection of session speakers.
@@ -1420,6 +1491,22 @@ components:
           items:
             $ref: '#/components/schemas/SessionSpeaker'
           description: Collection of a session's speakers.
+    program-item-document-paginated-response:
+      title: ProgramItemDocumentPaginatedResponse
+      description: The response from a request to get the list of session program item documents.
+      required:
+      - paging
+      - data
+      type: object
+      properties:
+        paging:
+          $ref: '#/components/schemas/Paging'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/program-item-session-document'
+          description: Collection of Session Program Item Documents.
+          maxItems: 200
     session-file:
       title: SessionFile
       required:
@@ -1457,116 +1544,28 @@ components:
           description: Display this file to the public
           example: true
           readOnly: true
-    session-segment-paginated-response:
-      title: SessionSegmentPaginatedResponse
-      description: The response from a request to get the list of SessionSegment associations.
+    Link:
+      title: Link
       required:
-      - paging
-      - data
+      - href
+      type: object
+      description: Represents a link to a related resource.
+      properties:
+        href:
+          type: string
+          description: A url provided that can be followed for linking
+          example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
+    NamedObject:
+      title: NamedObject
+      description: A Named object
       type: object
       properties:
-        paging:
-          $ref: '#/components/schemas/Paging'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/session-segment'
-          description: Collection of SessionSegment associations.
-    session-document-paginated-response:
-      title: SessionDocumentPaginatedResponse
-      description: The response from a request to get the list of documents for a single session.  This includes the paging object as well as the collection of documents.
-      required:
-      - paging
-      - data
-      type: object
-      properties:
-        paging:
-          $ref: '#/components/schemas/Paging'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/session-file'
-          description: Collection of a session's documents.
-    session-update:
-      title: SessionUpdate
-      type: object
-      description: Used to update a session.
-      allOf:
-      - $ref: '#/components/schemas/SessionBase'
-    sessions-paginated-response:
-      title: SessionPaginatedResponse
-      required:
-      - data
-      - paging
-      type: object
-      description: A paginated response of session objects.
-      properties:
-        paging:
-          $ref: '#/components/schemas/Paging'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/session'
-          description: Collection of sessions.
-    program-item-document-paginated-response:
-      title: ProgramItemDocumentPaginatedResponse
-      description: The response from a request to get the list of session program item documents.
-      required:
-      - paging
-      - data
-      type: object
-      properties:
-        paging:
-          $ref: '#/components/schemas/Paging'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/program-item-session-document'
-          description: Collection of Session Program Item Documents.
-          maxItems: 200
-    segment-id:
-      title: SegmentId
-      description: The unique identifier for an audience segment
-      type: string
-      format: uuid
-      example: 788426ac-5d83-11ee-8c99-0242ac120002
-    program-item-paginated-response:
-      title: ProgramItemPaginatedResponse
-      description: The response from a request to get the list of session program items.
-      required:
-      - paging
-      - data
-      type: object
-      properties:
-        paging:
-          $ref: '#/components/schemas/Paging'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/program-item'
-          description: Collection of Session Program Items.
-          maxItems: 200
-    EventId1:
-      title: EventId
-      description: The unique identifier for an event
-      type: string
-      format: uuid
-      example: 78842378-5d83-11ee-8c99-0242ac120002
-    session-category-paginated-response:
-      title: SessionCategoryPaginatedResponse
-      description: The response from a request to get the list of session categories.  This includes the paging object as well as the collection of session categories.
-      required:
-      - paging
-      - data
-      type: object
-      properties:
-        paging:
-          $ref: '#/components/schemas/Paging'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/session-category'
-          description: Collection of session categories.
+        id:
+          $ref: '#/components/schemas/uuid-property'
+        name:
+          type: string
+          description: Name of the object
+          example: Sample Object name
     SessionStatus:
       title: SessionStatus
       enum:
@@ -1576,6 +1575,109 @@ components:
       type: string
       description: This is used to denote the status of a session.
       example: Active
+    Location:
+      title: Location
+      type: object
+      description: Used to denote a locations name and abbreviation.
+      properties:
+        id:
+          $ref: '#/components/schemas/uuid-property'
+        code:
+          type: string
+          description: Code / Abbreviation of the location.
+          maxLength: 30
+          example: ConfA
+          readOnly: true
+        name:
+          type: string
+          description: Name of the location.
+          maxLength: 100
+          example: Conference Room A
+          readOnly: true
+    session-segment:
+      title: SessionSegment
+      type: object
+      description: Represents a mapping between a session and an audience segment, which is used to enforce session visibility to only those in certain audience segments.
+      required:
+      - event
+      - session
+      - segment
+      allOf:
+      - $ref: '#/components/schemas/Audit'
+      properties:
+        id:
+          description: ID of the session segment.
+          type: string
+          format: uuid
+          example: 38db6ae2-0dc3-487b-953e-86d6abbdf7d3
+          readOnly: true
+        event:
+          $ref: '#/components/schemas/event-id'
+        session:
+          $ref: '#/components/schemas/Session-1'
+        segment:
+          $ref: '#/components/schemas/Segment'
+        active:
+          description: True indicates the session segment is active.
+          type: boolean
+          example: true
+          default: true
+    Audit:
+      title: Audit
+      description: Audit information
+      type: object
+      properties:
+        created:
+          type: string
+          format: date-time
+          description: The ISO 8601 zoned date time when this record was created.
+          readOnly: true
+          example: '2017-01-02T02:00:00Z'
+        createdBy:
+          type: string
+          description: The identifier of the user that created this record.
+          readOnly: true
+          example: hporter
+        lastModified:
+          type: string
+          format: date-time
+          description: The ISO 8601 zoned date time when this record was updated.
+          readOnly: true
+          example: '2019-02-12T03:00:00Z'
+        lastModifiedBy:
+          type: string
+          description: The identifier of the user that last updated this record.
+          readOnly: true
+          example: hporter
+    filter:
+      title: A filter sent in the body of a request
+      description: A filter which is sent through the body of the request.
+      type: object
+      properties:
+        filter:
+          type: string
+          example: property eq 'value'
+          description: Filter included in the request.
+    SpeakerCategory:
+      title: SpeakerCategory
+      description: A defined speaker category.
+      type: object
+      required:
+      - id
+      properties:
+        id:
+          $ref: '#/components/schemas/uuid-property'
+        name:
+          type: string
+          description: The name of the speaker category
+          maxLength: 50
+          example: Presenters
+    session-update:
+      title: SessionUpdate
+      type: object
+      description: Used to update a session.
+      allOf:
+      - $ref: '#/components/schemas/SessionBase'
     UUID:
       title: UUID
       description: The reference to the related entity. Contains only the ID of the related entity.
@@ -1585,173 +1687,12 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/UUIDProperty'
-    UUIDProperty:
-      title: UUID Property
-      description: A string that has to be a format matching the industry standard uuid
-      type: string
-      format: uuid
-      example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
-    program-item-update-request:
-      title: ProgramItemUpdateRequest
-      type: object
-      description: Represents a program item object that will be updated.
-      required:
-      - id
-      - event
-      - session
-      - name
-      allOf:
-      - $ref: '#/components/schemas/Audit'
-      properties:
-        id:
-          description: ID of the program item.
-          type: string
-          format: uuid
-          example: 38db6ae2-0dc3-487b-953e-86d6abbdf7d3
-        event:
-          $ref: '#/components/schemas/event-id'
-        session:
-          $ref: '#/components/schemas/Session-1'
-        name:
-          type: string
-          description: Name of the program item.
-          maxLength: 500
-          example: Day 1 Program Item.
-        duration:
-          type: integer
-          description: The duration of the program item in minutes.
-          example: 30
-        description:
-          type: string
-          description: Description of the program item.
-          maxLength: 2500
-          example: This is a sample description of the day 1 program item.
-        rteDescription:
-          type: string
-          description: Rich-text-editor description in json formatting.
-          example: '{"format":"draftjs-nucleus","version":1,"content":{"blocks":[{"key":"cubve","text":"Program Item Description","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}}'
-    program-item-session-documents:
-      title: ProgramItemSessionDocuments
-      description: Represents an array of session document IDs associated with the given program item ID.
-      type: object
-      properties:
-        data:
-          type: array
-          description: List of program item session documents.
-          items:
-            $ref: '#/components/schemas/program-item-session-document'
-          maxItems: 10
-    session:
-      title: Session
-      type: object
-      description: Used to denote a session and its attributes.
-      required:
-      - title
-      - start
-      - end
-      - event
-      - status
-      allOf:
-      - $ref: '#/components/schemas/SessionBase'
-      properties:
-        includedSession:
-          type: boolean
-          description: Indicator to specify if this session was automatically included with the event.
-          example: true
-          default: false
-        relevance:
-          $ref: '#/components/schemas/Relevance'
-    program-item-session-document:
-      title: ProgramItemSessionDocument
-      type: object
-      description: Represents a program item object that will be added to a session document.
-      required:
-      - event
-      - session
-      - document
-      - programItem
-      allOf:
-      - $ref: '#/components/schemas/Audit'
-      properties:
-        id:
-          description: ID of the session document to program item relationship.
-          type: string
-          format: uuid
-          example: 38db6ae2-0dc3-487b-953e-86d6abbdf7d3
-          readOnly: true
-        event:
-          $ref: '#/components/schemas/event-id'
-        session:
-          $ref: '#/components/schemas/Session-1'
-        document:
-          $ref: '#/components/schemas/SessionDocumentLite'
-        programItem:
-          $ref: '#/components/schemas/ProgramItem'
-    baseErrorResponse:
-      title: ErrorResponse
-      description: Represents an error response with additional details of cascading error messages.
-      allOf:
-      - $ref: '#/components/schemas/ErrorResponseBase'
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorResponseBase'
-          description: Additional details of cascading error messages.
-    PaginationLinks:
-      title: PaginationLinks
-      type: object
-      description: Represents pagination links for navigating between pages of data.
-      properties:
-        next:
-          $ref: '#/components/schemas/Link'
-        self:
-          $ref: '#/components/schemas/Link'
-        prev:
-          $ref: '#/components/schemas/Link'
-    CategoryId:
-      title: CategoryId
-      type: object
-      description: An object that holds the id for a category
-      properties:
-        id:
-          $ref: '#/components/schemas/uuid-property'
-    Lookup:
-      title: Lookup
-      description: Lookup response object
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/uuid-property'
-        code:
-          type: string
-          description: Code / Abbreviation of the lookup item.
-          maxLength: 30
-          example: MU
-        name:
-          type: string
-          description: Name of the lookup item.
-          maxLength: 30
-          example: Meet up
-    Segment:
-      required:
-      - id
-      type: object
-      title: Segment
-      description: The audience segment associated with the session.
-      properties:
-        id:
-          $ref: '#/components/schemas/segment-id'
-    SessionId:
+    SessionId1:
       title: SessionId
-      description: The unique identifier for a session.
+      description: The unique identifier for a session
       type: string
       format: uuid
-      example: 832cb481-74c5-4859-ba21-bbb5be8b86e0
+      example: 78842aee-5d83-11ee-8c99-0242ac120002
     program-item:
       title: ProgramItem
       type: object
@@ -1792,74 +1733,64 @@ components:
           type: string
           description: Rich-text-editor description in json formatting.
           example: '{"format":"draftjs-nucleus","version":1,"content":{"blocks":[{"key":"cubve","text":"Program Item Description","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}}'
-    SessionLite:
+    DocumentId:
+      title: DocumentId
+      description: The unique identifier for a document.
+      type: string
+      format: uuid
+    Session-1:
       required:
       - id
       type: object
-      title: SessionLite
-      description: The unique identifier of a session.
+      title: Session
+      description: The related session object.
       properties:
         id:
-          $ref: '#/components/schemas/SessionId'
-    SessionId1:
-      title: SessionId
-      description: The unique identifier for a session
-      type: string
-      format: uuid
-      example: 78842aee-5d83-11ee-8c99-0242ac120002
-    ProgramItemId1:
-      title: ProgramItemId
-      description: The unique identifier for a program item
-      type: string
-      format: uuid
-      example: 788426ac-5d83-11ee-8c99-0242ac120002
-    custom-field:
-      title: CustomField
-      description: A Custom Field
-      type: object
+          $ref: '#/components/schemas/SessionId1'
+    ErrorResponse:
+      title: ErrorResponse
+      description: Represents an error response with additional details of cascading error messages.
       allOf:
-      - $ref: '#/components/schemas/CustomFieldBase'
-      properties:
-        type:
-          description: The type of data collected by a custom field.
-          type: string
-          allOf:
-          - $ref: '#/components/schemas/CustomFieldType'
-          - readOnly: true
-            example: MultiSelect
-    filter:
-      title: A filter sent in the body of a request
-      description: A filter which is sent through the body of the request.
+      - $ref: '#/components/schemas/ErrorResponseBase'
       type: object
+      required:
+      - code
+      - message
       properties:
-        filter:
-          type: string
-          example: property eq 'value'
-          description: Filter included in the request.
-    SessionSpeaker:
-      title: SessionSpeaker
-      description: A session speaker
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorResponseBase'
+          description: Additional details of cascading error messages.
+    session-speaker-assignment:
+      title: SessionSpeakerAssignment
+      type: object
+      description: Holds fields that can be applied to a session speaker assignment.
+      properties:
+        speakerCategory:
+          $ref: '#/components/schemas/CategoryId'
+        order:
+          description: Preferred position where the speaker will appear in an ordered list for a session. Smaller values indicate a higher position in the list with the value 1 being the first item in the list.
+          example: 1
+          minimum: 1
+          type: integer
+    Lookup:
+      title: Lookup
+      description: Lookup response object
       type: object
       properties:
         id:
           $ref: '#/components/schemas/uuid-property'
-        session:
-          $ref: '#/components/schemas/SessionLite'
-        category:
-          $ref: '#/components/schemas/SpeakerCategory'
-        order:
-          type: integer
-          description: The order of the speaker in a session.
-          example: 1
-    ProgramItem:
-      required:
-      - id
-      type: object
-      title: ProgramItem
-      description: The program item associated with the session.
-      properties:
-        id:
-          $ref: '#/components/schemas/ProgramItemId1'
+        code:
+          type: string
+          description: Code / Abbreviation of the lookup item.
+          maxLength: 30
+          example: MU
+        name:
+          type: string
+          description: Name of the lookup item.
+          maxLength: 30
+          example: Meet up
     CustomFieldBase:
       title: CustomFieldBase
       description: Base schema for Custom Field - allows type to be customized by extending schemas
@@ -1893,6 +1824,98 @@ components:
           description: The order of this question in the bigger list of questions.
           example: 1
           readOnly: true
+    session-segment-paginated-response:
+      title: SessionSegmentPaginatedResponse
+      description: The response from a request to get the list of SessionSegment associations.
+      required:
+      - paging
+      - data
+      type: object
+      properties:
+        paging:
+          $ref: '#/components/schemas/Paging'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/session-segment'
+          description: Collection of SessionSegment associations.
+    program-item-update-request:
+      title: ProgramItemUpdateRequest
+      type: object
+      description: Represents a program item object that will be updated.
+      required:
+      - id
+      - event
+      - session
+      - name
+      allOf:
+      - $ref: '#/components/schemas/Audit'
+      properties:
+        id:
+          description: ID of the program item.
+          type: string
+          format: uuid
+          example: 38db6ae2-0dc3-487b-953e-86d6abbdf7d3
+        event:
+          $ref: '#/components/schemas/event-id'
+        session:
+          $ref: '#/components/schemas/Session-1'
+        name:
+          type: string
+          description: Name of the program item.
+          maxLength: 500
+          example: Day 1 Program Item.
+        duration:
+          type: integer
+          description: The duration of the program item in minutes.
+          example: 30
+        description:
+          type: string
+          description: Description of the program item.
+          maxLength: 2500
+          example: This is a sample description of the day 1 program item.
+        rteDescription:
+          type: string
+          description: Rich-text-editor description in json formatting.
+          example: '{"format":"draftjs-nucleus","version":1,"content":{"blocks":[{"key":"cubve","text":"Program Item Description","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}}'
+    program-item-paginated-response:
+      title: ProgramItemPaginatedResponse
+      description: The response from a request to get the list of session program items.
+      required:
+      - paging
+      - data
+      type: object
+      properties:
+        paging:
+          $ref: '#/components/schemas/Paging'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/program-item'
+          description: Collection of Session Program Items.
+          maxItems: 200
+    session-category-paginated-response:
+      title: SessionCategoryPaginatedResponse
+      description: The response from a request to get the list of session categories.  This includes the paging object as well as the collection of session categories.
+      required:
+      - paging
+      - data
+      type: object
+      properties:
+        paging:
+          $ref: '#/components/schemas/Paging'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/session-category'
+          description: Collection of session categories.
+    SessionDocumentLite:
+      type: object
+      title: SessionDocumentLite
+      description: The related document object.
+      properties:
+        id:
+          $ref: '#/components/schemas/DocumentId'
     SessionBase:
       title: SessionBase
       type: object
@@ -2082,145 +2105,132 @@ components:
           type: integer
           description: The display order of session, set by planner for concurrent sessions
           example: 1
-    Link:
-      title: Link
+    sessions-paginated-response:
+      title: SessionPaginatedResponse
       required:
-      - href
+      - data
+      - paging
       type: object
-      description: Represents a link to a related resource.
+      description: A paginated response of session objects.
       properties:
-        href:
-          type: string
-          description: A url provided that can be followed for linking
-          example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
-    Audit:
-      title: Audit
-      description: Audit information
-      type: object
-      properties:
-        created:
-          type: string
-          format: date-time
-          description: The ISO 8601 zoned date time when this record was created.
-          readOnly: true
-          example: '2017-01-02T02:00:00Z'
-        createdBy:
-          type: string
-          description: The identifier of the user that created this record.
-          readOnly: true
-          example: hporter
-        lastModified:
-          type: string
-          format: date-time
-          description: The ISO 8601 zoned date time when this record was updated.
-          readOnly: true
-          example: '2019-02-12T03:00:00Z'
-        lastModifiedBy:
-          type: string
-          description: The identifier of the user that last updated this record.
-          readOnly: true
-          example: hporter
+        paging:
+          $ref: '#/components/schemas/Paging'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/session'
+          description: Collection of sessions.
     uuid-property:
       title: UUID Property
       description: A string that has to be a format matching the industry standard uuid
       type: string
       format: uuid
       example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
-    NamedObject:
-      title: NamedObject
-      description: A Named object
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/uuid-property'
-        name:
-          type: string
-          description: Name of the object
-          example: Sample Object name
-    locale.json:
-      title: Locale
-      description: Locale code
-      type: string
-      example: en-US
-      minLength: 1
-      maxLength: 200
-    event-id:
-      type: object
-      title: Event
-      description: The related event object.
-      properties:
-        id:
-          $ref: '#/components/schemas/EventId1'
-    Location:
-      title: Location
-      type: object
-      description: Used to denote a locations name and abbreviation.
-      properties:
-        id:
-          $ref: '#/components/schemas/uuid-property'
-        code:
-          type: string
-          description: Code / Abbreviation of the location.
-          maxLength: 30
-          example: ConfA
-          readOnly: true
-        name:
-          type: string
-          description: Name of the location.
-          maxLength: 100
-          example: Conference Room A
-          readOnly: true
-    SpeakerCategory:
-      title: SpeakerCategory
-      description: A defined speaker category.
-      type: object
+    session-category:
+      title: SessionCategory
+      description: This is used to denote the category of a session.
       required:
-      - id
-      properties:
-        id:
-          $ref: '#/components/schemas/uuid-property'
-        name:
-          type: string
-          description: The name of the speaker category
-          maxLength: 50
-          example: Presenters
-    session-location:
-      title: SessionLocation
-      type: object
-      required:
-      - code
       - name
-      description: Used to denote a sessions location.
+      type: object
       properties:
         id:
-          title: UUID Property
-          description: A string that represents a specified location.
+          title: Session Category Id
+          description: A string that represents a specified session category.
           type: string
           format: uuid
           example: 38db6ae2-0dc3-487b-953e-86d6abbdf7d3
           readOnly: true
-        code:
-          type: string
-          description: Code / Abbreviation of the location.
-          maxLength: 30
-          example: ConfA
         name:
           type: string
-          description: Name of the location.
+          description: The name of the session category.
           maxLength: 100
-          example: Conference Room A
-    SessionDocumentLite:
+          example: Networking
+        description:
+          type: string
+          description: A description for the session category.
+          maxLength: 2500
+          example: During networking sessions, come meet fellow workers in your field.
+    session-locations-paginated-response:
+      title: SessionLocationPaginatedResponse
+      required:
+      - data
+      - paging
       type: object
-      title: SessionDocumentLite
-      description: The related document object.
+      description: A paginated response of session locations.
+      properties:
+        paging:
+          $ref: '#/components/schemas/Paging'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/session-location'
+          description: Collection of session locations.
+    program-item-session-document:
+      title: ProgramItemSessionDocument
+      type: object
+      description: Represents a program item object that will be added to a session document.
+      required:
+      - event
+      - session
+      - document
+      - programItem
+      allOf:
+      - $ref: '#/components/schemas/Audit'
       properties:
         id:
-          $ref: '#/components/schemas/DocumentId'
+          description: ID of the session document to program item relationship.
+          type: string
+          format: uuid
+          example: 38db6ae2-0dc3-487b-953e-86d6abbdf7d3
+          readOnly: true
+        event:
+          $ref: '#/components/schemas/event-id'
+        session:
+          $ref: '#/components/schemas/Session-1'
+        document:
+          $ref: '#/components/schemas/SessionDocumentLite'
+        programItem:
+          $ref: '#/components/schemas/ProgramItem'
+    CustomFieldType:
+      title: CustomFieldType
+      enum:
+      - AutoIncrement
+      - ConsentQuestion
+      - Currency
+      - Decimal
+      - Date
+      - DateTime
+      - Email
+      - FileUpload
+      - FreeText
+      - General
+      - MultiChoice
+      - MultiSelect
+      - Number
+      - OpenEndedDateTime
+      - OpenEndedText
+      - SingleChoice
+      - SingleSelect
+      - USPhoneNumber
+      - Unknown
+      type: string
+      description: The type of data collected by a custom field.
+      example: General
   parameters:
-    speakerId1:
+    sort6:
+      name: sort
+      required: false
+      in: query
+      style: form
+      explode: false
+      description: "The sort order passed as a parameter, used to control the order of the\nsearch results as a priority ordered list of sorts\n\nThere are two orders:\n  * ascending: ASC\n  * descending: DESC\n\nThe following fields are sortable:\n  * start\n  * end\n  * title\n  * includedSession\n  * category.name\n  * code\n  * relevance\n  * order\n"
+      schema:
+        type: string
+        example: start:DESC,order:ASC,title:ASC
+    programItemId1:
       in: path
-      name: speakerId
-      description: Unique Id of a speaker
+      name: programItemId
+      description: Unique ID of a session program item.
       required: true
       schema:
         $ref: '#/components/schemas/uuid-property'
@@ -2233,50 +2243,6 @@ components:
         type: string
         format: date-time
         example: '2017-01-02T02:00:00Z'
-    token:
-      name: token
-      in: query
-      description: 'The continuation token returned from a previous class. This must be a valid UUID v4 if provided.
-
-        This will override any other pageable parameters provided.
-
-        '
-      style: form
-      explode: true
-      schema:
-        type: string
-        example: 0e28af57-511f-47ab-ae46-46cd1ca51a1a
-    customFieldId2:
-      in: path
-      name: customFieldId
-      description: Unique Id of a custom field
-      required: true
-      schema:
-        $ref: '#/components/schemas/uuid-property'
-    sort6:
-      name: sort
-      required: false
-      in: query
-      style: form
-      explode: false
-      description: "The sort order passed as a parameter, used to control the order of the\nsearch results as a priority ordered list of sorts\n\nThere are two orders:\n  * ascending: ASC\n  * descending: DESC\n\nThe following fields are sortable:\n  * start\n  * end\n  * title\n  * includedSession\n  * category.name\n  * code\n  * relevance\n  * order\n"
-      schema:
-        type: string
-        example: start:DESC,order:ASC,title:ASC
-    sessionId:
-      in: path
-      name: id
-      description: The unique identifier of a session.
-      required: true
-      schema:
-        $ref: '#/components/schemas/uuid-property'
-    locale1:
-      name: locale
-      required: false
-      description: Locale code in IETF Language tag format. Indicates desired locale of return values.
-      in: query
-      schema:
-        $ref: '#/components/schemas/locale.json'
     sessionId1:
       in: path
       name: id
@@ -2284,17 +2250,10 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/uuid-property'
-    programItemId1:
+    fileId:
       in: path
-      name: programItemId
-      description: Unique ID of a session program item.
-      required: true
-      schema:
-        $ref: '#/components/schemas/uuid-property'
-    eventId1:
-      in: path
-      name: id
-      description: Unique Id of Event
+      name: fileId
+      description: The unique identifier of a file from <a href="#operation/uploadFile">file upload</a> service.
       required: true
       schema:
         $ref: '#/components/schemas/uuid-property'
@@ -2310,10 +2269,31 @@ components:
         type: integer
         default: 100
         example: 100
-    fileId:
+    locale1:
+      name: locale
+      required: false
+      description: Locale code in IETF Language tag format. Indicates desired locale of return values.
+      in: query
+      schema:
+        $ref: '#/components/schemas/locale.json'
+    eventId1:
       in: path
-      name: fileId
-      description: The unique identifier of a file from <a href="#operation/uploadFile">file upload</a> service.
+      name: id
+      description: Unique Id of Event
+      required: true
+      schema:
+        $ref: '#/components/schemas/uuid-property'
+    customFieldId2:
+      in: path
+      name: customFieldId
+      description: Unique Id of a custom field
+      required: true
+      schema:
+        $ref: '#/components/schemas/uuid-property'
+    speakerId1:
+      in: path
+      name: speakerId
+      description: Unique Id of a speaker
       required: true
       schema:
         $ref: '#/components/schemas/uuid-property'
@@ -2326,34 +2306,27 @@ components:
         type: string
         format: date-time
         example: '2017-01-02T02:00:00Z'
+    sessionId:
+      in: path
+      name: id
+      description: The unique identifier of a session.
+      required: true
+      schema:
+        $ref: '#/components/schemas/uuid-property'
+    token:
+      name: token
+      in: query
+      description: 'The continuation token returned from a previous class. This must be a valid UUID v4 if provided.
+
+        This will override any other pageable parameters provided.
+
+        '
+      style: form
+      explode: true
+      schema:
+        type: string
+        example: 0e28af57-511f-47ab-ae46-46cd1ca51a1a
   responses:
-    Unauthorized1:
-      description: Bad or expired token
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 401
-            message: Unauthorized
-    NotFound1:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 404
-            message: Not found
-    TooManyRequests1:
-      description: Too many requests
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 429
-            message: Limit Exceeded
     Forbidden1:
       description: You do not have access to the resource
       content:
@@ -2363,6 +2336,33 @@ components:
           example:
             code: 403
             message: Access Forbidden
+    Unauthorized1:
+      description: Bad or expired token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 401
+            message: Unauthorized
+    TooManyRequests1:
+      description: Too many requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 429
+            message: Limit Exceeded
+    NotFound1:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 404
+            message: Not found
     BadRequest1:
       description: Bad request
       content:

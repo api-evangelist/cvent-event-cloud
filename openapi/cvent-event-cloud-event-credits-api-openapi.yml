@@ -64,36 +64,50 @@ paths:
         url: '#oauth2-auth-code-planner-admin'
 components:
   schemas:
-    attendeeCreditsPaginatedResponse:
-      title: Credits information
-      description: Response containing attendee credits information.
-      required:
-      - paging
-      - data
+    ErrorResponseBase:
+      title: ErrorResponseBase
       type: object
-      properties:
-        paging:
-          $ref: '#/components/schemas/paging.json'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/attendee-credit.json'
-          description: Collection of credits assigned to attendees.
-    ErrorResponse:
-      title: ErrorResponse
-      description: Represents an error response with additional details of cascading error messages.
-      allOf:
-      - $ref: '#/components/schemas/ErrorResponseBase'
-      type: object
+      description: Represents an error response with no additional details.
       required:
       - code
       - message
       properties:
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorResponseBase'
-          description: Additional details of cascading error messages.
+        code:
+          type: integer
+          description: The HTTP status code representing the error.
+          example: 400
+        message:
+          type: string
+          description: A brief description of the error.
+          example: Bad Request
+        target:
+          type: string
+          description: The target resource of the error.
+          example: example target
+    expandable-credit-type.json:
+      title: ExpandableCreditType
+      description: 'An object that contains the associated credit type ID.
+
+
+        This is an **expandable** object and if requested will contain the name of a credit type object.'
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: c15d600b-1363-413e-b00a-87d946903fe1
+          description: A unique identifier of the credit type.
+    pagination-links.json:
+      title: PaginationLinks
+      type: object
+      description: Represents pagination links for navigating between pages of data.
+      properties:
+        next:
+          $ref: '#/components/schemas/link.json'
+        self:
+          $ref: '#/components/schemas/link.json'
+        prev:
+          $ref: '#/components/schemas/link.json'
     attendee-credit.json:
       title: AttendeeCredit
       description: Credit details for an attendee.
@@ -148,37 +162,29 @@ components:
           description: The ISO 8601 zoned date time when this record was last modified.
           example: '2024-01-07T02:00:00Z'
           format: date-time
-    ErrorResponseBase:
-      title: ErrorResponseBase
-      type: object
-      description: Represents an error response with no additional details.
+    attendee-credit-type.json:
+      title: AttendeeCreditType
+      description: 'Represents the entity that granted the credit. Event: This credit was granted by an event. Session: This credit was granted by a session.'
+      type: string
+      enum:
+      - Event
+      - Session
+      example: Session
+    attendeeCreditsPaginatedResponse:
+      title: Credits information
+      description: Response containing attendee credits information.
       required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          description: The HTTP status code representing the error.
-          example: 400
-        message:
-          type: string
-          description: A brief description of the error.
-          example: Bad Request
-        target:
-          type: string
-          description: The target resource of the error.
-          example: example target
-    link.json:
-      title: Link
-      required:
-      - href
+      - paging
+      - data
       type: object
-      description: Represents a link to a related resource.
       properties:
-        href:
-          type: string
-          description: A url provided that can be followed for linking
-          example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
+        paging:
+          $ref: '#/components/schemas/paging.json'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/attendee-credit.json'
+          description: Collection of credits assigned to attendees.
     paging.json:
       title: Paging
       required:
@@ -208,38 +214,78 @@ components:
           example: 2
         _links:
           $ref: '#/components/schemas/pagination-links.json'
-    attendee-credit-type.json:
-      title: AttendeeCreditType
-      description: 'Represents the entity that granted the credit. Event: This credit was granted by an event. Session: This credit was granted by a session.'
-      type: string
-      enum:
-      - Event
-      - Session
-      example: Session
-    pagination-links.json:
-      title: PaginationLinks
+    link.json:
+      title: Link
+      required:
+      - href
       type: object
-      description: Represents pagination links for navigating between pages of data.
+      description: Represents a link to a related resource.
       properties:
-        next:
-          $ref: '#/components/schemas/link.json'
-        self:
-          $ref: '#/components/schemas/link.json'
-        prev:
-          $ref: '#/components/schemas/link.json'
-    expandable-credit-type.json:
-      title: ExpandableCreditType
-      description: 'An object that contains the associated credit type ID.
-
-
-        This is an **expandable** object and if requested will contain the name of a credit type object.'
-      type: object
-      properties:
-        id:
+        href:
           type: string
-          format: uuid
-          example: c15d600b-1363-413e-b00a-87d946903fe1
-          description: A unique identifier of the credit type.
+          description: A url provided that can be followed for linking
+          example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
+    ErrorResponse:
+      title: ErrorResponse
+      description: Represents an error response with additional details of cascading error messages.
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponseBase'
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorResponseBase'
+          description: Additional details of cascading error messages.
+  responses:
+    Forbidden1:
+      description: You do not have access to the resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 403
+            message: Access Forbidden
+    Unauthorized1:
+      description: Bad or expired token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 401
+            message: Unauthorized
+    TooManyRequests1:
+      description: Too many requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 429
+            message: Limit Exceeded
+    NotFound1:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 404
+            message: Not found
+    BadRequest1:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 400
+            message: Bad Request
   parameters:
     after:
       name: after
@@ -250,19 +296,6 @@ components:
         type: string
         format: date-time
         example: '2017-01-02T02:00:00Z'
-    token:
-      name: token
-      in: query
-      description: 'The continuation token returned from a previous class. This must be a valid UUID v4 if provided.
-
-        This will override any other pageable parameters provided.
-
-        '
-      style: form
-      explode: true
-      schema:
-        type: string
-        example: 0e28af57-511f-47ab-ae46-46cd1ca51a1a
     attendeeCreditLimit:
       name: limit
       in: query
@@ -283,6 +316,15 @@ components:
       schema:
         example: lastModified:DESC
         type: string
+    before:
+      name: before
+      required: false
+      in: query
+      description: Used to query records that have been added or updated before this time point.
+      schema:
+        type: string
+        format: date-time
+        example: '2017-01-02T02:00:00Z'
     expand1:
       name: expand
       in: query
@@ -297,61 +339,19 @@ components:
           type: string
           enum:
           - creditType
-    before:
-      name: before
-      required: false
+    token:
+      name: token
       in: query
-      description: Used to query records that have been added or updated before this time point.
+      description: 'The continuation token returned from a previous class. This must be a valid UUID v4 if provided.
+
+        This will override any other pageable parameters provided.
+
+        '
+      style: form
+      explode: true
       schema:
         type: string
-        format: date-time
-        example: '2017-01-02T02:00:00Z'
-  responses:
-    Unauthorized1:
-      description: Bad or expired token
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 401
-            message: Unauthorized
-    NotFound1:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 404
-            message: Not found
-    TooManyRequests1:
-      description: Too many requests
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 429
-            message: Limit Exceeded
-    Forbidden1:
-      description: You do not have access to the resource
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 403
-            message: Access Forbidden
-    BadRequest1:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 400
-            message: Bad Request
+        example: 0e28af57-511f-47ab-ae46-46cd1ca51a1a
   securitySchemes:
     OAuth2.authorizationCode:
       type: oauth2
