@@ -11,7 +11,7 @@ capability_model:
   attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
     CC BY 4.0
   notice: NOTICE
-edge_count: 5
+edge_count: 7
 edges:
 - tag: Discounts
   spec_file: cvent-event-cloud-discounts-api-openapi.yml
@@ -56,6 +56,28 @@ edges:
   reason: Surface lists eMarketing campaigns and email templates and sends marketing emails to recipient
     lists — email/marketing-automation execution, i.e. digital marketing. Some ambiguity between digital
     marketing and demand generation sub-capability.
+- tag: RFP Suppliers
+  spec_file: cvent-event-cloud-rfp-suppliers-api-openapi.yml
+  capability_id: BC-500.10
+  capability_id_l1: BC-500
+  capability_name: Sourcing Management
+  confidence: 0.7
+  evidence: GET /rfps/{rfpId}/suppliers  getRfpSuppliers  List RFP Suppliers; schemas RfpSupplierStatus,
+    SupplierResponse, RfpRecipientLogEntry
+  reason: Operations track which suppliers an RFP was sent to, their response status and recipient history
+    — i.e. RFx distribution and supplier response tracking, the core of sourcing/supplier selection. Not
+    supplier performance or onboarding, so BC-500.10 rather than BC-510.
+- tag: Travel RFPs
+  spec_file: cvent-event-cloud-travel-rfps-api-openapi.yml
+  capability_id: BC-500.10
+  capability_id_l1: BC-500
+  capability_name: Sourcing Management
+  confidence: 0.7
+  evidence: GET /travel-proposals/bids  ListTravelProposalBids; GET /travel-programs/questions  ListTravelProgramsQuestions;
+    schemas TravelProposalBid, TravelProposalBidRate, BidStatusType
+  reason: 'A hotel-programme RFP surface: programmes with questionnaires, supplier proposals and competing
+    bids with negotiated rates. This is RFx issuance and bid evaluation, i.e. strategic sourcing. Moderate-high
+    confidence; read-only bid retrieval limits certainty on how much of the sourcing cycle is covered.'
 - tag: User SCIM
   spec_file: cvent-event-cloud-user-scim-api-openapi.yml
   capability_id: BC-4230.50
