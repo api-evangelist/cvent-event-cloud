@@ -183,27 +183,134 @@ paths:
         description: More about OAuth2 authorization code support for administrators
         url: '#oauth2-auth-code-planner-admin'
 components:
+  parameters:
+    token:
+      name: token
+      in: query
+      description: 'The continuation token returned from a previous class. This must be a valid UUID v4 if provided.
+
+        This will override any other pageable parameters provided.
+
+        '
+      style: form
+      explode: true
+      schema:
+        type: string
+        example: 0e28af57-511f-47ab-ae46-46cd1ca51a1a
+    limit:
+      name: limit
+      in: query
+      description: The maximum number of records to return per page.
+      style: form
+      explode: true
+      schema:
+        maximum: 200
+        minimum: 1
+        type: integer
+        default: 100
+        example: 100
+    after:
+      name: after
+      required: false
+      description: Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store.
+      in: query
+      schema:
+        type: string
+        format: date-time
+        example: '2017-01-02T02:00:00Z'
+    before:
+      name: before
+      required: false
+      in: query
+      description: Used to query records that have been added or updated before this time point.
+      schema:
+        type: string
+        format: date-time
+        example: '2017-01-02T02:00:00Z'
+    id5:
+      in: path
+      name: id
+      required: true
+      description: Unique ID of the contact hook.
+      schema:
+        $ref: '#/components/schemas/uuid-property'
+  responses:
+    NotFound1:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 404
+            message: Not found
+    TooManyRequests1:
+      description: Too many requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 429
+            message: Limit Exceeded
+    HookUpdated:
+      description: Successfully updated a contact hook.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/hook'
+    HooksPaginatedResponse:
+      description: Successfully retrieved a list of contact hooks and their details.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/hooks-paginated-response'
+    Forbidden1:
+      description: You do not have access to the resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 403
+            message: Access Forbidden
+    ContactFieldsResponse:
+      description: Your server returns this structure on a successful callback with the updated values for contact fields present in your system.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/contact-fields'
+    HookCreated:
+      description: Successfully created a contact hook.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/hook'
+    Unauthorized1:
+      description: Bad or expired token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 401
+            message: Unauthorized
+    BadRequest1:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            code: 400
+            message: Bad Request
   schemas:
-    ErrorResponseBase:
-      title: ErrorResponseBase
-      type: object
-      description: Represents an error response with no additional details.
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          description: The HTTP status code representing the error.
-          example: 400
-        message:
-          type: string
-          description: A brief description of the error.
-          example: Bad Request
-        target:
-          type: string
-          description: The target resource of the error.
-          example: example target
+    uuid-property:
+      title: UUID Property
+      description: A string that has to be a format matching the industry standard uuid
+      type: string
+      format: uuid
+      example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
     pagination-links.json:
       title: PaginationLinks
       type: object
@@ -215,213 +322,6 @@ components:
           $ref: '#/components/schemas/link.json'
         prev:
           $ref: '#/components/schemas/link.json'
-    contact-field.json:
-      title: Contact Field
-      description: Contains contact data. For example, a User's email address.
-      type: object
-      required:
-      - id
-      - name
-      - maximumLength
-      - type
-      properties:
-        id:
-          title: Readonly UUID Property
-          description: The unique ID of the field supported by Cvent.
-          type: string
-          format: uuid
-          readOnly: true
-        name:
-          type: string
-          description: The name of the field.
-          example: Email Address
-        maximumLength:
-          type: integer
-          description: The maximum length allowed for a value.
-          example: 80
-        type:
-          type: string
-          description: The type of the field.
-          enum:
-          - String
-          - Integer
-          - Decimal
-          - Double
-          - DateTime
-          - SingleChoice
-          - MultiChoice
-          example: String
-        value:
-          type: array
-          items:
-            type: string
-            example: johndoe@cvent.com
-          description: The value(s) of the field.
-    paging.json:
-      title: Paging
-      required:
-      - _links
-      type: object
-      description: Represents pagination information for a collection of resources.
-      properties:
-        previousToken:
-          type: string
-          description: The pagination token for the previous page, if one exists. You can use this token to navigate to the previous page of data.
-          example: 1a2b3c4d5e6f7g8h9i10j11k
-        nextToken:
-          type: string
-          description: The pagination token for the next page. If this value is present in the response, there is another page of data you can fetch.
-          example: 1a2b3c4d5e6f7g8h9i10j11k
-        currentToken:
-          type: string
-          description: The pagination token for the current page.
-          example: 1a2b3c4d5e6f7g8h9i10j11k
-        limit:
-          type: integer
-          description: The number of records to return on the page. Not to exceed 200.
-          example: 100
-        totalCount:
-          type: integer
-          description: The total number of records available. This field may return blank, even if there are more records. To confirm if there are more records, check the `nextToken` field.
-          example: 2
-        _links:
-          $ref: '#/components/schemas/pagination-links.json'
-    link.json:
-      title: Link
-      required:
-      - href
-      type: object
-      description: Represents a link to a related resource.
-      properties:
-        href:
-          type: string
-          description: A url provided that can be followed for linking
-          example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
-    contact-fields:
-      title: Contact Fields
-      description: An array of standard contact fields supported by Cvent.
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/contact-field.json'
-          description: Collection of standard contact fields.
-    ErrorResponse:
-      title: ErrorResponse
-      description: Represents an error response with additional details of cascading error messages.
-      allOf:
-      - $ref: '#/components/schemas/ErrorResponseBase'
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorResponseBase'
-          description: Additional details of cascading error messages.
-    contact-transaction:
-      title: Contact Transaction
-      description: A changeset of contact fields.
-      required:
-      - transactionId
-      type: object
-      allOf:
-      - title: Contact Fields
-        description: An array of standard contact fields supported by Cvent.
-        required:
-        - data
-        type: object
-        properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/contact-field.json'
-            description: Collection of standard contact fields.
-      properties:
-        transactionId:
-          title: Readonly UUID Property
-          description: A unique id corresponding to the contact transaction callback made to fetch contact information.
-          type: string
-          format: uuid
-          readOnly: true
-          example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
-    hooks-paginated-response:
-      title: HooksPaginatedResponse
-      description: The response from a request to get the list of hooks with a callback URI. This includes the paging object as well as the collection of hooks.
-      type: object
-      required:
-      - paging
-      - data
-      properties:
-        paging:
-          $ref: '#/components/schemas/paging.json'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/hook'
-          description: Collection of contact hooks.
-    hook:
-      title: Hook
-      description: A hook with a callback URI.
-      type: object
-      required:
-      - name
-      - callback
-      - security
-      allOf:
-      - title: Audit
-        description: Audit information
-        type: object
-        properties:
-          created:
-            type: string
-            format: date-time
-            description: The ISO 8601 zoned date time when this record was created.
-            readOnly: true
-            example: '2017-01-02T02:00:00Z'
-          createdBy:
-            type: string
-            description: The identifier of the user that created this record.
-            readOnly: true
-            example: hporter
-          lastModified:
-            type: string
-            format: date-time
-            description: The ISO 8601 zoned date time when this record was updated.
-            readOnly: true
-            example: '2019-02-12T03:00:00Z'
-          lastModifiedBy:
-            type: string
-            description: The identifier of the user that last updated this record.
-            readOnly: true
-            example: hporter
-      properties:
-        id:
-          type: string
-          description: The unique ID representing the hook
-          format: uuid
-          readOnly: true
-          example: 3b2359a7-4583-40ed-8afd-67e5f15373d3
-        name:
-          type: string
-          description: Name of the contact hook.
-          example: Attendee Identification
-          minLength: 1
-          maxLength: 100
-        callback:
-          type: string
-          format: uri
-          description: A client hosted callback URI to which callback would be invoked. TLS is mandatory. Callback URL should not contain any confidential information such as API keys or login credentials.
-          example: https://myserver.com/send/callback/here
-          minLength: 1
-          maxLength: 300
-        security:
-          $ref: '#/components/schemas/hook-security.json'
     hook-security.json:
       title: Hook Security
       description: Describe security for a web hook callback. Each option corresponds to an Authorization header variant.
@@ -483,133 +383,233 @@ components:
             writeOnly: true
             example: ZGVtbzpwQDU1dzByZA==
             maxLength: 300
-    uuid-property:
-      title: UUID Property
-      description: A string that has to be a format matching the industry standard uuid
-      type: string
-      format: uuid
-      example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
-  responses:
-    ContactFieldsResponse:
-      description: Your server returns this structure on a successful callback with the updated values for contact fields present in your system.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/contact-fields'
-    Forbidden1:
-      description: You do not have access to the resource
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 403
-            message: Access Forbidden
-    Unauthorized1:
-      description: Bad or expired token
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 401
-            message: Unauthorized
-    HookUpdated:
-      description: Successfully updated a contact hook.
-      content:
-        application/json:
-          schema:
+    link.json:
+      title: Link
+      required:
+      - href
+      type: object
+      description: Represents a link to a related resource.
+      properties:
+        href:
+          type: string
+          description: A url provided that can be followed for linking
+          example: ?token=90c5f062-76ad-4ea4-aa53-00eb698d9262
+    contact-fields:
+      title: Contact Fields
+      description: An array of standard contact fields supported by Cvent.
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/contact-field.json'
+          description: Collection of standard contact fields.
+    hooks-paginated-response:
+      title: HooksPaginatedResponse
+      description: The response from a request to get the list of hooks with a callback URI. This includes the paging object as well as the collection of hooks.
+      type: object
+      required:
+      - paging
+      - data
+      properties:
+        paging:
+          $ref: '#/components/schemas/paging.json'
+        data:
+          type: array
+          items:
             $ref: '#/components/schemas/hook'
-    HookCreated:
-      description: Successfully created a contact hook.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/hook'
-    TooManyRequests1:
-      description: Too many requests
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 429
-            message: Limit Exceeded
-    HooksPaginatedResponse:
-      description: Successfully retrieved a list of contact hooks and their details.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/hooks-paginated-response'
-    NotFound1:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 404
-            message: Not found
-    BadRequest1:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          example:
-            code: 400
-            message: Bad Request
-  parameters:
-    after:
-      name: after
-      required: false
-      description: Used to query records that have been added or updated after this time point. Default to the beginning of time of the data store.
-      in: query
-      schema:
-        type: string
-        format: date-time
-        example: '2017-01-02T02:00:00Z'
-    limit:
-      name: limit
-      in: query
-      description: The maximum number of records to return per page.
-      style: form
-      explode: true
-      schema:
-        maximum: 200
-        minimum: 1
-        type: integer
-        default: 100
-        example: 100
-    before:
-      name: before
-      required: false
-      in: query
-      description: Used to query records that have been added or updated before this time point.
-      schema:
-        type: string
-        format: date-time
-        example: '2017-01-02T02:00:00Z'
-    id5:
-      in: path
-      name: id
-      required: true
-      description: Unique ID of the contact hook.
-      schema:
-        $ref: '#/components/schemas/uuid-property'
-    token:
-      name: token
-      in: query
-      description: 'The continuation token returned from a previous class. This must be a valid UUID v4 if provided.
-
-        This will override any other pageable parameters provided.
-
-        '
-      style: form
-      explode: true
-      schema:
-        type: string
-        example: 0e28af57-511f-47ab-ae46-46cd1ca51a1a
+          description: Collection of contact hooks.
+    paging.json:
+      title: Paging
+      required:
+      - _links
+      type: object
+      description: Represents pagination information for a collection of resources.
+      properties:
+        previousToken:
+          type: string
+          description: The pagination token for the previous page, if one exists. You can use this token to navigate to the previous page of data.
+          example: 1a2b3c4d5e6f7g8h9i10j11k
+        nextToken:
+          type: string
+          description: The pagination token for the next page. If this value is present in the response, there is another page of data you can fetch.
+          example: 1a2b3c4d5e6f7g8h9i10j11k
+        currentToken:
+          type: string
+          description: The pagination token for the current page.
+          example: 1a2b3c4d5e6f7g8h9i10j11k
+        limit:
+          type: integer
+          description: The number of records to return on the page. Not to exceed 200.
+          example: 100
+        totalCount:
+          type: integer
+          description: The total number of records available. This field may return blank, even if there are more records. To confirm if there are more records, check the `nextToken` field.
+          example: 2
+        _links:
+          $ref: '#/components/schemas/pagination-links.json'
+    contact-transaction:
+      title: Contact Transaction
+      description: A changeset of contact fields.
+      required:
+      - transactionId
+      type: object
+      allOf:
+      - title: Contact Fields
+        description: An array of standard contact fields supported by Cvent.
+        required:
+        - data
+        type: object
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/contact-field.json'
+            description: Collection of standard contact fields.
+      properties:
+        transactionId:
+          title: Readonly UUID Property
+          description: A unique id corresponding to the contact transaction callback made to fetch contact information.
+          type: string
+          format: uuid
+          readOnly: true
+          example: 04ca6ae2-0dc3-487b-953e-86d6abbdf7d3
+    ErrorResponse:
+      title: ErrorResponse
+      description: Represents an error response with additional details of cascading error messages.
+      allOf:
+      - $ref: '#/components/schemas/ErrorResponseBase'
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorResponseBase'
+          description: Additional details of cascading error messages.
+    ErrorResponseBase:
+      title: ErrorResponseBase
+      type: object
+      description: Represents an error response with no additional details.
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          description: The HTTP status code representing the error.
+          example: 400
+        message:
+          type: string
+          description: A brief description of the error.
+          example: Bad Request
+        target:
+          type: string
+          description: The target resource of the error.
+          example: example target
+    contact-field.json:
+      title: Contact Field
+      description: Contains contact data. For example, a User's email address.
+      type: object
+      required:
+      - id
+      - name
+      - maximumLength
+      - type
+      properties:
+        id:
+          title: Readonly UUID Property
+          description: The unique ID of the field supported by Cvent.
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          description: The name of the field.
+          example: Email Address
+        maximumLength:
+          type: integer
+          description: The maximum length allowed for a value.
+          example: 80
+        type:
+          type: string
+          description: The type of the field.
+          enum:
+          - String
+          - Integer
+          - Decimal
+          - Double
+          - DateTime
+          - SingleChoice
+          - MultiChoice
+          example: String
+        value:
+          type: array
+          items:
+            type: string
+            example: johndoe@cvent.com
+          description: The value(s) of the field.
+    hook:
+      title: Hook
+      description: A hook with a callback URI.
+      type: object
+      required:
+      - name
+      - callback
+      - security
+      allOf:
+      - title: Audit
+        description: Audit information
+        type: object
+        properties:
+          created:
+            type: string
+            format: date-time
+            description: The ISO 8601 zoned date time when this record was created.
+            readOnly: true
+            example: '2017-01-02T02:00:00Z'
+          createdBy:
+            type: string
+            description: The identifier of the user that created this record.
+            readOnly: true
+            example: hporter
+          lastModified:
+            type: string
+            format: date-time
+            description: The ISO 8601 zoned date time when this record was updated.
+            readOnly: true
+            example: '2019-02-12T03:00:00Z'
+          lastModifiedBy:
+            type: string
+            description: The identifier of the user that last updated this record.
+            readOnly: true
+            example: hporter
+      properties:
+        id:
+          type: string
+          description: The unique ID representing the hook
+          format: uuid
+          readOnly: true
+          example: 3b2359a7-4583-40ed-8afd-67e5f15373d3
+        name:
+          type: string
+          description: Name of the contact hook.
+          example: Attendee Identification
+          minLength: 1
+          maxLength: 100
+        callback:
+          type: string
+          format: uri
+          description: A client hosted callback URI to which callback would be invoked. TLS is mandatory. Callback URL should not contain any confidential information such as API keys or login credentials.
+          example: https://myserver.com/send/callback/here
+          minLength: 1
+          maxLength: 300
+        security:
+          $ref: '#/components/schemas/hook-security.json'
   securitySchemes:
     OAuth2.authorizationCode:
       type: oauth2
